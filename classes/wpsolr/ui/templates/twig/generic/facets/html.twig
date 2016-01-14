@@ -1,0 +1,32 @@
+{# Shared Facets template #}
+
+{% include template_css %} {# template_css is replaced by the (custom) layout's css selected in the widget. #}
+
+{{ widget_args.before_widget| raw }} {# Before widget HTML #}
+
+{{ widget_args.before_title| raw }} {# Before title HTML #}
+    {{ facets_header }} {# Title 'Filters' #}
+{{ widget_args.after_title| raw }} {# After title HTML #}
+
+<div id="res_facets">
+
+    <ul>
+        <li>
+            <a id="wpsolr_remove_facets" {# Do not remove id "wpsolr_remove_facets". It is used as JQuery selector. You can override it's CSS however. #}
+               class="select_opt wpsolr_facet_checkbox {{ not facets.has_facet_elements_selected ? "checked" : "" }}" {# Do not remove class "select_opt". It is used as JQuery selector. You can override it's CSS however. #}
+               href="#wpsolr_facets"
+            >
+                {{ facets_element_all_results }}
+            </a>
+        </li>
+    </ul>
+
+    {% for facet in facets.facets %} {# Loop on facets #}
+
+        {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}
+
+    {% endfor %} {# Loop on facets #}
+
+</div>
+
+{{ widget_args.after_widget| raw }} {# After widget HTML #}

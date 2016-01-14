@@ -1,0 +1,34 @@
+{# WPSOLR Facets default template #}
+
+<div>
+
+    {# Title like 'Filters' #}
+    <label class='wdm_label'>{{ facets_header }}</label>
+    <input type='hidden' name='sel_fac_field' id='sel_fac_field' data-wpsolr-facets-selected=''>
+
+    <div class='wdm_ul' id='wpsolr_section_facets'>
+
+        <div class='select_opt {{ facet_class }} {{ not facets.has_facet_elements_selected ? "checked" : "" }}'
+             id='wpsolr_remove_facets'>{{ facets_element_all_results }}
+        </div>
+
+        {% for facet in facets.facets %} {# Loop on facets #}
+
+            {# Current facet name #}
+            <lh>{{ facets_title|format(facet.name) }}</lh><br>
+
+            {% for item in facet.items %} {# Loop on current facet items #}
+
+                {# Current facet item #}
+                <div class='select_opt {{ facet_class }} {{ item.selected ? "checked" : "" }}'
+                     id='{{ facet.id }}:{{ item.name }}'>
+                    {{ facets_element|format( item.name, item.count ) }}
+                </div>
+
+            {% endfor %} {# Loop on current facet items #}
+
+        {% endfor %} {# Loop on facets #}
+
+    </div>
+
+</div>

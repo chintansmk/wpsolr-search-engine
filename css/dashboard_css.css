@@ -1,3 +1,23 @@
+.nav-tab.wpsolr-nav-tab-inactive{
+    background-color: #23282d;
+    color: #eee;
+}
+
+.nav-tab.wpsolr-nav-tab-active {
+    border-bottom-color: #fff;
+    background-color: rgba(138, 22, 193, 0.42);
+    background: #F78E3F none repeat scroll 0% 0%;
+    box-shadow: 0px 1px rgba(255, 255, 255, 0.1) inset, 0px 1px rgba(255, 255, 255, 0.1);
+    color: #FFF;
+}
+
+.nav-tab.wpsolr-nav-tab-success {
+    background-image: url('../images/success.png');
+    background-repeat: no-repeat;
+    background-position: right 5px center;
+    height: 22px;
+}
+
 .numberCircle {
     border-radius: 50%;
     behavior: url(PIE.htc); /* remove if you don't care about IE8 */
@@ -13,14 +33,15 @@
 
     font: 32px Arial, sans-serif;
 }
+
 .wdm-wrap {
     margin: 10px 20px 0 2px;
 }
 
 .page_title {
-    background-color: #F49537;
-    color: #fff;
-    border-left: 4px solid #C15F03;
+    background-color: rgba(135, 23, 191, 0.42);
+    color: red;
+    border-left: 4px solid #cccccc;
     padding: 5px 15px;
     margin-bottom: 15px;
 }
@@ -45,9 +66,8 @@
     float: left;
     width: 30%;
     padding: 10px;
-    font-size: 14px;
-    font-weight: bold;
-}
+    font-size: 12px;
+ }
 
 .col_right {
     float: left;
@@ -56,16 +76,19 @@
 }
 
 .wrapper {
-    background-color: #fff !important;
-    border: 1px #ccc;
-    margin-bottom: 15px;
+    margin: 16px 0;
+    padding: 23px 10px 0;
+    border: 1px solid #e5e5e5;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    background: #fff;
+    font-size: 13px;
+    line-height: 2.1em;
 }
 
 .wdm-save {
     /*padding: 10px !important ;*/
-    background: #F49537 !important;
-    border-color: #C15F03 !important;
-}
+    background: rgb(10, 83, 116) !important;
+ }
 
 .wdm-save:hover {
     background: #C15F03 !important;
@@ -134,11 +157,9 @@ input[type=text] {
 }
 
 .wdm_note {
-    font-style: italic;
-    color: #C15F03;
-    margin: 20px;
-    background: #ddd;
-    padding: 15px;
+    margin: 10px;
+    background: #f8f8f8;
+    padding: 10px;
     border-left: 4px solid #C15F03;
 }
 

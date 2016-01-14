@@ -1,0 +1,16 @@
+<script>
+    jQuery(document).ready(function () {
+
+        jQuery(".{{ facet_selector_class }}").on("click", function (event) {
+
+            alert(".{{ facet_selector_class }}");
+
+            jQuery(".{{ facet_selector_class }}").removeClass("{{ facet_selected_class }}"); // Deactivate all other facets
+
+            jQuery(this).addClass("{{ facet_selected_class }}");
+
+            {# Update url #}
+            console.log(jQuery(this).data("wpsolr-facet"));
+        });
+    });
+</script>

@@ -42,7 +42,7 @@ jQuery(document).ready(function () {
 
             // Errors
             if (data && (data.status != 0 || data.message)) {
-                jQuery('.status_index_message').html('<br><br>An error occured: <br><br>' + data.message);
+                jQuery('.status_index_message').html('<div class=\'wdm_note\'>An error occured:<p>' + data.message + '</p></div>');
 
                 // Block submit
                 alert('An error occured.');
@@ -148,7 +148,7 @@ jQuery(document).ready(function () {
             if (data.status != 0 || data.message) {
                 // Errors
 
-                jQuery('.status_index_message').html('<br><br>An error occured: <br><br>' + data.message);
+                jQuery('.status_index_message').html('<div class=\'wdm_note\'>An error occured:<p>' + data.message) + '</p></div>';
 
             }
             else if (!data.indexing_complete) {

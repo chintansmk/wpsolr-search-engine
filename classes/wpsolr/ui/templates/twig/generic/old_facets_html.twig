@@ -1,0 +1,49 @@
+{# Shared Facets template #}
+
+{{ widget_args.before_widget| raw }} {# Before widget HTML #}
+
+{{ widget_args.before_title| raw }} {# Before title HTML #}
+    {{ facets_header }} {# Title 'Filters' #}
+{{ widget_args.after_title| raw }} {# After title HTML #}
+
+<div id="res_facets"> {# Do not remove id "res_facets". It is used as JQuery selector. You can override it's CSS however. #}
+
+    <ul>
+        <li>
+            <a id="wpsolr_remove_facets" {# Do not remove id "wpsolr_remove_facets". It is used as JQuery selector. You can override it's CSS however. #}
+               class="select_opt wpsolr_facet_checkbox {{ not facets.has_facet_elements_selected ? "checked" : "" }}" {# Do not remove class "select_opt". It is used as JQuery selector. You can override it's CSS however. #}
+               href="#wpsolr_facets"
+            >
+                {{ facets_element_all_results }}
+            </a>
+        </li>
+    </ul>
+
+    {% for facet in facets.facets %} {# Loop on facets #}
+
+        <ul>
+
+            <span>{{ facets_title|format(facet.name) }}</span> {# Facet name #}
+
+            {% for item in facet.items %} {# Loop on facet items #}
+
+                <li>
+
+                    <a class='select_opt wpsolr_facet_checkbox {{ item.selected ? "checked" : "" }}'
+                       id='{{ facet.id }}:{{ item.name }}'
+                       href="#wpsolr_facets"
+                    >
+                        {{ facets_element|format( item.name|capitalize, item.count ) }}
+                    </a> {# Current facet item #}
+
+                </li>
+
+            {% endfor %} {# Loop on facet items #}
+
+        </ul>
+
+    {% endfor %} {# Loop on facets #}
+
+</div>
+
+{{ widget_args.after_widget| raw }} {# After widget HTML #}

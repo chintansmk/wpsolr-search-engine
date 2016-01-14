@@ -1,0 +1,28 @@
+{# Shared Sort template #}
+
+<script>
+    {# Your custom js here. #}
+</script>
+
+{% include template_css %} {# template_css is replaced by the (custom) layout's css selected in the widget. #}
+
+{{ widget_args.before_widget| raw }} {# Before widget HTML #}
+
+{{ widget_args.before_title| raw }} {# Before title HTML #}
+    {{ sort_header }} {# Title 'Sort by' #}
+{{ widget_args.after_title| raw }} {# After title HTML #}
+
+<select class="select_field"> {# Do not remove class "select_field". It is used as JQuery selector. You can override it's CSS however. #}
+
+    {% for sort in sort_list.items %} {# Loop on sort items #}
+
+        <option value="{{ sort.id }}" {{ sort.selected ? "selected" : "" }}> {# Sort item value #}
+            {{ sort.name }} {# Sort item name #}
+        </option>
+
+    {% endfor %} {# Loop on sort items #}
+
+</select>
+
+{{ widget_args.after_widget| raw }} {# After widget HTML #}
+

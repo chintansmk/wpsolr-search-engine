@@ -2,7 +2,7 @@
 
 Contributors: wpsolr
 
-Current Version: 7.6
+Current Version: 7.7
 
 Author: wpsolr
 
@@ -14,7 +14,7 @@ Requires at least: 3.7.1
 
 Tested up to: 4.4
 
-Stable tag: 7.6
+Stable tag: 7.7
 
 WPSOLR is the growing, blazing-fast, open source enterprise search plugin built on Apache Solr.
 
@@ -214,8 +214,6 @@ And now, with this plugin, you can get it for free. So, fasten your seat belt, a
 
 For more details visit <a href='http://wpsolr.com'>wpsolr.com</a>
 
-
-
 == Installation ==
 
 1. Upload the WPSOLR-Search-Engine folder to the /wp-content/plugins/ directory
@@ -254,6 +252,11 @@ For more details visit <a href='http://wpsolr.com'>wpsolr.com</a>
 27. 27) Admin: create local or cloud Solr indexes.
 
 == Changelog ==
+
+= 7.7 =
+* All Widgets are now a <a href="http://twig.sensiolabs.org/" target="_blank">Twig</a> template, which you can change with your theme Customizer.
+* New Widget 'WPSOLR Sort' to sort search results wherever your theme can support it.
+* Warning: Minimum PHP requirement is now PHP 5.5 (was 5.3 before).
 
 = 7.6 =
 * Extra option (default) to use your current theme search templates to display Solr results. Advantage: search results are fully controlled by your theme's standard loop. Drawback: advanced Solr features are not available: keyword autocompletion, did you mean, sort, facets.
@@ -509,9 +512,7 @@ You have to select the admin option "Replace standard WP search", and verify tha
 
 = Which PHP version is required ? =
 
-WPSOLR uses a Solr client library, Solarium, which requires namespaces.
-
-Namespaces are supported by PHP >= 5.3.0
+PHP >= 5.5.0, to support class name resolution via ::class.
 
 = How do I install and configure Solr? =
 

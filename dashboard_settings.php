@@ -1,9 +1,12 @@
 <?php
-/*
- *  Route to controllers
- */
-WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_MANAGED_SOLR_SERVERS, true );
-WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_INDEXES, true );
+use wpsolr\extensions\indexes\WPSOLR_Options_indexes;
+use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
+use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
+use wpsolr\extensions\WPSOLR_Extensions;
+use wpsolr\solr\WPSOLR_IndexSolrClient;
+use wpsolr\solr\WPSOLR_SearchSolrClient;
+use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\utilities\WPSOLR_Option;
 
 switch ( isset( $_POST['wpsolr_action'] ) ? $_POST['wpsolr_action'] : '' ) {
 	case 'wpsolr_admin_action_form_temporary_index':
@@ -15,17 +18,17 @@ switch ( isset( $_POST['wpsolr_action'] ) ? $_POST['wpsolr_action'] : '' ) {
 
 		if ( isset( $_POST['submit_button_form_temporary_index_select_managed_solr_service_id'] ) ) {
 
-			$form_data = WpSolrExtensions::extract_form_data( true, array(
+			$form_data = WPSOLR_Extensions::extract_form_data( true, array(
 					'managed_solr_service_id' => array( 'default_value' => '', 'can_be_empty' => false )
 				)
 			);
 
-			$managed_solr_server = new OptionManagedSolrServer( $form_data['managed_solr_service_id']['value'] );
+			$managed_solr_server = new WPSOLR_ManagedServers( $form_data['managed_solr_service_id']['value'] );
 			$response_object     = $managed_solr_server->call_rest_create_google_recaptcha_token();
 
-			if ( isset( $response_object ) && OptionManagedSolrServer::is_response_ok( $response_object ) ) {
-				$google_recaptcha_site_key = OptionManagedSolrServer::get_response_result( $response_object, 'siteKey' );
-				$google_recaptcha_token    = OptionManagedSolrServer::get_response_result( $response_object, 'token' );
+			if ( isset( $response_object ) && WPSOLR_ManagedServers::is_response_ok( $response_object ) ) {
+				$google_recaptcha_site_key = WPSOLR_ManagedServers::get_response_result( $response_object, 'siteKey' );
+				$google_recaptcha_token    = WPSOLR_ManagedServers::get_response_result( $response_object, 'token' );
 			}
 
 		}
@@ -46,33 +49,31 @@ function wpsolr_admin_action_form_temporary_index( &$response_object ) {
 		return;
 	}
 
-	$form_data = WpSolrExtensions::extract_form_data( true, array(
+	$form_data = WPSOLR_Extensions::extract_form_data( true, array(
 			'managed_solr_service_id' => array( 'default_value' => '', 'can_be_empty' => false )
 		)
 	);
 
-	$managed_solr_server = new OptionManagedSolrServer( $form_data['managed_solr_service_id']['value'] );
+	$managed_solr_server = new WPSOLR_ManagedServers( $form_data['managed_solr_service_id']['value'] );
 	$response_object     = $managed_solr_server->call_rest_create_solr_index( $g_recaptcha_response );
 
-	if ( isset( $response_object ) && OptionManagedSolrServer::is_response_ok( $response_object ) ) {
+	if ( isset( $response_object ) && WPSOLR_ManagedServers::is_response_ok( $response_object ) ) {
 
-		$option_indexes_object = new OptionIndexes();
-
-		$option_indexes_object->create_index(
+		WPSOLR_Global::getExtensionIndexes()->create_index(
 			$managed_solr_server->get_id(),
-			OptionIndexes::STORED_INDEX_TYPE_MANAGED_TEMPORARY,
-			OptionManagedSolrServer::get_response_result( $response_object, 'urlCore' ),
+			WPSOLR_Options_indexes::STORED_INDEX_TYPE_MANAGED_TEMPORARY,
+			WPSOLR_ManagedServers::get_response_result( $response_object, 'urlCore' ),
 			'Test index from ' . $managed_solr_server->get_label(),
-			OptionManagedSolrServer::get_response_result( $response_object, 'urlScheme' ),
-			OptionManagedSolrServer::get_response_result( $response_object, 'urlDomain' ),
-			OptionManagedSolrServer::get_response_result( $response_object, 'urlPort' ),
-			'/' . OptionManagedSolrServer::get_response_result( $response_object, 'urlPath' ) . '/' . OptionManagedSolrServer::get_response_result( $response_object, 'urlCore' ),
-			OptionManagedSolrServer::get_response_result( $response_object, 'key' ),
-			OptionManagedSolrServer::get_response_result( $response_object, 'secret' )
+			WPSOLR_ManagedServers::get_response_result( $response_object, 'urlScheme' ),
+			WPSOLR_ManagedServers::get_response_result( $response_object, 'urlDomain' ),
+			WPSOLR_ManagedServers::get_response_result( $response_object, 'urlPort' ),
+			'/' . WPSOLR_ManagedServers::get_response_result( $response_object, 'urlPath' ) . '/' . WPSOLR_ManagedServers::get_response_result( $response_object, 'urlCore' ),
+			WPSOLR_ManagedServers::get_response_result( $response_object, 'key' ),
+			WPSOLR_ManagedServers::get_response_result( $response_object, 'secret' )
 		);
 
 		// Redirect automatically to Solr options if it is the first solr index created
-		if ( count( $option_indexes_object->get_indexes() ) === 1 ) {
+		if ( count( WPSOLR_Global::getExtensionIndexes()->get_indexes() ) === 1 ) {
 			$redirect_location = '?page=solr_settings&tab=solr_option';
 			header( "Location: $redirect_location", true, 302 ); // wp_redirect() is not found
 			exit;
@@ -83,23 +84,13 @@ function wpsolr_admin_action_form_temporary_index( &$response_object ) {
 
 function wpsolr_admin_init() {
 
-	WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_INDEXES, true );
-	register_setting( OptionIndexes::get_option_name( WpSolrExtensions::OPTION_INDEXES ), OptionIndexes::get_option_name( WpSolrExtensions::OPTION_INDEXES ) );
+	WPSOLR_Extensions::register_settings();
 
 	register_setting( 'solr_form_options', 'wdm_solr_form_data' );
 	register_setting( 'solr_res_options', 'wdm_solr_res_data' );
 	register_setting( 'solr_facet_options', 'wdm_solr_facet_data' );
 	register_setting( 'solr_sort_options', WPSOLR_Option::OPTION_SORTBY );
-	register_setting( 'solr_localization_options', 'wdm_solr_localization_data' );
-	register_setting( 'solr_extension_groups_options', 'wdm_solr_extension_groups_data' );
-	register_setting( 'solr_extension_s2member_options', 'wdm_solr_extension_s2member_data' );
-	register_setting( 'solr_extension_wpml_options', 'wdm_solr_extension_wpml_data' );
-	register_setting( 'solr_extension_polylang_options', 'wdm_solr_extension_polylang_data' );
-	register_setting( 'solr_extension_qtranslatex_options', 'wdm_solr_extension_qtranslatex_data' );
 	register_setting( 'solr_operations_options', 'wdm_solr_operations_data' );
-	register_setting( 'solr_extension_woocommerce_options', 'wdm_solr_extension_woocommerce_data' );
-	register_setting( 'solr_extension_acf_options', 'wdm_solr_extension_acf_data' );
-	register_setting( 'solr_extension_types_options', 'wdm_solr_extension_types_data' );
 }
 
 function fun_add_solr_settings() {
@@ -125,7 +116,7 @@ function fun_set_solr_options() {
 	// Button Index
 	if ( isset( $_POST['solr_index_data'] ) ) {
 
-		$solr = WPSolrIndexSolrClient::create();
+		$solr = WPSOLR_IndexSolrClient::create();
 
 		try {
 			$res = $solr->get_solr_status();
@@ -166,7 +157,7 @@ function fun_set_solr_options() {
 
 	// Button delete
 	if ( isset( $_POST['solr_delete_index'] ) ) {
-		$solr = WPSolrIndexSolrClient::create();
+		$solr = WPSOLR_IndexSolrClient::create();
 
 		try {
 			$res = $solr->get_solr_status();
@@ -206,7 +197,6 @@ function fun_set_solr_options() {
 
 	?>
 	<div class="wdm-wrap" xmlns="http://www.w3.org/1999/html">
-	<div class="page_title"><h1>Power your search with Solr, the world's leading search engine</h1></div>
 
 	<?php
 	if ( isset ( $_GET['tab'] ) ) {
@@ -221,9 +211,9 @@ function fun_set_solr_options() {
 		$tab = 'solr_indexes';
 	}
 
-	switch ( $tab ) {
+switch ( $tab ) {
 	case 'solr_indexes' :
-		WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::OPTION_INDEXES );
+		WPSOLR_Extensions::require_once_wpsolr_extension_admin_options( WPSOLR_Extensions::OPTION_INDEXES );
 		break;
 
 	case 'solr_option':
@@ -240,14 +230,12 @@ function fun_set_solr_options() {
 				'localization_options' => '2.5 Localization Options',
 			);
 
-			$subtab = wpsolr_admin_sub_tabs( $subtabs );
+			$subtab              = wpsolr_admin_sub_tabs( $subtabs );
 
 			switch ( $subtab ) {
 				case 'result_opt':
 
-					WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_INDEXES, true );
-					$option_indexes = new OptionIndexes();
-					$solr_indexes   = $option_indexes->get_indexes();
+					$solr_indexes = WPSOLR_Global::getExtensionIndexes()->get_indexes();
 
 					?>
 					<div id="solr-results-options" class="wdm-vertical-tabs-content">
@@ -330,14 +318,15 @@ function fun_set_solr_options() {
 											$options = array(
 												array(
 													'code'  => 'use_current_theme_search_template',
-													'label' => 'Use my current theme search templates (no keyword autocompletion, no \'Did you mean\', no facets, no sort)'
+													'label' => '1. Use my current theme search templates (no keyword autocompletion, no \'Did you mean\', no facets, no sort)'
 												),
-												array( 'code'  => 'ajax',
-												       'label' => 'Use WPSOLR custom search templates with Ajax (full WPSOLR features)'
+												array(
+													'code'  => 'ajax',
+													'label' => '2. Use WPSOLR custom search templates with Ajax (full WPSOLR features)'
 												),
 												array(
 													'code'  => 'ajax_with_parameters',
-													'label' => 'Use WPSOLR custom search templates with Ajax and show parameters in url (full WPSOLR features)'
+													'label' => '3. Use WPSOLR custom search templates with Ajax and show parameters in url (full WPSOLR features)'
 												)
 											);
 											foreach ( $options as $option ) {
@@ -349,13 +338,24 @@ function fun_set_solr_options() {
 
 										</select>
 
-										<br/><br/>
-										To display your search results, you can choose among:<br/>
-										<b>- Full integration to your theme, but less Solr features:</b> <br/>
-										Use your own theme's search templates customized with Widget 'WPSOLR
-										Facets'.<br/>
-										<b>- Full Solr features, but less integration to your theme:</b><br/>
-										Use WPSOLR's custom search templates with your own css.<br/>
+										<div class="wdm_note">
+											To display your search results, you can choose among:<br/>
+											<ul>
+												<li>
+													1. <b>Full integration to your theme, but less Solr features.</b>
+													Use your own theme's search templates customized with our Widgets
+													"WPSOLR Facets" and "WPSOLR Sort", written in <a
+														href="http://twig.sensiolabs.org/" target="_blank">Twig</a>. You
+													can control 100% of the appearance of our Widgets, with the theme
+													Customizer.
+												</li>
+												<li>
+													2. 3. <b>Full Solr features, but less integration to your theme.</b>
+													Use WPSOLR's custom search templates with your own css.
+												</li>
+											</ul>
+										</div>
+
 									</div>
 									<div class="clear"></div>
 								</div>
@@ -385,10 +385,66 @@ function fun_set_solr_options() {
 									</div>
 									<div class="clear"></div>
 								</div>
+
+								<div class="wdm_row">
+									<div class='col_left'>Query default operator<br/>
+									</div>
+									<div class='col_right'>
+										<?php $query_default_operator = isset( $solr_res_options[ WPSOLR_Option::OPTION_SEARCH_QUERY_DEFAULT_OPERATOR ] )
+											? $solr_res_options[ WPSOLR_Option::OPTION_SEARCH_QUERY_DEFAULT_OPERATOR ] : WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND; ?>
+
+										<select
+											name='wdm_solr_res_data[<?php echo WPSOLR_Option::OPTION_SEARCH_QUERY_DEFAULT_OPERATOR; ?>]'>
+											<option
+												value='<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND; ?>' <?php selected( WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND, $query_default_operator, true ); ?>
+											>
+												<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND; ?>
+											</option>
+											<option
+												value='<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_OR; ?>' <?php selected( WPSOLR_SearchSolrClient::QUERY_OPERATOR_OR, $query_default_operator, true ); ?>
+											>
+												<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_OR; ?>
+											</option>
+										</select>
+
+									</div>
+									<div class="clear"></div>
+								</div>
+
+								<div class="wdm_row">
+									<div class='col_left'>Display partial keyword matches in results
+									</div>
+									<div class='col_right'>
+										<?php $is_query_partial_match = isset( $solr_res_options[ WPSOLR_Option::OPTION_SEARCH_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH ] ) ? '1' : '0'; ?>
+										<input type='checkbox'
+										       name='wdm_solr_res_data[<?php echo WPSOLR_Option::OPTION_SEARCH_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH; ?>]'
+										       value='1'
+											<?php checked( '1', $is_query_partial_match ); ?>>
+
+										Warning: this will hurt Solr search performance!
+										<p>This adds '*' to all keywords.
+										For instance, 'search apache' will return results
+										containing 'searching apachesolr'</p>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="wdm_row">
+									<div class='col_left'>Do not show a list of keywords suggestions in the
+										search box while typing
+									</div>
+									<div class='col_right'>
+										<?php $is_do_not_show_suggestions = isset( $solr_res_options[ WPSOLR_Option::OPTION_SEARCH_IS_DO_NOT_SHOW_SUGGESTIONS ] ) ? '1' : '0'; ?>
+										<input type='checkbox'
+										       name='wdm_solr_res_data[<?php echo WPSOLR_Option::OPTION_SEARCH_IS_DO_NOT_SHOW_SUGGESTIONS; ?>]'
+										       value='1'
+											<?php checked( '1', $is_do_not_show_suggestions ); ?>>
+									</div>
+									<div class="clear"></div>
+								</div>
 								<div class="wdm_row">
 									<div class='col_left'>Do not automatically trigger the search, when a user
 										clicks on the
-										autocomplete list
+										suggestions list
 									</div>
 									<div class='col_right'>
 										<?php $is_after_autocomplete_block_submit = isset( $solr_res_options['is_after_autocomplete_block_submit'] ) ? '1' : '0'; ?>
@@ -467,15 +523,15 @@ function fun_set_solr_options() {
 				case 'index_opt':
 
 
-					$posts          = get_post_types();
-					$args       = array(
+					$posts = get_post_types();
+					$args        = array(
 						'public'   => true,
 						'_builtin' => false
 
 					);
-					$output     = 'names'; // or objects
-					$operator   = 'and'; // 'and' or 'or'
-					$taxonomies = get_taxonomies( $args, $output, $operator );
+					$output      = 'names'; // or objects
+					$operator    = 'and'; // 'and' or 'or'
+					$taxonomies  = get_taxonomies( $args, $output, $operator );
 					global $wpdb;
 					$limit = (int) apply_filters( 'postmeta_form_limit', 30 );
 					$keys  = $wpdb->get_col( "
@@ -486,8 +542,7 @@ function fun_set_solr_options() {
 
 					// WooCommerce attributes are added to custom fields
 					if ( function_exists( 'wc_get_attribute_taxonomies' ) ) {
-						WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::EXTENSION_WOOCOMMERCE, true );
-						$woo_attribute_names = PluginWooCommerce::get_attribute_taxonomy_names();
+						$woo_attribute_names = WPSOLR_Plugin_WooCommerce::get_attribute_taxonomy_names();
 						foreach ( $woo_attribute_names as $woo_attribute_name ) {
 							// Add woo attribute slug to custom fields
 							array_push( $keys, $woo_attribute_name );
@@ -502,10 +557,6 @@ function fun_set_solr_options() {
 					}
 
 					$allowed_attachments_types = get_allowed_mime_types();
-
-					WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_INDEXES, true );
-					$option_indexes = new OptionIndexes();
-					$solr_indexes   = $option_indexes->get_indexes();
 					?>
 
 					<div id="solr-indexing-options" class="wdm-vertical-tabs-content">
@@ -691,13 +742,13 @@ function fun_set_solr_options() {
 					break;
 
 				case 'facet_opt':
-					$solr_options   = get_option( 'wdm_solr_form_data' );
+					$solr_options = get_option( 'wdm_solr_form_data' );
 					$checked_fls = $solr_options['cust_fields'] . ',' . $solr_options['taxonomies'];
 
 					$checked_fields = array();
 					$checked_fields = explode( ',', $checked_fls );
 					$img_path       = plugins_url( 'images/plus.png', __FILE__ );
-					$minus_path     = plugins_url( 'images/minus.png', __FILE__ );
+					$minus_path     = plugins_url( 'images/success.png', __FILE__ );
 					$built_in       = array( 'Type', 'Author', 'Categories', 'Tags' );
 					$built_in       = array_merge( $built_in, $checked_fields );
 					?>
@@ -727,8 +778,14 @@ function fun_set_solr_options() {
 								<div class="wdm_note">
 									<h4>Instructions</h4>
 									<ul class="wdm_ul wdm-instructions">
-										<li>Click on the 'Plus' icon to add the facets</li>
-										<li>Click on the 'Minus' icon to remove the facets</li>
+										<li>Click on the
+											<image src='<?php echo plugins_url( 'images/plus.png', __FILE__ ); ?>'/>
+											icon to add a facet
+										</li>
+										<li>Click on the
+											<image src='<?php echo plugins_url( 'images/success.png', __FILE__ ); ?>'/>
+											icon to remove a facet
+										</li>
 										<li>Sort the items in the order you want to display them by dragging and
 											dropping them at the desired plcae
 										</li>
@@ -803,9 +860,9 @@ function fun_set_solr_options() {
 
 				case 'sort_opt':
 					$img_path = plugins_url( 'images/plus.png', __FILE__ );
-					$minus_path = plugins_url( 'images/minus.png', __FILE__ );
+					$minus_path  = plugins_url( 'images/success.png', __FILE__ );
 
-					$built_in = WPSolrSearchSolrClient::get_sort_options();
+					$built_in = WPSOLR_SearchSolrClient::get_sort_options();
 
 					?>
 					<div id="solr-sort-options" class="wdm-vertical-tabs-content">
@@ -827,8 +884,14 @@ function fun_set_solr_options() {
 								<div class="wdm_note">
 									<h4>Instructions</h4>
 									<ul class="wdm_ul wdm-instructions">
-										<li>Click on the 'Plus' icon to add the sort</li>
-										<li>Click on the 'Minus' icon to remove the sort</li>
+										<li>Click on the
+											<image src='<?php echo plugins_url( 'images/plus.png', __FILE__ ); ?>'/>
+											icon to add a facet
+										</li>
+										<li>Click on the
+											<image src='<?php echo plugins_url( 'images/success.png', __FILE__ ); ?>'/>
+											icon to remove a facet
+										</li>
 										<li>Sort the items in the order you want to display them by dragging and
 											dropping them at the desired place
 										</li>
@@ -861,7 +924,7 @@ function fun_set_solr_options() {
 											if ( $selected_sort_value != '' ) {
 												foreach ( $selected_array as $sort_code ) {
 													if ( $sort_code != '' ) {
-														$sort     = WPSolrSearchSolrClient::get_sort_option_from_code( $sort_code, null );
+														$sort     = WPSOLR_SearchSolrClient::get_sort_option_from_code( $sort_code, null );
 														$dis_text = is_array( $sort ) ? $sort['label'] : $sort_code;
 
 														echo "<li id='$sort_code' class='ui-state-default facets sort_selected'>$dis_text
@@ -908,7 +971,7 @@ function fun_set_solr_options() {
 					break;
 
 				case 'localization_options':
-					WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::OPTION_LOCALIZATION );
+					WPSOLR_Extensions::require_once_wpsolr_extension_admin_options( WPSOLR_Extensions::OPTION_LOCALIZATION );
 					break;
 
 			}
@@ -919,234 +982,195 @@ function fun_set_solr_options() {
 		<?php
 		break;
 
-	case 'solr_plugins':
+case 'solr_plugins':
 	?>
 	<div id="solr-option-tab">
 
-		<?php
+	<?php
+	$subtabs = [ ];
+	foreach ( WPSOLR_Extensions::get_extensions() as $extension ) {
 
-		$subtabs = array(
-			'extension_woocommerce_opt' => 'WooCommerce',
-			'extension_acf_opt'         => 'Advanced Custom Fields (ACF)',
-			'extension_types_opt'       => 'Types',
-			'extension_wpml_opt'        => 'WPML',
-			'extension_polylang_opt'    => 'Polylang',
-			// It seems impossible to map qTranslate X structure (1 post/many languages) in WPSOLR's (1 post/1 language)
-			/* 'extension_qtranslatex_opt' => 'qTranslate X', */
-			'extension_groups_opt'      => 'Groups',
-			'extension_s2member_opt'    => 's2Member',
-		);
+		if ( ! empty( $extension['name'] ) ) {
+			$subtabs[ $extension['id'] ] = [
+				'name'       => $extension['name'],
+				'is_checked' => $extension['is_active']
+			];
+		}
+	}
 
-		$subtab = wpsolr_admin_sub_tabs( $subtabs );
+	$subtab = wpsolr_admin_sub_tabs( $subtabs );
 
-		switch ( $subtab ) {
-			case 'extension_groups_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_GROUPS );
-				break;
+	WPSOLR_Global::getExtension( $subtab )->output_form();
+	break;
 
-			case 'extension_s2member_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_S2MEMBER );
-				break;
+	case 'solr_operations':
 
-			case 'extension_wpml_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_WPML );
-				break;
+		$option_indexes_object = WPSOLR_Global::getExtensionIndexes();
 
-			case 'extension_polylang_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_POLYLANG );
-				break;
-
-			case 'extension_qtranslatex_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_QTRANSLATEX );
-				break;
-
-			case 'extension_woocommerce_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_WOOCOMMERCE );
-				break;
-
-			case 'extension_acf_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_ACF );
-				break;
-
-			case 'extension_types_opt':
-				WpSolrExtensions::require_once_wpsolr_extension_admin_options( WpSolrExtensions::EXTENSION_TYPES );
-				break;
-
+		// Create the tabs from the Solr indexes already configured
+		$subtabs = array();
+		foreach ( $option_indexes_object->get_indexes() as $index_indice => $index ) {
+			$subtabs[ $index_indice ] = isset( $index['index_name'] ) ? $index['index_name'] : 'Index with no name';
 		}
 
-		break;
+		if ( empty( $subtabs ) ) {
+			echo "Please create a Solr index configuration first.";
 
-		case 'solr_operations':
+			return;
+		}
 
-			WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_INDEXES, true );
-			$option_indexes_object = new OptionIndexes();
-
-			// Create the tabs from the Solr indexes already configured
-			$subtabs = array();
-			foreach ( $option_indexes_object->get_indexes() as $index_indice => $index ) {
-				$subtabs[ $index_indice ] = isset( $index['index_name'] ) ? $index['index_name'] : 'Index with no name';
-			}
-
-			if ( empty( $subtabs ) ) {
-				echo "Please create a Solr index configuration first.";
-
-				return;
-			}
-
-			// Create subtabs on the left side
-			$current_index_indice = wpsolr_admin_sub_tabs( $subtabs );
-			if ( ! $option_indexes_object->has_index( $current_index_indice ) ) {
-				$current_index_indice = key( $subtabs );
-			}
-			$current_index_name = $subtabs[ $current_index_indice ];
+		// Create subtabs on the left side
+		$current_index_indice = wpsolr_admin_sub_tabs( $subtabs );
+		if ( ! $option_indexes_object->has_index( $current_index_indice ) ) {
+			$current_index_indice = key( $subtabs );
+		}
+		$current_index_name = $subtabs[ $current_index_indice ];
 
 
-			try {
-				$solr                             = WPSolrIndexSolrClient::create( $current_index_indice );
-				$count_nb_documents_to_be_indexed = $solr->count_nb_documents_to_be_indexed();
-			} catch ( Exception $e ) {
-				echo '<b>An error occured while trying to connect to the Solr server:</b> <br>' . htmlentities( $e->getMessage() );
+		try {
+			$solr                             = WPSOLR_IndexSolrClient::create( $current_index_indice );
+			$count_nb_documents_to_be_indexed = $solr->count_nb_documents_to_be_indexed();
+		} catch ( Exception $e ) {
+			echo '<b>An error occured while trying to connect to the Solr server:</b> <br>' . htmlentities( $e->getMessage() );
 
-				return;
-			}
-
-			?>
-
-			<div id="solr-operations-tab"
-			     class="wdm-vertical-tabs-content">
-				<form action="options.php" method='post' id='solr_actions'>
-					<input type='hidden' id='solr_index_indice' name='wdm_solr_operations_data[solr_index_indice]'
-					       value="<?php echo $current_index_indice; ?>">
-					<?php
-
-					settings_fields( 'solr_operations_options' );
-
-					$solr_operations_options = get_option( 'wdm_solr_operations_data' );
-
-					$batch_size = empty( $solr_operations_options['batch_size'][ $current_index_indice ] ) ? '100' : $solr_operations_options['batch_size'][ $current_index_indice ];
-
-					?>
-					<input type='hidden' id='adm_path' value='<?php echo admin_url(); ?>'> <!-- for ajax -->
-					<div class='wrapper'>
-						<h4 class='head_div'>Content of the Solr index "<?php echo $current_index_name ?>"</h4>
-
-						<div class="wdm_note">
-							<div>
-								<?php
-								try {
-									$nb_documents_in_index = $solr->get_count_documents();
-									echo sprintf( "<b>A total of %s documents are currently in your index \"%s\"</b>", $nb_documents_in_index, $current_index_name );
-								} catch ( Exception $e ) {
-									echo '<b>Please check your Solr Hosting, an exception occured while calling your Solr server:</b> <br><br>' . htmlentities( $e->getMessage() );
-								}
-								?>
-							</div>
-							<?php if ( $count_nb_documents_to_be_indexed >= 0 ): ?>
-								<div><b>
-										<?php
-										echo $count_nb_documents_to_be_indexed;
-
-										// Reset value so it's not displayed next time this page is displayed.
-										//$solr->update_count_documents_indexed_last_operation();
-										?>
-									</b> document(s) remain to be indexed
-								</div>
-							<?php endif ?>
-						</div>
-						<div class="wdm_row">
-							<p>The indexing is <b>incremental</b>: only documents updated after the last operation
-								are sent to the index.</p>
-
-							<p>So, the first operation will index all documents, by batches of
-								<b><?php echo $batch_size; ?></b> documents.</p>
-
-							<p>If a <b>timeout</b> occurs, you just have to click on the button again: the process
-								will restart from where it stopped.</p>
-
-							<p>If you need to reindex all again, delete the index first.</p>
-						</div>
-						<div class="wdm_row">
-							<div class='col_left'>Number of documents sent in Solr as a single commit.<br>
-								You can change this number to control indexing's performance.
-							</div>
-							<div class='col_right'>
-								<input type='text' id='batch_size'
-								       name='wdm_solr_operations_data[batch_size][<?php echo $current_index_indice ?>]'
-								       placeholder="Enter a Number"
-								       value="<?php echo $batch_size; ?>">
-								<span class='res_err'></span><br>
-							</div>
-							<div class="clear"></div>
-							<div class='col_left'>Display debug infos during indexing</div>
-							<div class='col_right'>
-
-								<input type='checkbox'
-								       id='is_debug_indexing'
-								       name='wdm_solr_operations_data[is_debug_indexing][<?php echo $current_index_indice ?>]'
-								       value='is_debug_indexing'
-									<?php checked( 'is_debug_indexing', isset( $solr_operations_options['is_debug_indexing'][ $current_index_indice ] ) ? $solr_operations_options['is_debug_indexing'][ $current_index_indice ] : '' ); ?>>
-								<span class='res_err'></span><br>
-							</div>
-							<div class="clear"></div>
-							<div class='col_left'>
-								Re-index all the data in place.<br/>
-								If you check this option, it will restart the indexing from start, without deleting the
-								data already in the Solr index.
-							</div>
-							<div class='col_right'>
-
-								<input type='checkbox'
-								       id='is_reindexing_all_posts'
-								       name='is_reindexing_all_posts'
-								       value='is_reindexing_all_posts'
-									<?php checked( true, false ); ?>>
-								<span class='res_err'></span><br>
-							</div>
-							<div class="clear"></div>
-						</div>
-						<div class="wdm_row">
-							<div class="submit">
-								<input name="solr_start_index_data" type="submit" class="button-primary wdm-save"
-								       id='solr_start_index_data'
-								       value="Synchronize Wordpress with '<?php echo $current_index_name ?>' "/>
-								<input name="solr_stop_index_data" type="submit" class="button-primary wdm-save"
-								       id='solr_stop_index_data' value="Stop current indexing"
-								       style="visibility: hidden;"/>
-								<span class='status_index_icon'></span>
-
-								<input name="solr_delete_index" type="submit" class="button-primary wdm-save"
-								       id="solr_delete_index"
-								       value="Empty '<?php echo $current_index_name ?>' "/>
-
-
-								<span class='status_index_message'></span>
-								<span class='status_debug_message'></span>
-								<span class='status_del_message'></span>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-			<?php
-			break;
-
-
+			return;
 		}
 
 		?>
 
+		<div id="solr-operations-tab"
+		     class="wdm-vertical-tabs-content">
+			<form action="options.php" method='post' id='solr_actions'>
+				<input type='hidden' id='solr_index_indice' name='wdm_solr_operations_data[solr_index_indice]'
+				       value="<?php echo $current_index_indice; ?>">
+				<?php
+
+				settings_fields( 'solr_operations_options' );
+
+				$solr_operations_options = get_option( 'wdm_solr_operations_data' );
+
+				$batch_size = empty( $solr_operations_options['batch_size'][ $current_index_indice ] ) ? '100' : $solr_operations_options['batch_size'][ $current_index_indice ];
+
+				?>
+				<input type='hidden' id='adm_path' value='<?php echo admin_url(); ?>'> <!-- for ajax -->
+				<div class='wrapper'>
+					<h4 class='head_div'>Content of the Solr index "<?php echo $current_index_name ?>"</h4>
+
+					<div class="wdm_note">
+						<div>
+							<?php
+							try {
+								$nb_documents_in_index = $solr->get_count_documents();
+								echo sprintf( "<b>A total of %s documents are currently in your index \"%s\"</b>", $nb_documents_in_index, $current_index_name );
+							} catch ( Exception $e ) {
+								echo '<b>Please check your Solr Hosting, an exception occured while calling your Solr server:</b> <br><br>' . htmlentities( $e->getMessage() );
+							}
+							?>
+						</div>
+						<?php if ( $count_nb_documents_to_be_indexed >= 0 ): ?>
+							<div><b>
+									<?php
+									echo $count_nb_documents_to_be_indexed;
+
+									// Reset value so it's not displayed next time this page is displayed.
+									//$solr->update_count_documents_indexed_last_operation();
+									?>
+								</b> document(s) remain to be indexed
+							</div>
+						<?php endif ?>
+					</div>
+					<div class="wdm_row">
+						<p>The indexing is <b>incremental</b>: only documents updated after the last operation
+							are sent to the index.</p>
+
+						<p>So, the first operation will index all documents, by batches of
+							<b><?php echo $batch_size; ?></b> documents.</p>
+
+						<p>If a <b>timeout</b> occurs, you just have to click on the button again: the process
+							will restart from where it stopped.</p>
+
+						<p>If you need to reindex all again, delete the index first.</p>
+					</div>
+					<div class="wdm_row">
+						<div class='col_left'>Number of documents sent in Solr as a single commit.<br>
+							You can change this number to control indexing's performance.
+						</div>
+						<div class='col_right'>
+							<input type='text' id='batch_size'
+							       name='wdm_solr_operations_data[batch_size][<?php echo $current_index_indice ?>]'
+							       placeholder="Enter a Number"
+							       value="<?php echo $batch_size; ?>">
+							<span class='res_err'></span><br>
+						</div>
+						<div class="clear"></div>
+						<div class='col_left'>Display debug infos during indexing</div>
+						<div class='col_right'>
+
+							<input type='checkbox'
+							       id='is_debug_indexing'
+							       name='wdm_solr_operations_data[is_debug_indexing][<?php echo $current_index_indice ?>]'
+							       value='is_debug_indexing'
+								<?php checked( 'is_debug_indexing', isset( $solr_operations_options['is_debug_indexing'][ $current_index_indice ] ) ? $solr_operations_options['is_debug_indexing'][ $current_index_indice ] : '' ); ?>>
+							<span class='res_err'></span><br>
+						</div>
+						<div class="clear"></div>
+						<div class='col_left'>
+							Re-index all the data in place.<br/>
+							If you check this option, it will restart the indexing from start, without deleting the
+							data already in the Solr index.
+						</div>
+						<div class='col_right'>
+
+							<input type='checkbox'
+							       id='is_reindexing_all_posts'
+							       name='is_reindexing_all_posts'
+							       value='is_reindexing_all_posts'
+								<?php checked( true, false ); ?>>
+							<span class='res_err'></span><br>
+						</div>
+						<div class="clear"></div>
+					</div>
+					<div class="wdm_row">
+						<div class="submit">
+							<input name="solr_start_index_data" type="submit" class="button-primary wdm-save"
+							       id='solr_start_index_data'
+							       value="Synchronize Wordpress with '<?php echo $current_index_name ?>' "/>
+							<input name="solr_stop_index_data" type="submit" class="button-primary wdm-save"
+							       id='solr_stop_index_data' value="Stop current indexing"
+							       style="visibility: hidden;"/>
+							<span class='status_index_icon'></span>
+
+							<input name="solr_delete_index" type="submit" class="button-primary wdm-save"
+							       id="solr_delete_index"
+							       value="Empty '<?php echo $current_index_name ?>' "/>
+
+
+							<span class='status_index_message'></span>
+							<span class='status_debug_message'></span>
+							<span class='status_del_message'></span>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+		<?php
+		break;
+
+
+}
+
+	?>
+
 
 	</div>
 	<?php
-
 
 }
 
 function wpsolr_admin_tabs( $current = 'solr_indexes' ) {
 
 	// Get default search solr index indice
-	WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_INDEXES, true );
-	$option_indexes            = new OptionIndexes();
+	$option_indexes            = WPSOLR_Global::getExtensionIndexes();
 	$default_search_solr_index = $option_indexes->get_default_search_solr_index();
 
 	$nb_indexes        = count( $option_indexes->get_indexes() );
@@ -1166,8 +1190,8 @@ function wpsolr_admin_tabs( $current = 'solr_indexes' ) {
 	echo '<div id="icon-themes" class="icon32"><br></div>';
 	echo '<h2 class="nav-tab-wrapper">';
 	foreach ( $tabs as $tab => $name ) {
-		$class = ( $tab == $current ) ? ' nav-tab-active' : '';
-		echo "<a class='nav-tab$class' href='admin.php?page=solr_settings&tab=$tab'>$name</a>";
+		$class = ( $tab == $current ) ? 'wpsolr-nav-tab-active' : 'wpsolr-nav-tab-inactive';
+		echo "<a class='nav-tab $class' href='admin.php?page=solr_settings&tab=$tab'>$name</a>";
 
 	}
 	echo '</h2>';
@@ -1181,11 +1205,11 @@ function wpsolr_admin_sub_tabs( $subtabs, $before = null ) {
 
 	if ( isset ( $_GET['subtab'] ) ) {
 
-		$current_subtab = $_GET['subtab'];
+		$current_subtab_id = $_GET['subtab'];
 
 	} else {
 		// No user selection: use the first subtab in the list
-		$current_subtab = key( $subtabs );
+		$current_subtab_id = key( $subtabs );
 	}
 
 	echo '<div id="icon-themes" class="icon32"><br></div>';
@@ -1195,13 +1219,17 @@ function wpsolr_admin_sub_tabs( $subtabs, $before = null ) {
 		echo "$before<div style='clear: both;margin-bottom: 10px;'></div>";
 	}
 
-	foreach ( $subtabs as $subtab => $name ) {
-		$class = ( $subtab == $current_subtab ) ? ' nav-tab-active' : '';
-		echo "<a class='nav-tab$class' href='admin.php?page=solr_settings&tab=$tab&subtab=$subtab'>$name</a>";
+	foreach ( $subtabs as $subtab_id => $subtab ) {
+
+		$class_active  = ( $subtab_id == $current_subtab_id ) ? 'wpsolr-nav-tab-active' : 'wpsolr-nav-tab-inactive';
+		$class_checked = is_array( $subtab ) ? ( $subtab['is_checked'] ? 'wpsolr-nav-tab-success' : '' ) : '';
+		$name          = is_array( $subtab ) ? $subtab['name'] : $subtab;
+
+		echo "<a class='nav-tab $class_active $class_checked' href='admin.php?page=solr_settings&tab=$tab&subtab=$subtab_id'>$name</a>";
 
 	}
 
 	echo '</h2>';
 
-	return $current_subtab;
+	return $current_subtab_id;
 }

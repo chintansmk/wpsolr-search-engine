@@ -1,0 +1,8 @@
+<phpunit bootstrap="classes/wpsolr/WPSOLR_Autoloader.php">
+    <testsuites>
+        <testsuite name="all">
+            <directory>./classes</directory>
+            <exclude>./vendor</exclude>
+        </testsuite>
+    </testsuites>
+</phpunit>

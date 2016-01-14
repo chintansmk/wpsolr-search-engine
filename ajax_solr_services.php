@@ -1,13 +1,13 @@
 <?php
 
-include( dirname( __FILE__ ) . '/classes/solr/wpsolr-index-solr-client.php' );
-include( dirname( __FILE__ ) . '/classes/solr/wpsolr-search-solr-client.php' );
-include( dirname( __FILE__ ) . '/classes/ui/WPSOLR_Data_facets.php' );
-
-// Load localization class
-WpSolrExtensions::require_once_wpsolr_extension( WpSolrExtensions::OPTION_LOCALIZATION, true );
-WpSolrExtensions::load();
-
+use wpsolr\extensions\localization\WPSOLR_Localization;
+use wpsolr\solr\WPSOLR_IndexSolrClient;
+use wpsolr\solr\WPSOLR_SearchSolrClient;
+use wpsolr\ui\widget\WPSOLR_Widget_Facet;
+use wpsolr\ui\WPSOLR_Data_Facets;
+use wpsolr\ui\WPSOLR_UI_Facets;
+use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\WPSOLR_Filters;
 
 function solr_format_date( $thedate ) {
 	$datere  = '/(\d{4}-\d{2}-\d{2})\s(\d{2}:\d{2}:\d{2})/';
@@ -21,13 +21,13 @@ function fun_search_indexed_data() {
 	$ad_url = admin_url();
 
 	// Retrieve search form page url
-	$get_page_info = WPSolrSearchSolrClient::get_search_page();
+	$get_page_info = WPSOLR_SearchSolrClient::get_search_page();
 	$url           = get_permalink( $get_page_info->ID );
 	// Filter the search page url. Used for multi-language search forms.
-	$url = apply_filters( WpSolrFilters::WPSOLR_FILTER_SEARCH_PAGE_URL, $url, $get_page_info->ID );
+	$url = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_SEARCH_PAGE_URL, $url, $get_page_info->ID );
 
 	// Load localization options
-	$localization_options = OptionLocalization::get_options();
+	$localization_options = WPSOLR_Localization::get_options();
 
 	$wdm_typehead_request_handler = 'wdm_return_solr_rows';
 
@@ -41,8 +41,8 @@ function fun_search_indexed_data() {
 	echo $form = '
         <div class="ui-widget">
 	<input type="hidden"  id="ajax_nonce" value="' . $ajax_nonce . '">
-        <input type="text" placeholder="' . OptionLocalization::get_term( $localization_options, 'search_form_edit_placeholder' ) . '" value="' . WPSOLR_Global::getQuery()->get_wpsolr_query() . '" name="search" id="search_que" class="search-field sfl2" autocomplete="off"/>
-	<input type="submit" value="' . OptionLocalization::get_term( $localization_options, 'search_form_button_label' ) . '" id="searchsubmit" style="position:relative;width:auto">
+        <input type="text" placeholder="' . WPSOLR_Localization::get_term( $localization_options, 'search_form_edit_placeholder' ) . '" value="' . WPSOLR_Global::getQuery()->get_wpsolr_query() . '" name="search" id="search_que" class="search-field sfl2" autocomplete="off"/>
+	<input type="submit" value="' . WPSOLR_Localization::get_term( $localization_options, 'search_form_button_label' ) . '" id="searchsubmit" style="position:relative;width:auto">
 	<input type="hidden" value="' . WPSOLR_Global::getOption()->get_search_after_autocomplete_block_submit() . '" id="is_after_autocomplete_block_submit">
 	<input type="hidden" value="' . WPSOLR_Global::getQuery()->get_wpsolr_paged() . '" id="paginate">
 <div style="clear:both"></div>
@@ -66,7 +66,7 @@ function fun_search_indexed_data() {
 		}
 
 		if ( $final_result[2] == 0 ) {
-			echo "<span class='infor'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_header_no_results_found' ), WPSOLR_Global::getQuery()->get_wpsolr_query() ) . "</span>";
+			echo "<span class='infor'>" . sprintf( WPSOLR_Localization::get_term( $localization_options, 'results_header_no_results_found' ), WPSOLR_Global::getQuery()->get_wpsolr_query() ) . "</span>";
 		} else {
 			echo '<div class="wdm_resultContainer">
                     <div class="wdm_list">';
@@ -75,14 +75,14 @@ function fun_search_indexed_data() {
 			$selected_sort_values = WPSOLR_Global::getOption()->get_sortby_items_as_array();
 			if ( isset( $selected_sort_values ) && ( $selected_sort_values != '' ) ) {
 
-				$term        = OptionLocalization::get_term( $localization_options, 'sort_header' );
+				$term        = WPSOLR_Localization::get_term( $localization_options, 'sort_header' );
 				$sort_select = "<label class='wdm_label'>$term</label><select class='select_field'>";
 
 				// Add options
-				$sort_options = WPSolrSearchSolrClient::get_sort_options();
+				$sort_options = WPSOLR_SearchSolrClient::get_sort_options();
 				foreach ( $selected_sort_values as $sort_code ) {
 
-					$sort_label = OptionLocalization::get_term( $localization_options, $sort_code );
+					$sort_label = WPSOLR_Localization::get_term( $localization_options, $sort_code );
 
 					$selected = ( $sort_code === WPSOLR_Global::getQuery()->get_wpsolr_sort() ) ? 'selected' : '';
 					$sort_select .= "<option value='$sort_code' $selected>$sort_label</option>";
@@ -96,11 +96,11 @@ function fun_search_indexed_data() {
 
 			// Display facets UI
 			echo '<div id="res_facets">' . WPSOLR_UI_Facets::Build(
+					WPSOLR_Widget_Facet::wpsolr_get_default_layout_definition(),
 					WPSOLR_Data_Facets::get_data(
 						WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
 						WPSOLR_Global::getOption()->get_facets_to_display(),
-						$final_result[1] ),
-					$localization_options ) . '</div>';
+						$final_result[1] ), $localization_options, [ ] ) . '</div>';
 
 
 			echo '</div>
@@ -151,10 +151,6 @@ function fun_search_indexed_data() {
 
 function return_solr_instance() {
 
-	$path = plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
-	require_once $path;
-
-
 	$spath    = $_POST['spath'];
 	$port     = $_POST['sport'];
 	$host     = $_POST['shost'];
@@ -162,7 +158,7 @@ function return_solr_instance() {
 	$password = $_POST['spwd'];
 	$protocol = $_POST['sproto'];
 
-	$client = WPSolrSearchSolrClient::create_from_solarium_config( array(
+	$client = WPSOLR_SearchSolrClient::create_from_solarium_config( array(
 		'endpoint' => array(
 			'localhost1' => array(
 				'scheme'   => $protocol,
@@ -264,11 +260,11 @@ function return_solr_results() {
 
 	// Add facets data
 	$res1[] = WPSOLR_UI_Facets::Build(
+		WPSOLR_Widget_Facet::wpsolr_get_default_layout_definition(),
 		WPSOLR_Data_Facets::get_data(
 			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
 			WPSOLR_Global::getOption()->get_facets_to_display(),
-			$final_result[1] ),
-		OptionLocalization::get_options()
+			$final_result[1] ), WPSOLR_Localization::get_options(), [ ]
 	);
 
 	// Output Json response to Ajax call
@@ -302,7 +298,7 @@ function return_solr_index_data() {
 		// Re-index all the data ?
 		$is_reindexing_all_posts = ( $_POST['is_reindexing_all_posts'] === "true" );
 
-		$solr = WPSolrIndexSolrClient::create( $solr_index_indice );
+		$solr = WPSOLR_IndexSolrClient::create( $solr_index_indice );
 		// Reset documents if requested
 		if ( $is_reindexing_all_posts ) {
 			$solr->reset_documents();
@@ -344,7 +340,7 @@ function return_solr_delete_index() {
 		// Indice of Solr index to delete
 		$solr_index_indice = $_POST['solr_index_indice'];
 
-		$solr = WPSolrIndexSolrClient::create( $solr_index_indice );
+		$solr = WPSOLR_IndexSolrClient::create( $solr_index_indice );
 		$solr->delete_documents();
 
 	} catch ( Exception $e ) {

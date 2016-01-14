@@ -1,7 +1,6 @@
 <?php
 
-// Load WPML class
-WpSolrExtensions::load();
+use wpsolr\utilities\WPSOLR_Global;
 
 function wdm_return_solr_rows() {
 	if ( isset( $_POST['security'] )

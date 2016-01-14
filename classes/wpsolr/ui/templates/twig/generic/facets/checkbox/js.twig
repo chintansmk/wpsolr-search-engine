@@ -1,0 +1,14 @@
+<script>
+    jQuery(document).ready(function () {
+
+        jQuery(".{{ facet_selector_class }}").on("click", function (event) {
+
+            alert(".{{ facet_selector_class }}");
+
+            jQuery(this).toggleClass("{{ facet_selected_class }}"); {# check/uncheck clicked facet #}
+
+            {# Update url #}
+            console.log(jQuery(this).data("wpsolr-facet"));
+        });
+    });
+</script>

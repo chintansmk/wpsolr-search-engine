@@ -1,0 +1,29 @@
+{# Display a facet elements as checkboxes #}
+
+{% set facet_selector_class = facet.id %}
+{% set facet_selected_class = "checked" %}
+
+{% include template_css with {'plugin_dir_url': plugin_dir_url} %}
+{% include template_js with {'plugin_dir_url': plugin_dir_url, 'facet_selector_class': facet_selector_class} %}
+
+
+<ul class="wpsolr_any_facet_class {{ facet_selector_class }}">
+    <span>{{ facets_title|format(facet.name) }}</span> {# Facet name #}
+
+    {% for item in items %} {# Loop on facet items #}
+
+        {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name} %}
+
+        <li>
+
+            <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"
+               data-wpsolr-facet="{{ data_wpsolr_facet|json_encode }}">
+                {{ facets_element|format( item.name, item.count )|capitalize }}
+            </a> {# Current facet item #}
+
+        </li>
+
+    {% endfor %} {# Loop on facet items #}
+
+</ul>
+

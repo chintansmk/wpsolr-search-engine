@@ -1,0 +1,19 @@
+{# WPSOLR Sort default template #}
+
+<div>
+    {# Header like 'Sort by' #}
+    <label class="wdm_label">{{ sort_header }}</label>
+
+    <select class="select_field">
+
+        {% for sort in sort.items %} {# Loop on sort items #}
+
+            {# Current sort item #}
+            <option class='select_opt {{ facet_class }}' value='{{ sort.id }}' {{ sort.selected ? "selected" : "" }}>
+            {{ sort.name }}
+            </option>
+
+        {% endfor %} {# Loop on sort items #}
+
+    </select>
+</div>

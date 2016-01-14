@@ -23,12 +23,13 @@ function generateUrlParameters(url, current_parameters, is_remove_unused_paramet
     /**
      * Extract parameter query
      */
-    var query = current_parameters[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q] || '';
-    if (query !== '') {
-        url1.query[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q] = query;
-    } else if (is_remove_unused_parameters) {
-        delete url1.query[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q];
-    }
+    var query = current_parameters[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q] || url1.query[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q] || '';
+    url1.query[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q] = query;
+    /*if (query !== '') {
+     url1.query[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q] = query;
+     } else if (is_remove_unused_parameters) {
+     delete url1.query[wp_localize_script_autocomplete.SEARCH_PARAMETER_Q];
+     }*/
 
 
     /**
@@ -255,7 +256,10 @@ jQuery(document).ready(function () {
     /**
      * A facet is selected/unselected
      */
-    jQuery(document).on('click', '.select_opt', function () {
+    jQuery(document).on('click', '.select_opt', function (evt) {
+
+        // Prevent default events (navigation)
+        evt.preventDefault();
 
         // Reset pagination
         jQuery('#paginate').val('');

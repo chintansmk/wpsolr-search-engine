@@ -1,0 +1,17 @@
+{# Responsive Facets css template #}
+
+{% include 'generic/facets_css.twig' %} {# include generic css in this template #}
+
+<style>
+    #widgets .wpsolr_facet_checkbox1 {
+    {# Facet unchecked checkbox #} background: url({{ plugin_dir_url }}/images/1449252372_unchecked_checkbox.png) 0 50% no-repeat; /* https://www.iconfinder.com/icons/175466/checkbox_unchecked_icon#size=128 */
+        background-size: 14px 14px;
+        margin-bottom: 4px;
+        padding-left: 20px;
+        cursor: pointer;
+    }
+
+    #widgets .wpsolr_facet_checkbox.checked1 {
+    {# Facet checked checkbox #} background-image: url({{ plugin_dir_url }}/images/1449252361_checked_checkbox.png); /* https://www.iconfinder.com/icons/175220/checkbox_checked_icon#size=128 */
+    }
+</style>
