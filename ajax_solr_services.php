@@ -99,7 +99,7 @@ function fun_search_indexed_data() {
 					WPSOLR_Widget_Facet::wpsolr_get_default_layout_definition(),
 					WPSOLR_Data_Facets::get_data(
 						WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
-						WPSOLR_Global::getOption()->get_facets_to_display(),
+						WPSOLR_Global::getOption()->get_facets_selected_array(),
 						$final_result[1] ), $localization_options, [ ] ) . '</div>';
 
 
@@ -263,7 +263,7 @@ function return_solr_results() {
 		WPSOLR_Widget_Facet::wpsolr_get_default_layout_definition(),
 		WPSOLR_Data_Facets::get_data(
 			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
-			WPSOLR_Global::getOption()->get_facets_to_display(),
+			WPSOLR_Global::getOption()->get_facets_selected_array(),
 			$final_result[1] ), WPSOLR_Localization::get_options(), [ ]
 	);
 

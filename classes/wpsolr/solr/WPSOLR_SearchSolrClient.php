@@ -308,7 +308,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		 */
 		$this->add_facet_fields( $solarium_query,
 			array(
-				self::PARAMETER_FACET_FIELD_NAMES => WPSOLR_Global::getOption()->get_facets_to_display(),
+				self::PARAMETER_FACET_FIELD_NAMES => WPSOLR_Global::getOption()->get_facets_selected_array(),
 				self::PARAMETER_FACET_LIMIT       => WPSOLR_Global::getOption()->get_search_max_nb_items_by_facet(),
 				self::PARAMETER_FACET_MIN_COUNT   => self::DEFAULT_MIN_COUNT_BY_FACET
 			)
@@ -444,7 +444,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		}
 
 		// Retrieve facets from resultset
-		$facets_to_display = WPSOLR_Global::getOption()->get_facets_to_display();
+		$facets_to_display = WPSOLR_Global::getOption()->get_facets_selected_array();
 		if ( count( $facets_to_display ) ) {
 			foreach ( $facets_to_display as $facet ) {
 

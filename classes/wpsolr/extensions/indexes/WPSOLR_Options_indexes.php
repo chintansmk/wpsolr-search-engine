@@ -7,11 +7,11 @@ use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
 
 /**
- * Class WPSOLR_Options_indexes
+ * Class WPSOLR_Options_Indexes
  *
  * Manage Solr Indexes options
  */
-class WPSOLR_Options_indexes extends WPSOLR_Extensions {
+class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 
 	// Solr index properties
 	const INDEX_TYPE = 'index_type';
@@ -116,7 +116,7 @@ class WPSOLR_Options_indexes extends WPSOLR_Extensions {
 		}
 
 		// Save the new option
-		self::set_option_data( self::OPTION_INDEXES, $new_options );
+		self::set_option_data( self::EXTENSION_INDEXES, $new_options );
 
 		// Do not delete the old options. If the user wants to rollback the version, he can.
 		//delete_option( $old_options_name );
@@ -207,7 +207,7 @@ class WPSOLR_Options_indexes extends WPSOLR_Extensions {
 		$this->_options['solr_indexes'] = $solr_indexes;
 
 		// Save the options containing the new index
-		$this->set_option_data( self::OPTION_INDEXES, $this->_options );
+		$this->set_option_data( self::EXTENSION_INDEXES, $this->_options );
 	}
 
 	/**
@@ -277,7 +277,7 @@ class WPSOLR_Options_indexes extends WPSOLR_Extensions {
 		$this->_options['solr_indexes'] = $solr_indexes;
 
 		// Save the options containing the new index
-		$this->set_option_data( self::OPTION_INDEXES, $this->_options );
+		$this->set_option_data( self::EXTENSION_INDEXES, $this->_options );
 
 		// Update the default search Solr index with the newly created.
 		$this->update_default_search_solr_index_indice( $solr_index_indice );

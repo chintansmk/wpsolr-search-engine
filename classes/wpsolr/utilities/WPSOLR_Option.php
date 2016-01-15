@@ -353,23 +353,31 @@ class WPSOLR_Option {
 	 * Facets option and items
 	 *
 	 **************************************************************************************************************/
-	const OPTION_FACET = 'wdm_solr_facet_data';
-	const OPTION_FACET_FACETS = 'facets';
+	const OPTION_FACETS = 'wdm_solr_facet_data';
+	const OPTION_FACETS_SELECTED = 'facets';
 
 	/**
 	 * Get facet options array
 	 * @return array
 	 */
 	public function get_option_facet() {
-		return self::get_option( self::OPTION_FACET );
+		return self::get_option( self::OPTION_FACETS );
 	}
 
 	/**
-	 * Comma separated facets
+	 * Comma separated facets selected
+	 * @return "type,author,categories,tags,acf2_str"
+	 */
+	public function get_facets_selected() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_SELECTED, '' );
+	}
+
+	/**
+	 * Array of facets selected
 	 * @return array ["type","author","categories","tags","acf2_str"]
 	 */
-	public function get_facets_to_display() {
-		return $this->explode( $this->get_option_value( __FUNCTION__, self::OPTION_FACET, self::OPTION_FACET_FACETS, '' ) );
+	public function get_facets_selected_array() {
+		return $this->explode( $this->get_facets_selected() );
 	}
 
 	/***************************************************************************************************************
@@ -380,6 +388,7 @@ class WPSOLR_Option {
 	const OPTION_INDEXING = 'wdm_solr_form_data';
 	const OPTION_INDEXING_ARE_COMMENTS_INDEXED = 'comments';
 	const OPTION_INDEXING_CUSTOM_FIELDS = 'cust_fields';
+	const OPTION_INDEXING_TAXONOMIES = 'taxonomies';
 
 	/**
 	 * Get indexing options array
@@ -412,6 +421,24 @@ class WPSOLR_Option {
 	public function get_indexing_custom_fields_array() {
 		return $this->explode( $this->get_indexing_custom_fields() );
 	}
+
+
+	/**
+	 * Taxonomies indexed
+	 * @return string
+	 */
+	public function get_indexing_taxonomies() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_INDEXING, self::OPTION_INDEXING_TAXONOMIES, '' );
+	}
+
+	/**
+	 * Taxonomies indexed
+	 * @return array
+	 */
+	public function get_indexing_taxonomies_array() {
+		return $this->explode( $this->get_indexing_taxonomies() );
+	}
+
 
 	/***************************************************************************************************************
 	 *

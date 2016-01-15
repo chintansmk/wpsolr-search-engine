@@ -4,13 +4,13 @@
  * Included file to display admin options
  */
 
-use wpsolr\extensions\indexes\WPSOLR_Options_indexes;
+use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
 
 // Options name
-$option_name = WPSOLR_Extensions::get_option_name( WPSOLR_Extensions::OPTION_INDEXES );
+$option_name = WPSOLR_Extensions::get_option_name( WPSOLR_Extensions::EXTENSION_INDEXES );
 
 // Options object
 $option_object = WPSOLR_Global::getExtensionIndexes();
@@ -32,7 +32,7 @@ $form_data                             = WPSOLR_Extensions::extract_form_data( $
 	<?php
 
 	// Options data. Loaded after the POST, to be sure it contains the posted data.
-	$option_data = WPSOLR_Options_indexes::get_option_data( WPSOLR_Extensions::OPTION_INDEXES );
+	$option_data = WPSOLR_Options_Indexes::get_option_data( WPSOLR_Extensions::EXTENSION_INDEXES );
 
 	$subtabs = array();
 
@@ -113,7 +113,7 @@ $form_data                             = WPSOLR_Extensions::extract_form_data( $
 							if ( $is_index_unknown_on_server ) {
 
 								// Change the solr index type to managed
-								$option_object->update_index_property( $index_indice, WPSOLR_Options_indexes::INDEX_TYPE, WPSOLR_Options_indexes::STORED_INDEX_TYPE_UNMANAGED );
+								$option_object->update_index_property( $index_indice, WPSOLR_Options_Indexes::INDEX_TYPE, WPSOLR_Options_Indexes::STORED_INDEX_TYPE_UNMANAGED );
 
 								// Display message
 								$response_error = 'This temporary solr core has expired and was therefore deleted. You can remove it from your configuration';
@@ -128,7 +128,7 @@ $form_data                             = WPSOLR_Extensions::extract_form_data( $
 								if ( ! $is_index_type_temporary_on_server ) {
 
 									// Change the solr index type to managed
-									$option_object->update_index_property( $index_indice, WPSOLR_Options_indexes::INDEX_TYPE, WPSOLR_Options_indexes::STORED_INDEX_TYPE_MANAGED );
+									$option_object->update_index_property( $index_indice, WPSOLR_Options_Indexes::INDEX_TYPE, WPSOLR_Options_Indexes::STORED_INDEX_TYPE_MANAGED );
 
 									// No more readonly therefore
 									$is_index_type_temporary = false;

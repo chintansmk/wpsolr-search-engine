@@ -3,8 +3,9 @@
 namespace wpsolr\utilities;
 
 use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
-use wpsolr\extensions\indexes\WPSOLR_Options_indexes;
+use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
@@ -144,10 +145,17 @@ class WPSOLR_Global {
 	}
 
 	/**
-	 * @return WPSOLR_Options_indexes
+	 * @return WPSOLR_Options_Indexes
 	 */
 	public static function getExtensionIndexes() {
-		return self::getObject( WPSOLR_Extensions::OPTION_INDEXES, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_INDEXES );
+		return self::getObject( WPSOLR_Extensions::EXTENSION_INDEXES, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::EXTENSION_INDEXES );
+	}
+
+	/**
+	 * @return WPSOLR_Options_Facets
+	 */
+	public static function getExtensionFacets() {
+		return self::getObject( WPSOLR_Extensions::OPTION_FACETS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_FACETS );
 	}
 
 	/**
