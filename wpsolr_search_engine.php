@@ -201,6 +201,7 @@ function my_register_activation_hook() {
 	 * Migrate old data on plugin update
 	 */
 	WPSOLR_Global::getExtensionIndexes()->migrate_data_from_v4_9();
+	WPSOLR_Global::getExtensionFields()->migrate_data_from_v7_6();
 }
 
 

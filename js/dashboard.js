@@ -200,39 +200,6 @@ jQuery(document).ready(function () {
         });
     }
 
-    jQuery('#save_selected_index_options_form').click(function () {
-        ps_types = '';
-        tax = '';
-        fields = '';
-        attachment_types = '';
-
-        jQuery("input:checkbox[name=post_tys]:checked").each(function () {
-            ps_types += jQuery(this).val() + ',';
-        });
-        pt_tp = ps_types.substring(0, ps_types.length - 1);
-        jQuery('#p_types').val(pt_tp);
-
-        jQuery("input:checkbox[name=attachment_types]:checked").each(function () {
-            attachment_types += jQuery(this).val() + ',';
-        });
-        attachment_types = attachment_types.substring(0, attachment_types.length - 1);
-        jQuery('#attachment_types').val(attachment_types);
-
-        jQuery("input:checkbox[name=taxon]:checked").each(function () {
-            tax += jQuery(this).val() + ',';
-        });
-        tx = tax.substring(0, tax.length - 1);
-        jQuery('#tax_types').val(tx);
-
-        jQuery("input:checkbox[name=cust_fields]:checked").each(function () {
-            fields += jQuery(this).val() + ',';
-        });
-        fl = fields.substring(0, fields.length - 1);
-        jQuery('#field_types').val(fl);
-
-
-    });
-
     jQuery('#save_facets_options_form').click(function () {
 
         result = '';

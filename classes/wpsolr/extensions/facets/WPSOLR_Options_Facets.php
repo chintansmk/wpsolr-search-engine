@@ -40,8 +40,8 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 					'facets_selected'   => WPSOLR_Global::getOption()->get_facets_selected(),
 					'facets_candidates' => array_merge(
 						array( 'Type', 'Author', 'Categories', 'Tags' ),
-						WPSOLR_Global::getOption()->get_indexing_custom_fields_array(),
-						WPSOLR_Global::getOption()->get_indexing_taxonomies_array()
+						WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
+						WPSOLR_Global::getOption()->get_fields_taxonomies_array()
 					),
 					'image_plus'        => plugins_url( '../../../../images/plus.png', __FILE__ ),
 					'image_minus'       => plugins_url( '../../../../images/success.png', __FILE__ )

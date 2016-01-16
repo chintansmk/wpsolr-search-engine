@@ -473,7 +473,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 		$i                    = 1;
 		$cat_arr              = array();
-		$are_comments_indexed = WPSOLR_Global::getOption()->get_indexing_are_comments_indexed();
+		$are_comments_indexed = WPSOLR_Global::getOption()->get_fields_are_comments_indexed();
 		foreach ( $resultset as $document ) {
 
 			$id      = $document->id;

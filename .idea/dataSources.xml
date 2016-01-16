@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DataSourceManagerImpl" format="xml" hash="2621557733">
+  <component name="DataSourceManagerImpl" format="xml" hash="353769058">
     <data-source source="LOCAL" name="MySQL - local_eostisolr_api@vvv.dev" uuid="768cc5b7-5b10-4a20-9b4c-0270030bc27c">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>

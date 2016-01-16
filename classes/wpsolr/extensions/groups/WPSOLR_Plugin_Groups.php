@@ -94,7 +94,7 @@ class WPSOLR_Plugin_Groups extends WPSOLR_Extensions {
 		$is_result_without_capabilities_seen_by_all_users = WPSOLR_Global::getOption()->get_plugin_groups_is_result_without_capabilities_seen_by_all_users();
 
 		// Get custom fields selected for indexing
-		$array_custom_fields     = WPSOLR_Global::getOption()->get_indexing_custom_fields_array();
+		$array_custom_fields     = WPSOLR_Global::getOption()->get_fields_custom_fields_array();
 
 		// Is the custom field used by Groups plugin to store posts capabilities indexed ?
 		if ( false !== array_search( self::CUSTOM_FIELD_NAME_STORING_POST_CAPABILITIES, $array_custom_fields ) ) {

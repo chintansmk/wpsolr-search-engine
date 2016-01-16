@@ -385,41 +385,41 @@ class WPSOLR_Option {
 	 * Indexing option and items
 	 *
 	 **************************************************************************************************************/
-	const OPTION_INDEXING = 'wdm_solr_form_data';
-	const OPTION_INDEXING_ARE_COMMENTS_INDEXED = 'comments';
-	const OPTION_INDEXING_CUSTOM_FIELDS = 'cust_fields';
-	const OPTION_INDEXING_TAXONOMIES = 'taxonomies';
+	const OPTION_FIELDS = 'wdm_solr_form_data';
+	const OPTION_FIELDS_ARE_COMMENTS_INDEXED = 'comments';
+	const OPTION_FIELDS_CUSTOM_FIELDS = 'cust_fields';
+	const OPTION_FIELDS_TAXONOMIES = 'taxonomies';
 
 	/**
 	 * Get indexing options array
 	 * @return array
 	 */
-	public function get_option_indexing() {
-		return self::get_option( self::OPTION_INDEXING );
+	public function get_option_fields() {
+		return self::get_option( self::OPTION_FIELDS );
 	}
 
 	/**
 	 * Index comments ?
 	 * @return boolean
 	 */
-	public function get_indexing_are_comments_indexed() {
-		return ! $this->is_empty( $this->get_option_value( __FUNCTION__, self::OPTION_INDEXING, self::OPTION_INDEXING_ARE_COMMENTS_INDEXED ) );
+	public function get_fields_are_comments_indexed() {
+		return ! $this->is_empty( $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_ARE_COMMENTS_INDEXED ) );
 	}
 
 	/**
 	 * Custom fields indexed
 	 * @return string
 	 */
-	public function get_indexing_custom_fields() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_INDEXING, self::OPTION_INDEXING_CUSTOM_FIELDS, '' );
+	public function get_fields_custom_fields() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_CUSTOM_FIELDS, '' );
 	}
 
 	/**
 	 * Custom fields indexed
 	 * @return array
 	 */
-	public function get_indexing_custom_fields_array() {
-		return $this->explode( $this->get_indexing_custom_fields() );
+	public function get_fields_custom_fields_array() {
+		return $this->explode( $this->get_fields_custom_fields() );
 	}
 
 
@@ -428,14 +428,14 @@ class WPSOLR_Option {
 	 * @return string
 	 */
 	public function get_indexing_taxonomies() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_INDEXING, self::OPTION_INDEXING_TAXONOMIES, '' );
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_TAXONOMIES, '' );
 	}
 
 	/**
 	 * Taxonomies indexed
 	 * @return array
 	 */
-	public function get_indexing_taxonomies_array() {
+	public function get_fields_taxonomies_array() {
 		return $this->explode( $this->get_indexing_taxonomies() );
 	}
 

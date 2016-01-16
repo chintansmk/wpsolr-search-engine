@@ -4,6 +4,7 @@ namespace wpsolr\extensions;
 
 use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
+use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
@@ -87,6 +88,9 @@ abstract class WPSOLR_Extensions {
 
 	// Extension: Facets
 	const OPTION_FACETS = 'facets';
+
+	// Extension: Solr Fields
+	const OPTION_FIELDS = 'fields';
 
 	/*
 	 * Extensions configuration
@@ -271,6 +275,21 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_FACETS,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_FIELDS               =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Fields::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Fields::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'fields/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'fields/WPSOLR_Fields.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'fields/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_FIELDS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			]

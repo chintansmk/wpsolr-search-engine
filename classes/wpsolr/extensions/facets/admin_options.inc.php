@@ -1,7 +1,11 @@
+<?php
+use wpsolr\services\WPSOLR_Service_Wordpress;
+?>
+
 <div id="solr-facets-options" class="wdm-vertical-tabs-content">
 	<form action="options.php" method="POST" id='fac_settings_form'>
 		<?php
-		settings_fields( 'solr_facet_options' );
+		WPSOLR_Service_Wordpress::settings_fields( $options_name );
 		?>
 		<div class='wrapper'>
 			<h4 class='head_div'>Facets Options</h4>

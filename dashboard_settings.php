@@ -1,7 +1,6 @@
 <?php
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
-use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_IndexSolrClient;
 use wpsolr\solr\WPSOLR_SearchSolrClient;
@@ -223,11 +222,11 @@ switch ( $tab ) {
 			<?php
 
 			$subtabs = array(
-				'result_opt'           => '2.1 Result Options',
-				'index_opt'            => '2.2 Indexing Options',
-				'facet_opt'            => '2.3 Facets Options',
-				'sort_opt'             => '2.4 Sort Options',
-				'localization_options' => '2.5 Localization Options',
+				'result_opt'           => '2.1 Search',
+				'fields_opt'           => '2.2 Fields',
+				'facet_opt'            => '2.3 Facets',
+				'sort_opt'             => '2.4 Sorting',
+				'localization_options' => '2.5 Localization',
 			);
 
 			$subtab             = wpsolr_admin_sub_tabs( $subtabs );
@@ -421,7 +420,7 @@ switch ( $tab ) {
 										       value='1'
 											<?php checked( '1', $is_query_partial_match ); ?>>
 
-										Warning: this will hurt Solr search performance!
+										Warning: this will hurt both search performance and search accuracy !
 										<p>This adds '*' to all keywords.
 											For instance, 'search apache' will return results
 											containing 'searching apachesolr'</p>
@@ -520,225 +519,9 @@ switch ( $tab ) {
 					</div>
 					<?php
 					break;
-				case 'index_opt':
 
-
-					$posts = get_post_types();
-					$args       = array(
-						'public'   => true,
-						'_builtin' => false
-
-					);
-					$output     = 'names'; // or objects
-					$operator   = 'and'; // 'and' or 'or'
-					$taxonomies = get_taxonomies( $args, $output, $operator );
-					global $wpdb;
-					$limit = (int) apply_filters( 'postmeta_form_limit', 30 );
-					$keys  = $wpdb->get_col( "
-                                                                    SELECT distinct meta_key
-                                                                    FROM $wpdb->postmeta
-                                                                    WHERE meta_key!='bwps_enable_ssl' 
-                                                                    ORDER BY meta_key" );
-
-					// WooCommerce attributes are added to custom fields
-					if ( function_exists( 'wc_get_attribute_taxonomies' ) ) {
-						$woo_attribute_names = WPSOLR_Plugin_WooCommerce::get_attribute_taxonomy_names();
-						foreach ( $woo_attribute_names as $woo_attribute_name ) {
-							// Add woo attribute slug to custom fields
-							array_push( $keys, $woo_attribute_name );
-						}
-					}
-
-					$post_types = array();
-					foreach ( $posts as $ps ) {
-						if ( $ps != 'attachment' && $ps != 'revision' && $ps != 'nav_menu_item' ) {
-							array_push( $post_types, $ps );
-						}
-					}
-
-					$allowed_attachments_types = get_allowed_mime_types();
-					?>
-
-					<div id="solr-indexing-options" class="wdm-vertical-tabs-content">
-						<form action="options.php" method="POST" id='settings_form'>
-							<?php
-							settings_fields( 'solr_form_options' );
-							$solr_options = get_option( 'wdm_solr_form_data', array(
-								'comments'         => 0,
-								'p_types'          => '',
-								'taxonomies'       => '',
-								'cust_fields'      => '',
-								'attachment_types' => ''
-							) );
-							?>
-
-
-							<div class='indexing_option wrapper'>
-								<h4 class='head_div'>Indexing Options</h4>
-
-								<div class="wdm_note">
-
-									In this section, you will choose among all the data stored in your Wordpress
-									site, which you want to load in your Solr index.
-
-								</div>
-
-								<div class="wdm_row">
-									<div class='col_left'>
-										Index post excerpt.<br/>
-										Excerpt will be added to the post content, and be searchable, highlighted,
-										and
-										autocompleted.
-									</div>
-									<div class='col_right'>
-										<input type='checkbox' name='wdm_solr_form_data[p_excerpt]'
-										       value='1' <?php checked( '1', isset( $solr_options['p_excerpt'] ) ? $solr_options['p_excerpt'] : '' ); ?>>
-
-									</div>
-									<div class="clear"></div>
-								</div>
-								<div class="wdm_row">
-									<div class='col_left'>
-										Expand shortcodes of post content before indexing.<br/>
-										Else, shortcodes will simply be stripped.
-									</div>
-									<div class='col_right'>
-										<input type='checkbox' name='wdm_solr_form_data[is_shortcode_expanded]'
-										       value='1' <?php checked( '1', isset( $solr_options['is_shortcode_expanded'] ) ? $solr_options['is_shortcode_expanded'] : '' ); ?>>
-
-									</div>
-									<div class="clear"></div>
-								</div>
-								<div class="wdm_row">
-									<div class='col_left'>Post types to be indexed</div>
-									<div class='col_right'>
-										<input type='hidden' name='wdm_solr_form_data[p_types]' id='p_types'>
-										<?php
-										$post_types_opt = $solr_options['p_types'];
-										foreach ( $post_types as $type ) {
-											?>
-											<input type='checkbox' name='post_tys' value='<?php echo $type ?>'
-												<?php if ( strpos( $post_types_opt, $type ) !== false ) { ?> checked <?php } ?>> <?php echo $type ?>
-											<br>
-											<?php
-										}
-										?>
-
-									</div>
-									<div class="clear"></div>
-								</div>
-
-								<div class="wdm_row">
-									<div class='col_left'>Attachment types to be indexed</div>
-									<div class='col_right'>
-										<input type='hidden' name='wdm_solr_form_data[attachment_types]'
-										       id='attachment_types'>
-										<?php
-										$attachment_types_opt = $solr_options['attachment_types'];
-										foreach ( $allowed_attachments_types as $type ) {
-											?>
-											<input type='checkbox' name='attachment_types'
-											       value='<?php echo $type ?>'
-												<?php if ( strpos( $attachment_types_opt, $type ) !== false ) { ?> checked <?php } ?>> <?php echo $type ?>
-											<br>
-											<?php
-										}
-										?>
-									</div>
-									<div class="clear"></div>
-								</div>
-
-								<div class="wdm_row">
-									<div class='col_left'>Custom taxonomies to be indexed</div>
-									<div class='col_right'>
-										<div class='cust_tax'><!--new div class given-->
-											<input type='hidden' name='wdm_solr_form_data[taxonomies]'
-											       id='tax_types'>
-											<?php
-											$tax_types_opt = $solr_options['taxonomies'];
-											if ( count( $taxonomies ) > 0 ) {
-												foreach ( $taxonomies as $type ) {
-													?>
-
-													<input type='checkbox' name='taxon'
-													       value='<?php echo $type . "_str" ?>'
-														<?php if ( strpos( $tax_types_opt, $type . "_str" ) !== false ) { ?> checked <?php } ?>
-													> <?php echo $type ?> <br>
-													<?php
-												}
-
-											} else {
-												echo 'None';
-											} ?>
-										</div>
-									</div>
-									<div class="clear"></div>
-								</div>
-
-								<div class="wdm_row">
-									<div class='col_left'>Custom Fields to be indexed</div>
-
-									<div class='col_right'>
-										<input type='hidden' name='wdm_solr_form_data[cust_fields]'
-										       id='field_types'>
-
-										<div class='cust_fields'><!--new div class given-->
-											<?php
-											$field_types_opt = $solr_options['cust_fields'];
-											if ( count( $keys ) > 0 ) {
-												foreach ( $keys as $key ) {
-													?>
-
-													<input type='checkbox' name='cust_fields'
-													       value='<?php echo $key . "_str" ?>'
-														<?php if ( strpos( $field_types_opt, $key . "_str" ) !== false ) { ?> checked <?php } ?>> <?php echo $key ?>
-													<br>
-													<?php
-												}
-
-											} else {
-												echo 'None';
-											}
-											?>
-										</div>
-									</div>
-									<div class="clear"></div>
-								</div>
-
-								<div class="wdm_row">
-									<div class='col_left'>Index Comments</div>
-									<div class='col_right'>
-										<input type='checkbox' name='wdm_solr_form_data[comments]'
-										       value='1' <?php checked( '1', isset( $solr_options['comments'] ) ? $solr_options['comments'] : '' ); ?>>
-
-									</div>
-									<div class="clear"></div>
-								</div>
-								<div class="wdm_row">
-									<div class='col_left'>Exclude items (Posts,Pages,...)</div>
-									<div class='col_right'>
-										<input type='text' name='wdm_solr_form_data[exclude_ids]'
-										       placeholder="Comma separated ID's list"
-										       value="<?php echo empty( $solr_options['exclude_ids'] ) ? '' : $solr_options['exclude_ids']; ?>">
-										<br>
-										(Comma separated ids list)
-									</div>
-									<div class="clear"></div>
-								</div>
-								<div class='wdm_row'>
-									<div class="submit">
-										<input name="save_selected_index_options_form"
-										       id="save_selected_index_options_form" type="submit"
-										       class="button-primary wdm-save" value="Save Options"/>
-
-
-									</div>
-								</div>
-
-							</div>
-						</form>
-					</div>
-					<?php
+				case 'fields_opt':
+					WPSOLR_Global::getExtensionFields()->output_form();
 					break;
 
 				case 'facet_opt':

@@ -38,7 +38,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 	public function __construct( $solr_index_indice = null, $language_code = null ) {
 
 		// Load options
-		$this->solr_indexing_options = WPSOLR_Global::getOption()->get_option_indexing();
+		$this->solr_indexing_options = WPSOLR_Global::getOption()->get_option_fields();
 
 		$config = WPSOLR_Global::getExtensionIndexes()->build_solarium_config( $solr_index_indice, $language_code, self::DEFAULT_SOLR_TIMEOUT_IN_SECOND );
 
