@@ -4,10 +4,10 @@ namespace wpsolr\extensions\wpml;
 
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\services\WPSOLR_Service_Wordpress;
+use wpsolr\solr\WPSOLR_Schema;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 use wpsolr\WPSOLR_Filters;
-use wpsolr\WPSOLR_Schema;
 
 /**
  * Class WPSOLR_Plugin_Wpml

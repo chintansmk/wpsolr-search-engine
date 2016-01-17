@@ -3,6 +3,8 @@
 namespace wpsolr\ui;
 
 use wpsolr\services\WPSOLR_Service_Wordpress;
+use wpsolr\solr\WPSOLR_Field_Types;
+use wpsolr\utilities\WPSOLR_Regexp;
 use wpsolr\WPSOLR_Filters;
 
 /**
@@ -36,7 +38,7 @@ class WPSOLR_Data_Facets {
 				if ( isset( $facets_in_results[ $facet_to_display_id ] ) && count( $facets_in_results[ $facet_to_display_id ] ) > 0 ) {
 
 					// Remove the ending "_str"
-					$facet_to_display_id_without_str = preg_replace( '/_str$/', '', $facet_to_display_id );
+					$facet_to_display_id_without_str = WPSOLR_Regexp::remove_string_at_the_end( $facet_to_display_id, WPSOLR_Field_Types::SOLR_TYPE_STRING );
 
 					// Give plugins a chance to change the facet name (ACF).
 					$facet_to_display_name = WPSOLR_Service_Wordpress::apply_filters( WPSOLR_Filters::WPSOLR_FILTER_SEARCH_PAGE_FACET_NAME, $facet_to_display_id_without_str, null );
@@ -51,7 +53,7 @@ class WPSOLR_Data_Facets {
 
 					$facet['template_html'] = 'generic/facets/checkbox/html.twig';
 					$facet['template_css']  = 'generic/facets/checkbox/css.twig';
-					$facet['template_js']  = 'generic/facets/checkbox/js.twig';
+					$facet['template_js']   = 'generic/facets/checkbox/js.twig';
 
 					foreach ( $facets_in_results[ $facet_to_display_id ] as $facet_in_results ) {
 
@@ -85,9 +87,9 @@ class WPSOLR_Data_Facets {
 
 			}
 
-			return $results;
 		}
 
+		return $results;
 	}
 
 }

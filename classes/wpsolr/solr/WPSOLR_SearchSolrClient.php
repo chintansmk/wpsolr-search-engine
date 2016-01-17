@@ -9,7 +9,6 @@ use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\ui\WPSOLR_Query;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
-use wpsolr\WPSOLR_Schema;
 
 class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 

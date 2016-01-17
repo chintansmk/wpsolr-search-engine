@@ -2,8 +2,8 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\solr\WPSOLR_Schema;
 use wpsolr\utilities\WPSOLR_Global;
-use wpsolr\WPSOLR_Schema;
 
 /**
  * Manage Solr query parameters.

@@ -4,8 +4,10 @@ namespace wpsolr\extensions\s2member;
 
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\services\WPSOLR_Service_Wordpress;
+use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
+use wpsolr\utilities\WPSOLR_Regexp;
 use wpsolr\WPSOLR_Filters;
 
 /**
@@ -231,7 +233,7 @@ class WPSOLR_Plugin_S2member extends WPSOLR_Extensions {
 	public function filter_custom_fields( $custom_fields, $post_id ) {
 
 		// Remove the '_str' at the end of the custom field
-		$custom_field_name = str_replace( '_str', '', self::CUSTOM_FIELD_NAME_STORING_POST_CAPABILITIES );
+		$custom_field_name = WPSOLR_Regexp::remove_string_at_the_end( self::CUSTOM_FIELD_NAME_STORING_POST_CAPABILITIES, WPSOLR_Field_Types::SOLR_TYPE_STRING );
 
 		if ( $custom_fields && ( count( $custom_fields ) > 0 ) && isset( $custom_fields[ $custom_field_name ] ) ) {
 

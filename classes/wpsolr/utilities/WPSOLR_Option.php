@@ -387,8 +387,14 @@ class WPSOLR_Option {
 	 **************************************************************************************************************/
 	const OPTION_FIELDS = 'wdm_solr_form_data';
 	const OPTION_FIELDS_ARE_COMMENTS_INDEXED = 'comments';
-	const OPTION_FIELDS_CUSTOM_FIELDS = 'cust_fields';
+	const OPTION_FIELDS_CUSTOM_FIELDS_FROM_7_6 = 'cust_fields';
+	const OPTION_FIELDS_CUSTOM_FIELDS = 'custom_fields';
 	const OPTION_FIELDS_TAXONOMIES = 'taxonomies';
+	const OPTION_FIELDS_POST_TYPES = 'p_types';
+	const OPTION_FIELDS_ATTACHMENTS = 'attachment_types';
+	const OPTION_FIELDS_EXCLUDE_IDS = 'exclude_ids';
+	const OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED = 'p_excerpt';
+	const OPTION_FIELDS_IS_SHORTCODE_EXPANDED = 'is_shortcode_expanded';
 
 	/**
 	 * Get indexing options array
@@ -408,20 +414,19 @@ class WPSOLR_Option {
 
 	/**
 	 * Custom fields indexed
-	 * @return string
-	 */
-	public function get_fields_custom_fields() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_CUSTOM_FIELDS, '' );
-	}
-
-	/**
-	 * Custom fields indexed
 	 * @return array
 	 */
 	public function get_fields_custom_fields_array() {
-		return $this->explode( $this->get_fields_custom_fields() );
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_CUSTOM_FIELDS, [ ] );
 	}
 
+	/**
+	 * Custom fields indexed, <= 7.6
+	 * @return array
+	 */
+	public function migrate_data_from_v7_6_get_fields_custom_fields_array() {
+		return $this->explode( $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_CUSTOM_FIELDS_FROM_7_6, '' ) );
+	}
 
 	/**
 	 * Taxonomies indexed
@@ -439,6 +444,61 @@ class WPSOLR_Option {
 		return $this->explode( $this->get_indexing_taxonomies() );
 	}
 
+	/**
+	 * POst types indexed
+	 * @return string
+	 */
+	public function get_fields_post_types() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_POST_TYPES, '' );
+	}
+
+	/**
+	 * Attachements indexed
+	 * @return string
+	 */
+	public function get_fields_attachements() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_ATTACHMENTS, '' );
+	}
+
+	/**
+	 * Attachements indexed
+	 * @return array
+	 */
+	public function get_fields_attachements_array() {
+		return $this->explode( $this->get_fields_attachements() );
+	}
+
+	/**
+	 * Ids exluded from index
+	 * @return string
+	 */
+	public function get_fields_exclude_ids() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_EXCLUDE_IDS, '' );
+	}
+
+	/**
+	 * Ids exluded from index
+	 * @return array
+	 */
+	public function get_fields_exclude_ids_array() {
+		return $this->explode( $this->get_fields_exclude_ids() );
+	}
+
+	/**
+	 * Index post excerpts ?
+	 * @return boolean
+	 */
+	public function get_fields_are_post_excertps_indexed() {
+		return ! $this->is_empty( $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED ) );
+	}
+
+	/**
+	 * Index post excerpts ?
+	 * @return boolean
+	 */
+	public function get_fields_is_shortcode_expanded() {
+		return ! $this->is_empty( $this->get_option_value( __FUNCTION__, self::OPTION_FIELDS, self::OPTION_FIELDS_IS_SHORTCODE_EXPANDED ) );
+	}
 
 	/***************************************************************************************************************
 	 *
@@ -617,5 +677,6 @@ class WPSOLR_Option {
 	public function get_option_indexes() {
 		return self::get_option( self::OPTION_INDEXES );
 	}
+
 
 }

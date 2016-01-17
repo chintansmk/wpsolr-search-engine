@@ -3,6 +3,7 @@
 namespace wpsolr\extensions\facets;
 
 use wpsolr\extensions\WPSOLR_Extensions;
+use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
@@ -33,18 +34,18 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 			$form_file,
 			array_merge(
 				[
-					'options'           => WPSOLR_Global::getOption()->get_option_facet(
+					'options'               => WPSOLR_Global::getOption()->get_option_facet(
 						[ WPSOLR_Option::OPTION_FACETS_SELECTED => '' ]
 					),
-					'facets_selected_array'   => WPSOLR_Global::getOption()->get_facets_selected_array(),
-					'facets_selected'   => WPSOLR_Global::getOption()->get_facets_selected(),
-					'facets_candidates' => array_merge(
-						array( 'Type', 'Author', 'Categories', 'Tags' ),
+					'facets_selected_array' => WPSOLR_Global::getOption()->get_facets_selected_array(),
+					'facets_selected'       => WPSOLR_Global::getOption()->get_facets_selected(),
+					'facets_candidates'     => array_merge(
+						WPSOLR_Field_Types::get_fields_type_string( [ 'Type', 'Author', 'Categories', 'Tags' ] ),
 						WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
-						WPSOLR_Global::getOption()->get_fields_taxonomies_array()
+						WPSOLR_Field_Types::get_fields_type_string( WPSOLR_Global::getOption()->get_fields_taxonomies_array() )
 					),
-					'image_plus'        => plugins_url( '../../../../images/plus.png', __FILE__ ),
-					'image_minus'       => plugins_url( '../../../../images/success.png', __FILE__ )
+					'image_plus'            => plugins_url( '../../../../images/plus.png', __FILE__ ),
+					'image_minus'           => plugins_url( '../../../../images/success.png', __FILE__ )
 				],
 				$plugin_parameters
 			)

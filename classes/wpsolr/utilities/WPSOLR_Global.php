@@ -14,6 +14,7 @@ use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\wpml\WPSOLR_Plugin_Wpml;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\services\WPSOLR_Service_Wordpress;
+use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\ui\templates\twig\WPSOLR_Twig;
 use wpsolr\ui\WPSOLR_Query;
@@ -191,6 +192,20 @@ class WPSOLR_Global {
 	 */
 	public static function getExtension( $extension ) {
 		return self::getObject( $extension, WPSOLR_Extensions::CLASS, $extension );
+	}
+
+	/**
+	 * @return WPSOLR_Field_Types
+	 */
+	public static function getSolrFieldTypes() {
+		return self::getObject( WPSOLR_Field_Types::CLASS, WPSOLR_Field_Types::CLASS );
+	}
+
+	/**
+	 * @return \Solarium\Core\Query\Helper
+	 */
+	public static function getSolariumHelper() {
+		return self::getObject( \Solarium\Core\Query\Helper::CLASS, \Solarium\Core\Query\Helper::CLASS );
 	}
 
 }

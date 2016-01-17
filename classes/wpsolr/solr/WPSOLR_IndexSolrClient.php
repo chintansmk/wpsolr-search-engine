@@ -4,7 +4,6 @@ namespace wpsolr\solr;
 
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
-use wpsolr\WPSOLR_Schema;
 
 class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 
@@ -36,9 +35,6 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 	}
 
 	public function __construct( $solr_index_indice = null, $language_code = null ) {
-
-		// Load options
-		$this->solr_indexing_options = WPSOLR_Global::getOption()->get_option_fields();
 
 		$config = WPSOLR_Global::getExtensionIndexes()->build_solarium_config( $solr_index_indice, $language_code, self::DEFAULT_SOLR_TIMEOUT_IN_SECOND );
 
@@ -220,10 +216,8 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		// Get body of attachment
 		$solarium_extract_query = $client->createExtract();
 
-		$post_types = str_replace( ",", "','", $this->solr_indexing_options['p_types'] );
-		$exclude_id = $this->solr_indexing_options['exclude_ids'];
-		$ex_ids     = array();
-		$ex_ids     = explode( ',', $exclude_id );
+		$post_types = str_replace( ",", "','", WPSOLR_Global::getOption()->get_fields_post_types() );
+		$ex_ids     = WPSOLR_Global::getOption()->get_fields_exclude_ids_array();
 
 		// Build the WHERE clause
 
@@ -231,7 +225,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		$where_p = " post_type in ('$post_types') ";
 
 		// Build the attachment types clause
-		$attachment_types = str_replace( ",", "','", $this->solr_indexing_options['attachment_types'] );
+		$attachment_types = str_replace( ",", "','", WPSOLR_Global::getOption()->get_fields_attachements() );
 		if ( isset( $attachment_types ) && ( $attachment_types != '' ) ) {
 			$where_a = " ( post_status='publish' OR post_status='inherit' ) AND post_type='attachment' AND post_mime_type in ('$attachment_types') ";
 		}
@@ -533,10 +527,6 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		}
 		foreach ( $aTaxo as $a ) {
 
-			if ( substr( $a, ( strlen( $a ) - 4 ), strlen( $a ) ) == "_str" ) {
-				$a = substr( $a, 0, ( strlen( $a ) - 4 ) );
-			}
-
 			// Add only non empty categories
 			if ( strlen( trim( $a ) ) > 0 ) {
 				array_push( $newTax, $a );
@@ -569,7 +559,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_PID ]   = $pid;
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_TITLE ] = $ptitle;
 
-		if ( isset( $this->solr_indexing_options['p_excerpt'] ) && ( ! empty( $pexcerpt ) ) ) {
+		if ( WPSOLR_Global::getOption()->get_fields_are_post_excertps_indexed() && ( ! empty( $pexcerpt ) ) ) {
 
 			// Index post excerpt, by adding it to the post content.
 			// Excerpt can therefore be: searched, autocompleted, highlighted.
@@ -577,7 +567,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		}
 
 		$content_with_shortcodes_expanded_or_stripped = $pcontent;
-		if ( isset( $this->solr_indexing_options['is_shortcode_expanded'] ) && ( strpos( $pcontent, '[solr_search_shortcode]' ) === false ) ) {
+		if ( WPSOLR_Global::getOption()->get_fields_is_shortcode_expanded() && ( strpos( $pcontent, '[solr_search_shortcode]' ) === false ) ) {
 
 			// Expand shortcodes which have a plugin active, and are not the search form shortcode (else pb).
 			global $post;
@@ -615,17 +605,19 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 				if ( (array) $terms === $terms ) {
 					$parent = strtolower( str_replace( ' ', '_', $parent ) );
 					foreach ( $terms as $term ) {
-						$nm1                                = $parent . '_str';
-						$nm2                                = $parent . '_srch';
+						$nm1                                = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_type_name( $parent );
 						$solarium_document_for_update->$nm1 = $term->name;
+						/*
+						$nm2                                = $parent . '_srch';
 						$solarium_document_for_update->$nm2 = $term->name;
+						*/
 					}
 				}
 			}
 		}
 
 		// Add custom fields to the document
-		$this->set_custom_fields( $solarium_document_for_update, $post_to_index );
+		$this->set_custom_fields( $solarium_document_for_update, $post_to_index, WPSOLR_Global::getOption()->get_fields_custom_fields_array() );
 
 		// Last chance to customize the solarium update document
 		$solarium_document_for_update = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_SOLARIUM_DOCUMENT_FOR_UPDATE, $solarium_document_for_update, $this->solr_indexing_options, $post_to_index, $attachment_body );
@@ -640,50 +632,53 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 	 * HTML and php tags are removed.
 	 *
 	 * @param $solarium_document_for_update
-	 * @param $post
+	 * @param \WP_Post $post
+	 * @param array $custom_fields Custom fields to be indexed
 	 */
-	function set_custom_fields( $solarium_document_for_update, $post ) {
+	function set_custom_fields( $solarium_document_for_update, $post, $custom_fields ) {
 
-		$custom                    = $this->solr_indexing_options['cust_fields'];
-		$custom_fields_values_list = array();
-		$aCustom                   = explode( ',', $custom );
-		if ( count( $aCustom ) > 0 ) {
-			if ( count( $custom_fields = get_post_custom( $post->ID ) ) ) {
+		if ( count( $custom_fields ) > 0 ) { // There are custom fields to index
 
-				// Apply filters on custom fields
-				$custom_fields = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_POST_CUSTOM_FIELDS, $custom_fields, $post->ID );
+			if ( count( $post_custom_fields = get_post_custom( $post->ID ) ) ) { // There are custom fields to index on the post
+
+				// Apply filters on post custom fields
+				$post_custom_fields = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_POST_CUSTOM_FIELDS, $post_custom_fields, $post->ID );
 
 				$existing_custom_fields = isset( $solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_CUSTOM_FIELDS ] )
 					? $solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_CUSTOM_FIELDS ]
 					: array();
 
-				foreach ( (array) $aCustom as $field_name ) {
-					if ( substr( $field_name, ( strlen( $field_name ) - 4 ), strlen( $field_name ) ) == "_str" ) {
-						$field_name = substr( $field_name, 0, ( strlen( $field_name ) - 4 ) );
-					}
-					if ( isset( $custom_fields[ $field_name ] ) ) {
-						$field = (array) $custom_fields[ $field_name ];
+				foreach ( $custom_fields as $custom_field_name => $custom_field_type ) { // Loop on custom fields to index
 
-						$field_name = strtolower( str_replace( ' ', '_', $field_name ) );
+					if ( isset( $post_custom_fields[ $custom_field_name ] ) ) { // Custom field is also on the post
 
-						// Add custom field array of values
-						$nm1       = $field_name . '_str';
-						$nm2       = $field_name . '_srch';
-						$array_nm1 = array();
+						$post_custom_field = $post_custom_fields[ $custom_field_name ];
+
+						// Transform custom field name in Solr dynamic type name
+						// 'price' ===> 'price_f', 'town' ==> 'town_str'
+						$custom_field_name_with_dynamic_type = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_type_name( $custom_field_name, $custom_field_type );
+
+						/*
+						 $nm2       = $field_name . '_srch';
 						$array_nm2 = array();
-						foreach ( $field as $field_value ) {
-							$field_value_stripped = strip_tags( $field_value );
+						*/
 
-							array_push( $array_nm1, $field_value_stripped );
-							array_push( $array_nm2, $field_value_stripped );
+						$custom_field_with_dynamic_type = array();
+						foreach ( $post_custom_field as $field_value ) { // Loop on post custom field attributes
+
+							// Sanitize the value, depending on it's type
+							$field_value_sanitized = WPSOLR_Global::getSolrFieldTypes()->get_sanitized_value( $post, $custom_field_name, $field_value, $custom_field_type );
+
+							array_push( $custom_field_with_dynamic_type, $field_value_sanitized );
+							//array_push( $array_nm2, $field_value_stripped );
 
 							// Add current custom field values to custom fields search field
 							// $field being an array, we add each of it's element
-							array_push( $existing_custom_fields, $field_value_stripped );
+							array_push( $existing_custom_fields, $field_value_sanitized );
 						}
 
-						$solarium_document_for_update->$nm1 = $array_nm1;
-						$solarium_document_for_update->$nm2 = $array_nm2;
+						$solarium_document_for_update->$custom_field_name_with_dynamic_type = $custom_field_with_dynamic_type;
+						//$solarium_document_for_update->$nm2 = $array_nm2;
 
 					}
 				}

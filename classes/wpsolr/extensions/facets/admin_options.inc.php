@@ -1,5 +1,6 @@
 <?php
 use wpsolr\services\WPSOLR_Service_Wordpress;
+
 ?>
 
 <div id="solr-facets-options" class="wdm-vertical-tabs-content">
@@ -60,9 +61,11 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 								}
 							}
 						}
-						foreach ( $facets_candidates as $built_fac ) {
-							if ( $built_fac != '' ) {
-								$buil_fac = strtolower( $built_fac );
+						foreach ( $facets_candidates as $facet_candidate ) {
+
+							if ( $facet_candidate != '' ) {
+
+								$buil_fac = strtolower( $facet_candidate );
 								if ( substr( $buil_fac, ( strlen( $buil_fac ) - 4 ), strlen( $buil_fac ) ) == "_str" ) {
 									$dis_text = substr( $buil_fac, 0, ( strlen( $buil_fac ) - 4 ) );
 								} else {

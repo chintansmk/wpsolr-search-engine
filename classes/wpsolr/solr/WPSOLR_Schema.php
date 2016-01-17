@@ -1,6 +1,6 @@
 <?php
 
-namespace wpsolr;
+namespace wpsolr\solr;
 
 /**
  * Manage schema.xml definitions
@@ -51,41 +51,4 @@ class WPSOLR_Schema {
 		),
 	);
 
-	// Solr types
-	const SOLR_TYPE_STRING = '_str';
-	const SOLR_TYPE_INTEGER = '_i';
-	const SOLR_TYPE_INTEGER_LONG = '_l';
-	const SOLR_TYPE_FLOAT = '_f';
-	const SOLR_TYPE_FLOAT_DOUBLE = '_d';
-	const SOLR_TYPE_DATE = '_dt';
-	const SOLR_TYPE_CUSTOM_FIELD = 'custom';
-
-	private static $SOLR_TYPE_FIELD_NAME = 'name';
-
-	/**
-	 * Get all solr types
-	 * @return array
-	 */
-	public static function get_solr_types() {
-
-		return [
-			self::SOLR_TYPE_STRING       => [ self::$SOLR_TYPE_FIELD_NAME => 'String' ],
-			self::SOLR_TYPE_INTEGER      => [ self::$SOLR_TYPE_FIELD_NAME => 'Integer' ],
-			self::SOLR_TYPE_INTEGER_LONG => [ self::$SOLR_TYPE_FIELD_NAME => 'Integer long' ],
-			self::SOLR_TYPE_FLOAT        => [ self::$SOLR_TYPE_FIELD_NAME => 'Float' ],
-			self::SOLR_TYPE_FLOAT_DOUBLE => [ self::$SOLR_TYPE_FIELD_NAME => 'Float double' ],
-			self::SOLR_TYPE_DATE         => [ self::$SOLR_TYPE_FIELD_NAME => 'Date' ],
-			self::SOLR_TYPE_CUSTOM_FIELD => [ self::$SOLR_TYPE_FIELD_NAME => 'Custom field in schema.xml' ]
-		];
-
-	}
-
-	/**
-	 * Get a Solr type name attribute
-	 * @return array
-	 */
-	public static function get_solr_type_name( $solr_type ) {
-
-		return $solr_type[ self::$SOLR_TYPE_FIELD_NAME ];
-	}
 }
