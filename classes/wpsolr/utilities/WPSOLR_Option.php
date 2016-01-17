@@ -368,16 +368,16 @@ class WPSOLR_Option {
 	 * Comma separated facets selected
 	 * @return "type,author,categories,tags,acf2_str"
 	 */
-	public function get_facets_selected() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_SELECTED, '' );
+	public function migrate_data_from_v7_6_get_facets_selected_array() {
+		return $this->explode( $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_SELECTED, '' ) );
 	}
 
 	/**
 	 * Array of facets selected
-	 * @return array ["type","author","categories","tags","acf2_str"]
+	 * @return array ["type" => [...]]
 	 */
 	public function get_facets_selected_array() {
-		return $this->explode( $this->get_facets_selected() );
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_SELECTED, [] );
 	}
 
 	/***************************************************************************************************************

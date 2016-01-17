@@ -200,16 +200,7 @@ jQuery(document).ready(function () {
         });
     }
 
-    jQuery('#save_facets_options_form').click(function () {
 
-        result = '';
-        jQuery(".facet_selected").each(function () {
-            result += jQuery(this).attr('id') + ",";
-        });
-        result = result.substring(0, result.length - 1);
-
-        jQuery("#select_fac").val(result);
-    })
 
     jQuery('#save_sort_options_form').click(function () {
 
@@ -400,35 +391,6 @@ jQuery(document).ready(function () {
 
 
     })
-
-
-    jQuery('.plus_icon').click(function () {
-        jQuery(this).parent().addClass('facet_selected');
-        jQuery(this).hide();
-        jQuery(this).siblings().css('display', 'inline');
-    })
-
-    jQuery('.minus_icon').click(function () {
-        jQuery(this).parent().removeClass('facet_selected');
-        jQuery(this).hide();
-        jQuery(this).siblings().css('display', 'inline');
-    })
-
-    jQuery("#sortable1").sortable(
-        {
-            connectWith: ".connectedSortable",
-            stop: function (event, ui) {
-                jQuery('.connectedSortable').each(function () {
-                    result = "";
-                    jQuery(this).find(".facet_selected").each(function () {
-                        result += jQuery(this).attr('id') + ",";
-                    });
-                    result = result.substring(0, result.length - 1);
-
-                    jQuery("#select_fac").val(result);
-                });
-            }
-        });
 
 
     jQuery('.plus_icon_sort').click(function () {

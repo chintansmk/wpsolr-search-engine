@@ -37,8 +37,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 					'options'               => WPSOLR_Global::getOption()->get_option_facet(
 						[ WPSOLR_Option::OPTION_FACETS_SELECTED => '' ]
 					),
-					'facets_selected_array' => WPSOLR_Global::getOption()->get_facets_selected_array(),
-					'facets_selected'       => WPSOLR_Global::getOption()->get_facets_selected(),
+					'facets_selected' => WPSOLR_Field_Types::get_fields_type_string( WPSOLR_Global::getOption()->get_facets_selected_array() ),
 					'facets_candidates'     => array_merge(
 						WPSOLR_Field_Types::get_fields_type_string( [ 'Type', 'Author', 'Categories', 'Tags' ] ),
 						WPSOLR_Global::getOption()->get_fields_custom_fields_array(),

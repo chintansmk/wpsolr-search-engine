@@ -3,6 +3,37 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 
 ?>
 
+<script>
+	jQuery(document).ready(function () {
+
+		// Declare the list sortable
+		jQuery("#sortable").sortable();
+		jQuery("#sortable").accordion({active: false});
+
+		jQuery('.plus_icon').click(function () {
+			jQuery(this).parent().parent().addClass('facet_selected');
+			jQuery(this).hide();
+			jQuery(this).siblings().css('display', 'inline');
+
+			jQuery(this).parent().next().children().prop('disabled', false);
+		})
+
+		jQuery('.minus_icon').click(function () {
+			jQuery(this).parent().parent().removeClass('facet_selected');
+			jQuery(this).hide();
+			jQuery(this).siblings().css('display', 'inline');
+
+			jQuery(this).parent().next().children().prop('disabled', true);
+		})
+
+		jQuery('#save_facets_options_form').click(function () {
+
+		});
+
+	});
+
+</script>
+
 <div id="solr-facets-options" class="wdm-vertical-tabs-content">
 	<form action="options.php" method="POST" id='fac_settings_form'>
 		<?php
@@ -37,49 +68,52 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 			</div>
 
 			<div class="wdm_row">
-				<div class='avail_fac'>
+				<div class='wpsolr-1col'>
 					<h4>Available items for facets</h4>
-					<input type='hidden' id='select_fac' name='wdm_solr_facet_data[facets]'
-					       value='<?php echo $facets_selected ?>'>
 
-
-					<ul id="sortable1" class="wdm_ul connectedSortable">
+					<ul id="sortable" class="connectedSortable">
 						<?php
-						if ( $facets_selected != '' ) {
-							foreach ( $facets_selected_array as $selected_val ) {
-								if ( $selected_val != '' ) {
-									if ( substr( $selected_val, ( strlen( $selected_val ) - 4 ), strlen( $selected_val ) ) == "_str" ) {
-										$dis_text = substr( $selected_val, 0, ( strlen( $selected_val ) - 4 ) );
-									} else {
-										$dis_text = $selected_val;
-									}
+						foreach ( $facets_selected as $facet_selected_name => $facet_selected ) {
 
-
-									echo "<li id='$selected_val' class='ui-state-default facets facet_selected'>$dis_text
-                                                                                                    <img src='$image_plus'  class='plus_icon' style='display:none'>
-                                                                                                <img src='$image_minus' class='minus_icon' style='display:inline' title='Click to Remove the Facet'></li>";
-								}
-							}
+							echo <<<FACET_SELECTED_TAG
+										<li class='ui-state-default facets facet_selected'>
+											<div>
+												<a>$facet_selected_name</a>
+												<img src='$image_plus'  class='plus_icon' style='display:none'>
+												<img src='$image_minus' class='minus_icon' style='display:inline' title='Click to Remove the Facet'>
+											</div>
+											<div id='$facet_selected_name' >
+												<input type='hidden' name='wdm_solr_facet_data[facets][$facet_selected_name]' value='$facet_selected_name'/>
+												test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>
+											</div>
+										</li>
+FACET_SELECTED_TAG;
 						}
-						foreach ( $facets_candidates as $facet_candidate ) {
 
-							if ( $facet_candidate != '' ) {
 
-								$buil_fac = strtolower( $facet_candidate );
-								if ( substr( $buil_fac, ( strlen( $buil_fac ) - 4 ), strlen( $buil_fac ) ) == "_str" ) {
-									$dis_text = substr( $buil_fac, 0, ( strlen( $buil_fac ) - 4 ) );
-								} else {
-									$dis_text = $buil_fac;
-								}
+						foreach ( $facets_candidates as $facet_candidate_name => $facet_candidate ) {
 
-								if ( ! in_array( $buil_fac, $facets_selected_array ) ) {
+							$facet_candidate_name = strtolower( $facet_candidate_name );
 
-									echo "<li id='$buil_fac' class='ui-state-default facets'>$dis_text
-                                                                                                    <img src='$image_plus'  class='plus_icon' style='display:inline' title='Click to Add the Facet'>
-                                                                                                <img src='$image_minus' class='minus_icon' style='display:none'></li>";
-								}
+							if ( ! isset( $facets_selected[ $facet_candidate_name ] ) ) {
+
+								echo <<<FACET_CANDIDATE_TAG
+                                        <li class='ui-state-default facets'>
+                                            <div>
+                                                <a>$facet_candidate_name</a>
+                                                <img src='$image_plus'  class='plus_icon' style='display:inline' title='Click to Add the Facet'>
+                                                <img src='$image_minus' class='minus_icon' style='display:none'>
+                                            </div>
+                                            <div id='$facet_candidate_name' >
+                                                <input type='hidden' name='wdm_solr_facet_data[facets][$facet_candidate_name]' value='$facet_candidate_name'/>
+                                                <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>test <br/>
+                                            </div>
+                                        </li>
+FACET_CANDIDATE_TAG;
 							}
+
 						}
+
 						?>
 
 

@@ -30,8 +30,6 @@ use wpsolr\utilities\WPSOLR_Option;
 
 		jQuery(".<?php echo WPSOLR_Option::OPTION_FIELDS_CUSTOM_FIELDS ?> input:checkbox").click(function () {
 
-			console.log('.' + jQuery(this).val() + ':' + jQuery(this).prop("checked"));
-
 			jQuery('.' + jQuery(this).val()).children().toggle(jQuery(this).prop("checked"));
 			jQuery('.' + jQuery(this).val()).children().prop('disabled', !jQuery(this).prop("checked"));
 		});
@@ -212,7 +210,7 @@ use wpsolr\utilities\WPSOLR_Option;
 
 								<div class='wpsolr-2col'>
 									<input type='checkbox' name='<?php echo WPSOLR_Option::OPTION_FIELDS_TAXONOMIES ?>'
-									       value='<?php echo $indexable_item . "_str" ?>'
+									       value='<?php echo $indexable_item; ?>'
 										<?php if ( strpos( $indexed_items, $indexable_item ) !== false ) { ?> checked <?php } ?>>
 									<?php echo $indexable_item ?>
 								</div>
