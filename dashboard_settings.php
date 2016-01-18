@@ -96,8 +96,15 @@ function fun_add_solr_settings() {
 	$img_url = plugins_url( 'images/WPSOLRDashicon.png', __FILE__ );
 	add_menu_page( 'WPSOLR', 'WPSOLR', 'manage_options', 'solr_settings', 'fun_set_solr_options', $img_url );
 	wp_enqueue_style( 'dashboard_style', plugins_url( 'css/dashboard_css.css', __FILE__ ) );
+
+
+	// Jquery dialog js and css
+	wp_enqueue_style( 'jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
 	wp_enqueue_script( 'jquery-ui-sortable' );
 	wp_enqueue_script( 'jquery-ui-accordion' );
+	wp_enqueue_script( 'jquery-ui-dialog' );
+	wp_enqueue_script( 'jquery-ui-tabs' );
+
 	wp_enqueue_script( 'dashboard_js1', plugins_url( 'js/dashboard.js', __FILE__ ), array(
 		'jquery',
 		'jquery-ui-sortable'

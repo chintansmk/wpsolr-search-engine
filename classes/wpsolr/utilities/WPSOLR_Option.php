@@ -354,7 +354,8 @@ class WPSOLR_Option {
 	 *
 	 **************************************************************************************************************/
 	const OPTION_FACETS = 'wdm_solr_facet_data';
-	const OPTION_FACETS_SELECTED = 'facets';
+	const OPTION_FACETS_FACETS = 'facets';
+	const OPTION_FACETS_GROUPS = 'facets_groups';
 
 	/**
 	 * Get facet options array
@@ -369,7 +370,7 @@ class WPSOLR_Option {
 	 * @return "type,author,categories,tags,acf2_str"
 	 */
 	public function migrate_data_from_v7_6_get_facets_selected_array() {
-		return $this->explode( $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_SELECTED, '' ) );
+		return $this->explode( $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_FACETS, '' ) );
 	}
 
 	/**
@@ -377,7 +378,15 @@ class WPSOLR_Option {
 	 * @return array ["type" => [...]]
 	 */
 	public function get_facets_selected_array() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_SELECTED, [] );
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_FACETS, [ ] );
+	}
+
+	/**
+	 * Array of facets groups
+	 * @return array [ '1' => ['name' => 'Group 1']]
+	 */
+	public function get_facets_groups() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_GROUPS, [ ] );
 	}
 
 	/***************************************************************************************************************
