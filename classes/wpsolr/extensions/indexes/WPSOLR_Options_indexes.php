@@ -26,7 +26,7 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 	const STORED_INDEX_TYPE_MANAGED_TEMPORARY = 'index_type_managed_temporary';
 	// Managed Solr index
 	const STORED_INDEX_TYPE_MANAGED = 'index_type_managed';
-
+	
 	/**
 	 * Post constructor.
 	 */

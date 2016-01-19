@@ -3,6 +3,7 @@
 namespace wpsolr\extensions\fields;
 
 use wpsolr\extensions\WPSOLR_Extensions;
+use wpsolr\solr\WPSOLR_Field_Type;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
@@ -53,7 +54,6 @@ class WPSOLR_Options_Fields extends WPSOLR_Extensions {
 		// Do not delete the old options. If the user wants to rollback the version, he can.
 		return;
 	}
-
 
 	/**
 	 * Post constructor.
@@ -164,4 +164,24 @@ class WPSOLR_Options_Fields extends WPSOLR_Extensions {
 		return [ ];
 	}
 
+
+	/**
+	 * Retrieve the field type object of a field name
+	 *
+	 * @param string $field_name
+	 *
+	 * @return WPSOLR_Field_Type Field
+	 */
+	public function get_field_type_definition( $field_name ) {
+
+		$fields = WPSOLR_Global::getOption()->get_option_fields();
+
+		$solr_type = WPSOLR_Field_Types::SOLR_TYPE_STRING;
+
+		if ( isset( $fields['custom_fields'] ) && isset( $fields['custom_fields'][ $field_name ] ) ) {
+			$solr_type = $fields['custom_fields'][ $field_name ]['solr_type'];
+		}
+
+		return WPSOLR_Global::getSolrFieldTypes()->get_field_type( $solr_type );
+	}
 }

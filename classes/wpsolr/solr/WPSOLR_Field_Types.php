@@ -45,13 +45,13 @@ class WPSOLR_Field_Types {
 	public static function global_object() {
 
 		$result = new WPSOLR_Field_Types( [
-			self::SOLR_TYPE_STRING       => new WPSOLR_Field_Type_String( self::SOLR_TYPE_STRING, 'String', self::SOLR_DYNAMIC_TYPE_STRING ),
-			self::SOLR_TYPE_INTEGER      => new WPSOLR_Field_Type_Integer( self::SOLR_TYPE_INTEGER, 'Integer', self::SOLR_DYNAMIC_TYPE_INTEGER ),
-			self::SOLR_TYPE_INTEGER_LONG => new WPSOLR_Field_Type_Long( self::SOLR_TYPE_INTEGER_LONG, 'Integer long', self::SOLR_DYNAMIC_TYPE_INTEGER_LONG ),
-			self::SOLR_TYPE_FLOAT        => new WPSOLR_Field_Type_Float( self::SOLR_TYPE_FLOAT, 'Float', self::SOLR_DYNAMIC_TYPE_FLOAT ),
-			self::SOLR_TYPE_FLOAT_DOUBLE => new WPSOLR_Field_Type_Double( self::SOLR_TYPE_FLOAT_DOUBLE, 'Float double', self::SOLR_DYNAMIC_TYPE_FLOAT_DOUBLE ),
-			self::SOLR_TYPE_DATE         => new WPSOLR_Field_Type_Date( self::SOLR_TYPE_DATE, 'Date', self::SOLR_DYNAMIC_TYPE_DATE ),
-			self::SOLR_TYPE_CUSTOM_FIELD => new WPSOLR_Field_Type( self::SOLR_TYPE_CUSTOM_FIELD, 'Custom field in schema.xml', self::SOLR_DYNAMIC_TYPE_CUSTOM_FIELD )
+			self::SOLR_TYPE_STRING       => new WPSOLR_Field_Type_String( self::SOLR_TYPE_STRING, 'String', self::SOLR_DYNAMIC_TYPE_STRING, false ),
+			self::SOLR_TYPE_INTEGER      => new WPSOLR_Field_Type_Integer( self::SOLR_TYPE_INTEGER, 'Integer', self::SOLR_DYNAMIC_TYPE_INTEGER, true ),
+			self::SOLR_TYPE_INTEGER_LONG => new WPSOLR_Field_Type_Long( self::SOLR_TYPE_INTEGER_LONG, 'Integer long', self::SOLR_DYNAMIC_TYPE_INTEGER_LONG, true ),
+			self::SOLR_TYPE_FLOAT        => new WPSOLR_Field_Type_Float( self::SOLR_TYPE_FLOAT, 'Float', self::SOLR_DYNAMIC_TYPE_FLOAT, true ),
+			self::SOLR_TYPE_FLOAT_DOUBLE => new WPSOLR_Field_Type_Double( self::SOLR_TYPE_FLOAT_DOUBLE, 'Float double', self::SOLR_DYNAMIC_TYPE_FLOAT_DOUBLE, true ),
+			self::SOLR_TYPE_DATE         => new WPSOLR_Field_Type_Date( self::SOLR_TYPE_DATE, 'Date', self::SOLR_DYNAMIC_TYPE_DATE, true ),
+			self::SOLR_TYPE_CUSTOM_FIELD => new WPSOLR_Field_Type( self::SOLR_TYPE_CUSTOM_FIELD, 'Custom field in schema.xml', self::SOLR_DYNAMIC_TYPE_CUSTOM_FIELD, false, false )
 		] );
 
 		return $result;
@@ -62,14 +62,16 @@ class WPSOLR_Field_Types {
 	 *
 	 * @param array $field_names [ 'Type', 'Author' ]
 	 *
+	 * @param $solr_type
+	 *
 	 * @return array [ 'Type' => ['solr_type' => 'string'], 'Author' => ['solr_type' => 'string']]
 	 */
-	public static function get_fields_type_string( $field_names ) {
+	public static function add_fields_type( $field_names, $solr_type ) {
 
 		$results = [ ];
 
-		foreach ( $field_names as $field_name ) {
-			$results[ $field_name ] = [ 'solr_type' => self::SOLR_TYPE_STRING ];
+		foreach ( ( is_array( $field_names ) ? $field_names : array( $field_names ) ) as $field_name ) {
+			$results[ $field_name ] = [ 'solr_type' => $solr_type ];
 		}
 
 		return $results;

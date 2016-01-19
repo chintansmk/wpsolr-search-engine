@@ -40,8 +40,10 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
 					'layouts'                    => [
-						'1' => [ 'name' => 'Layout 1' ],
-						'2' => [ 'name' => 'Layout 2' ]
+						'1' => [ 'name' => 'Check boxes' ],
+						'2' => [ 'name' => 'Radio boxes' ],
+						'3' => [ 'name' => 'Numeric ranges' ],
+						'4' => [ 'name' => 'Numeric slider' ]
 					],
 					'selected_facets_group_uuid' => '2',
 					'new_facets_group_uuid'      => $new_facets_group_uuid,
@@ -53,10 +55,15 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 							]
 						] ),
 					'facets_selected'            => WPSOLR_Global::getOption()->get_facets_selected_array(),
-					'facets_candidates'          => array_merge(
-						WPSOLR_Field_Types::get_fields_type_string( [ 'Type', 'Author', 'Categories', 'Tags' ] ),
+					'fields'                     => array_merge(
+						WPSOLR_Field_Types::add_fields_type( [
+							'Type',
+							'Author',
+							'Categories',
+							'Tags'
+						], WPSOLR_Field_Types::SOLR_TYPE_STRING ),
 						WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
-						WPSOLR_Field_Types::get_fields_type_string( WPSOLR_Global::getOption()->get_fields_taxonomies_array() )
+						WPSOLR_Field_Types::add_fields_type( WPSOLR_Global::getOption()->get_fields_taxonomies_array(), WPSOLR_Field_Types::SOLR_TYPE_STRING )
 					),
 					'image_plus'                 => plugins_url( '../../../../images/plus.png', __FILE__ ),
 					'image_minus'                => plugins_url( '../../../../images/success.png', __FILE__ )

@@ -23,16 +23,22 @@ class WPSOLR_Field_Type {
 	// Dynamic type extension of the field: '_str'
 	protected $dynamic_type;
 
+	// Is this a range type ?
+	protected $is_range;
+
 	/**
 	 * WPSOLR_Field_Type constructor.
 	 *
 	 * @param $id
 	 * @param $name
+	 * @param $dynamic_type
+	 * @param $is_range
 	 */
-	public function __construct( $id, $name, $dynamic_type ) {
+	public function __construct( $id, $name, $dynamic_type, $is_range ) {
 		$this->id           = $id;
 		$this->name         = $name;
 		$this->dynamic_type = $dynamic_type;
+		$this->is_range     = $is_range;
 	}
 
 	/**
@@ -89,6 +95,20 @@ class WPSOLR_Field_Type {
 	 */
 	public function get_sanitized_value( $post, $field_name, $value ) {
 		return $value;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function get_is_range() {
+		return $this->is_range;
+	}
+
+	/**
+	 * @param boolean $is_range
+	 */
+	public function set_is_range( $is_range ) {
+		$this->is_range = $is_range;
 	}
 
 

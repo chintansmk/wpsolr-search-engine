@@ -1,5 +1,6 @@
 <?php
 use wpsolr\extensions\WPSOLR_Extensions;
+use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
 ?>
@@ -18,11 +19,11 @@ use wpsolr\utilities\WPSOLR_Option;
 		width: 95%;
 	}
 
-	#tabs {
+	.tabs {
 		margin-top: 1em;
 	}
 
-	#tabs li .ui-icon-close {
+	.tabs li .ui-icon-close {
 		float: left;
 		margin: 0.4em 0.2em 0 0;
 		cursor: pointer;
@@ -36,16 +37,18 @@ use wpsolr\utilities\WPSOLR_Option;
 <script>
 	jQuery(document).ready(function () {
 
-		jQuery(".tabs").tabs();
+		var tabs = jQuery(".tabs").tabs();
+		tabs.delegate("span.ui-icon-close", "click", function () {
+			var panelId = jQuery(this).closest("li").remove().attr("aria-controls");
+			jQuery("#" + panelId).remove();
+			tabs.tabs("refresh");
+		});
 
 
 		jQuery(".sortable").sortable();
 		jQuery(".sortable").accordion({active: false, collapsible: true, heightStyle: "content"});
 
 		var dialog, form;
-
-		// Collapsable instructions
-		jQuery(".instructions").accordion({active: false, collapsible: true});
 
 		dialog = jQuery("#dialog_form_group").dialog({
 			autoOpen: false,
@@ -82,37 +85,23 @@ use wpsolr\utilities\WPSOLR_Option;
 		<?php
 		foreach ( $facets_groups as $facets_group_uuid => $facets_group ) { ?>
 			<li><a href="#<?php echo $facets_group_uuid; ?>"><?php echo $facets_group['name']; ?></a>
-				<span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span></li>
+				<?php if ( $new_facets_group_uuid !== $facets_group_uuid ) { ?>
+					<span class="ui-icon ui-icon-close" role="presentation">Remove Tab</span>
+				<?php } ?>
+			</li>
 		<?php } ?>
 	</ul>
 	<?php foreach ( $facets_groups as $facets_group_uuid => $facets_group ) { ?>
 		<div id="<?php echo $facets_group_uuid; ?>">
 
-			<div class="wdm_note instructions">
-				<h4>Instructions</h4>
-				<ul class="wdm_ul wdm-instructions">
-					<li>Click on the
-						<image src='<?php echo $image_plus; ?>'/>
-						icon to add a facet
-					</li>
-					<li>Click on the
-						<image src='<?php echo $image_minus; ?>'/>
-						icon to remove a facet
-					</li>
-					<li>Sort the items in the order you want to display them by dragging and
-						dropping them at the desired plcae
-					</li>
-				</ul>
-			</div>
-
 			<div class="wdm_row">
 				<div class='col_left'>Group name</div>
 				<div class='col_right'>
-					<input type="text"
+					<input type="text" id="<?php echo $facets_group_uuid; ?>_group_name"
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][name]"
 					       value="<?php echo $new_facets_group_uuid == $facets_group_uuid ? '' : $facets_group['name']; ?>"/>
 
-					<input name="create_group" value="Clone the group"/>
+					<!--<input name="create_group" value="Clone the group"/>-->
 
 				</div>
 				<div class="clear"></div>
@@ -123,14 +112,16 @@ use wpsolr\utilities\WPSOLR_Option;
 				<?php
 				foreach ( ! empty( $facets_selected[ $facets_group_uuid ] ) ? $facets_selected[ $facets_group_uuid ] : [ ] as $facet_selected_name => $facet_selected ) {
 
+
 					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file( WPSOLR_Extensions::OPTION_FACETS, 'facet.inc.php' ),
 						array(
 							'options_name'         => $options_name,
 							'facets_group_uuid'    => $facets_group_uuid,
 							'layouts'              => $layouts,
 							'facet_name'           => $facet_selected_name,
+							'is_range'             => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_is_range(),
 							'facet'                => $facet_selected,
-							'facet_selected_class' => 'facet_selected',
+							'facet_selected_class' => $facet_selected_class,
 							'image_plus_display'   => 'none',
 							'image_minus_display'  => 'inline',
 							'image_plus'           => $image_plus,
@@ -140,20 +131,21 @@ use wpsolr\utilities\WPSOLR_Option;
 				}
 
 
-				foreach ( $facets_candidates as $facet_candidate_name => $facet_candidate ) {
+				foreach ( $fields as $field_name => $field ) {
 
-					$facet_candidate_name = strtolower( $facet_candidate_name );
+					$field_name = strtolower( $field_name );
 
-					if ( ! $facets_selected[ $facets_group_uuid ] || ! isset( $facets_selected[ $facets_group_uuid ][ $facet_candidate_name ] ) ) {
+					if ( ! isset( $facets_selected[ $facets_group_uuid ] ) || ! isset( $facets_selected[ $facets_group_uuid ][ $field_name ] ) ) {
 
 						WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file( WPSOLR_Extensions::OPTION_FACETS, 'facet.inc.php' ),
 							array(
 								'options_name'         => $options_name,
 								'facets_group_uuid'    => $facets_group_uuid,
 								'layouts'              => $layouts,
-								'facet_name'           => $facet_candidate_name,
-								'facet'                => $facet_candidate,
-								'facet_selected_class' => '',
+								'facet_name'           => $field_name,
+								'is_range'             => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_is_range(),
+								'facet'                => $field,
+								'facet_selected_class' => $facet_not_selected_class,
 								'image_plus_display'   => 'inline',
 								'image_minus_display'  => 'none',
 								'image_plus'           => $image_plus,

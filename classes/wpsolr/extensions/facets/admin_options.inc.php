@@ -8,25 +8,45 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 <script xmlns="http://www.w3.org/1999/html">
 	jQuery(document).ready(function () {
 
-		jQuery('.plus_icon').click(function () {
-			jQuery(this).parent().parent().addClass('facet_selected');
-			jQuery(this).hide();
-			jQuery(this).siblings().css('display', 'inline');
+		// Save form
+		jQuery('[name=save_facets_options_form]').click(function () {
 
-			jQuery(this).parent().next().children().prop('disabled', false);
-		})
+			// Remove a new group without a name
+			var new_group_element = jQuery('#<?php echo $new_facets_group_uuid ?>_group_name');
+			var new_group_name = new_group_element.val();
+			if (!new_group_name) {
+				if (new_group_element.is(':hidden')) {
+					jQuery('#<?php echo $new_facets_group_uuid ?>').remove();
+				} else {
+					new_group_element.css('border', '1px solid red');
+					return false;
+				}
+			}
 
-		jQuery('.minus_icon').click(function () {
-			jQuery(this).parent().parent().removeClass('facet_selected');
-			jQuery(this).hide();
-			jQuery(this).siblings().css('display', 'inline');
 
-			jQuery(this).parent().next().children().prop('disabled', true);
-		})
+			// Remove all facets not selected
+			jQuery('.facet_not_selected').each(function () {
+				jQuery(this).detach();
+			});
 
-		jQuery('#save_facets_options_form').click(function () {
-
+			return true;
 		});
+
+		jQuery('.facets input:checkbox').click(function () {
+			// id is 'field_name_is_active', we want #field_name which holds the facet section
+			var facet_section_id = '#' + jQuery(this).attr('id').replace('_is_active', '');
+
+			if (jQuery(this).prop("checked")) {
+				jQuery(facet_section_id).parent().removeClass('facet_not_selected');
+				jQuery(facet_section_id).parent().addClass('facet_selected');
+			} else {
+				jQuery(facet_section_id).parent().addClass('facet_not_selected');
+				jQuery(facet_section_id).parent().removeClass('facet_selected');
+			}
+			jQuery(facet_section_id).parent().find('.plus_icon').toggle(!jQuery(this).prop("checked"));
+			jQuery(facet_section_id).parent().find('.minus_icon').toggle(jQuery(this).prop("checked"));
+
+		})
 
 	});
 
@@ -36,6 +56,9 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 	jQuery(document).ready(function () {
 
 		var dialog, form;
+
+		// Collapsable instructions
+		jQuery(".instructions").accordion({active: false, collapsible: true});
 
 		dialog = jQuery(".dialog_form_layout").dialog({
 			autoOpen: false,
@@ -69,6 +92,7 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 
 	});
 </script>
+
 
 <div class="dialog_form_layout" title="Create a new layout">
 	<p class="validateTips">Name a layout and customize it's html, css, js with Twig language. Select the layout on any
@@ -107,21 +131,37 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 		<?php
 		WPSOLR_Service_Wordpress::settings_fields( $options_name );
 		?>
+		<div class="wdm_note instructions">
+			<h4>Instructions</h4>
+			<ul class="wdm_ul wdm-instructions">
+				<div class="wdm_note">
+
+					In this section, you will choose which data you want to display as facets in
+					your search results. Facets are extra filters usually seen in the left hand
+					side of the results, displayed as a list of links. You can add facets only
+					to data you've selected to be indexed.
+
+				</div>
+				<li>Click on the
+					<image src='<?php echo $image_plus; ?>'/>
+					icon to add a facet
+				</li>
+				<li>Click on the
+					<image src='<?php echo $image_minus; ?>'/>
+					icon to remove a facet
+				</li>
+				<li>Sort the items in the order you want to display them by dragging and
+					dropping them at the desired plcae
+				</li>
+			</ul>
+		</div>
+
 		<div class='wrapper'>
 			<h4 class='head_div'>Facets Options</h4>
 
-			<div class="wdm_note">
-
-				In this section, you will choose which data you want to display as facets in
-				your search results. Facets are extra filters usually seen in the left hand
-				side of the results, displayed as a list of links. You can add facets only
-				to data you've selected to be indexed.
-
-			</div>
-
 			<div class="wdm_row">
 				<div class='wpsolr-1col'>
-					<h4 style="display:inline">Available items for facets of group</h4>
+					<h4 style="display:inline">Manage groups of facets to show in WPSOLR Wigets.</h4>
 
 					<?php
 					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(
@@ -133,8 +173,9 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 							'selected_facets_group_uuid' => $selected_facets_group_uuid,
 							'facets_groups'              => $facets_groups,
 							'facets_selected'            => $facets_selected,
-							'facets_candidates'          => $facets_candidates,
+							'fields'                     => $fields,
 							'facet_selected_class'       => 'facet_selected',
+							'facet_not_selected_class'   => 'facet_not_selected',
 							'image_plus_display'         => 'none',
 							'image_minus_display'        => 'inline',
 							'image_plus'                 => $image_plus,

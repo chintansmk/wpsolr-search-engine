@@ -131,15 +131,15 @@
     margin: 0;
 }
 
-input[type=radio]:checked:before {
+.wpsolr input[type=radio]:checked:before {
     background-color: #0f5991 !important;
 }
 
-input[type=checkbox]:checked:before {
+.wpsolr input[type=checkbox]:checked:before {
     color: #0f5991 !important;
 }
 
-input[type=text] {
+.wpsolr input[type=text] {
     width: 300px;
 }
 
