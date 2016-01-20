@@ -27,7 +27,7 @@ $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] 
 		<img src='<?php echo $image_minus; ?>' class='minus_icon' style='display:<?php echo $image_minus_display; ?>'
 		     title='Click to Remove the Facet'>
 	</div>
-	<div id='<?php echo $facet_name; ?>'>
+	<div id='<?php echo $facets_group_uuid . '_' . $facet_name; ?>'>
 		<input type='hidden'
 		       name='<?php echo $facet_option_array_name; ?>[name]'
 		       value='<?php echo $facet_name; ?>'/>
@@ -37,7 +37,7 @@ $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] 
 				Show this facet in this group
 			</div>
 			<div class='col_right'>
-				<input type='checkbox' id="<?php echo $facet_name; ?>_is_active"
+				<input type='checkbox' id="<?php echo $facets_group_uuid . '_' . $facet_name; ?>_is_active"
 				       name='<?php echo $facet_option_array_name; ?>[is_active]' value='1'
 					<?php checked( '1', $facet_is_active, true ); ?>/>
 			</div>

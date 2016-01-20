@@ -33,8 +33,10 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 		});
 
 		jQuery('.facets input:checkbox').click(function () {
-			// id is 'field_name_is_active', we want #field_name which holds the facet section
+			// id is 'group_uuid_field_name_is_active', we want #group_uuid_field_name which holds the facet section
 			var facet_section_id = '#' + jQuery(this).attr('id').replace('_is_active', '');
+
+			console.log(facet_section_id);
 
 			if (jQuery(this).prop("checked")) {
 				jQuery(facet_section_id).parent().removeClass('facet_not_selected');
