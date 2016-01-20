@@ -14,80 +14,82 @@ use wpsolr\utilities\WPSOLR_Global;
 class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 
 	protected static $wpsolr_layouts = [
-		'default'        => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'wpsolr/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'WPSOLR'
-		],
-		'customizr'      => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Customizr'
-		],
-		'graphene'       => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Graphene'
-		],
-		'hueman'         => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Hueman'
-		],
-		'spacious'       => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Spacious'
-		],
-		'twentyten'      => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Ten'
-		],
-		'twentyeleven'   => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Eleven'
-		],
-		'twentythirteen' => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Thirteen'
-		],
-		'twentyfourteen' => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fourteen'
-		],
-		'twentyfifteen'  => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fifteen'
-		],
-		'twentysixteen'  => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Sixteen'
-		],
-		'responsive'     => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Responsive'
-		],
-		'vantage'        => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Vantage'
-		],
-		'virtue'         => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Virtue'
-		],
-		'zerif-lite'     => [
-			self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
-			self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
-			self::LAYOUT_FIELD_TEMPLATE_NAME => 'Zerif Lite'
+		self::TYPE_GROUP_LAYOUT => [
+			'default'        => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'wpsolr/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'WPSOLR'
+			],
+			'customizr'      => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Customizr'
+			],
+			'graphene'       => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Graphene'
+			],
+			'hueman'         => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Hueman'
+			],
+			'spacious'       => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Spacious'
+			],
+			'twentyten'      => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Ten'
+			],
+			'twentyeleven'   => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Eleven'
+			],
+			'twentythirteen' => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Thirteen'
+			],
+			'twentyfourteen' => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fourteen'
+			],
+			'twentyfifteen'  => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fifteen'
+			],
+			'twentysixteen'  => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Sixteen'
+			],
+			'responsive'     => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Responsive'
+			],
+			'vantage'        => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Vantage'
+			],
+			'virtue'         => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Virtue'
+			],
+			'zerif-lite'     => [
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sort_dropdownlist_html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sort_dropdownlist_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Zerif Lite'
+			]
 		]
 	];
 
@@ -114,7 +116,7 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 	protected function wpsolr_form( $args, $instance ) {
 
 		echo WPSOLR_UI_Sort::Build(
-			$this->wpsolr_get_instance_layout( $instance ),
+			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT ),
 			WPSOLR_Data_Sort::get_data(
 				WPSOLR_Global::getQuery()->get_wpsolr_sort(),
 				WPSOLR_Global::getOption()->get_sortby_items_as_array(),

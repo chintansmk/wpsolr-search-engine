@@ -4,6 +4,8 @@ namespace wpsolr\ui;
 
 use wpsolr\services\WPSOLR_Service_Wordpress;
 use wpsolr\solr\WPSOLR_Field_Types;
+use wpsolr\ui\widget\WPSOLR_Widget;
+use wpsolr\ui\widget\WPSOLR_Widget_Facet;
 use wpsolr\utilities\WPSOLR_Regexp;
 use wpsolr\WPSOLR_Filters;
 
@@ -51,9 +53,10 @@ class WPSOLR_Data_Facets {
 					$facet['id']    = $facet_to_display_id;
 					$facet['name']  = $facet_to_display_name;
 
-					$facet['template_html'] = 'generic/facets/checkbox/html.twig';
-					$facet['template_css']  = 'generic/facets/checkbox/css.twig';
-					$facet['template_js']   = 'generic/facets/checkbox/js.twig';
+					// Templates
+					$facet[ WPSOLR_Widget_Facet::LAYOUT_FIELD_TEMPLATE_HTML ] = WPSOLR_Widget_Facet::wpsolr_get_layout_template_html( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+					$facet[ WPSOLR_Widget_Facet::LAYOUT_FIELD_TEMPLATE_CSS ]  = WPSOLR_Widget_Facet::wpsolr_get_layout_template_css( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+					$facet[ WPSOLR_Widget_Facet::LAYOUT_FIELD_TEMPLATE_JS ]   = WPSOLR_Widget_Facet::wpsolr_get_layout_template_js( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
 
 					foreach ( $facets_in_results[ $facet_to_display_id ] as $facet_in_results ) {
 

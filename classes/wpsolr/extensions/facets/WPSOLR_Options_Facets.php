@@ -5,6 +5,7 @@ namespace wpsolr\extensions\facets;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\solr\WPSOLR_Schema;
+use wpsolr\ui\widget\WPSOLR_Widget_Facet;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
@@ -39,12 +40,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 					'options'                    => WPSOLR_Global::getOption()->get_option_facet(
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
-					'layouts'                    => [
-						'1' => [ 'name' => 'Check boxes' ],
-						'2' => [ 'name' => 'Radio boxes' ],
-						'3' => [ 'name' => 'Numeric ranges' ],
-						'4' => [ 'name' => 'Numeric slider' ]
-					],
+					'layouts'                    => WPSOLR_Widget_Facet::get_facets_layouts(),
 					'selected_facets_group_uuid' => '2',
 					'new_facets_group_uuid'      => $new_facets_group_uuid,
 					'facets_groups'              => array_merge(
