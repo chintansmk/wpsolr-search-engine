@@ -666,15 +666,18 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 						$custom_field_with_dynamic_type = array();
 						foreach ( $post_custom_field as $field_value ) { // Loop on post custom field attributes
 
-							// Sanitize the value, depending on it's type
-							$field_value_sanitized = WPSOLR_Global::getSolrFieldTypes()->get_sanitized_value( $post, $custom_field_name, $field_value, $custom_field_type );
+							if ( ! empty( trim( $field_value ) ) ) {
 
-							array_push( $custom_field_with_dynamic_type, $field_value_sanitized );
-							//array_push( $array_nm2, $field_value_stripped );
+								// Sanitize the value, depending on it's type
+								$field_value_sanitized = WPSOLR_Global::getSolrFieldTypes()->get_sanitized_value( $post, $custom_field_name, $field_value, $custom_field_type );
 
-							// Add current custom field values to custom fields search field
-							// $field being an array, we add each of it's element
-							array_push( $existing_custom_fields, $field_value_sanitized );
+								array_push( $custom_field_with_dynamic_type, $field_value_sanitized );
+								//array_push( $array_nm2, $field_value_stripped );
+
+								// Add current custom field values to custom fields search field
+								// $field being an array, we add each of it's element
+								array_push( $existing_custom_fields, $field_value_sanitized );
+							}
 						}
 
 						$solarium_document_for_update->$custom_field_name_with_dynamic_type = $custom_field_with_dynamic_type;
