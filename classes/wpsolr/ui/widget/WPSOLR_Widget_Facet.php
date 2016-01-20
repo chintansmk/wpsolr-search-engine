@@ -174,8 +174,21 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		// Facets of the widget facets groups
 		$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
 
+		// Widget can be on a search page: verify that it's facets group is the same as the default facets group
+		$wpsolr_query = WPSOLR_Global::getQuery();
+		if ( $wpsolr_query->get_wpsolr_is_search() ) {
+
+			if ( $facets_group_id != WPSOLR_Global::getOption()->get_facets_group_default() ) {
+				// Stay hidden
+				return;
+			}
+		} else {
+
+			$wpsolr_query->set_wpsolr_facets_fields( $facets );
+		}
+
 		// Call and get Solr results
-		$results = WPSOLR_Global::getSolrClient()->display_results( WPSOLR_Global::getQuery()->set_wpsolr_facets_fields( $facets ) );
+		$results = WPSOLR_Global::getSolrClient()->display_results( $wpsolr_query );
 
 		// Build the facets UI
 		echo WPSOLR_UI_Facets::Build(

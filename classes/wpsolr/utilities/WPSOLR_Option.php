@@ -356,6 +356,7 @@ class WPSOLR_Option {
 	const OPTION_FACETS = 'wdm_solr_facet_data';
 	const OPTION_FACETS_FACETS = 'facets';
 	const OPTION_FACETS_GROUPS = 'facets_groups';
+	const OPTION_FACETS_GROUP_DEFAULT_ID = 'facets_group_default_id';
 
 	/**
 	 * Get facet options array
@@ -387,6 +388,16 @@ class WPSOLR_Option {
 	 */
 	public function get_facets_groups() {
 		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_GROUPS, [ ] );
+	}
+
+
+	/**
+	 * Get the default facets group, used in ?s urls
+	 *
+	 * @return string
+	 */
+	public function get_facets_group_default() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_GROUP_DEFAULT_ID, '' );
 	}
 
 	/***************************************************************************************************************
@@ -686,6 +697,5 @@ class WPSOLR_Option {
 	public function get_option_indexes() {
 		return self::get_option( self::OPTION_INDEXES );
 	}
-
 
 }

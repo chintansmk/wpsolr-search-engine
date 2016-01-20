@@ -37,27 +37,27 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 			$form_file,
 			array_merge(
 				[
-					'options'                    => WPSOLR_Global::getOption()->get_option_facet(
+					'options'                   => WPSOLR_Global::getOption()->get_option_facet(
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
-					'layouts'                    => WPSOLR_Widget_Facet::get_facets_layouts(),
-					'selected_facets_group_uuid' => '2',
-					'new_facets_group_uuid'      => $new_facets_group_uuid,
-					'facets_groups'              => array_merge(
+					'layouts'                   => WPSOLR_Widget_Facet::get_facets_layouts(),
+					'default_facets_group_uuid' => WPSOLR_Global::getOption()->get_facets_group_default(),
+					'new_facets_group_uuid'     => $new_facets_group_uuid,
+					'facets_groups'             => array_merge(
 						WPSOLR_Global::getOption()->get_facets_groups(),
 						[
 							$new_facets_group_uuid => [
 								'name' => 'New group'
 							]
 						] ),
-					'facets_selected'            => WPSOLR_Global::getOption()->get_facets_selected_array(),
-					'fields'                     => array_merge(
+					'facets_selected'           => WPSOLR_Global::getOption()->get_facets_selected_array(),
+					'fields'                    => array_merge(
 						WPSOLR_Field_Types::add_fields_type( $this->get_special_fields(), WPSOLR_Field_Types::SOLR_TYPE_STRING ),
 						WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
 						WPSOLR_Field_Types::add_fields_type( WPSOLR_Global::getOption()->get_fields_taxonomies_array(), WPSOLR_Field_Types::SOLR_TYPE_STRING )
 					),
-					'image_plus'                 => plugins_url( '../../../../images/plus.png', __FILE__ ),
-					'image_minus'                => plugins_url( '../../../../images/success.png', __FILE__ )
+					'image_plus'                => plugins_url( '../../../../images/plus.png', __FILE__ ),
+					'image_minus'               => plugins_url( '../../../../images/success.png', __FILE__ )
 				],
 				$plugin_parameters
 			)
@@ -76,6 +76,23 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		$facets_groups = WPSOLR_Global::getOption()->get_facets_selected_array();
 
 		return ! empty( $facets_groups[ $facets_group ] ) ? $facets_groups[ $facets_group ] : [ ];
+	}
+
+
+	/**
+	 * Get facets of default group
+	 *
+	 * @return array Facets of default group
+	 */
+	public function get_facets_from_default_group() {
+
+		$default_facets_group_id = WPSOLR_Global::getOption()->get_facets_group_default();
+
+		if ( ! empty( $default_facets_group_id ) ) {
+			return $this->get_facets_from_group( $default_facets_group_id );
+		}
+
+		return [ ];
 	}
 
 	public function get_special_fields() {

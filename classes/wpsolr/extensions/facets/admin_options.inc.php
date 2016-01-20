@@ -163,7 +163,7 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 
 			<div class="wdm_row">
 				<div class='wpsolr-1col'>
-					<h4 style="display:inline">Manage groups of facets to show in WPSOLR Wigets.</h4>
+					<h4 style="display:inline">Manage groups of facets to show in WPSOLR Widgets.</h4>
 
 					<?php
 					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(
@@ -172,7 +172,7 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 							'options_name'               => $options_name,
 							'new_facets_group_uuid'      => $new_facets_group_uuid,
 							'layouts'                    => $layouts,
-							'selected_facets_group_uuid' => $selected_facets_group_uuid,
+							'default_facets_group_uuid' => $default_facets_group_uuid,
 							'facets_groups'              => $facets_groups,
 							'facets_selected'            => $facets_selected,
 							'fields'                     => $fields,

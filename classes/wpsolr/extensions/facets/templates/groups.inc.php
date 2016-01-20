@@ -80,6 +80,25 @@ use wpsolr\utilities\WPSOLR_Option;
 	});
 </script>
 
+<div class="wdm_row">
+	<div class='col_left'>Facets displayed in search pages</div>
+	<div class='col_right'>
+		<select
+			name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUP_DEFAULT_ID; ?>]">
+			<?php
+			foreach ( array_merge( [ '' => [ 'name' => 'Select a group' ] ], $facets_groups ) as $facets_group_uuid => $facets_group ) { ?>
+				<?php if ( $new_facets_group_uuid != $facets_group_uuid ) { ?>
+					<option
+						value="<?php echo $facets_group_uuid; ?>" <?php selected( $facets_group_uuid, $default_facets_group_uuid, true ); ?>>
+						<?php echo $facets_group['name']; ?>
+					</option>
+				<?php } ?>
+			<?php } ?>
+		</select>
+	</div>
+	<div class="clear"></div>
+</div>
+
 <div class="tabs">
 	<ul>
 		<?php

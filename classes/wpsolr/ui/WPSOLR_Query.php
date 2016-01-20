@@ -20,6 +20,7 @@ class WPSOLR_Query extends \WP_Query {
 	protected $wpsolr_paged;
 	protected $wpsolr_sort;
 	protected $wpsolr_facets;
+	protected $wpsolr_is_wp_search;
 
 
 	/**
@@ -50,6 +51,7 @@ class WPSOLR_Query extends \WP_Query {
 
 	public function set_defaults() {
 
+		$this->set_wpsolr_is_search( false );
 		$this->set_wpsolr_query( '' );
 		$this->set_filter_query_fields( array() );
 		$this->set_wpsolr_paged( '0' );
@@ -154,6 +156,19 @@ class WPSOLR_Query extends \WP_Query {
 		$this->wpsolr_sort = $wpsolr_sort;
 	}
 
+	/**
+	 * @return boolean
+	 */
+	public function get_wpsolr_is_search() {
+		return $this->wpsolr_is_wp_search;
+	}
+
+	/**
+	 * @param boolean $wpsolr_is_wp_search
+	 */
+	public function set_wpsolr_is_search( $wpsolr_is_wp_search ) {
+		$this->wpsolr_is_wp_search = $wpsolr_is_wp_search;
+	}
 
 	/**************************************************************************
 	 *
@@ -163,7 +178,8 @@ class WPSOLR_Query extends \WP_Query {
 
 	function get_posts() {
 
-		//return parent::get_posts();
+		// Mark this query
+		$this->set_wpsolr_is_search( true );
 
 		// Let WP extract parameters
 		$this->parse_query();
@@ -179,6 +195,9 @@ class WPSOLR_Query extends \WP_Query {
 
 		// Set variable 's', so that get_search_query() and other standard WP_Query methods still work with our own search parameter
 		//$this->set( 's', $query );
+
+		// Add facets from default group of facets
+		$this->set_wpsolr_facets_fields( WPSOLR_Global::getExtensionFacets()->get_facets_from_default_group() );
 
 		$this->solr_client = WPSOLR_Global::getSolrClient();
 		$this->resultSet   = $this->solr_client->execute_wpsolr_query( $this );
