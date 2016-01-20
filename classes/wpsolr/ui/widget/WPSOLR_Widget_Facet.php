@@ -16,6 +16,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 	// Form fields
 	const FORM_FIELD_FACETS_GROUP_ID = 'facets_group_id';
 	const FORM_FIELD_FACETS_GROUP_NAME = 'name';
+	const FORM_FIELD_SOLR_QUERY_PARAMETERS = 'added_solr_query';
 
 	protected static $wpsolr_layouts = [
 		self::TYPE_GROUP_LAYOUT         => [
@@ -138,6 +139,10 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		// Add facets group selection
 		$facets_group_id = ! empty( $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] : '';
 		$facets_groups   = WPSOLR_Global::getOption()->get_facets_groups();
+
+		// Add solr additional query to the facets
+		$solr_query_parameters = ! empty( $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] ) ? $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] : '';
+
 		?>
 
 		<p>
@@ -149,6 +154,13 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 						value="<?php echo $facet_group_id; ?>" <?php selected( $facets_group_id, $facet_group_id, true ) ?>><?php echo $facets_group[ self::FORM_FIELD_FACETS_GROUP_NAME ]; ?></option>
 				<?php } ?>
 			</select>
+		</p>
+
+		<p>
+			Restrict facets results by adding your own Solr query:
+			<textarea rows="3" class="widefat"
+			          id="<?php echo $this->get_field_id( self::FORM_FIELD_SOLR_QUERY_PARAMETERS ); ?>"
+			          name="<?php echo $this->get_field_name( self::FORM_FIELD_SOLR_QUERY_PARAMETERS ); ?>"><?php echo $solr_query_parameters; ?></textarea>
 		</p>
 
 		<?php
@@ -186,6 +198,9 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 
 			$wpsolr_query->set_wpsolr_facets_fields( $facets );
 		}
+
+		// Add more Solr parameters
+		$wpsolr_query->wpsolr_add_query_fields( $this->wpsolr_get_added_solr_query_parameters( $instance ) );
 
 		// Call and get Solr results
 		$results = WPSOLR_Global::getSolrClient()->display_results( $wpsolr_query );
@@ -231,6 +246,19 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 	private function wpsolr_get_instance_facets_group_id( $instance ) {
 
 		return ! empty( $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] : '';
+	}
+
+
+	/**
+	 * Get the solr query added to the solr request
+	 *
+	 * @param $instance
+	 *
+	 * @return string facets group id
+	 */
+	private function wpsolr_get_added_solr_query_parameters( $instance ) {
+
+		return ! empty( $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] ) ? $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] : '';
 	}
 
 	/**

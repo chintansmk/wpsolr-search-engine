@@ -82,6 +82,27 @@ class WPSOLR_Query extends \WP_Query {
 	}
 
 	/**
+	 * Add query fields to the query
+	 *
+	 * @param array $query_fields
+	 */
+	public function wpsolr_add_query_fields( $query_fields ) {
+
+		if ( ! empty( $query_fields ) ) {
+
+			foreach ( ( is_array( $query_fields ) ? $query_fields : array( $query_fields ) ) as $query_field ) {
+
+				if ( ! empty( $query_field ) && ! in_array( $query_field, $this->wpsolr_filter_query ) ) {
+					array_push( $this->wpsolr_filter_query, $query_field );
+				}
+			}
+
+		}
+
+		return $this;
+	}
+
+	/**
 	 * @param array $fq
 	 */
 	public function set_filter_query_fields( $fq ) {
