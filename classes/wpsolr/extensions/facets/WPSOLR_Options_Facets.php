@@ -4,6 +4,7 @@ namespace wpsolr\extensions\facets;
 
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
+use wpsolr\solr\WPSOLR_Schema;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
@@ -13,7 +14,6 @@ use wpsolr\utilities\WPSOLR_Option;
  * Manage Facets
  */
 class WPSOLR_Options_Facets extends WPSOLR_Extensions {
-
 
 	/**
 	 * Post constructor.
@@ -56,12 +56,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 						] ),
 					'facets_selected'            => WPSOLR_Global::getOption()->get_facets_selected_array(),
 					'fields'                     => array_merge(
-						WPSOLR_Field_Types::add_fields_type( [
-							'Type',
-							'Author',
-							'Categories',
-							'Tags'
-						], WPSOLR_Field_Types::SOLR_TYPE_STRING ),
+						WPSOLR_Field_Types::add_fields_type( $this->get_special_fields(), WPSOLR_Field_Types::SOLR_TYPE_STRING ),
 						WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
 						WPSOLR_Field_Types::add_fields_type( WPSOLR_Global::getOption()->get_fields_taxonomies_array(), WPSOLR_Field_Types::SOLR_TYPE_STRING )
 					),
@@ -71,6 +66,29 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 				$plugin_parameters
 			)
 		);
+	}
+
+	/**
+	 * Get facets of a facets group
+	 *
+	 * @param string $facets_group Group of facets
+	 *
+	 * @return array Facets of the group
+	 */
+	public function get_facets_from_group( $facets_group ) {
+
+		$facets_groups = WPSOLR_Global::getOption()->get_facets_selected_array();
+
+		return ! empty( $facets_groups[ $facets_group ] ) ? $facets_groups[ $facets_group ] : [ ];
+	}
+
+	public function get_special_fields() {
+		return [
+			WPSOLR_Schema::_FIELD_NAME_TYPE,
+			WPSOLR_Schema::_FIELD_NAME_AUTHOR,
+			WPSOLR_Schema::_FIELD_NAME_CATEGORIES,
+			WPSOLR_Schema::_FIELD_NAME_TAGS
+		];
 	}
 
 }

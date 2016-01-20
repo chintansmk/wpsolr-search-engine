@@ -33,7 +33,7 @@ class WPSOLR_Data_Facets {
 
 		if ( count( $facets_in_results ) && count( $facets_to_display ) ) {
 
-			foreach ( $facets_to_display as $facet_to_display_id ) {
+			foreach ( $facets_to_display as $facet_to_display_id => $facet_to_display ) {
 
 				if ( isset( $facets_in_results[ $facet_to_display_id ] ) && count( $facets_in_results[ $facet_to_display_id ] ) > 0 ) {
 

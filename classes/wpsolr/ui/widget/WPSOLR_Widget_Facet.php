@@ -118,13 +118,17 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 	 */
 	protected function wpsolr_form( $args, $instance ) {
 
-		$results = WPSOLR_Global::getSolrClient()->display_results( WPSOLR_Global::getQuery() );
+		// Facets of the widget facets groups
+		$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( 'A37A13182806F22A890073006C58FD4C' );
+
+
+		$results = WPSOLR_Global::getSolrClient()->display_results( WPSOLR_Global::getQuery()->set_wpsolr_facets_fields( $facets ) );
 
 		echo WPSOLR_UI_Facets::Build(
 			$this->wpsolr_get_instance_layout( $instance ),
 			WPSOLR_Data_Facets::get_data(
 				WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
-				WPSOLR_Global::getOption()->get_facets_selected_array(),
+				$facets,
 				$results[1]
 			),
 			WPSOLR_Localization::get_options(),

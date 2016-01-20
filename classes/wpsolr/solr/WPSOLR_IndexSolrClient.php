@@ -605,7 +605,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 				if ( (array) $terms === $terms ) {
 					$parent = strtolower( str_replace( ' ', '_', $parent ) );
 					foreach ( $terms as $term ) {
-						$nm1                                = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_type_name( $parent );
+						$nm1                                = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_type( $parent );
 						$solarium_document_for_update->$nm1 = $term->name;
 						/*
 						$nm2                                = $parent . '_srch';
@@ -656,7 +656,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 
 						// Transform custom field name in Solr dynamic type name
 						// 'price' ===> 'price_f', 'town' ==> 'town_str'
-						$custom_field_name_with_dynamic_type = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_type_name( $custom_field_name, $custom_field_type );
+						$custom_field_name_with_dynamic_type = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_type( $custom_field_name, $custom_field_type );
 
 						/*
 						 $nm2       = $field_name . '_srch';

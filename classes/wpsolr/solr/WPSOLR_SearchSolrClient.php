@@ -307,7 +307,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		 */
 		$this->add_facet_fields( $solarium_query,
 			array(
-				self::PARAMETER_FACET_FIELD_NAMES => WPSOLR_Global::getOption()->get_facets_selected_array(),
+				self::PARAMETER_FACET_FIELD_NAMES => $wpsolr_query->get_wpsolr_facets_fields(),
 				self::PARAMETER_FACET_LIMIT       => WPSOLR_Global::getOption()->get_search_max_nb_items_by_facet(),
 				self::PARAMETER_FACET_MIN_COUNT   => self::DEFAULT_MIN_COUNT_BY_FACET
 			)
@@ -443,20 +443,33 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		}
 
 		// Retrieve facets from resultset
-		$facets_to_display = WPSOLR_Global::getOption()->get_facets_selected_array();
+		$facets_to_display = $wpsolr_query->get_wpsolr_facets_fields();
+		$special_fields    = WPSOLR_Global::getExtensionFacets()->get_special_fields();
 		if ( count( $facets_to_display ) ) {
-			foreach ( $facets_to_display as $facet ) {
+			foreach ( $facets_to_display as $field_name => $facet ) {
 
-				$fact = strtolower( $facet );
-				if ( WPSOLR_Schema::_FIELD_NAME_CATEGORIES === $fact ) {
-					$fact = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
-				}
-				$facet_res = $resultset->getFacetSet()->getFacet( "$fact" );
-
-				foreach ( $facet_res as $value => $count ) {
-					$output[ $facet ][] = array( $value, $count );
+				$field_name = strtolower( $field_name );
+				if ( WPSOLR_Schema::_FIELD_NAME_CATEGORIES === $field_name ) {
+					$field_name = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
 				}
 
+				if ( ! in_array( $field_name, $special_fields ) ) {
+					// Add the solr type extension
+					$field_name_dynamic = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+						$field_name,
+						WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_dynamic_type()
+					);
+
+				} else {
+
+					$field_name_dynamic = $field_name;
+				}
+
+				$result_facet = $resultset->getFacetSet()->getFacet( "$field_name_dynamic" );
+
+				foreach ( ( ! empty( $result_facet ) ? $result_facet : [ ] ) as $value => $count ) {
+					$output[ $field_name ][] = array( $value, $count );
+				}
 
 			}
 			$search_result[] = $output;
@@ -644,7 +657,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	) {
 
 		// Field names
-		$field_names = isset( $facets_parameters[ self::PARAMETER_FACET_FIELD_NAMES ] )
+		$fields = isset( $facets_parameters[ self::PARAMETER_FACET_FIELD_NAMES ] )
 			? $facets_parameters[ self::PARAMETER_FACET_FIELD_NAMES ]
 			: array();
 
@@ -658,24 +671,36 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 			? $facets_parameters[ self::PARAMETER_FACET_MIN_COUNT ]
 			: self::DEFAULT_MIN_COUNT_BY_FACET;
 
+		$special_fields = WPSOLR_Global::getExtensionFacets()->get_special_fields();
 
-		if ( count( $field_names ) ) {
+		if ( count( $fields ) ) {
 
 			$facetSet = $solarium_query->getFacetSet();
 
 			// Only display facets that contain data
 			$facetSet->setMinCount( $min_count );
 
-			foreach ( $field_names as $facet ) {
-				$fact = strtolower( $facet );
+			foreach ( $fields as $field_name => $facet ) {
+				$field_name = strtolower( $field_name );
 
 				// Field 'categories' are now treated as other fields (dynamic string type)
-				if ( WPSOLR_Schema::_FIELD_NAME_CATEGORIES === $fact ) {
-					$fact = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
+				if ( WPSOLR_Schema::_FIELD_NAME_CATEGORIES === $field_name ) {
+
+					$field_name = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
+				} else {
+
+					if ( ! in_array( $field_name, $special_fields ) ) {
+						// Add the solr type extension
+						$field_name = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+							$field_name,
+							WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_dynamic_type()
+						);
+					}
+
 				}
 
 				// Add the facet
-				$facetSet->createFacetField( "$fact" )->setField( "$fact" )->setLimit( $limit );
+				$facetSet->createFacetField( "$field_name" )->setField( "$field_name" )->setLimit( $limit );
 
 			}
 		}

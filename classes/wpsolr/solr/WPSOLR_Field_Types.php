@@ -1,6 +1,7 @@
 <?php
 
 namespace wpsolr\solr;
+use wpsolr\utilities\WPSOLR_Global;
 
 
 /**
@@ -78,19 +79,34 @@ class WPSOLR_Field_Types {
 	}
 
 	/**
-	 * Convert a field name in a dynamic strinf field type
-	 * 'field1' => 'field1_str'
+	 * Convert a field name in a dynamic field type
+	 * 'price' => 'price_f'
 	 *
 	 * @param string $field_name 'price'
+	 * @param string $field_type 'float'
 	 *
 	 * @return string 'price_f'
 	 */
-	public function get_dynamic_type_name( $field_name, $field_type ) {
+	public function get_dynamic_name_from_type( $field_name, $field_type ) {
+
+		return $this->get_dynamic_name_from_dynamic_extension( $field_name, $this->get_field_type( $field_type['solr_type'] )->get_dynamic_type() );
+	}
+
+	/**
+	 * Convert a field name in a dynamic field type
+	 * 'price' => 'price_f'
+	 *
+	 * @param string $field_name 'price'
+	 * @param string $dynamic_extension '_f'
+	 *
+	 * @return string 'price_f'
+	 */
+	public function get_dynamic_name_from_dynamic_extension( $field_name, $dynamic_extension ) {
 
 		// Solr field names cannot contain a blank
 		$field_name = strtolower( str_replace( ' ', '_', $field_name ) );
 
-		return $field_name . $this->get_field_type( $field_type['solr_type'] )->get_dynamic_type();
+		return $field_name . $dynamic_extension;
 	}
 
 	/**

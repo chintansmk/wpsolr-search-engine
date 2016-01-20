@@ -19,6 +19,7 @@ class WPSOLR_Query extends \WP_Query {
 	protected $wpsolr_filter_query;
 	protected $wpsolr_paged;
 	protected $wpsolr_sort;
+	protected $wpsolr_facets;
 
 
 	/**
@@ -84,6 +85,28 @@ class WPSOLR_Query extends \WP_Query {
 	public function set_filter_query_fields( $fq ) {
 		// Ensure fq is always an array
 		$this->wpsolr_filter_query = empty( $fq ) ? array() : ( is_array( $fq ) ? $fq : array( $fq ) );
+	}
+
+	/**
+	 * Set query facets
+	 *
+	 * @param $facets
+	 *
+	 * @return $this
+	 */
+	public function set_wpsolr_facets_fields( $facets ) {
+		$this->wpsolr_facets = $facets;
+
+		return $this;
+	}
+
+	/**
+	 * Get query facets
+	 *
+	 * @return array Facets
+	 */
+	public function get_wpsolr_facets_fields() {
+		return $this->wpsolr_facets;
 	}
 
 	/**
@@ -260,6 +283,7 @@ class WPSOLR_Query extends \WP_Query {
 
 		return $results;
 	}
+
 
 	/*
 	public function get( $query_var, $default = '' ) {
