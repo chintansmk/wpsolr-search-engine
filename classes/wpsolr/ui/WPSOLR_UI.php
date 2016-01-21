@@ -37,6 +37,14 @@ class WPSOLR_UI {
 		// Twig parameters delegated to child classes
 		$twig_parameters = static::create_twig_parameters( $data, $localization_options );
 
+		// JS template
+		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
+			$layout[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_JS ],
+			array_merge(
+				$twig_parameters
+			)
+		);
+
 		// CSS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
 			$layout[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_CSS ],

@@ -38,46 +38,45 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
         echo "\">
 
     <li>
-        ??????
         <span>";
-        // line 14
+        // line 13
         echo twig_escape_filter($this->env, sprintf((isset($context["facets_title"]) ? $context["facets_title"] : null), $this->getAttribute((isset($context["facet"]) ? $context["facet"] : null), "name", array())), "html", null, true);
         echo "</span> ";
-        // line 15
+        // line 14
         echo "
         <ul>
 
             ";
-        // line 18
+        // line 17
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable((isset($context["items"]) ? $context["items"] : null));
         foreach ($context['_seq'] as $context["_key"] => $context["item"]) {
             echo " ";
-            // line 19
+            // line 18
             echo "
                 ";
-            // line 20
+            // line 19
             $context["data_wpsolr_facet"] = array("facet_id" => $this->getAttribute((isset($context["facet"]) ? $context["facet"] : null), "id", array()), "facet_value" => $this->getAttribute($context["item"], "name", array()));
-            // line 21
+            // line 20
             echo "
                 <li>
 
                     <a class=\"";
-            // line 24
+            // line 23
             echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
             echo " ";
             echo twig_escape_filter($this->env, (($this->getAttribute($context["item"], "selected", array())) ? ((isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null)) : ("")), "html", null, true);
             echo "\"
                        data-wpsolr-facet=\"";
-            // line 25
+            // line 24
             echo twig_escape_filter($this->env, twig_jsonencode_filter((isset($context["data_wpsolr_facet"]) ? $context["data_wpsolr_facet"] : null)), "html", null, true);
             echo "\">
                         ";
-            // line 26
+            // line 25
             echo twig_escape_filter($this->env, twig_capitalize_string_filter($this->env, sprintf((isset($context["facets_element"]) ? $context["facets_element"] : null), (($this->getAttribute($context["item"], "name", array()) . "-") . ($this->getAttribute($context["item"], "name", array()) + $this->getAttribute($this->getAttribute((isset($context["definition"]) ? $context["definition"] : null), "range", array()), "gap", array()))), $this->getAttribute($context["item"], "count", array()))), "html", null, true);
             echo "
                     </a> ";
-            // line 28
+            // line 27
             echo "
                 </li>
 
@@ -86,9 +85,9 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['item'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 31
+        // line 30
         echo " ";
-        // line 32
+        // line 31
         echo "
         </ul>
 
@@ -111,7 +110,7 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
 
     public function getDebugInfo()
     {
-        return array (  92 => 32,  90 => 31,  81 => 28,  77 => 26,  73 => 25,  67 => 24,  62 => 21,  60 => 20,  57 => 19,  52 => 18,  47 => 15,  44 => 14,  37 => 10,  33 => 8,  31 => 7,  29 => 6,  26 => 5,  24 => 4,  22 => 3,  19 => 2,);
+        return array (  91 => 31,  89 => 30,  80 => 27,  76 => 25,  72 => 24,  66 => 23,  61 => 20,  59 => 19,  56 => 18,  51 => 17,  46 => 14,  43 => 13,  37 => 10,  33 => 8,  31 => 7,  29 => 6,  26 => 5,  24 => 4,  22 => 3,  19 => 2,);
     }
 }
 /* {# Display a facet elements as checkboxes #}*/
@@ -126,7 +125,6 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
 /* <ul class="wpsolr_any_facet_class {{ facet_selector_class }}">*/
 /* */
 /*     <li>*/
-/*         ??????*/
 /*         <span>{{ facets_title|format(facet.name) }}</span> {# Facet name #}*/
 /* */
 /*         <ul>*/

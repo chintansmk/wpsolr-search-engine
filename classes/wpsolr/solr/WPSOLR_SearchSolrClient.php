@@ -450,10 +450,10 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 				$field_name = strtolower( $field_name );
 				if ( WPSOLR_Schema::_FIELD_NAME_CATEGORIES === $field_name ) {
-					$field_name = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
-				}
+					$field_name_dynamic = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
 
-				if ( ! in_array( $field_name, $special_fields ) ) {
+				} else if ( ! in_array( $field_name, $special_fields ) ) {
+
 					// Add the solr type extension
 					$field_name_dynamic = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
 						$field_name,
@@ -651,7 +651,8 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	 * @param int $max_nb_items_by_facet Maximum items by facet
 	 * @param int $min_count_by_facet Do not return facet elements with less than this minimum count
 	 */
-	public function add_facet_fields(
+	public
+	function add_facet_fields(
 		Query $solarium_query,
 		$facets_parameters
 	) {

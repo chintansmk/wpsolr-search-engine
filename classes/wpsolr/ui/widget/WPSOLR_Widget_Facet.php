@@ -23,81 +23,97 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			'default'        => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'wpsolr/facets_html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'WPSOLR'
 			],
 			'customizr'      => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Customizr'
 			],
 			'graphene'       => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Graphene'
 			],
 			'hueman'         => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Hueman'
 			],
 			'spacious'       => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Spacious'
 			],
 			'twentyten'      => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Ten'
 			],
 			'twentyeleven'   => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Eleven'
 			],
 			'twentytwelve'   => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Twelve'
 			],
 			'twentythirteen' => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Thirteen'
 			],
 			'twentyfourteen' => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fourteen'
 			],
 			'twentyfifteen'  => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fifteen'
 			],
 			'twentysixteen'  => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Sixteen'
 			],
 			'responsive'     => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'responsive/facets_css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Responsive'
 			],
 			'vantage'        => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Vantage'
 			],
 			'virtue'         => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Virtue'
 			],
 			'zerif-lite'     => [
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Zerif Lite'
 			]
 		],

@@ -22,40 +22,43 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
         $this->loadTemplate((isset($context["template_css"]) ? $context["template_css"] : null), "generic/facets/html.twig", 3)->display($context);
         echo " ";
         // line 4
+        $this->loadTemplate((isset($context["template_js"]) ? $context["template_js"] : null), "generic/facets/html.twig", 4)->display($context);
+        echo " ";
+        // line 5
         echo "
 ";
-        // line 5
+        // line 6
         echo $this->getAttribute((isset($context["widget_args"]) ? $context["widget_args"] : null), "before_widget", array());
         echo " ";
-        // line 6
+        // line 7
         echo "
 ";
-        // line 7
+        // line 8
         echo $this->getAttribute((isset($context["widget_args"]) ? $context["widget_args"] : null), "before_title", array());
         echo " ";
-        // line 8
+        // line 9
         echo "    ";
         echo twig_escape_filter($this->env, (isset($context["facets_header"]) ? $context["facets_header"] : null), "html", null, true);
         echo " ";
-        // line 9
+        // line 10
         echo $this->getAttribute((isset($context["widget_args"]) ? $context["widget_args"] : null), "after_title", array());
         echo " ";
-        // line 10
+        // line 11
         echo "
 <div id=\"res_facets\">
 
     <ul>
         <li>
             <a id=\"wpsolr_remove_facets\" ";
-        // line 16
+        // line 17
         echo "               class=\"select_opt wpsolr_facet_checkbox ";
         echo (( !$this->getAttribute((isset($context["facets"]) ? $context["facets"] : null), "has_facet_elements_selected", array())) ? ("checked") : (""));
         echo "\" ";
-        // line 17
+        // line 18
         echo "               href=\"#wpsolr_facets\"
             >
                 ";
-        // line 19
+        // line 20
         echo twig_escape_filter($this->env, (isset($context["facets_element_all_results"]) ? $context["facets_element_all_results"] : null), "html", null, true);
         echo "
             </a>
@@ -63,7 +66,7 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
     </ul>
 
     ";
-        // line 24
+        // line 25
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable($this->getAttribute((isset($context["facets"]) ? $context["facets"] : null), "facets", array()));
         $context['loop'] = array(
@@ -81,12 +84,12 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
         }
         foreach ($context['_seq'] as $context["_key"] => $context["facet"]) {
             echo " ";
-            // line 25
+            // line 26
             echo "
         ";
-            // line 26
-            $this->loadTemplate($this->getAttribute($context["facet"], "template_html", array()), "generic/facets/html.twig", 26)->display(array_merge($context, array("facets_element" => (isset($context["facets_element"]) ? $context["facets_element"] : null), "facets_title" => (isset($context["facets_title"]) ? $context["facets_title"] : null), "definition" => $this->getAttribute($context["facet"], "definition", array()), "items" => $this->getAttribute($context["facet"], "items", array()), "plugin_dir_url" => (isset($context["plugin_dir_url"]) ? $context["plugin_dir_url"] : null), "template_css" => $this->getAttribute($context["facet"], "template_css", array()), "template_js" => $this->getAttribute($context["facet"], "template_js", array()))));
             // line 27
+            $this->loadTemplate($this->getAttribute($context["facet"], "template_html", array()), "generic/facets/html.twig", 27)->display(array_merge($context, array("facets_element" => (isset($context["facets_element"]) ? $context["facets_element"] : null), "facets_title" => (isset($context["facets_title"]) ? $context["facets_title"] : null), "facet_definition" => $this->getAttribute($context["facet"], "definition", array()), "items" => $this->getAttribute($context["facet"], "items", array()), "plugin_dir_url" => (isset($context["plugin_dir_url"]) ? $context["plugin_dir_url"] : null), "template_css" => $this->getAttribute($context["facet"], "template_css", array()), "template_js" => $this->getAttribute($context["facet"], "template_js", array()))));
+            // line 28
             echo "
     ";
             ++$context['loop']['index0'];
@@ -101,14 +104,14 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['facet'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 28
-        echo " ";
         // line 29
+        echo " ";
+        // line 30
         echo "
 </div>
 
 ";
-        // line 32
+        // line 33
         echo $this->getAttribute((isset($context["widget_args"]) ? $context["widget_args"] : null), "after_widget", array());
         echo " ";
     }
@@ -125,12 +128,13 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
 
     public function getDebugInfo()
     {
-        return array (  112 => 32,  107 => 29,  105 => 28,  90 => 27,  88 => 26,  85 => 25,  67 => 24,  59 => 19,  55 => 17,  51 => 16,  44 => 10,  41 => 9,  37 => 8,  34 => 7,  31 => 6,  28 => 5,  25 => 4,  22 => 3,  19 => 2,);
+        return array (  115 => 33,  110 => 30,  108 => 29,  93 => 28,  91 => 27,  88 => 26,  70 => 25,  62 => 20,  58 => 18,  54 => 17,  47 => 11,  44 => 10,  40 => 9,  37 => 8,  34 => 7,  31 => 6,  28 => 5,  25 => 4,  22 => 3,  19 => 2,);
     }
 }
 /* {# Shared Facets template #}*/
 /* */
 /* {% include template_css %} {# template_css is replaced by the (custom) layout's css selected in the widget. #}*/
+/* {% include template_js %} {# template_css is replaced by the (custom) layout's js selected in the widget. #}*/
 /* */
 /* {{ widget_args.before_widget| raw }} {# Before widget HTML #}*/
 /* */
@@ -153,7 +157,7 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
 /* */
 /*     {% for facet in facets.facets %} {# Loop on facets #}*/
 /* */
-/*         {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'definition': facet.definition, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}*/
+/*         {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'facet_definition': facet.definition, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}*/
 /* */
 /*     {% endfor %} {# Loop on facets #}*/
 /* */

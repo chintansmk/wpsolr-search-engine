@@ -17,35 +17,37 @@ class __TwigTemplate_324ec559ab400df5bcbf5fd8c1df51a7891e700204d999b2569f62861ff
     {
         // line 1
         echo "<script>
+    /*
     jQuery(document).ready(function () {
 
         jQuery(\".";
-        // line 4
+        // line 5
         echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
         echo "\").on(\"click\", function (event) {
 
             alert(\".";
-        // line 6
+        // line 7
         echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
         echo "\");
 
             jQuery(\".";
-        // line 8
+        // line 9
         echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
         echo "\").removeClass(\"";
         echo twig_escape_filter($this->env, (isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null), "html", null, true);
         echo "\"); // Deactivate all other facets
 
             jQuery(this).addClass(\"";
-        // line 10
+        // line 11
         echo twig_escape_filter($this->env, (isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null), "html", null, true);
         echo "\");
 
             ";
-        // line 13
+        // line 14
         echo "            console.log(jQuery(this).data(\"wpsolr-facet\"));
         });
     });
+    */
 </script>
 ";
     }
@@ -62,10 +64,11 @@ class __TwigTemplate_324ec559ab400df5bcbf5fd8c1df51a7891e700204d999b2569f62861ff
 
     public function getDebugInfo()
     {
-        return array (  46 => 13,  41 => 10,  34 => 8,  29 => 6,  24 => 4,  19 => 1,);
+        return array (  47 => 14,  42 => 11,  35 => 9,  30 => 7,  25 => 5,  19 => 1,);
     }
 }
 /* <script>*/
+/*     /**/
 /*     jQuery(document).ready(function () {*/
 /* */
 /*         jQuery(".{{ facet_selector_class }}").on("click", function (event) {*/
@@ -80,5 +83,6 @@ class __TwigTemplate_324ec559ab400df5bcbf5fd8c1df51a7891e700204d999b2569f62861ff
 /*             console.log(jQuery(this).data("wpsolr-facet"));*/
 /*         });*/
 /*     });*/
+/*     *//* */
 /* </script>*/
 /* */

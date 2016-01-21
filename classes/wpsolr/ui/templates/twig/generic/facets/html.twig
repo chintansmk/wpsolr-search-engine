@@ -1,6 +1,7 @@
 {# Shared Facets template #}
 
 {% include template_css %} {# template_css is replaced by the (custom) layout's css selected in the widget. #}
+{% include template_js %} {# template_css is replaced by the (custom) layout's js selected in the widget. #}
 
 {{ widget_args.before_widget| raw }} {# Before widget HTML #}
 
@@ -23,7 +24,7 @@
 
     {% for facet in facets.facets %} {# Loop on facets #}
 
-        {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'definition': facet.definition, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}
+        {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'facet_definition': facet.definition, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}
 
     {% endfor %} {# Loop on facets #}
 

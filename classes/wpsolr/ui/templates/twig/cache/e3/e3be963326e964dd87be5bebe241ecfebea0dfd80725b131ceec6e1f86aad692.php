@@ -32,8 +32,10 @@ class __TwigTemplate_a02f3a7510ae1155f940669c62f31bcbeec3d2668f59af6da38dce9c0dc
         // line 8
         echo "
 
-<ul class=\"wpsolr_any_facet_class ";
+<ul data-wpsolr-facet-description=\"";
         // line 10
+        echo twig_escape_filter($this->env, twig_jsonencode_filter((isset($context["facet_definition"]) ? $context["facet_definition"] : null)), "html", null, true);
+        echo "\" class=\"wpsolr_any_facet_class ";
         echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
         echo "\">
 
@@ -66,7 +68,7 @@ class __TwigTemplate_a02f3a7510ae1155f940669c62f31bcbeec3d2668f59af6da38dce9c0dc
             echo " ";
             echo twig_escape_filter($this->env, (($this->getAttribute($context["item"], "selected", array())) ? ((isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null)) : ("")), "html", null, true);
             echo "\"
-                       data-wpsolr-facet=\"";
+                       data-wpsolr-facet-item-value=\"";
             // line 23
             echo twig_escape_filter($this->env, twig_jsonencode_filter((isset($context["data_wpsolr_facet"]) ? $context["data_wpsolr_facet"] : null)), "html", null, true);
             echo "\">
@@ -108,7 +110,7 @@ class __TwigTemplate_a02f3a7510ae1155f940669c62f31bcbeec3d2668f59af6da38dce9c0dc
 
     public function getDebugInfo()
     {
-        return array (  90 => 30,  88 => 29,  79 => 26,  75 => 24,  71 => 23,  65 => 22,  61 => 20,  59 => 19,  56 => 18,  51 => 17,  46 => 14,  43 => 13,  37 => 10,  33 => 8,  31 => 7,  29 => 6,  26 => 5,  24 => 4,  22 => 3,  19 => 2,);
+        return array (  92 => 30,  90 => 29,  81 => 26,  77 => 24,  73 => 23,  67 => 22,  63 => 20,  61 => 19,  58 => 18,  53 => 17,  48 => 14,  45 => 13,  37 => 10,  33 => 8,  31 => 7,  29 => 6,  26 => 5,  24 => 4,  22 => 3,  19 => 2,);
     }
 }
 /* {# Display a facet elements as checkboxes #}*/
@@ -120,7 +122,7 @@ class __TwigTemplate_a02f3a7510ae1155f940669c62f31bcbeec3d2668f59af6da38dce9c0dc
 /* {% include template_js with {'plugin_dir_url': plugin_dir_url, 'facet_selector_class': facet_selector_class} %}*/
 /* */
 /* */
-/* <ul class="wpsolr_any_facet_class {{ facet_selector_class }}">*/
+/* <ul data-wpsolr-facet-description="{{ facet_definition|json_encode }}" class="wpsolr_any_facet_class {{ facet_selector_class }}">*/
 /* */
 /*     <li>*/
 /*         <span>{{ facets_title|format(facet.name) }}</span> {# Facet name #}*/
@@ -133,7 +135,7 @@ class __TwigTemplate_a02f3a7510ae1155f940669c62f31bcbeec3d2668f59af6da38dce9c0dc
 /* */
 /*                 <li>*/
 /*                     <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"*/
-/*                        data-wpsolr-facet="{{ data_wpsolr_facet|json_encode }}">*/
+/*                        data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">*/
 /*                         {{ facets_element|format( item.name, item.count )|capitalize }}*/
 /*                     </a> {# Current facet item #}*/
 /* */
