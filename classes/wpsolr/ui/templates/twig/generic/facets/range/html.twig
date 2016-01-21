@@ -16,13 +16,14 @@
 
             {% for item in items %} {# Loop on facet items #}
 
-                {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name} %}
+                {% set range_sup = item.name + facet_definition.range.gap-1 %}
+                {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name, 'range_sup': range_sup} %}
 
                 <li>
 
                     <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"
-                       data-wpsolr-facet="{{ data_wpsolr_facet|json_encode }}">
-                        {{ facets_element|format( (item.name ~ "-" ~  (item.name + facet_definition.range.gap)), item.count )|capitalize }}
+                       data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">
+                        {{ facets_element|format( (item.name ~ "-" ~  range_sup), item.count )|capitalize }}
                     </a> {# Current facet item #}
 
                 </li>

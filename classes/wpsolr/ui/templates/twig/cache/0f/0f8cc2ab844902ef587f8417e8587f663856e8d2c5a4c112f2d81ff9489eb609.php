@@ -17,37 +17,31 @@ class __TwigTemplate_324ec559ab400df5bcbf5fd8c1df51a7891e700204d999b2569f62861ff
     {
         // line 1
         echo "<script>
-    /*
     jQuery(document).ready(function () {
 
-        jQuery(\".";
-        // line 5
+        jQuery(\".wpsolr_any_facet_class li .";
+        // line 4
         echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
         echo "\").on(\"click\", function (event) {
 
-            alert(\".";
-        // line 7
-        echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
-        echo "\");
 
-            jQuery(\".";
-        // line 9
+            jQuery(\".wpsolr_any_facet_class li .";
+        // line 7
         echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
         echo "\").removeClass(\"";
         echo twig_escape_filter($this->env, (isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null), "html", null, true);
-        echo "\"); // Deactivate all other facets
-
+        echo "\"); // Deactivate all facets
             jQuery(this).addClass(\"";
-        // line 11
+        // line 8
         echo twig_escape_filter($this->env, (isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null), "html", null, true);
-        echo "\");
+        echo "\"); // Activate clicked facet
 
-            ";
-        // line 14
-        echo "            console.log(jQuery(this).data(\"wpsolr-facet\"));
+            var facet = jQuery(this).data(\"wpsolr-facet-item-value\"); // facet value stored in html5 data
+            //wpsolr_facets.removeFacetValue(facet); // remove all other values
+            wpsolr_facets.addFacetRangeValue(facet); // add facet to facets
+            wpsolr_facets.create_url();
         });
     });
-    */
 </script>
 ";
     }
@@ -64,25 +58,23 @@ class __TwigTemplate_324ec559ab400df5bcbf5fd8c1df51a7891e700204d999b2569f62861ff
 
     public function getDebugInfo()
     {
-        return array (  47 => 14,  42 => 11,  35 => 9,  30 => 7,  25 => 5,  19 => 1,);
+        return array (  36 => 8,  30 => 7,  24 => 4,  19 => 1,);
     }
 }
 /* <script>*/
-/*     /**/
 /*     jQuery(document).ready(function () {*/
 /* */
-/*         jQuery(".{{ facet_selector_class }}").on("click", function (event) {*/
+/*         jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").on("click", function (event) {*/
 /* */
-/*             alert(".{{ facet_selector_class }}");*/
 /* */
-/*             jQuery(".{{ facet_selector_class }}").removeClass("{{ facet_selected_class }}"); // Deactivate all other facets*/
+/*             jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").removeClass("{{ facet_selected_class }}"); // Deactivate all facets*/
+/*             jQuery(this).addClass("{{ facet_selected_class }}"); // Activate clicked facet*/
 /* */
-/*             jQuery(this).addClass("{{ facet_selected_class }}");*/
-/* */
-/*             {# Update url #}*/
-/*             console.log(jQuery(this).data("wpsolr-facet"));*/
+/*             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data*/
+/*             //wpsolr_facets.removeFacetValue(facet); // remove all other values*/
+/*             wpsolr_facets.addFacetRangeValue(facet); // add facet to facets*/
+/*             wpsolr_facets.create_url();*/
 /*         });*/
 /*     });*/
-/*     *//* */
 /* </script>*/
 /* */

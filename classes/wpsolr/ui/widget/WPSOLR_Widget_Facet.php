@@ -209,6 +209,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
 
 		// Widget can be on a search page: verify that it's facets group is the same as the default facets group
+		/*
 		$wpsolr_query = WPSOLR_Global::getQuery();
 		if ( $wpsolr_query->get_wpsolr_is_search() ) {
 
@@ -220,6 +221,10 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 
 			$wpsolr_query->set_wpsolr_facets_fields( $facets );
 		}
+		*/
+
+		$wpsolr_query = WPSOLR_Global::getQuery();
+		$wpsolr_query->set_wpsolr_facets_fields( $facets );
 
 		// Add more Solr parameters
 		$wpsolr_query->wpsolr_add_query_fields( $this->wpsolr_get_added_solr_query_parameters( $instance ) );

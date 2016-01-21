@@ -56,27 +56,30 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
             echo "
                 ";
             // line 19
-            $context["data_wpsolr_facet"] = array("facet_id" => $this->getAttribute((isset($context["facet"]) ? $context["facet"] : null), "id", array()), "facet_value" => $this->getAttribute($context["item"], "name", array()));
+            $context["range_sup"] = (($this->getAttribute($context["item"], "name", array()) + $this->getAttribute($this->getAttribute((isset($context["facet_definition"]) ? $context["facet_definition"] : null), "range", array()), "gap", array())) - 1);
             // line 20
+            echo "                ";
+            $context["data_wpsolr_facet"] = array("facet_id" => $this->getAttribute((isset($context["facet"]) ? $context["facet"] : null), "id", array()), "facet_value" => $this->getAttribute($context["item"], "name", array()), "range_sup" => (isset($context["range_sup"]) ? $context["range_sup"] : null));
+            // line 21
             echo "
                 <li>
 
                     <a class=\"";
-            // line 23
+            // line 24
             echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
             echo " ";
             echo twig_escape_filter($this->env, (($this->getAttribute($context["item"], "selected", array())) ? ((isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null)) : ("")), "html", null, true);
             echo "\"
-                       data-wpsolr-facet=\"";
-            // line 24
+                       data-wpsolr-facet-item-value=\"";
+            // line 25
             echo twig_escape_filter($this->env, twig_jsonencode_filter((isset($context["data_wpsolr_facet"]) ? $context["data_wpsolr_facet"] : null)), "html", null, true);
             echo "\">
                         ";
-            // line 25
-            echo twig_escape_filter($this->env, twig_capitalize_string_filter($this->env, sprintf((isset($context["facets_element"]) ? $context["facets_element"] : null), (($this->getAttribute($context["item"], "name", array()) . "-") . ($this->getAttribute($context["item"], "name", array()) + $this->getAttribute($this->getAttribute((isset($context["definition"]) ? $context["definition"] : null), "range", array()), "gap", array()))), $this->getAttribute($context["item"], "count", array()))), "html", null, true);
+            // line 26
+            echo twig_escape_filter($this->env, twig_capitalize_string_filter($this->env, sprintf((isset($context["facets_element"]) ? $context["facets_element"] : null), (($this->getAttribute($context["item"], "name", array()) . "-") . (isset($context["range_sup"]) ? $context["range_sup"] : null)), $this->getAttribute($context["item"], "count", array()))), "html", null, true);
             echo "
                     </a> ";
-            // line 27
+            // line 28
             echo "
                 </li>
 
@@ -85,9 +88,9 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['item'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 30
-        echo " ";
         // line 31
+        echo " ";
+        // line 32
         echo "
         </ul>
 
@@ -110,7 +113,7 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
 
     public function getDebugInfo()
     {
-        return array (  91 => 31,  89 => 30,  80 => 27,  76 => 25,  72 => 24,  66 => 23,  61 => 20,  59 => 19,  56 => 18,  51 => 17,  46 => 14,  43 => 13,  37 => 10,  33 => 8,  31 => 7,  29 => 6,  26 => 5,  24 => 4,  22 => 3,  19 => 2,);
+        return array (  94 => 32,  92 => 31,  83 => 28,  79 => 26,  75 => 25,  69 => 24,  64 => 21,  61 => 20,  59 => 19,  56 => 18,  51 => 17,  46 => 14,  43 => 13,  37 => 10,  33 => 8,  31 => 7,  29 => 6,  26 => 5,  24 => 4,  22 => 3,  19 => 2,);
     }
 }
 /* {# Display a facet elements as checkboxes #}*/
@@ -131,13 +134,14 @@ class __TwigTemplate_0e2d919f052e649fe6144088c8fe2b6978898a7a895b79046e8b09bc762
 /* */
 /*             {% for item in items %} {# Loop on facet items #}*/
 /* */
-/*                 {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name} %}*/
+/*                 {% set range_sup = item.name + facet_definition.range.gap-1 %}*/
+/*                 {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name, 'range_sup': range_sup} %}*/
 /* */
 /*                 <li>*/
 /* */
 /*                     <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"*/
-/*                        data-wpsolr-facet="{{ data_wpsolr_facet|json_encode }}">*/
-/*                         {{ facets_element|format( (item.name ~ "-" ~  (item.name + definition.range.gap)), item.count )|capitalize }}*/
+/*                        data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">*/
+/*                         {{ facets_element|format( (item.name ~ "-" ~  range_sup), item.count )|capitalize }}*/
 /*                     </a> {# Current facet item #}*/
 /* */
 /*                 </li>*/

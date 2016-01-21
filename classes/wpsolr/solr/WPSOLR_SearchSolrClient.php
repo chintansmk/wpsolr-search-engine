@@ -800,6 +800,8 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		Query $solarium_query, $filter_query_fields = array()
 	) {
 
+		$special_fields = WPSOLR_Global::getExtensionFacets()->get_special_fields();
+
 		foreach ( $filter_query_fields as $filter_query_field ) {
 
 			if ( ! empty( $filter_query_field ) ) {
@@ -811,10 +813,29 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 
 				if ( ! empty( $filter_query_field_name ) && ! empty( $filter_query_field_value ) ) {
+
+					// Retrieve field type
+					$field_definition = WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name );
+
+					if ( ! in_array( $filter_query_field_name, $special_fields ) ) {
+						// Add the solr type extension
+						$filter_query_field_name = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+							$filter_query_field_name,
+							WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name )->get_dynamic_type()
+						);
+					}
+
 					$fac_fd = "$filter_query_field_name";
 
 					// In case the facet contains white space, we enclose it with "".
-					$filter_query_field_value_escaped = "\"$filter_query_field_value\"";
+					if ( ! $field_definition->get_is_range() ) {
+						$filter_query_field_value_escaped = "\"$filter_query_field_value\"";
+
+					} else {
+
+						// Create range [0 TO 10]
+						$filter_query_field_value_escaped = $filter_query_field_value;
+					}
 
 					$solarium_query->addFilterQuery( array(
 						'key'   => "$fac_fd:$filter_query_field_value_escaped",

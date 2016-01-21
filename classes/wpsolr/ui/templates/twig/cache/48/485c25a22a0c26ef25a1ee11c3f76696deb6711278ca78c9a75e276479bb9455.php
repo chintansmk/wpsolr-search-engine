@@ -40,7 +40,7 @@ class __TwigTemplate_4424131a3bfd9da5e6959f4907221f93ef8fca143ecd3fb9b42184c1a44
         // line 11
         echo " background-image: url(";
         echo twig_escape_filter($this->env, (isset($context["plugin_dir_url"]) ? $context["plugin_dir_url"] : null), "html", null, true);
-        echo "/images/1449252361_checked_checkbox.png); /* https://www.iconfinder.com/icons/326677/on_radio_icon#size=128 */
+        echo "/images/1452781456_radio-button-on.png); /* https://www.iconfinder.com/icons/326677/on_radio_icon#size=128 */
     }
 
 </style>
@@ -72,7 +72,7 @@ class __TwigTemplate_4424131a3bfd9da5e6959f4907221f93ef8fca143ecd3fb9b42184c1a44
 /*     }*/
 /* */
 /*     a.{{ facet_selector_class }}.checked {*/
-/*     {# Facet checked checkbox #} background-image: url({{ plugin_dir_url }}/images/1449252361_checked_checkbox.png); /* https://www.iconfinder.com/icons/326677/on_radio_icon#size=128 *//* */
+/*     {# Facet checked checkbox #} background-image: url({{ plugin_dir_url }}/images/1452781456_radio-button-on.png); /* https://www.iconfinder.com/icons/326677/on_radio_icon#size=128 *//* */
 /*     }*/
 /* */
 /* </style>*/

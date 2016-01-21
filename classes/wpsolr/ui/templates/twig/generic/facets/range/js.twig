@@ -1,18 +1,16 @@
 <script>
-    /*
     jQuery(document).ready(function () {
 
-        jQuery(".{{ facet_selector_class }}").on("click", function (event) {
+        jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").on("click", function (event) {
 
-            alert(".{{ facet_selector_class }}");
 
-            jQuery(".{{ facet_selector_class }}").removeClass("{{ facet_selected_class }}"); // Deactivate all other facets
+            jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").removeClass("{{ facet_selected_class }}"); // Deactivate all facets
+            jQuery(this).addClass("{{ facet_selected_class }}"); // Activate clicked facet
 
-            jQuery(this).addClass("{{ facet_selected_class }}");
-
-            {# Update url #}
-            console.log(jQuery(this).data("wpsolr-facet"));
+            var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
+            //wpsolr_facets.removeFacetValue(facet); // remove all other values
+            wpsolr_facets.addFacetRangeValue(facet); // add facet to facets
+            wpsolr_facets.create_url();
         });
     });
-    */
 </script>

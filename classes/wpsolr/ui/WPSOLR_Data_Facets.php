@@ -61,8 +61,15 @@ class WPSOLR_Data_Facets {
 
 					foreach ( $facets_in_results[ $facet_to_display_id ] as $facet_in_results ) {
 
+						$facet_value = $facet_in_results[0];
+						if ( isset( $facet['definition']['range'] ) ) {
+
+							// Facet range come as [10 TO 19]
+							$facet_value = sprintf( '[%s TO %s]', $facet_value, $facet_value + $facet['definition']['range']['gap'] - 1 );
+						}
+
 						// Current item selected ?
-						$item_selected = isset( $facets_selected[ $facet_to_display_id ] ) && ( in_array( $facet_in_results[0], $facets_selected[ $facet_to_display_id ] ) );
+						$item_selected = isset( $facets_selected[ $facet_to_display_id ] ) && ( in_array( $facet_value, $facets_selected[ $facet_to_display_id ] ) );
 
 						// Update, once, $results['has_facet_elements_selected'], if current element is selected
 						if ( $item_selected && ! $results['has_facet_elements_selected'] ) {

@@ -21,7 +21,9 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
     var WPSOLR_Facets = function () {
         console.log(\"Facets constructor\");
 
-        this.facets = [];
+        this.facets = {};
+        this.facets.field = [];
+        this.facets.range = [];
         this.url = \"\";
     };
 
@@ -35,10 +37,19 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
     };
 
     WPSOLR_Facets.prototype.addFacetValue = function (facet) {
-        this.debug(\"add facets\", facet);
+        this.debug(\"add facet\", facet);
         this.debugState();
 
-        this.facets.push(facet);
+        this.facets.field.push(facet);
+
+        this.debugState();
+    };
+
+    WPSOLR_Facets.prototype.addFacetRangeValue = function (facet) {
+        this.debug(\"add facet range\", facet);
+        this.debugState();
+
+        this.facets.range.push(facet);
 
         this.debugState();
     };
@@ -49,16 +60,26 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 
         var url1 = new Url(window.location.href);
 
-        // 2nd, add parameters
-        var fields_query = this.facets || [];
-        for (i = 0; i < fields_query.length; i++) {
-            url1.query['wpsolr_fq' + '[' + i + ']'] = fields_query[i].facet_id + \":\" + fields_query[i].facet_value;
+        // query
+        url1.query['s'] = '';
+
+
+        // Add field parameters
+        var facets = this.facets.field || [];
+        for (i = 0; i < facets.length; i++) {
+            url1.query['wpsolr_fq' + '[' + i + ']'] = facets[i].facet_id + \":\" + facets[i].facet_value;
+        }
+
+        // Add range parameters
+        var facets = this.facets.range || [];
+        for (i = 0; i < facets.length; i++) {
+            url1.query['wpsolr_fq' + '[' + i + ']'] = facets[i].facet_id + \":\" + \"[\" + facets[i].facet_value + \" TO \" + (facets[i].range_sup) + \"]\";
         }
 
 
         this.url = url1.toString();
 
-       window.location.href = this.url;
+        window.location.href = this.url;
 
         this.debugState();
     };
@@ -85,7 +106,9 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*     var WPSOLR_Facets = function () {*/
 /*         console.log("Facets constructor");*/
 /* */
-/*         this.facets = [];*/
+/*         this.facets = {};*/
+/*         this.facets.field = [];*/
+/*         this.facets.range = [];*/
 /*         this.url = "";*/
 /*     };*/
 /* */
@@ -99,10 +122,19 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*     };*/
 /* */
 /*     WPSOLR_Facets.prototype.addFacetValue = function (facet) {*/
-/*         this.debug("add facets", facet);*/
+/*         this.debug("add facet", facet);*/
 /*         this.debugState();*/
 /* */
-/*         this.facets.push(facet);*/
+/*         this.facets.field.push(facet);*/
+/* */
+/*         this.debugState();*/
+/*     };*/
+/* */
+/*     WPSOLR_Facets.prototype.addFacetRangeValue = function (facet) {*/
+/*         this.debug("add facet range", facet);*/
+/*         this.debugState();*/
+/* */
+/*         this.facets.range.push(facet);*/
 /* */
 /*         this.debugState();*/
 /*     };*/
@@ -113,16 +145,26 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /* */
 /*         var url1 = new Url(window.location.href);*/
 /* */
-/*         // 2nd, add parameters*/
-/*         var fields_query = this.facets || [];*/
-/*         for (i = 0; i < fields_query.length; i++) {*/
-/*             url1.query['wpsolr_fq' + '[' + i + ']'] = fields_query[i].facet_id + ":" + fields_query[i].facet_value;*/
+/*         // query*/
+/*         url1.query['s'] = '';*/
+/* */
+/* */
+/*         // Add field parameters*/
+/*         var facets = this.facets.field || [];*/
+/*         for (i = 0; i < facets.length; i++) {*/
+/*             url1.query['wpsolr_fq' + '[' + i + ']'] = facets[i].facet_id + ":" + facets[i].facet_value;*/
+/*         }*/
+/* */
+/*         // Add range parameters*/
+/*         var facets = this.facets.range || [];*/
+/*         for (i = 0; i < facets.length; i++) {*/
+/*             url1.query['wpsolr_fq' + '[' + i + ']'] = facets[i].facet_id + ":" + "[" + facets[i].facet_value + " TO " + (facets[i].range_sup) + "]";*/
 /*         }*/
 /* */
 /* */
 /*         this.url = url1.toString();*/
 /* */
-/*        window.location.href = this.url;*/
+/*         window.location.href = this.url;*/
 /* */
 /*         this.debugState();*/
 /*     };*/
