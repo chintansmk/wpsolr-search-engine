@@ -656,6 +656,8 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		$facets_parameters
 	) {
 
+		$extension_facets = WPSOLR_Global::getExtensionFacets();
+
 		// Field names
 		$fields = isset( $facets_parameters[ self::PARAMETER_FACET_FIELD_NAMES ] )
 			? $facets_parameters[ self::PARAMETER_FACET_FIELD_NAMES ]
@@ -700,8 +702,14 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				}
 
 				// Add the facet
-				$facetSet->createFacetField( "$field_name" )->setField( "$field_name" )->setLimit( $limit );
+				$solarium_facet = $facetSet->createFacetField( "$field_name" )->setField( "$field_name" )->setLimit( $limit )->setSort( $extension_facets->get_facet_sort( $facet ) );
 
+				// Display facet items not in results ?
+				if ( $extension_facets->get_is_facet_in_exclusion_tag( $facet ) ) {
+
+					// Exclude the tag corresponding to this facet. The tag was set on addFilterQuery().
+					$solarium_facet->setExcludes( [ $field_name ] );
+				}
 			}
 		}
 
@@ -793,7 +801,8 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 					$solarium_query->addFilterQuery( array(
 						'key'   => "$fac_fd:$filter_query_field_value_escaped",
-						'query' => "$fac_fd:$filter_query_field_value_escaped"
+						'query' => "$fac_fd:$filter_query_field_value_escaped",
+						'tag'   => "$fac_fd"
 					) );
 
 				}

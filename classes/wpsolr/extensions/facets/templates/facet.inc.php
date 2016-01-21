@@ -1,4 +1,5 @@
 <?php
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\utilities\WPSOLR_Option;
 
 ?>
@@ -13,9 +14,9 @@ $facet_range_end   = ! empty( $facet['range'] ) && ! empty( $facet['range']['end
 $facet_range_gap   = ! empty( $facet['range'] ) && ! empty( $facet['range']['gap'] ) ? $facet['range']['gap'] : 100;
 
 $facet_elements_operator = ! empty( $facet['elements_operator'] ) ? $facet['elements_operator'] : 'AND';
-$facet_sort              = ! empty( $facet['sort'] ) ? $facet['sort'] : 'count';
-$facet_min_count         = ! empty( $facet['min_count'] ) ? $facet['min_count'] : '0';
-$facet_missing           = ! empty( $facet['missing'] ) ? $facet['missing'] : '0';
+$facet_sort              = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] : WPSOLR_Options_Facets::FACET_SORT_COUNT;
+$facet_min_count         = ! empty( $facet['min_count'] ) ? $facet['min_count'] : '1';
+$facet_is_exclusion_tag  = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_IS_EXCLUSION ] );
 $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] : '0';
 
 ?>
@@ -83,14 +84,12 @@ $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] 
 		</div>
 		<div class="wdm_row">
 			<div class='col_left'>
-				Count missing elements
+				Show missing facet contents
 			</div>
 			<div class='col_right'>
-				<select name='<?php echo $facet_option_array_name; ?>[missing]'>
-					<option value='0' <?php selected( '0', $facet_missing, true ); ?>>Do not count missing elements
-					</option>
-					<option value='1' <?php selected( '1', $facet_missing, true ); ?>>Count missing elements</option>
-				</select>
+				<input type="checkbox"
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_IS_EXCLUSION; ?>]'
+				       value='1' <?php checked( $facet_is_exclusion_tag ); ?> />
 			</div>
 		</div>
 		<div class="wdm_row">
@@ -111,9 +110,14 @@ $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] 
 			</div>
 			<div class='col_right'>
 				<select name='<?php echo $facet_option_array_name; ?>[sort]'>
-					<option value='count' <?php selected( 'count', $facet_sort, true ); ?>>Count
+					<option
+						value='<?php echo WPSOLR_Options_Facets::FACET_SORT_COUNT ?>' <?php selected( 'count', $facet_sort, true ); ?>>
+						Count
 					</option>
-					<option value='index' <?php selected( 'index', $facet_sort, true ); ?>>Alphabetical</option>
+					<option
+						value='<?php echo WPSOLR_Options_Facets::FACET_SORT_ALPHABETICAL ?>' <?php selected( 'index', $facet_sort, true ); ?>>
+						Alphabetical
+					</option>
 				</select>
 			</div>
 		</div>

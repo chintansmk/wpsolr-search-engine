@@ -16,6 +16,13 @@ use wpsolr\utilities\WPSOLR_Option;
  */
 class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
+	const FACET_FIELD_SORT = 'sort';
+	const FACET_SORT_ALPHABETICAL = 'index';
+	const FACET_SORT_COUNT = 'count';
+
+	// Is a facet in an exclusion tag (show misssing elements)
+	const FACET_FIELD_IS_EXCLUSION = 'missing';
+
 	/**
 	 * Post constructor.
 	 */
@@ -104,4 +111,22 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		];
 	}
 
+
+	/**
+	 * Get sort value of a facet
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_sort( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_SORT ] ) ? $facet[ self::FACET_FIELD_SORT ] : self::FACET_SORT_ALPHABETICAL;
+	}
+
+	/**
+	 * Does a facet shows also items not in results ?
+	 *
+	 * @param $facet
+	 */
+	public function get_is_facet_in_exclusion_tag( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_IS_EXCLUSION ] );
+	}
 }
