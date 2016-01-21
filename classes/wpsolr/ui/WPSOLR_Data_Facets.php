@@ -71,7 +71,7 @@ class WPSOLR_Data_Facets {
 
 
 						$name = trim( $facet_in_results[0] );
-						if ( ! empty( ( $name ) ) ) { // Only add facet if non blank name (it happens).
+						if ( ! empty( $name ) || $name === '0' ) { // Only add facet if non blank name (it happens).
 
 							array_push( $facet['items'], array(
 								'name'     => $facet_in_results[0],

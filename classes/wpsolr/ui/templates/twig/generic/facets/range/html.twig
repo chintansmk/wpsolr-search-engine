@@ -10,6 +10,7 @@
 <ul class="wpsolr_any_facet_class {{ facet_selector_class }}">
 
     <li>
+        ??????
         <span>{{ facets_title|format(facet.name) }}</span> {# Facet name #}
 
         <ul>
@@ -22,8 +23,7 @@
 
                     <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"
                        data-wpsolr-facet="{{ data_wpsolr_facet|json_encode }}">
-                        {{ item.name - definition.range.gap }}
-                        - {{ facets_element|format( item.name, item.count )|capitalize }}
+                        {{ facets_element|format( (item.name ~ "-" ~  (item.name + definition.range.gap)), item.count )|capitalize }}
                     </a> {# Current facet item #}
 
                 </li>
