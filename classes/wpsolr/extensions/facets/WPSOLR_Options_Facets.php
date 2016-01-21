@@ -16,12 +16,22 @@ use wpsolr\utilities\WPSOLR_Option;
  */
 class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
+	// Facet sort
 	const FACET_FIELD_SORT = 'sort';
 	const FACET_SORT_ALPHABETICAL = 'index';
 	const FACET_SORT_COUNT = 'count';
 
 	// Is a facet in an exclusion tag (show misssing elements)
 	const FACET_FIELD_IS_EXCLUSION = 'missing';
+
+	// Facet range start
+	const FACET_RANGE = 'range';
+	const FACET_RANGE_START = 'start';
+	const FACET_RANGE_START_DEFAULT = '0';
+	const FACET_RANGE_END = 'end';
+	const FACET_RANGE_END_DEFAULT = '100';
+	const FACET_RANGE_GAP = 'gap';
+	const FACET_RANGE_GAP_DEFAULT = '10';
 
 	/**
 	 * Post constructor.
@@ -119,6 +129,42 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_facet_sort( $facet ) {
 		return isset( $facet[ self::FACET_FIELD_SORT ] ) ? $facet[ self::FACET_FIELD_SORT ] : self::FACET_SORT_ALPHABETICAL;
+	}
+
+	/**
+	 * Is facet a range ?
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_is_range( $facet ) {
+		return isset( $facet[ self::FACET_RANGE ] );
+	}
+
+	/**
+	 * Get range start of a facet
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_range_start( $facet ) {
+		return isset( $facet[ self::FACET_RANGE ] ) && isset( $facet[ self::FACET_RANGE ][ self::FACET_RANGE_START ] ) ? $facet[ self::FACET_RANGE ][ self::FACET_RANGE_START ] : self::FACET_RANGE_START_DEFAULT;
+	}
+
+	/**
+	 * Get range end of a facet
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_range_end( $facet ) {
+		return isset( $facet[ self::FACET_RANGE ] ) && isset( $facet[ self::FACET_RANGE ][ self::FACET_RANGE_END ] ) ? $facet[ self::FACET_RANGE ][ self::FACET_RANGE_END ] : self::FACET_RANGE_END_DEFAULT;
+	}
+
+	/**
+	 * Get range gap of a facet
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_range_gap( $facet ) {
+		return isset( $facet[ self::FACET_RANGE ] ) && isset( $facet[ self::FACET_RANGE ][ self::FACET_RANGE_GAP ] ) ? $facet[ self::FACET_RANGE ][ self::FACET_RANGE_GAP ] : self::FACET_RANGE_GAP_DEFAULT;
 	}
 
 	/**

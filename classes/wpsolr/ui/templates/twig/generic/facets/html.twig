@@ -23,7 +23,7 @@
 
     {% for facet in facets.facets %} {# Loop on facets #}
 
-        {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}
+        {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'definition': facet.definition, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}
 
     {% endfor %} {# Loop on facets #}
 

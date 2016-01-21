@@ -113,6 +113,12 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig'
+			],
+			'range'    => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric Range',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig'
 			]
 		]
 	];

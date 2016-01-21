@@ -702,7 +702,23 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				}
 
 				// Add the facet
-				$solarium_facet = $facetSet->createFacetField( "$field_name" )->setField( "$field_name" )->setLimit( $limit )->setSort( $extension_facets->get_facet_sort( $facet ) );
+				if ( $extension_facets->get_facet_is_range( $facet ) ) {
+
+					// Set a range facet
+					$solarium_facet = $facetSet->createFacetRange( "$field_name" );
+					$solarium_facet->setStart( $extension_facets->get_facet_range_start( $facet ) );
+					$solarium_facet->setEnd( $extension_facets->get_facet_range_end( $facet ) );
+					$solarium_facet->setGap( $extension_facets->get_facet_range_gap( $facet ) );
+				} else {
+
+					// Set a field facet
+					$solarium_facet = $facetSet->createFacetField( "$field_name" );
+					$solarium_facet->setLimit( $limit );
+					$solarium_facet->setSort( $extension_facets->get_facet_sort( $facet ) );
+				}
+
+				// Facets generic options
+				$solarium_facet->setField( "$field_name" );
 
 				// Display facet items not in results ?
 				if ( $extension_facets->get_is_facet_in_exclusion_tag( $facet ) ) {

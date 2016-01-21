@@ -48,10 +48,11 @@ class WPSOLR_Data_Facets {
 					$facet_to_display_name = str_replace( '_', ' ', $facet_to_display_name );
 					$facet_to_display_name = ucfirst( $facet_to_display_name );
 
-					$facet          = array();
-					$facet['items'] = array();
-					$facet['id']    = $facet_to_display_id;
-					$facet['name']  = $facet_to_display_name;
+					$facet               = array();
+					$facet['items']      = array();
+					$facet['id']         = $facet_to_display_id;
+					$facet['name']       = $facet_to_display_name;
+					$facet['definition'] = $facet_to_display;
 
 					// Templates
 					$facet[ WPSOLR_Widget_Facet::LAYOUT_FIELD_TEMPLATE_HTML ] = WPSOLR_Widget_Facet::wpsolr_get_layout_template_html( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );

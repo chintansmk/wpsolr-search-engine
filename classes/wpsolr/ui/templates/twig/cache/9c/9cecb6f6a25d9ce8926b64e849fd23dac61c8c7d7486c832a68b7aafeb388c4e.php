@@ -85,7 +85,7 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
             echo "
         ";
             // line 26
-            $this->loadTemplate($this->getAttribute($context["facet"], "template_html", array()), "generic/facets/html.twig", 26)->display(array_merge($context, array("facets_element" => (isset($context["facets_element"]) ? $context["facets_element"] : null), "facets_title" => (isset($context["facets_title"]) ? $context["facets_title"] : null), "items" => $this->getAttribute($context["facet"], "items", array()), "plugin_dir_url" => (isset($context["plugin_dir_url"]) ? $context["plugin_dir_url"] : null), "template_css" => $this->getAttribute($context["facet"], "template_css", array()), "template_js" => $this->getAttribute($context["facet"], "template_js", array()))));
+            $this->loadTemplate($this->getAttribute($context["facet"], "template_html", array()), "generic/facets/html.twig", 26)->display(array_merge($context, array("facets_element" => (isset($context["facets_element"]) ? $context["facets_element"] : null), "facets_title" => (isset($context["facets_title"]) ? $context["facets_title"] : null), "definition" => $this->getAttribute($context["facet"], "definition", array()), "items" => $this->getAttribute($context["facet"], "items", array()), "plugin_dir_url" => (isset($context["plugin_dir_url"]) ? $context["plugin_dir_url"] : null), "template_css" => $this->getAttribute($context["facet"], "template_css", array()), "template_js" => $this->getAttribute($context["facet"], "template_js", array()))));
             // line 27
             echo "
     ";
@@ -153,7 +153,7 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
 /* */
 /*     {% for facet in facets.facets %} {# Loop on facets #}*/
 /* */
-/*         {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}*/
+/*         {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'definition': facet.definition, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}*/
 /* */
 /*     {% endfor %} {# Loop on facets #}*/
 /* */
