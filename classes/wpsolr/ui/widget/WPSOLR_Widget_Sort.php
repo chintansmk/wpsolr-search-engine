@@ -131,15 +131,12 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 	protected function wpsolr_form( $args, $instance ) {
 
 		echo WPSOLR_UI_Sort::Build(
-			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT ),
-			WPSOLR_Data_Sort::get_data(
-				WPSOLR_Global::getQuery()->get_wpsolr_sort(),
-				WPSOLR_Global::getOption()->get_sortby_items_as_array(),
-				WPSOLR_Global::getOption()->get_sortby_default(),
-				WPSOLR_Localization::get_options()
-			),
-			WPSOLR_Localization::get_options(),
-			$args
+			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT ), WPSOLR_Data_Sort::get_data(
+			WPSOLR_Global::getQuery()->get_wpsolr_sort(),
+			WPSOLR_Global::getOption()->get_sortby_items_as_array(),
+			WPSOLR_Global::getOption()->get_sortby_default(),
+			WPSOLR_Localization::get_options()
+		), WPSOLR_Localization::get_options(), $args, $instance
 		);
 
 	}

@@ -234,14 +234,11 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 
 		// Build the facets UI
 		echo WPSOLR_UI_Facets::Build(
-			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT ),
-			WPSOLR_Data_Facets::get_data(
-				WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
-				$facets,
-				$results[1]
-			),
-			WPSOLR_Localization::get_options(),
-			$args
+			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT ), WPSOLR_Data_Facets::get_data(
+			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
+			$facets,
+			$results[1]
+		), WPSOLR_Localization::get_options(), $args, $instance
 		);
 
 	}

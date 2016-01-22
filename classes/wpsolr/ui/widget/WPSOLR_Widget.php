@@ -112,6 +112,8 @@ class WPSOLR_Widget extends \WP_Widget {
 			$this->wpsolr_uuid = uniqid();
 		}
 
+		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'WPSOLR Widget', 'text_domain' );
+
 		$is_custom_twig_template_string     = ! empty( $instance[ self::FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_STRING ] );
 		$is_custom_twig_template_css_string = ! empty( $instance[ self::FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_CSS_STRING ] );
 
@@ -207,6 +209,10 @@ class WPSOLR_Widget extends \WP_Widget {
 			<a href="http://twig.sensiolabs.org/" target="_blank">Twig</a>.
 		</p>
 
+		<p>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+		</p>
 		<p>
 			Use layout:
 			<select class="<?php echo $uuid_layout_id; ?>"

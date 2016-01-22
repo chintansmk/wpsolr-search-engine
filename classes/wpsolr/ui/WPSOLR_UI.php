@@ -28,14 +28,16 @@ class WPSOLR_UI {
 	 * @param array $localization_options
 	 * @param array $widget_args
 	 *
+	 * @param $widget_instance
+	 *
 	 * @return string
 	 */
-	public static function Build( $layout, $data, $localization_options, $widget_args ) {
+	public static function Build( $layout, $data, $localization_options, $widget_args, $widget_instance ) {
 
 		$html = '';
 
 		// Twig parameters delegated to child classes
-		$twig_parameters = static::create_twig_parameters( $data, $localization_options );
+		$twig_parameters = static::create_twig_parameters( $data, $localization_options, $widget_instance );
 
 		// JS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
@@ -78,9 +80,11 @@ class WPSOLR_UI {
 	 * @param $data
 	 * @param $localization_options
 	 *
+	 * @param $widget_instance
+	 *
 	 * @return array
 	 */
-	public static function create_twig_parameters( $data, $localization_options ) {
+	public static function create_twig_parameters( $data, $localization_options, $widget_instance ) {
 		dies( 'Missing implementation.' );
 	}
 
