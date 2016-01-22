@@ -4,6 +4,7 @@
         console.log("Facets constructor");
 
         this.clear();
+        this.extractUrl();
     };
 
     WPSOLR_Facets.prototype.debug = function (message, object) {
@@ -63,8 +64,6 @@
         this.facets = {};
         this.facets.field = [];
         this.facets.range = [];
-        this.extractUrl();
-
     }
 
     WPSOLR_Facets.prototype.addFacetValue = function (facet) {
@@ -104,8 +103,8 @@
 
         var url1 = new Url(this.url);
 
-        // query
-        url1.query["s"] = "";
+        // query: keep it, or add one empty to go to search page on click
+        url1.query["s"] = url1.query["s"] || '';
 
         var fq_index = 0;
 
@@ -137,8 +136,8 @@
         // Global object used by one widget
         wpsolr_facets = new WPSOLR_Facets();
 
-        jQuery("wpsolr_remove_facets").on("click", function (event) {
-            
+        jQuery(".wpsolr_remove_facets").on("click", function (event) {
+
             //jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").removeClass("{{ facet_selected_class }}"); // Deactivate all facets
             //jQuery(this).addClass("{{ facet_selected_class }}"); // Activate clicked facet
 

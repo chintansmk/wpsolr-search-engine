@@ -22,6 +22,7 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
         console.log(\"Facets constructor\");
 
         this.clear();
+        this.extractUrl();
     };
 
     WPSOLR_Facets.prototype.debug = function (message, object) {
@@ -81,8 +82,6 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
         this.facets = {};
         this.facets.field = [];
         this.facets.range = [];
-        this.extractUrl();
-
     }
 
     WPSOLR_Facets.prototype.addFacetValue = function (facet) {
@@ -122,8 +121,8 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 
         var url1 = new Url(this.url);
 
-        // query
-        url1.query[\"s\"] = \"\";
+        // query: keep it, or add one empty to go to search page on click
+        url1.query[\"s\"] = url1.query[\"s\"] || '';
 
         var fq_index = 0;
 
@@ -155,16 +154,16 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
         // Global object used by one widget
         wpsolr_facets = new WPSOLR_Facets();
 
-        jQuery(\"wpsolr_remove_facets\").on(\"click\", function (event) {
-            
+        jQuery(\".wpsolr_remove_facets\").on(\"click\", function (event) {
+
             //jQuery(\".wpsolr_any_facet_class li .";
-        // line 142
+        // line 141
         echo twig_escape_filter($this->env, (isset($context["facet_selector_class"]) ? $context["facet_selector_class"] : null), "html", null, true);
         echo "\").removeClass(\"";
         echo twig_escape_filter($this->env, (isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null), "html", null, true);
         echo "\"); // Deactivate all facets
             //jQuery(this).addClass(\"";
-        // line 143
+        // line 142
         echo twig_escape_filter($this->env, (isset($context["facet_selected_class"]) ? $context["facet_selected_class"] : null), "html", null, true);
         echo "\"); // Activate clicked facet
 
@@ -191,7 +190,7 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 
     public function getDebugInfo()
     {
-        return array (  168 => 143,  162 => 142,  19 => 1,);
+        return array (  167 => 142,  161 => 141,  19 => 1,);
     }
 }
 /* <script>*/
@@ -200,6 +199,7 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*         console.log("Facets constructor");*/
 /* */
 /*         this.clear();*/
+/*         this.extractUrl();*/
 /*     };*/
 /* */
 /*     WPSOLR_Facets.prototype.debug = function (message, object) {*/
@@ -259,8 +259,6 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*         this.facets = {};*/
 /*         this.facets.field = [];*/
 /*         this.facets.range = [];*/
-/*         this.extractUrl();*/
-/* */
 /*     }*/
 /* */
 /*     WPSOLR_Facets.prototype.addFacetValue = function (facet) {*/
@@ -300,8 +298,8 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /* */
 /*         var url1 = new Url(this.url);*/
 /* */
-/*         // query*/
-/*         url1.query["s"] = "";*/
+/*         // query: keep it, or add one empty to go to search page on click*/
+/*         url1.query["s"] = url1.query["s"] || '';*/
 /* */
 /*         var fq_index = 0;*/
 /* */
@@ -333,8 +331,8 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*         // Global object used by one widget*/
 /*         wpsolr_facets = new WPSOLR_Facets();*/
 /* */
-/*         jQuery("wpsolr_remove_facets").on("click", function (event) {*/
-/*             */
+/*         jQuery(".wpsolr_remove_facets").on("click", function (event) {*/
+/* */
 /*             //jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").removeClass("{{ facet_selected_class }}"); // Deactivate all facets*/
 /*             //jQuery(this).addClass("{{ facet_selected_class }}"); // Activate clicked facet*/
 /* */
