@@ -23,16 +23,18 @@ class WPSOLR_UI {
 	/**
 	 * Build facets UI
 	 *
-	 * @param string $layout Layout to render (default file or custom string)
+	 * @param $facets_group_id
 	 * @param array $data Data from Solr
 	 * @param array $localization_options
 	 * @param array $widget_args
 	 *
 	 * @param $widget_instance
 	 *
+	 * @param string $layout Layout to render (default file or custom string)
+	 *
 	 * @return string
 	 */
-	public static function Build( $layout, $data, $localization_options, $widget_args, $widget_instance ) {
+	public static function Build( $facets_group_id, $data, $localization_options, $widget_args, $widget_instance, $layout ) {
 
 		$html = '';
 
@@ -64,8 +66,9 @@ class WPSOLR_UI {
 			array_merge(
 				$twig_parameters,
 				array(
-					'widget_args'    => $widget_args,
-					'plugin_dir_url' => self::plugin_dir_url()
+					'facets_group_id' => $facets_group_id,
+					'widget_args'     => $widget_args,
+					'plugin_dir_url'  => self::plugin_dir_url()
 				)
 			)
 		);

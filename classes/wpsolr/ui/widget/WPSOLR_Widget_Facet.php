@@ -199,46 +199,45 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 	 */
 	protected function wpsolr_form( $args, $instance ) {
 
-		// Facets group of the widget
-		$facets_group_id = $this->wpsolr_get_instance_facets_group_id( $instance );
-		if ( empty( $facets_group_id ) ) {
-			throw new Exception( sptrinf( 'Select a facets group.' ) );
-		}
 
-		// Facets of the widget facets groups
-		$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
+		// Widget can be on a search page ?s=
+		$wpsolr_query    = WPSOLR_Global::getQuery();
+		$facets_group_id = $wpsolr_query->get_wpsolr_facets_groups_id();
 
-		// Widget can be on a search page: verify that it's facets group is the same as the default facets group
-		/*
-		$wpsolr_query = WPSOLR_Global::getQuery();
-		if ( $wpsolr_query->get_wpsolr_is_search() ) {
+		if ( ! $wpsolr_query->get_wpsolr_is_search() ) {
 
-			if ( $facets_group_id != WPSOLR_Global::getOption()->get_facets_group_default() ) {
-				// Stay hidden
-				return;
+			// Facets of the group on the query url
+			if ( empty( $facets_group_id ) ) {
+
+				// Facets group of the widget
+				$facets_group_id = $this->wpsolr_get_instance_facets_group_id( $instance );
+				if ( empty( $facets_group_id ) ) {
+					throw new Exception( sptrinf( 'Select a facets group.' ) );
+				}
 			}
-		} else {
+			// Facets of the facets groups
+			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
 
 			$wpsolr_query->set_wpsolr_facets_fields( $facets );
+
+			// Add Solr query fields from the Widget filter
+			$wpsolr_query->wpsolr_add_query_fields( $this->wpsolr_get_added_solr_query_parameters( $instance ) );
+		} else {
+
+			// Facets of the group on the query url for a search url
+			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
 		}
-		*/
-
-		$wpsolr_query = WPSOLR_Global::getQuery();
-		$wpsolr_query->set_wpsolr_facets_fields( $facets );
-
-		// Add more Solr parameters
-		$wpsolr_query->wpsolr_add_query_fields( $this->wpsolr_get_added_solr_query_parameters( $instance ) );
 
 		// Call and get Solr results
 		$results = WPSOLR_Global::getSolrClient()->display_results( $wpsolr_query );
 
 		// Build the facets UI
 		echo WPSOLR_UI_Facets::Build(
-			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT ), WPSOLR_Data_Facets::get_data(
+			$facets_group_id, WPSOLR_Data_Facets::get_data(
 			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
 			$facets,
 			$results[1]
-		), WPSOLR_Localization::get_options(), $args, $instance
+		), WPSOLR_Localization::get_options(), $args, $instance, $this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
 		);
 
 	}

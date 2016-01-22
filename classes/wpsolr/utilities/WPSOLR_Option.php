@@ -396,7 +396,7 @@ class WPSOLR_Option {
 	 *
 	 * @return string
 	 */
-	public function get_facets_group_default() {
+	public function get_default_facets_group_id() {
 		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_GROUP_DEFAULT_ID, '' );
 	}
 

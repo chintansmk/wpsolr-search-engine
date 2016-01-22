@@ -21,6 +21,7 @@ class WPSOLR_Query extends \WP_Query {
 	protected $wpsolr_sort;
 	protected $wpsolr_facets;
 	protected $wpsolr_is_wp_search;
+	protected $wpsolr_facets_groups_id;
 
 
 	/**
@@ -56,6 +57,8 @@ class WPSOLR_Query extends \WP_Query {
 		$this->set_filter_query_fields( array() );
 		$this->set_wpsolr_paged( '0' );
 		$this->set_wpsolr_sort( WPSOLR_Global::getOption()->get_sortby_default() );
+		$this->set_wpsolr_facets_groups_id( '' );
+
 	}
 
 	/**
@@ -191,6 +194,20 @@ class WPSOLR_Query extends \WP_Query {
 		$this->wpsolr_is_wp_search = $wpsolr_is_wp_search;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function get_wpsolr_facets_groups_id() {
+		return $this->wpsolr_facets_groups_id;
+	}
+
+	/**
+	 * @param string $wpsolr_facets_groups_id
+	 */
+	public function set_wpsolr_facets_groups_id( $wpsolr_facets_groups_id ) {
+		$this->wpsolr_facets_groups_id = $wpsolr_facets_groups_id;
+	}
+
 	/**************************************************************************
 	 *
 	 * Override WP_Query methods
@@ -217,8 +234,15 @@ class WPSOLR_Query extends \WP_Query {
 		// Set variable 's', so that get_search_query() and other standard WP_Query methods still work with our own search parameter
 		//$this->set( 's', $query );
 
-		// Add facets from default group of facets
-		$this->set_wpsolr_facets_fields( WPSOLR_Global::getExtensionFacets()->get_facets_from_default_group() );
+		// Add facets from url group or default group of facets
+		$facets_group_id = $this->get_wpsolr_facets_groups_id();
+		if ( ! empty( $facets_group_id ) ) {
+			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
+		} else {
+			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_default_group();
+		}
+
+		$this->set_wpsolr_facets_fields( $facets );
 
 		$this->solr_client = WPSOLR_Global::getSolrClient();
 		$this->resultSet   = $this->solr_client->execute_wpsolr_query( $this );

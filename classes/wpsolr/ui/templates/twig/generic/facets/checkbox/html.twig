@@ -7,7 +7,8 @@
 {% include template_js with {'plugin_dir_url': plugin_dir_url, 'facet_selector_class': facet_selector_class} %}
 
 
-<ul data-wpsolr-facet-description="{{ facet_definition|json_encode }}" class="wpsolr_any_facet_class {{ facet_selector_class }}">
+<ul data-wpsolr-facet-description="{{ facet_definition|json_encode }}"
+    class="wpsolr_any_facet_class {{ facet_selector_class }}">
 
     <li>
         <span>{{ facets_title|format(facet.name) }}</span> {# Facet name #}

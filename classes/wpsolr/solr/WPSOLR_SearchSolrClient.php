@@ -465,10 +465,14 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 					$field_name_dynamic = $field_name;
 				}
 
-				$result_facet = $resultset->getFacetSet()->getFacet( "$field_name_dynamic" );
+				if ( ! empty( $resultset->getFacetSet() ) ) {
 
-				foreach ( ( ! empty( $result_facet ) ? $result_facet : [ ] ) as $value => $count ) {
-					$output[ $field_name ][] = array( $value, $count );
+					$result_facet = $resultset->getFacetSet()->getFacet( "$field_name_dynamic" );
+
+					foreach ( ( ! empty( $result_facet ) ? $result_facet : [ ] ) as $value => $count ) {
+						$output[ $field_name ][] = array( $value, $count );
+					}
+
 				}
 
 			}

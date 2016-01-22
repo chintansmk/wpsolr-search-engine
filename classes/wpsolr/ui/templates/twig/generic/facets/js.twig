@@ -1,8 +1,9 @@
 <script>
 
-    var WPSOLR_Facets = function () {
+    var WPSOLR_Facets = function (groups_facet_id) {
         console.log("Facets constructor");
 
+        this.groups_facet_id = groups_facet_id;
         this.facets = {};
         this.facets.field = [];
         this.facets.range = [];
@@ -160,6 +161,8 @@
         }
 
 
+        url1.query["wpsolr_facets_group"] = this.groups_facet_id;
+
         this.url = url1.toString();
 
         window.location.href = this.url;
@@ -170,8 +173,9 @@
     // Create a global WPSOLR facets object
     var wpsolr_facets;
     jQuery(document).ready(function () {
+
         // Global object used by one widget
-        wpsolr_facets = new WPSOLR_Facets();
+        wpsolr_facets = new WPSOLR_Facets(jQuery(".wpsolr_remove_facets").data("wpsolr-facets_group_id"));
 
         jQuery(".wpsolr_remove_facets").on("click", function (event) {
 

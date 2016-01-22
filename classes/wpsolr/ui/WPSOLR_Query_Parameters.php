@@ -19,6 +19,7 @@ class WPSOLR_Query_Parameters {
 	const SEARCH_PARAMETER_FQ = 'wpsolr_fq';
 	const SEARCH_PARAMETER_PAGE = 'wpsolr_page';
 	const SEARCH_PARAMETER_SORT = 'wpsolr_sort';
+	const SEARCH_PARAMETER_FACETS_GROUP = 'wpsolr_facets_group';
 
 	/**
 	 * Copy url parameters to query.
@@ -39,6 +40,10 @@ class WPSOLR_Query_Parameters {
 
 		if ( isset( $url_parameters[ WPSOLR_Query_Parameters::SEARCH_PARAMETER_SORT ] ) ) {
 			$wpsolr_query->set_wpsolr_sort( $url_parameters[ WPSOLR_Query_Parameters::SEARCH_PARAMETER_SORT ] );
+		}
+
+		if ( isset( $url_parameters[ WPSOLR_Query_Parameters::SEARCH_PARAMETER_FACETS_GROUP ] ) ) {
+			$wpsolr_query->set_wpsolr_facets_groups_id( $url_parameters[ WPSOLR_Query_Parameters::SEARCH_PARAMETER_FACETS_GROUP ] );
 		}
 
 	}
@@ -164,6 +169,5 @@ class WPSOLR_Query_Parameters {
 
 		return add_query_arg( $_SERVER['QUERY_STRING'], '', home_url( $wp->request ) );
 	}
-
 
 }

@@ -58,7 +58,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
 					'layouts'                   => WPSOLR_Widget_Facet::get_facets_layouts(),
-					'default_facets_group_uuid' => WPSOLR_Global::getOption()->get_facets_group_default(),
+					'default_facets_group_uuid' => WPSOLR_Global::getOption()->get_default_facets_group_id(),
 					'new_facets_group_uuid'     => $new_facets_group_uuid,
 					'facets_groups'             => array_merge(
 						WPSOLR_Global::getOption()->get_facets_groups(),
@@ -84,15 +84,15 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	/**
 	 * Get facets of a facets group
 	 *
-	 * @param string $facets_group Group of facets
+	 * @param string $facets_group_id Group of facets
 	 *
 	 * @return array Facets of the group
 	 */
-	public function get_facets_from_group( $facets_group ) {
+	public function get_facets_from_group( $facets_group_id ) {
 
 		$facets_groups = WPSOLR_Global::getOption()->get_facets_selected_array();
 
-		return ! empty( $facets_groups[ $facets_group ] ) ? $facets_groups[ $facets_group ] : [ ];
+		return ! empty( $facets_groups[ $facets_group_id ] ) ? $facets_groups[ $facets_group_id ] : [ ];
 	}
 
 
@@ -103,7 +103,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_facets_from_default_group() {
 
-		$default_facets_group_id = WPSOLR_Global::getOption()->get_facets_group_default();
+		$default_facets_group_id = WPSOLR_Global::getOption()->get_default_facets_group_id();
 
 		if ( ! empty( $default_facets_group_id ) ) {
 			return $this->get_facets_from_group( $default_facets_group_id );

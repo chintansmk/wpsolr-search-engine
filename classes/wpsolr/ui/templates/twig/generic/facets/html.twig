@@ -14,6 +14,7 @@
     <ul>
         <li>
             <a {# Do not remove id "wpsolr_remove_facets". It is used as JQuery selector. You can override it's CSS however. #}
+                    data-wpsolr-facets_group_id="{{ facets_group_id }}"
                     class="wpsolr_remove_facets wpsolr_facet_checkbox {{ not facets.has_facet_elements_selected ? "checked" : "" }}" {# Do not remove class "select_opt". It is used as JQuery selector. You can override it's CSS however. #}
                     href="javascript:;"
             >
