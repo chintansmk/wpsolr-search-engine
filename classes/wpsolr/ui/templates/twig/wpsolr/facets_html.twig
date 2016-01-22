@@ -8,8 +8,7 @@
 
     <div class='wdm_ul' id='wpsolr_section_facets'>
 
-        <div class='select_opt {{ facet_class }} {{ not facets.has_facet_elements_selected ? "checked" : "" }}'
-             id='wpsolr_remove_facets'>{{ facets_element_all_results }}
+        <div class='wpsolr_remove_facets {{ facet_class }} {{ not facets.has_facet_elements_selected ? "checked" : "" }}'>{{ facets_element_all_results }}
         </div>
 
         {% for facet in facets.facets %} {# Loop on facets #}

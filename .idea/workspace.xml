@@ -5,10 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab468aab-fb21-4977-b005-a2c5caca8c3b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/9c/9cecb6f6a25d9ce8926b64e849fd23dac61c8c7d7486c832a68b7aafeb388c4e.php" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/9c/9cecb6f6a25d9ce8926b64e849fd23dac61c8c7d7486c832a68b7aafeb388c4e.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/d8/d85ffaea16d320a4b4fb07a56ef73610429fd60afce6d6ed9c82003f99c5aeaa.php" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/d8/d85ffaea16d320a4b4fb07a56ef73610429fd60afce6d6ed9c82003f99c5aeaa.php" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/09/099feeaf1f0aa1215b744be419894b41f9023678926e830e79403eb14d907b14.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/0f/0f8cc2ab844902ef587f8417e8587f663856e8d2c5a4c112f2d81ff9489eb609.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/19/1931263be0118221b753c1ea9935924965f393398c2433f3557915b89ed41741.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/23/2354324b6e97826b5a2743a72677a171bf9cd2249e5bae30b0a47e6730321d4b.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/3d/3d0b5def340654f0dbe4eb7b138247428a59d3d99125bb4daba12e83b9ede8dc.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/48/485c25a22a0c26ef25a1ee11c3f76696deb6711278ca78c9a75e276479bb9455.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/77/77eca0c14440b8fd0c16e9316679667bbbed5a1c9d72e163c1d9266b724d1361.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/92/92804e3dae4732d8f0159d2b4758179d450004d7e5fcc200f870b727931a4f13.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/93/93979f70e771c242daf37fc8cd3e4c291680b15f4e82fe1da4752ed1c6c33c77.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/9b/9b689dd08005e8e1d694de20c26616b5cfb15919ef70a9bb8dfbac0a9389e1cf.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/9c/9cecb6f6a25d9ce8926b64e849fd23dac61c8c7d7486c832a68b7aafeb388c4e.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/a5/a511ee6a9fa538aefea6eaacbfd853e8f58225e79a99e232a67b88fe520cf648.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/a8/a81bdddff1909ed87638ac22c1ee79b165f5b1a3300bd0c2b7fd091c6270a9fa.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/b1/b19ee649e4f52bab5312142048448215094a13801e2ef1ba3a8a293c169596f4.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/d5/d50948a368c623f313f6adc015de9018b032e329dc83634fed4c58b8a9f54a3e.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/d8/d85ffaea16d320a4b4fb07a56ef73610429fd60afce6d6ed9c82003f99c5aeaa.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/df/dfa736201aa5502c4288b0a8a628201d4226fca0cb2c2056f284d0443a7a574e.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/e3/e3be963326e964dd87be5bebe241ecfebea0dfd80725b131ceec6e1f86aad692.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/e9/e96416af8b5a4055e838fee5efb3bd80d671bf270230405c7259f8fe9c2fa701.php" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/cache/f4/f4528a6944afcb3cfaf8f102a6c79778d3ff177b1dbf9451f5c95083489ec4f5.php" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/html.twig" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/html.twig" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/js.twig" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/js.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/radiobox/js.twig" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/radiobox/js.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/old_facets_html.twig" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/old_facets_html.twig" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/wpsolr/facets_html.twig" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/wpsolr/facets_html.twig" />
     </list>
     <ignored path="wpsolr-search-engine.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -65,7 +88,37 @@
         <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/js.twig">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.47368422">
-              <caret line="119" column="45" selection-start-line="119" selection-start-column="45" selection-end-line="119" selection-end-column="45" />
+              <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="js.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.56">
+              <caret line="4" column="78" selection-start-line="4" selection-start-column="70" selection-end-line="4" selection-end-column="78" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="js.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/radiobox/js.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.56">
+              <caret line="4" column="70" selection-start-line="4" selection-start-column="70" selection-end-line="4" selection-end-column="70" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="old_facets_html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/old_facets_html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-7.68">
+              <caret line="12" column="15" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="15" />
               <folding />
             </state>
           </provider>
@@ -74,18 +127,18 @@
       <file leaf-file-name="html.twig" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.24">
-              <caret line="16" column="48" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
+            <state vertical-scroll-proportion="-10.88">
+              <caret line="17" column="36" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="html.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/html.twig">
+        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/checkbox/html.twig">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-4.8653846">
-              <caret line="23" column="96" selection-start-line="23" selection-start-column="76" selection-end-line="23" selection-end-column="96" />
+            <state vertical-scroll-proportion="-14.08">
+              <caret line="22" column="51" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -99,36 +152,6 @@
               <folding>
                 <element signature="e#29#74#0#PHP" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="js.twig" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.32">
-              <caret line="13" column="11" selection-start-line="3" selection-start-column="1" selection-end-line="13" selection-end-column="11" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="autocomplete_solr.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/autocomplete_solr.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-24.0">
-              <caret line="153" column="57" selection-start-line="153" selection-start-column="44" selection-end-line="153" selection-end-column="57" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="url.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bower_components/jsurl/url.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -166,8 +189,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/classes/wpsolr/extensions/WPSOLR_Extensions.php" />
-        <option value="$PROJECT_DIR$/wpsolr_search_engine.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/WPSOLR_Schema.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/solr/WPSOLR_Field.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/solr/WPSOLR_Schema.php" />
@@ -212,10 +233,12 @@
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/css.twig" />
         <option value="$PROJECT_DIR$/classes/wpsolr/solr/WPSOLR_SearchSolrClient.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/html.twig" />
-        <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/radiobox/js.twig" />
-        <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Data_Facets.php" />
+        <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/wpsolr/facets_html.twig" />
+        <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/old_facets_html.twig" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/html.twig" />
+        <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig" />
+        <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/radiobox/js.twig" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/js.twig" />
       </list>
     </option>
@@ -1114,6 +1137,114 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="range" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpsolr-search-engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="htdocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wp-content" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpsolr-search-engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="classes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpsolr" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="twig" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="generic" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="facets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="radiobox" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpsolr-search-engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="htdocs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wp-content" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="plugins" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpsolr-search-engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="classes" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wpsolr" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ui" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="twig" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="generic" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="facets" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="checkbox" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -2102,20 +2233,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/js/dashboard.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.39937758">
-          <caret line="122" column="25" selection-start-line="122" selection-start-column="25" selection-end-line="122" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/extensions/indexes/admin_options.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="3.6123536">
-          <caret line="217" column="68" selection-start-line="217" selection-start-column="42" selection-end-line="217" selection-end-column="68" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/extensions/fields/admin_options.inc.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3919063">
@@ -2419,14 +2536,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/checkbox/html.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.37486687">
-          <caret line="22" column="51" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="51" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/css.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.23855165">
@@ -2443,34 +2552,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/bower_components/jsurl/url.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/checkbox/js.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2857143">
           <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/radiobox/js.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.12">
-          <caret line="8" column="0" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_UI_Facets.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -2485,6 +2570,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.40350878">
+          <caret line="23" column="96" selection-start-line="23" selection-start-column="76" selection-end-line="23" selection-end-column="96" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower_components/jsurl/url.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.5925926">
+          <caret line="10" column="6" selection-start-line="10" selection-start-column="6" selection-end-line="10" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/wpsolr/facets_html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39445302">
+          <caret line="16" column="51" selection-start-line="16" selection-start-column="51" selection-end-line="16" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/autocomplete_solr.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33230293">
+          <caret line="258" column="30" selection-start-line="258" selection-start-column="25" selection-end-line="258" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Data_Facets.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-16.32">
@@ -2495,34 +2612,50 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/html.twig">
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/checkbox/html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.8653846">
-          <caret line="23" column="96" selection-start-line="23" selection-start-column="76" selection-end-line="23" selection-end-column="96" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/autocomplete_solr.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-24.0">
-          <caret line="153" column="57" selection-start-line="153" selection-start-column="44" selection-end-line="153" selection-end-column="57" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.32">
-          <caret line="13" column="11" selection-start-line="3" selection-start-column="1" selection-end-line="13" selection-end-column="11" />
+        <state vertical-scroll-proportion="-14.08">
+          <caret line="22" column="51" selection-start-line="22" selection-start-column="23" selection-end-line="22" selection-end-column="51" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/html.twig">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.24">
-          <caret line="16" column="48" selection-start-line="16" selection-start-column="48" selection-end-line="16" selection-end-column="48" />
+        <state vertical-scroll-proportion="-10.88">
+          <caret line="17" column="36" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/old_facets_html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-7.68">
+          <caret line="12" column="15" selection-start-line="12" selection-start-column="15" selection-end-line="12" selection-end-column="15" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_UI_Facets.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/range/js.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.56">
+          <caret line="4" column="78" selection-start-line="4" selection-start-column="70" selection-end-line="4" selection-end-column="78" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/radiobox/js.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.56">
+          <caret line="4" column="70" selection-start-line="4" selection-start-column="70" selection-end-line="4" selection-end-column="70" />
           <folding />
         </state>
       </provider>
@@ -2530,7 +2663,7 @@
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/js.twig">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.47368422">
-          <caret line="119" column="45" selection-start-line="119" selection-start-column="45" selection-end-line="119" selection-end-column="45" />
+          <caret line="85" column="0" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
           <folding />
         </state>
       </provider>

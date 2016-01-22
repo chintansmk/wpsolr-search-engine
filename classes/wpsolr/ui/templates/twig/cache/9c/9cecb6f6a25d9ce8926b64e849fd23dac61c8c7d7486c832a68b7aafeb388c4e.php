@@ -55,7 +55,7 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
         echo (( !$this->getAttribute((isset($context["facets"]) ? $context["facets"] : null), "has_facet_elements_selected", array())) ? ("checked") : (""));
         echo "\" ";
         // line 18
-        echo "                    href=\"#wpsolr_facets\"
+        echo "                    href=\"javascript:;\"
             >
                 ";
         // line 20
@@ -148,7 +148,7 @@ class __TwigTemplate_7fda6c18c72d5f02e4d6bf407812736a77bde8f3d81c831d570f53b09fd
 /*         <li>*/
 /*             <a {# Do not remove id "wpsolr_remove_facets". It is used as JQuery selector. You can override it's CSS however. #}*/
 /*                     class="wpsolr_remove_facets wpsolr_facet_checkbox {{ not facets.has_facet_elements_selected ? "checked" : "" }}" {# Do not remove class "select_opt". It is used as JQuery selector. You can override it's CSS however. #}*/
-/*                     href="#wpsolr_facets"*/
+/*                     href="javascript:;"*/
 /*             >*/
 /*                 {{ facets_element_all_results }}*/
 /*             </a>*/
