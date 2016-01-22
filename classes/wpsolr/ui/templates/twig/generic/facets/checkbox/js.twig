@@ -1,13 +1,18 @@
 <script>
     jQuery(document).ready(function () {
 
+        // Init facets
+        jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}.checked").each(function () {
+            var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
+            wpsolr_facets.addFacetValue(facet); // add facet to facets
+        });
+
         jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").on("click", function (event) {
 
             jQuery(this).toggleClass("{{ facet_selected_class }}"); {# check/uncheck clicked facet #}
 
             {# Update url #}
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
-            //wpsolr_facets.removeFacetValue(facet); // remove all other values
             wpsolr_facets.addFacetValue(facet); // add facet to facets
             wpsolr_facets.create_url();
         });

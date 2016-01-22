@@ -24,7 +24,7 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
         this.facets = {};
         this.facets.field = [];
         this.facets.range = [];
-        //this.extractUrl();
+        //this.extractUrl(); // Done by the widget js calling this api
     };
 
     WPSOLR_Facets.prototype.is_pattern_range = function (parameter) {
@@ -68,11 +68,11 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
     };
 
 
-    WPSOLR_Facets.prototype.is_exist_facet_id = function (facets, facet) {
+    WPSOLR_Facets.prototype.is_exist_facet_id = function (facets, facet, is_compare_value) {
 
         for (var index = 0; index < facets.length; index++) {
             if (facets[index].facet_id == facet.facet_id) {
-                return true;
+                return !is_compare_value || (facets[index].facet_value == facet.facet_value);
             }
         }
 
@@ -108,14 +108,27 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
         this.debugState();
     }
 
+    WPSOLR_Facets.prototype.addFacetAnyValue = function (facets, facet) {
+        this.debug(\"add facet any\", facet);
+        this.debugState();
+
+
+        if (this.is_exist_facet_id(this.facets.field, facet, false)) {
+        }
+
+        // Add facet
+        facets.field.push(facet);
+
+        this.debugState();
+    };
+
     WPSOLR_Facets.prototype.addFacetValue = function (facet) {
         this.debug(\"add facet\", facet);
         this.debugState();
 
-        /*
-         if (!this.is_exist_facet_id(this.facets.field, facet)) {
-         this.facets.field.push(facet);
-         }*/
+
+        if (this.is_exist_facet_id(this.facets.field, facet, false)) {
+        }
 
         // Mono selection: Remove facet(s) with same id
         this.delete_facet_id(this.facets.field, facet);
@@ -209,7 +222,7 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*         this.facets = {};*/
 /*         this.facets.field = [];*/
 /*         this.facets.range = [];*/
-/*         //this.extractUrl();*/
+/*         //this.extractUrl(); // Done by the widget js calling this api*/
 /*     };*/
 /* */
 /*     WPSOLR_Facets.prototype.is_pattern_range = function (parameter) {*/
@@ -253,11 +266,11 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*     };*/
 /* */
 /* */
-/*     WPSOLR_Facets.prototype.is_exist_facet_id = function (facets, facet) {*/
+/*     WPSOLR_Facets.prototype.is_exist_facet_id = function (facets, facet, is_compare_value) {*/
 /* */
 /*         for (var index = 0; index < facets.length; index++) {*/
 /*             if (facets[index].facet_id == facet.facet_id) {*/
-/*                 return true;*/
+/*                 return !is_compare_value || (facets[index].facet_value == facet.facet_value);*/
 /*             }*/
 /*         }*/
 /* */
@@ -293,14 +306,27 @@ class __TwigTemplate_8fc61a5a79c1f4a36462a5105c7c3f6c8f7d7bcef1a14a16a6d7ca8415d
 /*         this.debugState();*/
 /*     }*/
 /* */
+/*     WPSOLR_Facets.prototype.addFacetAnyValue = function (facets, facet) {*/
+/*         this.debug("add facet any", facet);*/
+/*         this.debugState();*/
+/* */
+/* */
+/*         if (this.is_exist_facet_id(this.facets.field, facet, false)) {*/
+/*         }*/
+/* */
+/*         // Add facet*/
+/*         facets.field.push(facet);*/
+/* */
+/*         this.debugState();*/
+/*     };*/
+/* */
 /*     WPSOLR_Facets.prototype.addFacetValue = function (facet) {*/
 /*         this.debug("add facet", facet);*/
 /*         this.debugState();*/
 /* */
-/*         /**/
-/*          if (!this.is_exist_facet_id(this.facets.field, facet)) {*/
-/*          this.facets.field.push(facet);*/
-/*          }*//* */
+/* */
+/*         if (this.is_exist_facet_id(this.facets.field, facet, false)) {*/
+/*         }*/
 /* */
 /*         // Mono selection: Remove facet(s) with same id*/
 /*         this.delete_facet_id(this.facets.field, facet);*/
