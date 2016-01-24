@@ -174,7 +174,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				<?php } ?>
 			</select>
 		</p>
-		
+
 		<?php
 	}
 

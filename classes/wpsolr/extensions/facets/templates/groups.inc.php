@@ -127,7 +127,7 @@ use wpsolr\utilities\WPSOLR_Option;
 			<div class="wdm_row">
 				<div class='col_left'>Group filter</div>
 				<div class='col_right'>
-					<input type="text"
+					<input type="text" style="width: 100%"
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][<?php echo WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY; ?>]"
 					       value="<?php echo ! empty( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) ? $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] : ''; ?>"/>
 					<!--<input name="create_group" value="Clone the group"/>-->
