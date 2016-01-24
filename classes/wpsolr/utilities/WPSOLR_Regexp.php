@@ -2,6 +2,8 @@
 
 namespace wpsolr\utilities;
 
+use wpsolr\exceptions\WPSOLR_Exception;
+
 
 /**
  * Common Regexp expressions used in WPSOLR.
@@ -55,6 +57,52 @@ class WPSOLR_Regexp {
 
 		return $results;
 
+	}
+
+	/**
+	 * Split a text containing lines in an array
+	 * @see http://stackoverflow.com/questions/1483497/how-to-put-string-in-array-split-by-new-line
+	 *
+	 * @param $text_with_lines
+	 *
+	 * @return array
+	 */
+	static function split_lines( $text_with_lines ) {
+
+		return preg_split( "/(\r\n|\n|\r)/", $text_with_lines );
+	}
+
+
+	/**
+	 * Match a text with lines of regexp expressions
+	 *
+	 *
+	 * @param $regexp_lines Lines of regexp
+	 * @param $text Text to match
+	 *
+	 * @return bool True if at least one regexp matches the text
+	 * @throws WPSOLR_Exception
+	 */
+	static function preg_match_lines_of_regexp( $regexp_lines, $text ) {
+
+		foreach ( self::split_lines( $regexp_lines ) as $regexp_line ) { // loop on each line
+
+			// Is the text match with the regexp line ?
+			// @is used to suppress the annoying warning if regexp is in syntax error
+			$preg_line_match = @preg_match( $regexp_line, $text, $line_matches );
+			if ( $preg_line_match === false ) {
+				// regexp syntax error: no url is authorized
+				throw new WPSOLR_Exception( sprintf( 'Invalid Regexp \'%s\'.', $regexp_line ) );
+			}
+
+			if ( $line_matches != null ) {
+				// This line matched: stop with success
+				return true;
+			};
+		}
+
+		// No lines matched
+		return false;
 	}
 
 }

@@ -99,4 +99,89 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 		}
 
 	}
+
+	public function test_split_lines() {
+
+		$this->assertEquals(
+			[ '' ],
+			WPSOLR_Regexp::split_lines( '' )
+		);
+
+		$this->assertEquals(
+			[ 'one line' ],
+			WPSOLR_Regexp::split_lines( 'one line' )
+		);
+
+		foreach ( [ "\n", "\r", "\r\n" ] as $new_line_char ) {
+
+			// One line ending with newline
+			$this->assertEquals(
+				[ 'line 1', '' ],
+				WPSOLR_Regexp::split_lines( "line 1{$new_line_char}" )
+			);
+
+			// One line beginning with newline
+			$this->assertEquals(
+				[ '', 'line 1' ],
+				WPSOLR_Regexp::split_lines( "{$new_line_char}line 1" )
+			);
+
+			// 2 lines
+			$this->assertEquals(
+				[ 'line 1', 'line 2' ],
+				WPSOLR_Regexp::split_lines( "line 1{$new_line_char}line 2" )
+			);
+
+		}
+
+	}
+
+
+	public function test_preg_match_limes() {
+
+		foreach ( [ "\n", "\r", "\r\n" ] as $new_line_char ) {
+
+			// One regep line: true
+			$this->assertTrue(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/", "1" )
+			);
+
+			// One regep line: false
+			$this->assertFalse(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/", "2" )
+			);
+
+			// 2 regep lines: matches on 1st regexp
+			$this->assertTrue(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/{$new_line_char}/2/", "1" )
+			);
+
+			// 2 regep lines: matches on 2nd regexp
+			$this->assertTrue(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/{$new_line_char}/2/", "2" )
+			);
+
+			// 2 regep lines: matches on 2nd regexp
+			$this->assertTrue(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/{$new_line_char}/2/{$new_line_char}", "2" )
+			);
+
+			// 2 regep lines: no match
+			$this->assertFalse(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/{$new_line_char}/2/", "3" )
+			);
+
+		}
+	}
+
+	/**
+	 * @expectedException WPSOLR_Exception
+	 * */
+	public function test_preg_match_limes_syntax_error() {
+
+		// regep syntax error should be trhrowing an exception
+		$this->assertTrue(
+			WPSOLR_Regexp::preg_match_lines_of_regexp( "1/", "1" )
+		);
+	}
 }

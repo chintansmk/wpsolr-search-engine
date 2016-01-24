@@ -5,6 +5,7 @@ namespace wpsolr\ui\widget;
 use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\ui\WPSOLR_Query_Parameters;
 use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\utilities\WPSOLR_Regexp;
 
 
 /**
@@ -211,7 +212,9 @@ class WPSOLR_Widget extends \WP_Widget {
 
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
+			       name="<?php echo $this->get_field_name( 'title' ); ?>" type="text"
+			       value="<?php echo esc_attr( $title ); ?>">
 		</p>
 		<p>
 			Use layout:
@@ -537,27 +540,15 @@ class WPSOLR_Widget extends \WP_Widget {
 	 */
 	protected function wpsolr_url_is_authorized( $instance ) {
 
-		$url_regexp = $this->wpsolr_get_instance_url_regexp( $instance );
+		$url_regexp_lines = $this->wpsolr_get_instance_url_regexp( $instance );
 
-		if ( $url_regexp == null ) {
+		if ( $url_regexp_lines == null ) {
 			// No url regexp defined on the widget: all url are authorized.
 			return true;
 		}
 
-		$url = WPSOLR_Query_Parameters::get_current_page_url();
-
-		// Is the url found in the regexp ?
-		// @is used to suppress the annoying warning if regexp is in syntax error
-		$preg_match = @preg_match( $url_regexp, $url, $matches );
-
-
-		if ( $preg_match === false ) {
-			// regexp syntax error: no url is authorized
-			throw new WPSOLR_Exception( sprintf( 'Invalid Regexp \'%s\'.', $url_regexp ) );
-		}
-
-		// Authorized url if regex matched
-		return ( $matches != null );
+		// Is current url matching one of the regexp lines ?
+		return WPSOLR_Regexp::preg_match_lines_of_regexp( $url_regexp_lines, WPSOLR_Query_Parameters::get_current_page_url() );
 	}
 
 	/**
