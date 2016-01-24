@@ -162,10 +162,6 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		// Add facets group selection
 		$facets_group_id = ! empty( $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] : '';
 		$facets_groups   = WPSOLR_Global::getOption()->get_facets_groups();
-
-		// Add solr additional query to the facets
-		$solr_query_parameters = ! empty( $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] ) ? $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] : '';
-
 		?>
 
 		<p>
@@ -178,14 +174,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				<?php } ?>
 			</select>
 		</p>
-
-		<p>
-			Restrict facets results by adding your own Solr query:
-			<textarea rows="3" class="widefat"
-			          id="<?php echo $this->get_field_id( self::FORM_FIELD_SOLR_QUERY_PARAMETERS ); ?>"
-			          name="<?php echo $this->get_field_name( self::FORM_FIELD_SOLR_QUERY_PARAMETERS ); ?>"><?php echo $solr_query_parameters; ?></textarea>
-		</p>
-
+		
 		<?php
 	}
 
