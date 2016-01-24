@@ -58,13 +58,14 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
 					'layouts'                   => WPSOLR_Widget_Facet::get_facets_layouts(),
-					'default_facets_group_uuid' => WPSOLR_Global::getOption()->get_default_facets_group_id(),
+					'default_facets_group_uuid' => $this->get_default_facets_group_id(),
 					'new_facets_group_uuid'     => $new_facets_group_uuid,
 					'facets_groups'             => array_merge(
 						WPSOLR_Global::getOption()->get_facets_groups(),
 						[
 							$new_facets_group_uuid => [
-								'name' => 'New group'
+								'name'                                          => 'New group',
+								WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY => ''
 							]
 						] ),
 					'facets_selected'           => WPSOLR_Global::getOption()->get_facets_selected_array(),
@@ -107,6 +108,65 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 		if ( ! empty( $default_facets_group_id ) ) {
 			return $this->get_facets_from_group( $default_facets_group_id );
+		}
+
+		return [ ];
+	}
+
+	/**
+	 * Get facets group
+	 *
+	 * @@param string $facets_group_id
+	 * @return array Facets group
+	 */
+	public function get_facets_group( $facets_group_id ) {
+
+		$facets_groups = WPSOLR_Global::getOption()->get_facets_groups();
+
+		if ( ! empty( $facets_group_id ) && ! empty( $facets_groups ) && ! empty( $facets_groups[ $facets_group_id ] ) ) {
+			return $facets_groups[ $facets_group_id ];
+		}
+
+		return [ ];
+	}
+
+	/**
+	 * Get facets group filter query
+	 *
+	 * @@param string $facets_group_id
+	 * @return string Facets group filter query
+	 */
+	public function get_facets_group_filter_query( $facets_group_id ) {
+
+		$facets_groups = $this->get_facets_group( $facets_group_id );
+
+		if ( ! empty( $facets_groups ) && ! empty( $facets_groups[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) ) {
+			return $facets_groups[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ];
+		}
+
+		return '';
+	}
+
+	/**
+	 * Get default facets group id
+	 *
+	 * @return string Default facets group id
+	 */
+	public function get_default_facets_group_id() {
+
+		return WPSOLR_Global::getOption()->get_default_facets_group_id();
+	}
+
+	/**
+	 * Get default facets group
+	 *
+	 * @return array Default facets group
+	 */
+	public function get_default_facets_group() {
+
+		$default_facets_group_id = $this->get_default_facets_group_id();
+		if ( ! empty( $default_facets_group_id ) ) {
+			return $this->get_facets_group( $default_facets_group_id );
 		}
 
 		return [ ];

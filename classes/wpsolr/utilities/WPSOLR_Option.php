@@ -357,6 +357,7 @@ class WPSOLR_Option {
 	const OPTION_FACETS_FACETS = 'facets';
 	const OPTION_FACETS_GROUPS = 'facets_groups';
 	const OPTION_FACETS_GROUP_DEFAULT_ID = 'facets_group_default_id';
+	const OPTION_FACETS_GROUP_FILTER_QUERY = 'filter_query';
 
 	/**
 	 * Get facet options array

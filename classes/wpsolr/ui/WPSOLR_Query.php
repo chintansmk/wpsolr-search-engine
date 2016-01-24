@@ -236,13 +236,20 @@ class WPSOLR_Query extends \WP_Query {
 
 		// Add facets from url group or default group of facets
 		$facets_group_id = $this->get_wpsolr_facets_groups_id();
-		if ( ! empty( $facets_group_id ) ) {
-			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
-		} else {
-			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_default_group();
+		if ( empty( $facets_group_id ) ) {
+
+			$facets_group_id = WPSOLR_Global::getExtensionFacets()->get_default_facets_group_id();
+			$this->set_wpsolr_facets_groups_id( $facets_group_id );
 		}
 
+		$facets_group_filter_query = WPSOLR_Global::getExtensionFacets()->get_facets_group_filter_query( $facets_group_id );
+		$facets               = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
+
+		// Add group facets to Solr filters
 		$this->set_wpsolr_facets_fields( $facets );
+
+		// Add Solr query fields from the group filter
+		$this->wpsolr_add_query_fields( $facets_group_filter_query );
 
 		$this->solr_client = WPSOLR_Global::getSolrClient();
 		$this->resultSet   = $this->solr_client->execute_wpsolr_query( $this );

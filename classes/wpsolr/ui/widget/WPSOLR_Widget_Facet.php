@@ -2,6 +2,7 @@
 
 namespace wpsolr\ui\widget;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\ui\widget;
 use wpsolr\ui\WPSOLR_Data_Facets;
@@ -212,7 +213,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				// Facets group of the widget
 				$facets_group_id = $this->wpsolr_get_instance_facets_group_id( $instance );
 				if ( empty( $facets_group_id ) ) {
-					throw new Exception( sptrinf( 'Select a facets group.' ) );
+					throw new WPSOLR_Exception( sptrinf( 'Select a facets group.' ) );
 				}
 			}
 			// Facets of the facets groups
@@ -221,7 +222,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			$wpsolr_query->set_wpsolr_facets_fields( $facets );
 
 			// Add Solr query fields from the Widget filter
-			$wpsolr_query->wpsolr_add_query_fields( $this->wpsolr_get_added_solr_query_parameters( $instance ) );
+			$wpsolr_query->wpsolr_add_query_fields( WPSOLR_Global::getExtensionFacets()->get_facets_group_filter_query( $facets_group_id ) );
 		} else {
 
 			// Facets of the group on the query url for a search url
@@ -236,8 +237,10 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			$facets_group_id, WPSOLR_Data_Facets::get_data(
 			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
 			$facets,
-			$results[1]
-		), WPSOLR_Localization::get_options(), $args, $instance, $this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
+			$results[1] ),
+			WPSOLR_Localization::get_options(),
+			$args,
+			$instance, $this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
 		);
 
 	}

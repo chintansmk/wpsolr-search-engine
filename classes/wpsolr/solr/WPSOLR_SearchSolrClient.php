@@ -8,6 +8,7 @@ use Solarium\QueryType\Select\Query\Query;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\ui\WPSOLR_Query;
 use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\utilities\WPSOLR_Regexp;
 use wpsolr\WPSOLR_Filters;
 
 class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
@@ -810,44 +811,51 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 			if ( ! empty( $filter_query_field ) ) {
 
-				$filter_query_field_array = explode( ':', $filter_query_field );
+				$matches = WPSOLR_Regexp::extract_filter_query( $filter_query_field );
+				foreach ( $matches as $match ) {
 
-				$filter_query_field_name  = strtolower( $filter_query_field_array[0] );
-				$filter_query_field_value = isset( $filter_query_field_array[1] ) ? $filter_query_field_array[1] : '';
+					$filter_query_field_array = explode( ':', $match );
+
+					$filter_query_field_name  = strtolower( $filter_query_field_array[0] );
+					$filter_query_field_value = isset( $filter_query_field_array[1] ) ? $filter_query_field_array[1] : '';
 
 
-				if ( ! empty( $filter_query_field_name ) && ! empty( $filter_query_field_value ) ) {
+					if ( ! empty( $filter_query_field_name ) && ! empty( $filter_query_field_value ) ) {
 
-					// Retrieve field type
-					$field_definition = WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name );
+						// Retrieve field type
+						$field_definition = WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name );
 
-					if ( ! in_array( $filter_query_field_name, $special_fields ) ) {
-						// Add the solr type extension
-						$filter_query_field_name = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
-							$filter_query_field_name,
-							WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name )->get_dynamic_type()
-						);
+						$fac_fd = "$filter_query_field_name";
+						if ( ! in_array( $filter_query_field_name, $special_fields ) ) {
+							// Add the solr type extension
+							$fac_fd = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+								$filter_query_field_name,
+								WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name )->get_dynamic_type()
+							);
+						}
+
+						// In case the facet contains white space, we enclose it with "".
+						if ( ! $field_definition->get_is_range() ) {
+							$filter_query_field_value_escaped = "\"$filter_query_field_value\"";
+
+						} else {
+
+							// Create range [0 TO 10]
+							$filter_query_field_value_escaped = $filter_query_field_value;
+						}
+
+						$filter_query_field = str_replace( "$filter_query_field_name:$filter_query_field_value", "$fac_fd:$filter_query_field_value_escaped", $filter_query_field );
+
+						$test = $filter_query_field;
 					}
-
-					$fac_fd = "$filter_query_field_name";
-
-					// In case the facet contains white space, we enclose it with "".
-					if ( ! $field_definition->get_is_range() ) {
-						$filter_query_field_value_escaped = "\"$filter_query_field_value\"";
-
-					} else {
-
-						// Create range [0 TO 10]
-						$filter_query_field_value_escaped = $filter_query_field_value;
-					}
-
-					$solarium_query->addFilterQuery( array(
-						'key'   => "$fac_fd:$filter_query_field_value_escaped",
-						'query' => "$fac_fd:$filter_query_field_value_escaped",
-						'tag'   => "$fac_fd"
-					) );
-
 				}
+
+				$solarium_query->addFilterQuery( array(
+					'key'   => "$filter_query_field",
+					'query' => "$filter_query_field",
+					'tag'   => "$fac_fd"
+				) );
+
 			}
 		}
 	}
