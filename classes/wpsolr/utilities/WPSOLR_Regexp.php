@@ -44,6 +44,10 @@ class WPSOLR_Regexp {
 		// Negate all special caracters to get the 'field:value' array
 		preg_match_all( '/[^()|&!]+/', $text, $matches );
 
+		// https://lucene.apache.org/core/2_9_4/queryparsersyntax.html#Escaping Special Characters
+		// [+ - && || ! ( ) { } [ ] ^ " ~ * ? : \]
+		// To escape these character use the \
+
 		// Trim results
 		$results_with_some_empty_key = ! empty( $matches[0] ) ? array_map( 'trim', $matches[0] ) : [ ];
 
