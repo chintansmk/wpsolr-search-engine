@@ -13,6 +13,7 @@ use wpsolr\WPSOLR_Filters;
  */
 class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 
+
 	// Solr index properties
 	const INDEX_TYPE = 'index_type';
 	const MANAGED_SOLR_SERVICE_ID = 'managed_solr_service_id';
