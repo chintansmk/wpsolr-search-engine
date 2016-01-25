@@ -62,20 +62,6 @@
         return false;
     }
 
-    WPSOLR_Facets.prototype.delete_facet_id = function (facets, facet) {
-        this.debug("delete facet id", facet);
-        this.debugState();
-
-        var len = facets.length;
-        for (var index = 0; index < len; index++) {
-            if (facets[index].facet_id == facet.facet_id) {
-                facets.splice(index, 1);
-            }
-        }
-
-        this.debugState();
-    }
-
     WPSOLR_Facets.prototype.clear = function () {
         this.debug("clear", '');
         this.debugState();
@@ -95,12 +81,48 @@
         this.debug("add facet any", facet);
         this.debugState();
 
+        // Add facet
+        facets.push(facet);
 
-        if (this.is_exist_facet_id(this.facets.field, facet, false)) {
+        this.debugState();
+    };
+
+    WPSOLR_Facets.prototype.removeFacetAnyValue = function (facets, facet) {
+        this.debug("removeFacetAnyValue", facet);
+        this.debugState();
+
+        for (index = facets.length - 1; index >= 0; --index) {
+            if (facets[index].facet_id == facet.facet_id) {
+                if ((facet.facet_value == undefined) || (facets[index].facet_value == facet.facet_value)) {
+                    facets.splice(index, 1);
+                }
+            }
         }
 
-        // Add facet
-        facets.field.push(facet);
+        this.debugState();
+    };
+
+    WPSOLR_Facets.prototype.toggleFacetAnyValue = function (facets, facet) {
+        this.debug("toggleFacetAnyValue", facet);
+        this.debugState();
+
+        if (this.is_exist_facet_id(facets, facet, true)) {
+
+            this.removeFacetAnyValue(facets, facet);
+        } else {
+
+            this.addFacetAnyValue(facets, facet);
+        }
+
+
+        this.debugState();
+    };
+
+    WPSOLR_Facets.prototype.toggleFacetValue = function (facet) {
+        this.debug("toggleFacetValue", facet);
+        this.debugState();
+
+        this.toggleFacetAnyValue(this.facets.field, facet);
 
         this.debugState();
     };
@@ -109,15 +131,17 @@
         this.debug("add facet", facet);
         this.debugState();
 
+        this.addFacetAnyValue(this.facets.field, facet);
 
-        if (this.is_exist_facet_id(this.facets.field, facet, false)) {
-        }
+        this.debugState();
+    };
 
-        // Mono selection: Remove facet(s) with same id
-        this.delete_facet_id(this.facets.field, facet);
+    WPSOLR_Facets.prototype.removeFacetValue = function (facet) {
+        this.debug("removeFacetValue", facet);
+        this.debugState();
 
-        // Add facet
-        this.facets.field.push(facet);
+        this.removeFacetAnyValue(this.facets.field, facet);
+        this.removeFacetAnyValue(this.facets.range, facet);
 
         this.debugState();
     };
@@ -126,11 +150,8 @@
         this.debug("add facet range", facet);
         this.debugState();
 
-        // Mono selection: Remove facet(s) with same id
-        this.delete_facet_id(this.facets.range, facet);
-
         // Add facet
-        this.facets.range.push(facet);
+        this.addFacetAnyValue(this.facets.range, facet);
 
         this.debugState();
     };
@@ -145,6 +166,17 @@
         url1.query["s"] = url1.query["s"] || '';
 
         var fq_index = 0;
+
+        // delete all wpsolr_fq parameters
+        for (i = 0; ; i++) {
+            if (url1.query["wpsolr_fq" + "[" + i + "]"]) {
+                delete url1.query["wpsolr_fq" + "[" + i + "]"];
+                this.debug('delete from url', "wpsolr_fq" + "[" + i + "]");
+            } else {
+                break;
+            }
+        }
+
 
         // Add field parameters
         var facets = this.facets.field || [];

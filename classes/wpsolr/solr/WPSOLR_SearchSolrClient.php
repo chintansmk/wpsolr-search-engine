@@ -820,7 +820,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 					$filter_query_field_value = isset( $filter_query_field_array[1] ) ? $filter_query_field_array[1] : '';
 
 
-					if ( ! empty( $filter_query_field_name ) && ! empty( $filter_query_field_value ) ) {
+					if ( ! empty( $filter_query_field_name ) && ( ! empty( $filter_query_field_value ) || $filter_query_field_value === '0' ) ) {
 
 						// Retrieve field type
 						$field_definition = WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name );
@@ -845,8 +845,6 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 						}
 
 						$filter_query_field = str_replace( "$filter_query_field_name:$filter_query_field_value", "$fac_fd:$filter_query_field_value_escaped", $filter_query_field );
-
-						$test = $filter_query_field;
 					}
 				}
 

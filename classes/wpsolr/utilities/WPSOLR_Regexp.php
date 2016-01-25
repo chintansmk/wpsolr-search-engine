@@ -39,7 +39,7 @@ class WPSOLR_Regexp {
 	static function extract_filter_query( $text ) {
 
 		// Replace separator literals by a single special character. Much easier, because negate a literal is difficult with regexp.
-		$text = str_replace( [ 'AND', 'and', 'OR', 'or' ], '|', $text );
+		$text = str_replace( [ ' AND ', ' and ', ' OR ', ' or ' ], ' | ', $text );
 
 		// Negate all special caracters to get the 'field:value' array
 		preg_match_all( '/[^()|&!]+/', $text, $matches );
