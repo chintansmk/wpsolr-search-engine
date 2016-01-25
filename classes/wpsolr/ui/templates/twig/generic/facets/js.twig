@@ -52,14 +52,23 @@
 
 
     WPSOLR_Facets.prototype.is_exist_facet_id = function (facets, facet, is_compare_value) {
+        this.debug("is_exist_facet_id", facet);
+        this.debugState();
 
+        var result = false;
         for (var index = 0; index < facets.length; index++) {
             if (facets[index].facet_id == facet.facet_id) {
-                return !is_compare_value || (facets[index].facet_value == facet.facet_value);
+
+                if (!is_compare_value || (facets[index].facet_value == facet.facet_value)) {
+                    result = true;
+                    break;
+                }
             }
         }
 
-        return false;
+        this.debug("is_exist_facet_id found", result);
+
+        return result;
     }
 
     WPSOLR_Facets.prototype.clear = function () {
