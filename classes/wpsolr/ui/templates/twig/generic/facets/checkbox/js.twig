@@ -14,6 +14,7 @@
             {# Update url #}
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
             wpsolr_facets.toggleFacetValue(facet); // add facet element if selected
+            wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
             wpsolr_facets.create_url();
         });
 

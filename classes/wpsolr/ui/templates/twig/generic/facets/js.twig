@@ -4,6 +4,7 @@
         console.log("Facets constructor");
 
         this.groups_facet_id = groups_facet_id;
+        this.lastFacetSelected = {};
         this.facets = {};
         this.facets.field = [];
         this.facets.range = [];
@@ -165,6 +166,17 @@
         this.debugState();
     };
 
+
+    WPSOLR_Facets.prototype.updateLastFacetSelected = function (facet) {
+        this.debug("updateLastFacetSelected", facet);
+        this.debugState();
+
+        // Update
+        this.lastFacetSelected = facet;
+
+        this.debugState();
+    };
+
     WPSOLR_Facets.prototype.create_url = function () {
         this.debug("url", '');
         this.debugState();
@@ -203,6 +215,10 @@
 
 
         url1.query["wpsolr_facets_group"] = this.groups_facet_id;
+
+        // Last facet selected
+        url1.query["wpsolr_last_facet_selected"] = this.lastFacetSelected['facet_id'];
+
 
         this.url = url1.toString();
 
