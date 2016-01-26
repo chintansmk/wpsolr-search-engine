@@ -16,6 +16,15 @@ use wpsolr\utilities\WPSOLR_Option;
  */
 class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
+	// Facet labels
+	const FACET_FIELD_LABEL = 'label'; // Facet label
+	const FACET_FIELD_LABEL_FIRST = 'label_first'; // Label of the first label element
+	const FACET_FIELD_LABEL_LAST = 'label_last'; // Label of the last label element
+
+	// Facet labels templates
+	const FACET_LABEL_TEMPLATE = '%s (%s)';
+	const FACET_LABEL_TEMPLATE_RANGE = '%s - %s (%s)';
+
 	// Facet sort
 	const FACET_FIELD_SORT = 'sort';
 	const FACET_SORT_ALPHABETICAL = 'index';
@@ -234,5 +243,32 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_is_facet_in_exclusion_tag( $facet ) {
 		return isset( $facet[ self::FACET_FIELD_IS_EXCLUSION ] );
+	}
+
+	/**
+	 * Get label of a facet element
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_label( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_LABEL ] ) ? $facet[ self::FACET_FIELD_LABEL ] : '';
+	}
+
+	/**
+	 * Get label of a facet first element
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_label_first( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_LABEL_FIRST ] ) ? $facet[ self::FACET_FIELD_LABEL_FIRST ] : '';
+	}
+
+	/**
+	 * Get label of a facet last element
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_label_last( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_LABEL_LAST ] ) ? $facet[ self::FACET_FIELD_LABEL_LAST ] : '';
 	}
 }

@@ -6,6 +6,7 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\widget\WPSOLR_Widget_Facet;
+use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Regexp;
 use wpsolr\WPSOLR_Filters;
 
@@ -48,6 +49,10 @@ class WPSOLR_Data_Facets {
 					$facet_to_display_name = str_replace( '_', ' ', $facet_to_display_name );
 					$facet_to_display_name = ucfirst( $facet_to_display_name );
 
+					$facet_label_other = WPSOLR_Global::getExtensionFacets()->get_facet_label( $facet_to_display );
+					$facet_label_first = WPSOLR_Global::getExtensionFacets()->get_facet_label_first( $facet_to_display );
+					$facet_label_last  = WPSOLR_Global::getExtensionFacets()->get_facet_label_last( $facet_to_display );
+
 					$facet               = array();
 					$facet['items']      = array();
 					$facet['id']         = $facet_to_display_id;
@@ -59,7 +64,22 @@ class WPSOLR_Data_Facets {
 					$facet[ WPSOLR_Widget_Facet::LAYOUT_FIELD_TEMPLATE_CSS ]  = WPSOLR_Widget_Facet::wpsolr_get_layout_template_css( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
 					$facet[ WPSOLR_Widget_Facet::LAYOUT_FIELD_TEMPLATE_JS ]   = WPSOLR_Widget_Facet::wpsolr_get_layout_template_js( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
 
+					$loop      = 0;
+					$nb_facets = count( $facets_in_results[ $facet_to_display_id ] );
 					foreach ( $facets_in_results[ $facet_to_display_id ] as $facet_in_results ) {
+
+						$loop ++;
+
+						// Which facet template to use ?
+						$facet_label = $facet_label_other;
+						switch ( $loop ) {
+							case 1:
+								$facet_label = $facet_label_first;
+								break;
+							case $nb_facets:
+								$facet_label = $facet_label_last;
+								break;
+						}
 
 						$facet_value = $facet_in_results[0];
 						if ( isset( $facet['definition']['range'] ) ) {
@@ -81,6 +101,7 @@ class WPSOLR_Data_Facets {
 						if ( ! empty( $name ) || $name === '0' ) { // Only add facet if non blank name (it happens). '0' is authorized for ranges.
 
 							array_push( $facet['items'], array(
+								'label'    => $facet_label,
 								'name'     => $facet_in_results[0],
 								'count'    => $facet_in_results[1],
 								'selected' => $item_selected

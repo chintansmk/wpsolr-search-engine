@@ -18,7 +18,11 @@ $facet_sort              = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_S
 $facet_min_count         = ! empty( $facet['min_count'] ) ? $facet['min_count'] : '1';
 $facet_is_exclusion_tag  = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_IS_EXCLUSION ] );
 $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] : '0';
-
+$facet_label             = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL ] )
+	? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL ]
+	: ( $is_range ? WPSOLR_Options_Facets::FACET_LABEL_TEMPLATE_RANGE : WPSOLR_Options_Facets::FACET_LABEL_TEMPLATE );
+$facet_label_first       = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST ] : $facet_label;
+$facet_label_last        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST ] : $facet_label;
 ?>
 
 <li class='facets <?php echo $facet_selected_class; ?>'>
@@ -73,13 +77,43 @@ $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] 
 
 		<div class="wdm_row">
 			<div class='col_left'>
+				Facet element template
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL; ?>]'
+				       value='<?php echo $facet_label; ?>'/>
+			</div>
+		</div>
+		<div class="wdm_row">
+			<div class='col_left'>
+				First facet element template
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST; ?>]'
+				       value='<?php echo $facet_label_first; ?>'/>
+			</div>
+		</div>
+		<div class="wdm_row">
+			<div class='col_left'>
+				Last facet element template
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST; ?>]'
+				       value='<?php echo $facet_label_last; ?>'/>
+			</div>
+		</div>
+
+		<div class="wdm_row">
+			<div class='col_left'>
 				Show if count greater or equal than
 			</div>
 			<div class='col_right'>
 				<input type='text'
 				       name='<?php echo $facet_option_array_name; ?>[min_count]'
 				       value='<?php echo $facet_min_count; ?>'/>
-
 			</div>
 		</div>
 		<div class="wdm_row">
