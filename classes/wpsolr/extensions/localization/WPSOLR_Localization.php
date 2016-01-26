@@ -2,8 +2,8 @@
 
 namespace wpsolr\extensions\localization;
 
+use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\WPSOLR_Extensions;
-use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\utilities\WPSOLR_Global;
 
 /**
@@ -48,29 +48,29 @@ class WPSOLR_Localization extends WPSOLR_Extensions {
 			/* Localization terms */
 			self::TERMS           => array(
 				/* Search Form */
-				'search_form_button_label'                                 => _x( 'Search', 'Search form button label', 'wpsolr' ),
-				'search_form_edit_placeholder'                             => _x( 'Search ....', 'Search edit placeholder', 'wpsolr' ),
-				'sort_header'                                              => _x( 'Sort by', 'Sort list header', 'wpsolr' ),
+				'search_form_button_label'                              => _x( 'Search', 'Search form button label', 'wpsolr' ),
+				'search_form_edit_placeholder'                          => _x( 'Search ....', 'Search edit placeholder', 'wpsolr' ),
+				'sort_header'                                           => _x( 'Sort by', 'Sort list header', 'wpsolr' ),
 				/* Sort */
-				WPSOLR_SearchSolrClient::SORT_CODE_BY_RELEVANCY_DESC       => _x( 'More relevant', 'Sort list element', 'wpsolr' ),
-				WPSOLR_SearchSolrClient::SORT_CODE_BY_DATE_ASC             => _x( 'Oldest', 'Sort list element', 'wpsolr' ),
-				WPSOLR_SearchSolrClient::SORT_CODE_BY_DATE_DESC            => _x( 'Newest', 'Sort list element', 'wpsolr' ),
-				WPSOLR_SearchSolrClient::SORT_CODE_BY_NUMBER_COMMENTS_ASC  => _x( 'The more commented', 'Sort list element', 'wpsolr' ),
-				WPSOLR_SearchSolrClient::SORT_CODE_BY_NUMBER_COMMENTS_DESC => _x( 'The least commented', 'Sort list element', 'wpsolr' ),
-				'facets_header'                                            => _x( 'Filters', 'Facets list header', 'wpsolr' ),
+				WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC       => _x( 'More relevant', 'Sort list element', 'wpsolr' ),
+				WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_ASC             => _x( 'Oldest', 'Sort list element', 'wpsolr' ),
+				WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_DESC            => _x( 'Newest', 'Sort list element', 'wpsolr' ),
+				WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_ASC  => _x( 'The more commented', 'Sort list element', 'wpsolr' ),
+				WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_DESC => _x( 'The least commented', 'Sort list element', 'wpsolr' ),
+				'facets_header'                                         => _x( 'Filters', 'Facets list header', 'wpsolr' ),
 				/* Facets */
-				'facets_title'                                             => _x( 'By %s', 'Facets list title', 'wpsolr' ),
-				'facets_element_all_results'                               => _x( 'All results', 'Facets list element all results', 'wpsolr' ),
-				'facets_element'                                           => _x( '%s (%d)', 'Facets list element name with #results', 'wpsolr' ),
+				'facets_title'                                          => _x( 'By %s', 'Facets list title', 'wpsolr' ),
+				'facets_element_all_results'                            => _x( 'All results', 'Facets list element all results', 'wpsolr' ),
+				'facets_element'                                        => _x( '%s (%d)', 'Facets list element name with #results', 'wpsolr' ),
 				/* Results header */
-				'results_header_did_you_mean'                              => _x( 'Did you mean: %s', 'Results header: did you mean ?', 'wpsolr' ),
-				'results_header_pagination_numbers'                        => _x( 'Showing %d to %d results out of %d', 'Results header: pagination numbers', 'wpsolr' ),
-				'results_header_no_results_found'                          => _x( 'No results found for %s', 'Results header: no results found', 'wpsolr' ),
-				'results_row_by_author'                                    => _x( 'By %s', 'Result row information box: by author', 'wpsolr' ),
-				'results_row_in_category'                                  => _x( ', in %s', 'Result row information box: in category', 'wpsolr' ),
-				'results_row_on_date'                                      => _x( ', on %s', 'Result row information box: on date', 'wpsolr' ),
-				'results_row_number_comments'                              => _x( ', %d comments', 'Result row information box: number of comments', 'wpsolr' ),
-				'infinitescroll_loading'                                   => _x( 'Loading ...', 'Text displayed while infinite scroll is loading next page of results', 'wpsolr' ),
+				'results_header_did_you_mean'                           => _x( 'Did you mean: %s', 'Results header: did you mean ?', 'wpsolr' ),
+				'results_header_pagination_numbers'                     => _x( 'Showing %d to %d results out of %d', 'Results header: pagination numbers', 'wpsolr' ),
+				'results_header_no_results_found'                       => _x( 'No results found for %s', 'Results header: no results found', 'wpsolr' ),
+				'results_row_by_author'                                 => _x( 'By %s', 'Result row information box: by author', 'wpsolr' ),
+				'results_row_in_category'                               => _x( ', in %s', 'Result row information box: in category', 'wpsolr' ),
+				'results_row_on_date'                                   => _x( ', on %s', 'Result row information box: on date', 'wpsolr' ),
+				'results_row_number_comments'                           => _x( ', %d comments', 'Result row information box: number of comments', 'wpsolr' ),
+				'infinitescroll_loading'                                => _x( 'Loading ...', 'Text displayed while infinite scroll is loading next page of results', 'wpsolr' ),
 			)
 		);
 	}
@@ -94,12 +94,12 @@ class WPSOLR_Localization extends WPSOLR_Extensions {
 			'Sort list box'              =>
 				array(
 					self::KEY_SECTION_TERMS => array(
-						'sort_header'                                              => array( 'Sort list header' ),
-						WPSOLR_SearchSolrClient::SORT_CODE_BY_RELEVANCY_DESC       => array( 'Sort list element' ),
-						WPSOLR_SearchSolrClient::SORT_CODE_BY_DATE_ASC             => array( 'Sort list element' ),
-						WPSOLR_SearchSolrClient::SORT_CODE_BY_DATE_DESC            => array( 'Sort list element' ),
-						WPSOLR_SearchSolrClient::SORT_CODE_BY_NUMBER_COMMENTS_ASC  => array( 'Sort list element' ),
-						WPSOLR_SearchSolrClient::SORT_CODE_BY_NUMBER_COMMENTS_DESC => array( 'Sort list element' ),
+						'sort_header'                                           => array( 'Sort list header' ),
+						WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC       => array( 'Sort list element' ),
+						WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_ASC             => array( 'Sort list element' ),
+						WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_DESC            => array( 'Sort list element' ),
+						WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_ASC  => array( 'Sort list element' ),
+						WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_DESC => array( 'Sort list element' ),
 					)
 				),
 			'Facets box'                 =>

@@ -22,8 +22,8 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	const FACET_FIELD_LABEL_LAST = 'label_last'; // Label of the last label element
 
 	// Facet labels templates
-	const FACET_LABEL_TEMPLATE = '%s (%s)';
-	const FACET_LABEL_TEMPLATE_RANGE = '%s - %s (%s)';
+	const FACET_LABEL_TEMPLATE = '%1%s (%2%d)';
+	const FACET_LABEL_TEMPLATE_RANGE = '%1%s - %2%s (%3%d)';
 
 	// Facet sort
 	const FACET_FIELD_SORT = 'sort';

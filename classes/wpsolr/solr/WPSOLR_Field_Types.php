@@ -1,7 +1,6 @@
 <?php
 
 namespace wpsolr\solr;
-use wpsolr\utilities\WPSOLR_Global;
 
 
 /**
@@ -134,6 +133,28 @@ class WPSOLR_Field_Types {
 
 		return $this->get_field_type( $field_type['solr_type'] )->get_sanitized_value( $post, $field_name, $field_value );
 
+	}
+
+	/**
+	 * Return sortable fields among fields
+	 *
+	 * @param $fields
+	 *
+	 * @return array Sortable fields
+	 */
+	public function get_sortable( $fields ) {
+		$results = [ ];
+
+		foreach ( $fields as $field_name => $field ) {
+
+			if ( $this->solr_field_types[ $field['solr_type'] ]->get_is_range() ) {
+
+				$results[ $field_name ] = $field;;
+			}
+
+		}
+
+		return $results;
 	}
 
 }

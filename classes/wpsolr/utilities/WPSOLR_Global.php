@@ -9,6 +9,7 @@ use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
+use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\wpml\WPSOLR_Plugin_Wpml;
@@ -206,6 +207,13 @@ class WPSOLR_Global {
 	 */
 	public static function getSolariumHelper() {
 		return self::getObject( \Solarium\Core\Query\Helper::CLASS, \Solarium\Core\Query\Helper::CLASS );
+	}
+
+	/**
+	 * @return WPSOLR_Options_Sorts
+	 */
+	public static function getExtensionSorts() {
+		return self::getObject( WPSOLR_Extensions::OPTION_SORTS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_SORTS );
 	}
 
 }

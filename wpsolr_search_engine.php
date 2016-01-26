@@ -9,6 +9,7 @@
  */
 
 use wpsolr\extensions\localization\WPSOLR_Localization;
+use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\solr\WPSOLR_IndexSolrClient;
 use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\ui\widget\WPSOLR_Widget;
@@ -323,7 +324,7 @@ function my_enqueue() {
 			'SEARCH_PARAMETER_FQ'         => WPSOLR_Query_Parameters::SEARCH_PARAMETER_FQ,
 			'SEARCH_PARAMETER_SORT'       => WPSOLR_Query_Parameters::SEARCH_PARAMETER_SORT,
 			'SEARCH_PARAMETER_PAGE'       => WPSOLR_Query_Parameters::SEARCH_PARAMETER_PAGE,
-			'SORT_CODE_BY_RELEVANCY_DESC' => WPSOLR_SearchSolrClient::SORT_CODE_BY_RELEVANCY_DESC,
+			'SORT_CODE_BY_RELEVANCY_DESC' => WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC,
 		) );
 
 	/*

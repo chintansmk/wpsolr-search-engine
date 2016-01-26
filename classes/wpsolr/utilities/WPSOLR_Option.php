@@ -156,50 +156,6 @@ class WPSOLR_Option {
 	const OPTION_SHARED_IS_EXTENSION_ACTIVE = 'is_extension_active';
 	const OPTION_SHARED_SOLR_INDEX_INDICE = 'solr_index_indice';
 
-
-	/***************************************************************************************************************
-	 *
-	 * Sort by option and items
-	 *
-	 **************************************************************************************************************/
-	const OPTION_SORTBY = 'wdm_solr_sortby_data';
-	const OPTION_SORTBY_ITEM_DEFAULT = 'sort_default';
-	const OPTION_SORTBY_ITEM_ITEMS = 'sort';
-
-
-	/**
-	 * Get sortby options array
-	 * @return array
-	 */
-	public function get_option_sortby() {
-		return self::get_option( self::OPTION_SORTBY );
-	}
-
-	/**
-	 * Default sort by option
-	 * @return string
-	 */
-	public function get_sortby_default() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_SORTBY, self::OPTION_SORTBY_ITEM_DEFAULT, WPSOLR_SearchSolrClient::SORT_CODE_BY_RELEVANCY_DESC );
-	}
-
-	/**
-	 * Comma separated string of items selectable in sort by
-	 * @return string Items
-	 */
-	public function get_sortby_items() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_SORTBY, self::OPTION_SORTBY_ITEM_ITEMS, WPSOLR_SearchSolrClient::SORT_CODE_BY_RELEVANCY_DESC );
-	}
-
-	/**
-	 * Array of items selectable in sort by
-	 * @return array Array of items
-	 */
-	public function get_sortby_items_as_array() {
-		return $this->explode( $this->get_sortby_items() );
-	}
-
-
 	/***************************************************************************************************************
 	 *
 	 * Search results option and items
@@ -399,6 +355,59 @@ class WPSOLR_Option {
 	 */
 	public function get_default_facets_group_id() {
 		return $this->get_option_value( __FUNCTION__, self::OPTION_FACETS, self::OPTION_FACETS_GROUP_DEFAULT_ID, '' );
+	}
+
+
+	/***************************************************************************************************************
+	 *
+	 * Sort option and items
+	 *
+	 **************************************************************************************************************/
+	const OPTION_SORTS = 'wdm_solr_sortby_data';
+	const OPTION_SORTS_SORTS = 'sorts';
+	const OPTION_SORTS_GROUPS = 'sorts_groups';
+	const OPTION_SORTS_GROUP_DEFAULT_ID = 'sorts_group_default_id';
+
+	/**
+	 * Get facet options array
+	 * @return array
+	 */
+	public function get_option_sort() {
+		return self::get_option( self::OPTION_SORTS );
+	}
+
+	/**
+	 * Comma separated sorts selected
+	 * @return "type,author,categories,tags,acf2_str"
+	 */
+	public function migrate_data_from_v7_6_get_sorts_selected_array() {
+		return $this->explode( $this->get_option_value( __FUNCTION__, self::OPTION_SORTS, self::OPTION_SORTS_SORTS, '' ) );
+	}
+
+	/**
+	 * Array of sorts selected
+	 * @return array ["type" => [...]]
+	 */
+	public function get_sorts_selected_array() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_SORTS, self::OPTION_SORTS_SORTS, [ ] );
+	}
+
+	/**
+	 * Array of sorts groups
+	 * @return array [ '1' => ['name' => 'Group 1']]
+	 */
+	public function get_sorts_groups() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_SORTS, self::OPTION_SORTS_GROUPS, [ ] );
+	}
+
+
+	/**
+	 * Get the default sorts group, used in ?s urls
+	 *
+	 * @return string
+	 */
+	public function get_default_sorts_group_id() {
+		return $this->get_option_value( __FUNCTION__, self::OPTION_SORTS, self::OPTION_SORTS_GROUP_DEFAULT_ID, '' );
 	}
 
 	/***************************************************************************************************************

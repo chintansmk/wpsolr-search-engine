@@ -88,7 +88,7 @@ function wpsolr_admin_init() {
 	register_setting( 'solr_form_options', 'wdm_solr_form_data' );
 	register_setting( 'solr_res_options', 'wdm_solr_res_data' );
 	register_setting( 'solr_facet_options', 'wdm_solr_facet_data' );
-	register_setting( 'solr_sort_options', WPSOLR_Option::OPTION_SORTBY );
+	register_setting( 'solr_sort_options', WPSOLR_Option::OPTION_SORTS );
 	register_setting( 'solr_operations_options', 'wdm_solr_operations_data' );
 }
 
@@ -237,7 +237,7 @@ switch ( $tab ) {
 				'localization_options' => '2.5 Localization',
 			);
 
-			$subtab             = wpsolr_admin_sub_tabs( $subtabs );
+			$subtab = wpsolr_admin_sub_tabs( $subtabs );
 
 			switch ( $subtab ) {
 				case 'result_opt':
@@ -537,115 +537,7 @@ switch ( $tab ) {
 					break;
 
 				case 'sort_opt':
-					$img_path = plugins_url( 'images/plus.png', __FILE__ );
-					$minus_path = plugins_url( 'images/success.png', __FILE__ );
-
-					$built_in = WPSOLR_SearchSolrClient::get_sort_options();
-
-					?>
-					<div id="solr-sort-options" class="wdm-vertical-tabs-content">
-						<form action="options.php" method="POST" id='sort_settings_form'>
-							<?php
-							settings_fields( 'solr_sort_options' );
-							$selected_sort_value = WPSOLR_Global::getOption()->get_sortby_items();
-							$selected_array      = WPSOLR_Global::getOption()->get_sortby_items_as_array();
-							?>
-							<div class='wrapper'>
-								<h4 class='head_div'>Sort Options</h4>
-
-								<div class="wdm_note">
-
-									In this section, you will choose which elements will be displayed as sort
-									criteria for your search results, and in which order.
-
-								</div>
-								<div class="wdm_note">
-									<h4>Instructions</h4>
-									<ul class="wdm_ul wdm-instructions">
-										<li>Click on the
-											<image src='<?php echo plugins_url( 'images/plus.png', __FILE__ ); ?>'/>
-											icon to add a facet
-										</li>
-										<li>Click on the
-											<image src='<?php echo plugins_url( 'images/success.png', __FILE__ ); ?>'/>
-											icon to remove a facet
-										</li>
-										<li>Sort the items in the order you want to display them by dragging and
-											dropping them at the desired place
-										</li>
-									</ul>
-								</div>
-
-								<div class="wdm_row">
-									<div class='col_left'>Default when no sort is selected by the user</div>
-									<div class='col_right'>
-										<select name="wdm_solr_sortby_data[sort_default]">
-											<?php foreach ( $built_in as $sort ) {
-												$selected = WPSOLR_Global::getOption()->get_sortby_default() == $sort['code'] ? 'selected' : '';
-												?>
-												<option
-													value="<?php echo $sort['code'] ?>" <?php echo $selected ?> ><?php echo $sort['label'] ?></option>
-											<?php } ?>
-										</select>
-									</div>
-								</div>
-
-								<div class="wdm_row">
-									<div class='avail_fac'>
-										<h4>Activate/deactivate items in the sort list</h4>
-										<input type='hidden' id='select_sort' name='wdm_solr_sortby_data[sort]'
-										       value='<?php echo $selected_sort_value ?>'>
-
-
-										<ul id="sortable_sort" class="wdm_ul connectedSortable_sort">
-											<?php
-											if ( $selected_sort_value != '' ) {
-												foreach ( $selected_array as $sort_code ) {
-													if ( $sort_code != '' ) {
-														$sort     = WPSOLR_SearchSolrClient::get_sort_option_from_code( $sort_code, null );
-														$dis_text = is_array( $sort ) ? $sort['label'] : $sort_code;
-
-														echo "<li id='$sort_code' class='ui-state-default facets sort_selected'>$dis_text
-                                                                                                    <img src='$img_path'  class='plus_icon_sort' style='display:none'>
-                                                                                                <img src='$minus_path' class='minus_icon_sort' style='display:inline' title='Click to Remove the Sort'></li>";
-													}
-												}
-											}
-											foreach ( $built_in as $built ) {
-												if ( $built != '' ) {
-													$buil_fac = $built['code'];
-													$dis_text = $built['label'];
-
-													if ( ! in_array( $buil_fac, $selected_array ) ) {
-
-														echo "<li id='$buil_fac' class='ui-state-default facets'>$dis_text
-                                                                                                    <img src='$img_path'  class='plus_icon_sort' style='display:inline' title='Click to Add the Sort'>
-                                                                                                <img src='$minus_path' class='minus_icon_sort' style='display:none'></li>";
-													}
-												}
-											}
-											?>
-
-
-										</ul>
-									</div>
-
-									<div class="clear"></div>
-								</div>
-
-								<div class='wdm_row'>
-									<div class="submit">
-										<input name="save_sort_options_form" id="save_sort_options_form"
-										       type="submit" class="button-primary wdm-save"
-										       value="Save Options"/>
-
-
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-					<?php
+					WPSOLR_Global::getExtensionSorts()->output_form();
 					break;
 
 				case 'localization_options':

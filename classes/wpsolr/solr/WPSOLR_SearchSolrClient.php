@@ -6,6 +6,7 @@ use Solarium\Core\Client\Client;
 use Solarium\Core\Query\Result\ResultInterface;
 use Solarium\QueryType\Select\Query\Query;
 use wpsolr\extensions\localization\WPSOLR_Localization;
+use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\ui\WPSOLR_Query;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Regexp;
@@ -24,21 +25,6 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 	// Search page slug
 	const _SEARCH_PAGE_SLUG = 'search-wpsolr';
-
-	// Do not change - Sort by most relevant
-	const SORT_CODE_BY_RELEVANCY_DESC = 'sort_by_relevancy_desc';
-
-	// Do not change - Sort by newest
-	const SORT_CODE_BY_DATE_DESC = 'sort_by_date_desc';
-
-	// Do not change - Sort by oldest
-	const SORT_CODE_BY_DATE_ASC = 'sort_by_date_asc';
-
-	// Do not change - Sort by least comments
-	const SORT_CODE_BY_NUMBER_COMMENTS_ASC = 'sort_by_number_comments_asc';
-
-	// Do not change - Sort by most comments
-	const SORT_CODE_BY_NUMBER_COMMENTS_DESC = 'sort_by_number_comments_desc';
 
 	// Default maximum number of items returned by facet
 	const DEFAULT_MAX_NB_ITEMS_BY_FACET = 10;
@@ -190,43 +176,6 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		update_post_meta( $search_page_id, 'bwps_enable_ssl', '1' );
 
 		return get_post( $search_page_id );
-	}
-
-	/**
-	 * Get all sort by options available
-	 *
-	 * @param string $sort_code_to_retrieve
-	 *
-	 * @return array
-	 */
-	public
-	static function get_sort_options() {
-
-		$results = array(
-
-			array(
-				'code'  => self::SORT_CODE_BY_RELEVANCY_DESC,
-				'label' => 'Most relevant',
-			),
-			array(
-				'code'  => self::SORT_CODE_BY_DATE_DESC,
-				'label' => 'Newest',
-			),
-			array(
-				'code'  => self::SORT_CODE_BY_DATE_ASC,
-				'label' => 'Oldest',
-			),
-			array(
-				'code'  => self::SORT_CODE_BY_NUMBER_COMMENTS_DESC,
-				'label' => 'More comments',
-			),
-			array(
-				'code'  => self::SORT_CODE_BY_NUMBER_COMMENTS_ASC,
-				'label' => 'Less comments',
-			),
-		);
-
-		return $results;
 	}
 
 	/**
@@ -866,30 +815,48 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	 */
 	private
 	function add_sort_field(
-		Query $solarium_query, $sort_field_name = self::SORT_CODE_BY_RELEVANCY_DESC
+		Query $solarium_query, $sort_field_name = WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC
 	) {
 
 		switch ( $sort_field_name ) {
 
-			case self::SORT_CODE_BY_DATE_DESC:
+			case WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_DESC:
 				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_DATE, $solarium_query::SORT_DESC );
 				break;
 
-			case self::SORT_CODE_BY_DATE_ASC:
+			case WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_ASC:
 				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_DATE, $solarium_query::SORT_ASC );
 				break;
 
-			case self::SORT_CODE_BY_NUMBER_COMMENTS_DESC:
+			case WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_DESC:
 				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS, $solarium_query::SORT_DESC );
 				break;
 
-			case self::SORT_CODE_BY_NUMBER_COMMENTS_ASC:
+			case WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_ASC:
 				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS, $solarium_query::SORT_ASC );
 				break;
 
-			case self::SORT_CODE_BY_RELEVANCY_DESC:
+			case WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC:
+				// Nothing to do, as relevancy is Solr default sort
+				break;
+
+			case WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC:
+			case "":
+				// Nothing to do, as relevancy is Solr default sort
+				break;
+
 			default:
-				// None is relevancy by default
+				// Custom field
+				$special_fields = WPSOLR_Global::getExtensionFacets()->get_special_fields();
+
+				if ( ! in_array( $sort_field_name, $special_fields ) ) {
+					// Add the solr type extension
+					$sort_field_name = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+						$sort_field_name,
+						WPSOLR_Global::getExtensionFields()->get_field_type_definition( $sort_field_name )->get_dynamic_type()
+					);
+				}
+				$solarium_query->addSort( $sort_field_name, $solarium_query::SORT_ASC );
 				break;
 
 		}
