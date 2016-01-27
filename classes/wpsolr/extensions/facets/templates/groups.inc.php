@@ -116,9 +116,9 @@ use wpsolr\utilities\WPSOLR_Option;
 			<div class="wdm_row">
 				<div class='col_left'>Group name</div>
 				<div class='col_right'>
-					<input type="text" id="<?php echo $facets_group_uuid; ?>_group_name"
+					<input type="text" id="<?php echo esc_attr( $facets_group_uuid ); ?>_group_name"
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][name]"
-					       value="<?php echo $new_facets_group_uuid == $facets_group_uuid ? '' : $facets_group['name']; ?>"/>
+					       value="<?php echo $new_facets_group_uuid == $facets_group_uuid ? '' : esc_attr( $facets_group['name'] ); ?>"/>
 
 					<!--<input name="create_group" value="Clone the group"/>-->
 				</div>
@@ -129,7 +129,7 @@ use wpsolr\utilities\WPSOLR_Option;
 				<div class='col_right'>
 					<input type="text" style="width: 100%"
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][<?php echo WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY; ?>]"
-					       value="<?php echo ! empty( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) ? $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] : ''; ?>"/>
+					       value="<?php echo ! empty( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) ? esc_attr( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) : ''; ?>"/>
 					<!--<input name="create_group" value="Clone the group"/>-->
 				</div>
 				<div class="clear"></div>

@@ -117,9 +117,9 @@ use wpsolr\utilities\WPSOLR_Option;
 			<div class="wdm_row">
 				<div class='col_left'>Group name</div>
 				<div class='col_right'>
-					<input type="text" id="<?php echo $sorts_group_uuid; ?>_group_name"
+					<input type="text" id="<?php echo esc_attr( $sorts_group_uuid ); ?>_group_name"
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_SORTS_GROUPS; ?>][<?php echo $sorts_group_uuid; ?>][name]"
-					       value="<?php echo $new_sorts_group_uuid == $sorts_group_uuid ? '' : $sorts_group['name']; ?>"/>
+					       value="<?php echo $new_sorts_group_uuid == $sorts_group_uuid ? '' : esc_attr( $sorts_group['name'] ); ?>"/>
 
 					<!--<input name="create_group" value="Clone the group"/>-->
 				</div>

@@ -2,6 +2,7 @@
 
 namespace wpsolr\utilities;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\WPSOLR_Unit_Test;
 
 class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
@@ -137,13 +138,18 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 	}
 
 
-	public function test_preg_match_limes() {
+	public function test_preg_match_lines() {
 
 		foreach ( [ "\n", "\r", "\r\n" ] as $new_line_char ) {
 
 			// One regep line: true
 			$this->assertTrue(
 				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/", "1" )
+			);
+
+			// Trim regep line: true
+			$this->assertTrue(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/   ", "1" )
 			);
 
 			// One regep line: false

@@ -69,7 +69,7 @@ $sort_label_desc = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL_DESC ]
 			<div class='col_right'>
 				<input type='text'
 				       name='<?php echo $sort_option_array_name; ?>[<?php echo WPSOLR_Options_Sorts::SORT_FIELD_LABEL_ASC; ?>]'
-				       value='<?php echo $sort_label_asc; ?>'/>
+				       value='<?php echo esc_attr( $sort_label_asc ); ?>'/>
 			</div>
 		</div>
 
@@ -80,7 +80,7 @@ $sort_label_desc = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL_DESC ]
 			<div class='col_right'>
 				<input type='text'
 				       name='<?php echo $sort_option_array_name; ?>[<?php echo WPSOLR_Options_Sorts::SORT_FIELD_LABEL_DESC; ?>]'
-				       value='<?php echo $sort_label_desc; ?>'/>
+				       value='<?php echo esc_attr( $sort_label_desc ); ?>'/>
 			</div>
 		</div>
 
