@@ -48,7 +48,7 @@
         this.debugState();
     };
 
-    wpsolr_sorts.prototype.create_url = function () {
+    wpsolr_sorts.prototype.create_url = function (external_parameters) {
         this.debug("url", '');
         this.debugState();
 
@@ -65,6 +65,11 @@
         }
 
         url1.query["wpsolr_sorts_group"] = this.groups_sort_id;
+
+        // External parameters
+        if (external_parameters) {
+            url1.query[external_parameters.name] = external_parameters.value;
+        }
 
         this.url = url1.toString();
 
@@ -84,7 +89,7 @@
 
             wpsolr_sorts.clear(); // clear all Sorts
             wpsolr_sorts.addValue(jQuery(this).val());
-            wpsolr_sorts.create_url();
+            wpsolr_sorts.create_url((window.wpsolr_facets) ? wpsolr_facets.get_parameter_group_id() : {});
         });
 
     });

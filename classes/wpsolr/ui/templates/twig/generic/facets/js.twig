@@ -11,6 +11,11 @@
         //this.extractUrl(); // Done by the widget js calling this api
     };
 
+    WPSOLR_Facets.prototype.get_parameter_group_id = function () {
+
+        return {'name': 'wpsolr_facets_group', 'value': this.groups_facet_id};
+    };
+
     WPSOLR_Facets.prototype.is_pattern_range = function (parameter) {
 
         var pattern_range = /\[.* TO .*\]/;
