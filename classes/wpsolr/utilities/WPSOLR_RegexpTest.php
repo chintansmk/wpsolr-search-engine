@@ -7,6 +7,31 @@ use wpsolr\WPSOLR_Unit_Test;
 
 class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 
+	public function test_extract_last_separator() {
+
+		foreach ( [ '_', '__' ] as $separator ) {
+
+			// No match
+			$this->assertEquals(
+				'',
+				WPSOLR_Regexp::extract_last_separator( 'field1', $separator )
+			);
+
+			// Usual case
+			$this->assertEquals(
+				'asc',
+				WPSOLR_Regexp::extract_last_separator( sprintf( 'field1%sasc', $separator ), $separator )
+			);
+
+			// Extract last separator only
+			$this->assertEquals(
+				'asc',
+				WPSOLR_Regexp::extract_last_separator( sprintf( 'field1%snot_this%sasc', $separator, $separator ), $separator )
+			);
+		}
+
+	}
+
 	public function test_remove_string_at_the_end() {
 
 		// Usual case

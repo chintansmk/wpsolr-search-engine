@@ -231,7 +231,7 @@
     jQuery(document).ready(function () {
 
         // Global object used by one widget
-        wpsolr_facets = new WPSOLR_Facets(jQuery(".wpsolr_remove_facets").data("wpsolr-facets_group_id"));
+        wpsolr_facets = new WPSOLR_Facets("{{ group_id }}");
 
         jQuery(".wpsolr_remove_facets").on("click", function (event) {
 
@@ -242,4 +242,3 @@
     });
 
 </script>
-

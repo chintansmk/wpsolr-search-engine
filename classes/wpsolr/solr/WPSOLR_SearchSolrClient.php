@@ -849,14 +849,21 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				// Custom field
 				$special_fields = WPSOLR_Global::getExtensionFacets()->get_special_fields();
 
-				if ( ! in_array( $sort_field_name, $special_fields ) ) {
+				$sort_field_name_for_solr = $sort_field_name;
+				if ( ! in_array( $sort_field_name_for_solr, $special_fields ) ) {
+
+					// Strip the postix from the field name
+					$sort_field_name_for_solr = WPSOLR_Global::getExtensionSorts()->get_field_name_without_postfix( $sort_field_name_for_solr );
+
 					// Add the solr type extension
-					$sort_field_name = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
-						$sort_field_name,
-						WPSOLR_Global::getExtensionFields()->get_field_type_definition( $sort_field_name )->get_dynamic_type()
+					$sort_field_name_for_solr = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+						$sort_field_name_for_solr,
+						WPSOLR_Global::getExtensionFields()->get_field_type_definition( $sort_field_name_for_solr )->get_dynamic_type()
 					);
 				}
-				$solarium_query->addSort( $sort_field_name, $solarium_query::SORT_ASC );
+
+				$order_by = WPSOLR_Global::getExtensionSorts()->get_sort_order_by( $sort_field_name );
+				$solarium_query->addSort( $sort_field_name_for_solr, $order_by );
 				break;
 
 		}

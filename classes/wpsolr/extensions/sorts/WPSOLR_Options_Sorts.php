@@ -2,11 +2,14 @@
 
 namespace wpsolr\extensions\sorts;
 
+use Solarium\QueryType\Select\Query\Query;
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Schema;
 use wpsolr\ui\widget\WPSOLR_Widget_Sort;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
+use wpsolr\utilities\WPSOLR_Regexp;
 
 /**
  * Class WPSOLR_Options_Sorts
@@ -31,12 +34,16 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 	const SORT_CODE_BY_NUMBER_COMMENTS_DESC = 'sort_by_number_comments_desc';
 
 	// Sort labels
-	const SORT_FIELD_LABEL_ASC = 'label_asc'; // Label of the sort element, ascending
+	const SORT_FIELD_LABEL = 'label'; // Label of the sort element
 	const SORT_FIELD_LABEL_DESC = 'label_desc';
 
 	// Form fields
 	const SORTS_GROUP_FIELD_DEFAULT_SORT_FIELD = 'default_sort_field';
 	const SORT_FIELD_NAME = 'name';
+
+	// Sorting postfix in field names
+	const SORT_FIELD_POSTFIX_ASC = '_asc';
+	const SORT_FIELD_POSTFIX_DESC = '_desc';
 
 	/**
 	 * Post constructor.
@@ -90,13 +97,21 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 	 */
 	public function get_fields_sortable() {
 
+		$results = [ ];
+
 		// Custom fields indexed
 		$indexed_custom_fields = WPSOLR_Global::getOption()->get_fields_custom_fields_array();
 
-		// Filter on sortable fields
+		// Filter to get only sortable fields
 		$sortable_fields = WPSOLR_Global::getSolrFieldTypes()->get_sortable( $indexed_custom_fields );
 
-		return $sortable_fields;
+		// Add sorting postfixes to field names
+		foreach ( $sortable_fields as $sortable_field_name => $sortable_field ) {
+			$results[ $sortable_field_name . '_' . Query::SORT_ASC ]  = $sortable_field;
+			$results[ $sortable_field_name . '_' . Query::SORT_DESC ] = $sortable_field;
+		}
+
+		return $results;
 	}
 
 	/**
@@ -203,14 +218,48 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Get label asc of a sort
+	 * Get label of a sort
 	 *
 	 * @param $sort
 	 *
-	 * @return string Sort label asc
+	 * @return string Sort label
 	 */
-	public function get_sort_label_asc( $sort ) {
-		return isset( $sort[ self::SORT_FIELD_LABEL_ASC ] ) ? $sort[ self::SORT_FIELD_LABEL_ASC ] : '';
+	public function get_sort_label( $sort ) {
+		return isset( $sort[ self::SORT_FIELD_LABEL ] ) ? $sort[ self::SORT_FIELD_LABEL ] : '';
 	}
+
+
+	/**
+	 * Remove the sorting postfix from a field name
+	 *
+	 * 'field1_asc' => 'field1'
+	 * 'field1_desc' => 'field1'
+	 *
+	 * @param $sort_field_name_for_solr Field name to strip
+	 *
+	 * @return string
+	 */
+	public function get_field_name_without_postfix( $sort_field_name_for_solr ) {
+
+		$result = $sort_field_name_for_solr;
+
+		$result = WPSOLR_Regexp::remove_string_at_the_end( $result, '_' . Query::SORT_ASC );
+		$result = WPSOLR_Regexp::remove_string_at_the_end( $result, '_' . Query::SORT_DESC );
+
+		return $result;
+	}
+
+
+	public function get_sort_order_by( $sort_field_name_with_postfix ) {
+
+		$result = WPSOLR_Regexp::extract_last_separator( $sort_field_name_with_postfix, '_' );
+
+		if ( ( $result != Query::SORT_ASC ) && ( $result != Query::SORT_DESC ) ) {
+			throw new WPSOLR_Exception( sprintf( 'Sort field %s without order by postix.', $sort_field_name_with_postfix ) );
+		}
+
+		return $result;
+	}
+
 
 }

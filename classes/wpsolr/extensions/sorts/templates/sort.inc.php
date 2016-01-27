@@ -9,9 +9,8 @@ $sort_option_array_name = sprintf( '%s[%s][%s][%s]', $options_name, WPSOLR_Optio
 
 $sort_layout_id = ! empty( $sort['layout_id'] ) ? $sort['layout_id'] : '';
 
-$sort_is_active  = ! empty( $sort['is_active'] ) ? $sort['is_active'] : '0';
-$sort_label_asc  = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL_ASC ] ) ? $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL_ASC ] : '';
-$sort_label_desc = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL_DESC ] ) ? $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL_DESC ] : '';
+$sort_is_active = ! empty( $sort['is_active'] ) ? $sort['is_active'] : '0';
+$sort_label     = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL ] ) ? $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL ] : '';
 ?>
 
 <li class='sorts <?php echo $sort_selected_class; ?>'>
@@ -64,23 +63,12 @@ $sort_label_desc = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL_DESC ]
 
 		<div class="wdm_row">
 			<div class='col_left'>
-				Label ascending
+				Label
 			</div>
 			<div class='col_right'>
 				<input type='text'
-				       name='<?php echo $sort_option_array_name; ?>[<?php echo WPSOLR_Options_Sorts::SORT_FIELD_LABEL_ASC; ?>]'
-				       value='<?php echo esc_attr( $sort_label_asc ); ?>'/>
-			</div>
-		</div>
-
-		<div class="wdm_row">
-			<div class='col_left'>
-				Label descending
-			</div>
-			<div class='col_right'>
-				<input type='text'
-				       name='<?php echo $sort_option_array_name; ?>[<?php echo WPSOLR_Options_Sorts::SORT_FIELD_LABEL_DESC; ?>]'
-				       value='<?php echo esc_attr( $sort_label_desc ); ?>'/>
+				       name='<?php echo $sort_option_array_name; ?>[<?php echo WPSOLR_Options_Sorts::SORT_FIELD_LABEL; ?>]'
+				       value='<?php echo esc_attr( $sort_label ); ?>'/>
 			</div>
 		</div>
 

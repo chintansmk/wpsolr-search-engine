@@ -1,8 +1,5 @@
 {# Shared Facets template #}
 
-{% include template_css %} {# template_css is replaced by the (custom) layout's css selected in the widget. #}
-{% include template_js %} {# template_css is replaced by the (custom) layout's js selected in the widget. #}
-
 {{ widget_args.before_widget| raw }} {# Before widget HTML #}
 
 {{ widget_args.before_title| raw }} {# Before title HTML #}
@@ -13,10 +10,8 @@
 
     <ul>
         <li>
-            <a {# Do not remove id "wpsolr_remove_facets". It is used as JQuery selector. You can override it's CSS however. #}
-                    data-wpsolr-facets_group_id="{{ facets_group_id }}"
-                    class="wpsolr_remove_facets wpsolr_facet_checkbox {{ not facets.has_facet_elements_selected ? "checked" : "" }}" {# Do not remove class "select_opt". It is used as JQuery selector. You can override it's CSS however. #}
-                    href="javascript:;"
+            <a class="wpsolr_remove_facets wpsolr_facet_checkbox {{ not facets.has_facet_elements_selected ? "checked" : "" }}" {# Do not remove class "select_opt". It is used as JQuery selector. You can override it's CSS however. #}
+               href="javascript:;"
             >
                 {{ facets_element_all_results }}
             </a>

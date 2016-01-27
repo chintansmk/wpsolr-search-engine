@@ -2,6 +2,8 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\ui\widget\WPSOLR_Widget;
+use wpsolr\ui\widget\WPSOLR_Widget_Sort;
 use wpsolr\utilities\WPSOLR_Global;
 
 /**
@@ -38,10 +40,15 @@ class WPSOLR_Data_Sort {
 
 				$sort = array(
 					'id'       => $sort_to_display_name,
-					'name'     => WPSOLR_Global::getExtensionSorts()->get_sort_label_asc( $sort_to_display ),
+					'name'     => WPSOLR_Global::getExtensionSorts()->get_sort_label( $sort_to_display ),
 					'selected' => ( $sort_to_display_name === ( ! empty( $sort_selected ) ? $sort_selected : $sort_default_name )
 					)
 				);
+
+				// Templates
+				$sort[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_HTML ] = WPSOLR_Widget_Sort::wpsolr_get_layout_template_html( $sort_to_display[ WPSOLR_Widget::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+				$sort[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_CSS ]  = WPSOLR_Widget_Sort::wpsolr_get_layout_template_css( $sort_to_display[ WPSOLR_Widget::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+				$sort[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_JS ]   = WPSOLR_Widget_Sort::wpsolr_get_layout_template_js( $sort_to_display[ WPSOLR_Widget::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
 
 				array_push( $results['items'], $sort );
 			}

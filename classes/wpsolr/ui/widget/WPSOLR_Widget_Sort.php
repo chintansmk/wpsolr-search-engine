@@ -21,102 +21,102 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 	protected static $wpsolr_layouts = [
 		self::TYPE_GROUP_LAYOUT         => [
 			'default'        => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'WPSOLR'
 			],
 			'customizr'      => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Customizr'
 			],
 			'graphene'       => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Graphene'
 			],
 			'hueman'         => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Hueman'
 			],
 			'spacious'       => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Spacious'
 			],
 			'twentyten'      => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Ten'
 			],
 			'twentyeleven'   => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Eleven'
 			],
 			'twentythirteen' => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Thirteen'
 			],
 			'twentyfourteen' => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fourteen'
 			],
 			'twentyfifteen'  => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fifteen'
 			],
 			'twentysixteen'  => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Sixteen'
 			],
 			'responsive'     => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Responsive'
 			],
 			'vantage'        => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Vantage'
 			],
 			'virtue'         => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Virtue'
 			],
 			'zerif-lite'     => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig',
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Zerif Lite'
 			]
 		],
 		self::TYPE_GROUP_ELEMENT_LAYOUT => [
 			'Select' => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Select',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/select/js.twig'
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig'
 			]
 		]
 	];

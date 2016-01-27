@@ -15,12 +15,31 @@ class WPSOLR_Regexp {
 
 
 	/**
+	 * Extract last occurence of a separator
+	 * 'field1' => ''
+	 * 'field1_asc' => 'asc'
+	 * 'field1_notme_asc' => 'asc'
+	 *
+	 * @param $text
+	 * @param $text_to_find
+	 *
+	 * @return string
+	 */
+	static function extract_last_separator( $text, $separator ) {
+
+		preg_match( sprintf( '/[_]+[^_]*$/', $separator ), $text, $matches );
+
+		return ! empty( $matches ) ? substr( $matches[0], strlen( $separator ) ) : '';
+	}
+
+
+	/**
 	 * Remove $text_to_remove at the end of $text
 	 *
 	 * @param $text
 	 * @param $text_to_remove
 	 *
-	 * @return mixed
+	 * @return string
 	 */
 	static function remove_string_at_the_end( $text, $text_to_remove ) {
 
