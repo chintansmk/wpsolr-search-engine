@@ -289,12 +289,24 @@ class WPSOLR_Query extends \WP_Query {
 
 			array_push( $posts_ids, $document->id );
 		}
-		$posts_in_results = get_posts( array(
+		$posts_in_results_unordered = get_posts( array(
 				'numberposts' => count( $posts_ids ),
 				'post_type'   => 'any',
 				'post__in'    => $posts_ids
 			)
 		);
+
+		$posts_in_results = [ ];
+		foreach ( $posts_ids as $post_id ) {
+
+			foreach ( $posts_in_results_unordered as $post ) {
+
+				if ( $post->ID == $post_id ) {
+					array_push( $posts_in_results, $post );
+					break;
+				}
+			}
+		}
 
 		foreach ( $posts_in_results as $post ) {
 			$this->set_the_title( $post );
