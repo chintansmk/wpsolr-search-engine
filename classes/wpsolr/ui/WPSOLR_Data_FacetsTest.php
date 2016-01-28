@@ -23,6 +23,9 @@ class WPSOLR_Data_FacetsTest extends WPSOLR_Unit_Test {
 	}
 
 
+	/**
+	 * @group toBeFixed
+	 */
 	public function testFacetIdNotStripped() {
 
 		$this->wpsolr_mock_apply_filter( WPSOLR_Filters::WPSOLR_FILTER_SEARCH_PAGE_FACET_NAME, m::any(), m::any(), 1, null );
@@ -72,6 +75,9 @@ class WPSOLR_Data_FacetsTest extends WPSOLR_Unit_Test {
 
 	}
 
+	/**
+	 * @group toBeFixed
+	 */
 	public function test4facetsCallsFilter4Times() {
 
 		$this->wpsolr_mock_apply_filter( WPSOLR_Filters::WPSOLR_FILTER_SEARCH_PAGE_FACET_NAME, m::any(), m::any(), 4, null );

@@ -160,10 +160,17 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 
 		}
 
+		// 2 lines with a blank line
+		$this->assertEquals(
+			[ 'line 1', 'line 2' , ' ' ],
+			WPSOLR_Regexp::split_lines( "line 1{$new_line_char}line 2{$new_line_char} " )
+		);
+
 	}
 
 
-	public function test_preg_match_lines() {
+	public
+	function test_preg_match_lines() {
 
 		foreach ( [ "\n", "\r", "\r\n" ] as $new_line_char ) {
 
@@ -202,13 +209,19 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/{$new_line_char}/2/", "3" )
 			);
 
+			// 2 regep lines with a blank line
+			$this->assertTrue(
+				WPSOLR_Regexp::preg_match_lines_of_regexp( "/1/{$new_line_char}/2/{$new_line_char} ", "1" )
+			);
+
 		}
 	}
 
 	/**
 	 * @expectedException WPSOLR_Exception
 	 * */
-	public function test_preg_match_limes_syntax_error() {
+	public
+	function test_preg_match_limes_syntax_error() {
 
 		// regep syntax error should be trhrowing an exception
 		$this->assertTrue(

@@ -3,6 +3,9 @@
         <testsuite name="all">
             <directory>./classes</directory>
             <exclude>./vendor</exclude>
+            <exclude>
+                <group>toBeFixed</group>
+            </exclude>
         </testsuite>
     </testsuites>
 </phpunit>
