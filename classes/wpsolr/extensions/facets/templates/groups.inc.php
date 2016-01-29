@@ -84,7 +84,10 @@ use wpsolr\utilities\WPSOLR_Option;
 
 		function display_facet_types(layout_element, layout_facet_type) {
 			layout_element.parent().parent().parent().children(".wpsolr_facet_type").hide(); // hide all facet type sections
+			layout_element.parent().parent().parent().children(".wpsolr_facet_type").addClass("facet_type_not_selected"); // Detach at form submit
+
 			layout_element.parent().parent().parent().children(".wpsolr_" + layout_facet_type).show(); // show facet section type of the selected layout
+			layout_element.parent().parent().parent().children(".wpsolr_" + layout_facet_type).removeClass("facet_type_not_selected"); // Detach at form submit
 		}
 
 		// Display facet sections depending on the select layout facet type

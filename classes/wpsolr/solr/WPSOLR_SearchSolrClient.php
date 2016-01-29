@@ -5,6 +5,7 @@ namespace wpsolr\solr;
 use Solarium\Core\Client\Client;
 use Solarium\Core\Query\Result\ResultInterface;
 use Solarium\QueryType\Select\Query\Query;
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\ui\WPSOLR_Query;
@@ -396,6 +397,10 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		$facets_to_display = $wpsolr_query->get_wpsolr_facets_fields();
 		$special_fields    = WPSOLR_Global::getExtensionFacets()->get_special_fields();
 		if ( count( $facets_to_display ) ) {
+			$extension_facets      = WPSOLR_Global::getExtensionFacets();
+			$extension_field_types = WPSOLR_Global::getSolrFieldTypes();
+			$extension_fields      = WPSOLR_Global::getExtensionFields();
+
 			foreach ( $facets_to_display as $field_name => $facet ) {
 
 				$field_name = strtolower( $field_name );
@@ -405,9 +410,9 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				} else if ( ! in_array( $field_name, $special_fields ) ) {
 
 					// Add the solr type extension
-					$field_name_dynamic = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+					$field_name_dynamic = $extension_field_types->get_dynamic_name_from_dynamic_extension(
 						$field_name,
-						WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_dynamic_type()
+						$extension_fields->get_field_type_definition( $field_name )->get_dynamic_type()
 					);
 
 				} else {
@@ -417,10 +422,29 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 				if ( ! empty( $resultset->getFacetSet() ) ) {
 
-					$result_facet = $resultset->getFacetSet()->getFacet( "$field_name_dynamic" );
+					if ( $extension_facets->get_facet_is_query( $facet ) ) {
 
-					foreach ( ( ! empty( $result_facet ) ? $result_facet : [ ] ) as $value => $count ) {
-						$output[ $field_name ][] = array( $value, $count );
+						// Fetch all query ranges of the facet definition
+						$loop = 0;
+						foreach ( $extension_facets->get_facet_query_custom_ranges( $facet ) as $facet_custom_range ) {
+
+							$result_facet = $resultset->getFacetSet()->getFacet( 'query_' . "$field_name_dynamic" . '_' . $loop );
+
+							if ( isset( $result_facet ) ) {
+								$output[ $field_name ][] = array( $loop, $result_facet->getValue() );
+							}
+
+							$loop ++;
+						}
+
+					} else {
+
+						$result_facet = $resultset->getFacetSet()->getFacet( "$field_name_dynamic" );
+
+						foreach ( ( ! empty( $result_facet ) ? $result_facet : [ ] ) as $value => $count ) {
+							$output[ $field_name ][] = array( $value, $count );
+						}
+
 					}
 
 				}
@@ -657,37 +681,60 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				}
 
 				// Add the facet
-				if ( $extension_facets->get_facet_is_range( $facet ) ) {
+				if ( $extension_facets->get_facet_is_query( $facet ) ) {
 
-					// Set an interval facet.
+					// Set a query facet.
 					// We don't use range intervals because it requires docValues and Solr 4.10
-					$solarium_facet = $facetSet->createFacetQuery( "$field_name" )->setQuery( "$field_name: [0 TO 20]" );
 
-				} else if ( $extension_facets->get_facet_is_range( $facet ) ) {
+					$loop = 0;
+					foreach ( $extension_facets->get_facet_query_custom_ranges( $facet ) as $facet_custom_range ) {
 
-					// Set a range facet
-					$solarium_facet = $facetSet->createFacetRange( "$field_name" );
-					$solarium_facet->setStart( $extension_facets->get_facet_range_start( $facet ) );
-					$solarium_facet->setEnd( $extension_facets->get_facet_range_end( $facet ) );
-					$solarium_facet->setGap( $extension_facets->get_facet_range_gap( $facet ) );
+						$range_inf = $facet_custom_range[ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_INF ];
+						$range_sup = $facet_custom_range[ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_SUP ];
+
+						$solarium_facet = $facetSet->createFacetQuery( 'query_' . $field_name . '_' . $loop )->setQuery( "$field_name: [$range_inf TO $range_sup]" );
+
+						// Display facet items not in results ?
+						if ( $extension_facets->get_is_facet_in_exclusion_tag( $facet ) ) {
+
+							// Exclude the tag corresponding to this facet. The tag was set on addFilterQuery().
+							$solarium_facet->setExcludes( [ $field_name ] );
+						}
+
+						$loop ++;
+					}
 
 				} else {
 
-					// Set a field facet
-					$solarium_facet = $facetSet->createFacetField( "$field_name" );
-					$solarium_facet->setLimit( $limit );
-					$solarium_facet->setSort( $extension_facets->get_facet_sort( $facet ) );
-					$solarium_facet->setField( "$field_name" );
+					if ( $extension_facets->get_facet_is_range( $facet ) ) {
+
+						// Set a range facet
+						$solarium_facet = $facetSet->createFacetRange( "$field_name" );
+						$solarium_facet->setStart( $extension_facets->get_facet_range_start( $facet ) );
+						$solarium_facet->setEnd( $extension_facets->get_facet_range_end( $facet ) );
+						$solarium_facet->setGap( $extension_facets->get_facet_range_gap( $facet ) );
+
+						$solarium_facet->setField( "$field_name" );
+
+					} else {
+
+						// Set a field facet
+						$solarium_facet = $facetSet->createFacetField( "$field_name" );
+						$solarium_facet->setLimit( $limit );
+						$solarium_facet->setSort( $extension_facets->get_facet_sort( $facet ) );
+
+						$solarium_facet->setField( "$field_name" );
+					}
+
+					// Display facet items not in results ?
+					if ( $extension_facets->get_is_facet_in_exclusion_tag( $facet ) ) {
+
+						// Exclude the tag corresponding to this facet. The tag was set on addFilterQuery().
+						$solarium_facet->setExcludes( [ $field_name ] );
+					}
+
 				}
 
-				// Facets generic options
-
-				// Display facet items not in results ?
-				if ( $extension_facets->get_is_facet_in_exclusion_tag( $facet ) ) {
-
-					// Exclude the tag corresponding to this facet. The tag was set on addFilterQuery().
-					$solarium_facet->setExcludes( [ $field_name ] );
-				}
 			}
 		}
 

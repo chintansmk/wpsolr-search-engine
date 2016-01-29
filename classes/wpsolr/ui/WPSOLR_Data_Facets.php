@@ -2,6 +2,7 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\services\WPSOLR_Service_Wordpress;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\ui\widget\WPSOLR_Widget;
@@ -36,6 +37,8 @@ class WPSOLR_Data_Facets {
 
 		if ( count( $facets_in_results ) && count( $facets_to_display ) ) {
 
+			$extension_facets = WPSOLR_Global::getExtensionFacets();
+
 			foreach ( $facets_to_display as $facet_to_display_id => $facet_to_display ) {
 
 				if ( isset( $facets_in_results[ $facet_to_display_id ] ) && count( $facets_in_results[ $facet_to_display_id ] ) > 0 ) {
@@ -49,9 +52,16 @@ class WPSOLR_Data_Facets {
 					$facet_to_display_name = str_replace( '_', ' ', $facet_to_display_name );
 					$facet_to_display_name = ucfirst( $facet_to_display_name );
 
-					$facet_label_other = WPSOLR_Global::getExtensionFacets()->get_facet_label( $facet_to_display );
-					$facet_label_first = WPSOLR_Global::getExtensionFacets()->get_facet_label_first( $facet_to_display );
-					$facet_label_last  = WPSOLR_Global::getExtensionFacets()->get_facet_label_last( $facet_to_display );
+					$facet_label = '';
+					if ( ! isset( $facet_to_display['query'] ) ) {
+						$facet_label_other = $extension_facets->get_facet_label( $facet_to_display );
+						$facet_label_first = $extension_facets->get_facet_label_first( $facet_to_display );
+						$facet_label_last  = $extension_facets->get_facet_label_last( $facet_to_display );
+					}
+
+					if ( isset( $facet_to_display['query'] ) ) {
+						$facet_query_custom_ranges = $extension_facets->get_facet_query_custom_ranges( $facet_to_display );
+					}
 
 					$facet               = array();
 					$facet['items']      = array();
@@ -70,15 +80,21 @@ class WPSOLR_Data_Facets {
 
 						$loop ++;
 
-						// Which facet template to use ?
-						$facet_label = $facet_label_other;
-						switch ( $loop ) {
-							case 1:
-								$facet_label = $facet_label_first;
-								break;
-							case $nb_facets:
-								$facet_label = $facet_label_last;
-								break;
+						if ( ! isset( $facet['definition']['query'] ) ) {
+
+							// Which facet template to use ?
+							$facet_label = $facet_label_other;
+							switch ( $loop ) {
+								case 1:
+									$facet_label = $facet_label_first;
+									break;
+								case $nb_facets:
+									$facet_label = $facet_label_last;
+									break;
+							}
+						} else {
+
+							$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_LABEL ];
 						}
 
 						$facet_value = $facet_in_results[0];
@@ -86,6 +102,14 @@ class WPSOLR_Data_Facets {
 
 							// Facet range come as [10 TO 19]
 							$facet_value = sprintf( '[%s TO %s]', $facet_value, $facet_value + $facet['definition']['range']['gap'] - 1 );
+
+						} else if ( isset( $facet['definition']['query'] ) ) {
+
+							$range_inf = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_INF ];
+							$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_SUP ];
+
+							// Facet range come as [10 TO 19]
+							$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
 						}
 
 						// Current item selected ?
@@ -100,12 +124,26 @@ class WPSOLR_Data_Facets {
 						$name = trim( $facet_in_results[0] );
 						if ( ! empty( $name ) || $name === '0' ) { // Only add facet if non blank name (it happens). '0' is authorized for ranges.
 
-							array_push( $facet['items'], array(
-								'label'    => $facet_label,
-								'name'     => $facet_in_results[0],
-								'count'    => $facet_in_results[1],
-								'selected' => $item_selected
-							) );
+							if ( isset( $facet['definition']['query'] ) ) {
+
+								array_push( $facet['items'], array(
+									'label'     => $facet_label,
+									'range_inf' => $range_inf,
+									'range_sup' => $range_sup,
+									'count'     => $facet_in_results[1],
+									'selected'  => $item_selected
+								) );
+
+							} else {
+
+								array_push( $facet['items'], array(
+									'label'    => $facet_label,
+									'name'     => $facet_in_results[0],
+									'count'    => $facet_in_results[1],
+									'selected' => $item_selected
+								) );
+
+							}
 
 						}
 

@@ -9,6 +9,7 @@ use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\widget\WPSOLR_Widget_Facet;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
+use wpsolr\utilities\WPSOLR_Regexp;
 
 /**
  * Class WPSOLR_Options_Facets
@@ -50,6 +51,11 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 	// Facet query
 	const FACET_FIELD_QUERY = 'query';
+	const FACET_FIELD_QUERY_RANGES = 'custom_ranges';
+	const FACET_FIELD_QUERY_RANGES_DEFAULT = '0|10|%1$s - %2$s (%3$d)';
+	const FACET_FIELD_QUERY_RANGE_INF = 'range_inf';
+	const FACET_FIELD_QUERY_RANGE_SUP = 'range_sup';
+	const FACET_FIELD_QUERY_RANGE_LABEL = 'range_label';
 
 	// Layouts available for each field type
 	protected $layouts;
@@ -248,11 +254,11 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Is facet intervals ?
+	 * Is facet query ?
 	 *
 	 * @param $facet
 	 */
-	public function get_facet_is_intervals( $facet ) {
+	public function get_facet_is_query( $facet ) {
 		return isset( $facet[ self::FACET_FIELD_QUERY ] );
 	}
 
@@ -318,4 +324,43 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	public function get_facet_label_last( $facet ) {
 		return isset( $facet[ self::FACET_FIELD_LABEL_LAST ] ) ? $facet[ self::FACET_FIELD_LABEL_LAST ] : '';
 	}
+
+
+	/**
+	 * Get an array of custom ranges for a range query facet
+	 *
+	 * 0|9|%1$s - %2$s (%3$d)
+	 * 10|20|%1$s TO %2$s (%3$d)
+	 * =>
+	 * [
+	 *  ['range_inf' => '0',  'range_sup' => '9',  'range_label' => '%1$s - %2$s (%3$d)']
+	 *  ['range_inf' => '10', 'range_sup' => '20', 'range_label' => '%1$s TO %2$s (%3$d)']
+	 * ]
+	 *
+	 * @param $facet
+	 *
+	 * @return array
+	 */
+	public function get_facet_query_custom_ranges( $facet ) {
+
+		$results = [ ];
+
+		$custom_ranges_string = isset( $facet[ self::FACET_FIELD_QUERY ] ) && isset( $facet[ self::FACET_FIELD_QUERY ][ self::FACET_FIELD_QUERY_RANGES ] ) ? $facet[ self::FACET_FIELD_QUERY ][ self::FACET_FIELD_QUERY_RANGES ] : '';
+
+		if ( ! empty( $custom_ranges_string ) ) {
+
+			foreach ( WPSOLR_Regexp::split_lines( $custom_ranges_string ) as $custom_range_string ) {
+
+				$custom_range = explode( '|', $custom_range_string );
+				$results[]    = [
+					self::FACET_FIELD_QUERY_RANGE_INF   => $custom_range[0],
+					self::FACET_FIELD_QUERY_RANGE_SUP   => $custom_range[1],
+					self::FACET_FIELD_QUERY_RANGE_LABEL => $custom_range[2]
+				];
+			}
+		}
+
+		return $results;
+	}
+
 }

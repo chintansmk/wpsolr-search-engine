@@ -29,6 +29,11 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 				jQuery(this).detach();
 			});
 
+			// Remove all facet type sections not selected
+			jQuery('.facet_type_not_selected').each(function () {
+				jQuery(this).detach();
+			});
+
 			return true;
 		});
 
@@ -169,19 +174,19 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(
 						WPSOLR_Extensions::OPTION_FACETS, 'groups.inc.php' ),
 						array(
-							'options_name'               => $options_name,
-							'new_facets_group_uuid'      => $new_facets_group_uuid,
-							'layouts'                    => $layouts,
+							'options_name'              => $options_name,
+							'new_facets_group_uuid'     => $new_facets_group_uuid,
+							'layouts'                   => $layouts,
 							'default_facets_group_uuid' => $default_facets_group_uuid,
-							'facets_groups'              => $facets_groups,
-							'facets_selected'            => $facets_selected,
-							'fields'                     => $fields,
-							'facet_selected_class'       => 'facet_selected',
-							'facet_not_selected_class'   => 'facet_not_selected',
-							'image_plus_display'         => 'none',
-							'image_minus_display'        => 'inline',
-							'image_plus'                 => $image_plus,
-							'image_minus'                => $image_minus
+							'facets_groups'             => $facets_groups,
+							'facets_selected'           => $facets_selected,
+							'fields'                    => $fields,
+							'facet_selected_class'      => 'facet_selected',
+							'facet_not_selected_class'  => 'facet_not_selected',
+							'image_plus_display'        => 'none',
+							'image_minus_display'       => 'inline',
+							'image_plus'                => $image_plus,
+							'image_minus'               => $image_minus
 						)
 					);
 					?>
