@@ -9,9 +9,9 @@ $facet_option_array_name = sprintf( '%s[%s][%s][%s]', $options_name, WPSOLR_Opti
 
 $facet_layout_id = ! empty( $facet['layout_id'] ) ? $facet['layout_id'] : '';
 
-$facet_range_start = ! empty( $facet[ WPSOLR_Options_Facets::FACET_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_RANGE ][ WPSOLR_Options_Facets::FACET_RANGE_START ] ) ? $facet[ WPSOLR_Options_Facets::FACET_RANGE ][ WPSOLR_Options_Facets::FACET_RANGE_START ] : WPSOLR_Options_Facets::FACET_RANGE_START_DEFAULT;
-$facet_range_end   = ! empty( $facet[ WPSOLR_Options_Facets::FACET_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_RANGE ][ WPSOLR_Options_Facets::FACET_RANGE_END ] ) ? $facet[ WPSOLR_Options_Facets::FACET_RANGE ][ WPSOLR_Options_Facets::FACET_RANGE_END ] : WPSOLR_Options_Facets::FACET_RANGE_END_DEFAULT;
-$facet_range_gap   = ! empty( $facet[ WPSOLR_Options_Facets::FACET_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_RANGE ][ WPSOLR_Options_Facets::FACET_RANGE_GAP ] ) ? $facet[ WPSOLR_Options_Facets::FACET_RANGE ][ WPSOLR_Options_Facets::FACET_RANGE_GAP ] : WPSOLR_Options_Facets::FACET_RANGE_GAP_DEFAULT;
+$facet_range_start = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_START ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_START ] : WPSOLR_Options_Facets::FACET_FILED_RANGE_START_DEFAULT;
+$facet_range_end   = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_END ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_END ] : WPSOLR_Options_Facets::FACET_FIELD_RANGE_END_DEFAULT;
+$facet_range_gap   = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_GAP ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_GAP ] : WPSOLR_Options_Facets::FACET_FIELD_RANGE_GAP_DEFAULT;
 
 $facet_elements_operator = ! empty( $facet['elements_operator'] ) ? $facet['elements_operator'] : 'AND';
 $facet_sort              = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] : WPSOLR_Options_Facets::FACET_SORT_COUNT;
@@ -23,6 +23,9 @@ $facet_label             = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_L
 	: ( $is_range ? WPSOLR_Options_Facets::FACET_LABEL_TEMPLATE_RANGE : WPSOLR_Options_Facets::FACET_LABEL_TEMPLATE );
 $facet_label_first       = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST ] : $facet_label;
 $facet_label_last        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST ] : $facet_label;
+
+$facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_QUERY ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_QUERY ] : [ ];
+
 ?>
 
 <li class='facets <?php echo $facet_selected_class; ?>'>
@@ -54,8 +57,8 @@ $facet_label_last        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_L
 				Display as
 			</div>
 			<div class='col_right'>
-				<select
-					name='<?php echo $facet_option_array_name; ?>[layout_id]'>
+				<select class="wpsolr_layout_select"
+				        name='<?php echo $facet_option_array_name; ?>[layout_id]'>
 					<?php foreach ( $layouts as $layout_id => $layout ) { ?>
 						<option
 							value='<?php echo $layout_id; ?>' <?php selected( $layout_id, $facet_layout_id, true ); ?>><?php echo $layout['name']; ?></option>
@@ -74,38 +77,6 @@ $facet_label_last        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_L
 		</div>
 
 		<!-- Facet common section-->
-
-		<div class="wdm_row">
-			<div class='col_left'>
-				Facet element template
-			</div>
-			<div class='col_right'>
-				<input type='text'
-				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL; ?>]'
-				       value='<?php echo esc_attr( $facet_label ); ?>'/>
-			</div>
-		</div>
-		<div class="wdm_row">
-			<div class='col_left'>
-				First facet element template
-			</div>
-			<div class='col_right'>
-				<input type='text'
-				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST; ?>]'
-				       value='<?php echo esc_attr( $facet_label_first ); ?>'/>
-			</div>
-		</div>
-		<div class="wdm_row">
-			<div class='col_left'>
-				Last facet element template
-			</div>
-			<div class='col_right'>
-				<input type='text'
-				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST; ?>]'
-				       value='<?php echo esc_attr( $facet_label_last ); ?>'/>
-			</div>
-		</div>
-
 		<div class="wdm_row">
 			<div class='col_left'>
 				Show if count greater or equal than
@@ -156,38 +127,96 @@ $facet_label_last        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_L
 			</div>
 		</div>
 
-		<?php if ( $is_range ) { ?>
-			<!-- Facet range section-->
-			<div class="wdm_row" class="wpsolr_facet_range">
-				<div class='col_left'>
-					Range start
-				</div>
-				<div class='col_right'>
-					<input type='text'
-					       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_RANGE_START ?>]'
-					       value='<?php echo esc_attr( $facet_range_start ); ?>'/>
-
-				</div>
-				<div class='col_left'>
-					Range end
-				</div>
-				<div class='col_right'>
-					<input type='text'
-					       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_RANGE_END ?>]'
-					       value='<?php echo esc_attr( $facet_range_end ); ?>'/>
-
-				</div>
-				<div class='col_left'>
-					Range gap
-				</div>
-				<div class='col_right'>
-					<input type='text'
-					       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_RANGE_GAP ?>]'
-					       value='<?php echo esc_attr( $facet_range_gap ); ?>'/>
-
-				</div>
+		<!-- Facet field/range section-->
+		<div
+			class="wdm_row wpsolr_facet_type wpsolr_<?php echo WPSOLR_Options_Facets::FACET_TYPE_FIELD; ?> wpsolr_<?php echo WPSOLR_Options_Facets::FACET_TYPE_RANGE; ?>">
+			<div class='col_left'>
+				First facet element label
 			</div>
-		<?php } ?>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST; ?>]'
+				       value='<?php echo esc_attr( $facet_label_first ); ?>'/>
+			</div>
+			<div class='col_left'>
+				Middle facet element label
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL; ?>]'
+				       value='<?php echo esc_attr( $facet_label ); ?>'/>
+			</div>
+			<div class='col_left'>
+				Last facet element label
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST; ?>]'
+				       value='<?php echo esc_attr( $facet_label_last ); ?>'/>
+			</div>
+		</div>
+
+		<!-- Facet range section-->
+		<div class="wdm_row wpsolr_facet_type wpsolr_<?php echo WPSOLR_Options_Facets::FACET_TYPE_RANGE; ?>">
+			<div class='col_left'>
+				Range start
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE_START ?>]'
+				       value='<?php echo esc_attr( $facet_range_start ); ?>'/>
+
+			</div>
+			<div class='col_left'>
+				Range end
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE_END ?>]'
+				       value='<?php echo esc_attr( $facet_range_end ); ?>'/>
+
+			</div>
+			<div class='col_left'>
+				Range gap
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE_GAP ?>]'
+				       value='<?php echo esc_attr( $facet_range_gap ); ?>'/>
+
+			</div>
+		</div>
+
+		<!-- Facet query section-->
+		<div class="wdm_row wpsolr_facet_type wpsolr_<?php echo WPSOLR_Options_Facets::FACET_TYPE_QUERY; ?>">
+			<div class='col_left'>
+				Query start
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE_START ?>]'
+				       value='<?php echo esc_attr( $facet_range_start ); ?>'/>
+
+			</div>
+			<div class='col_left'>
+				Range end
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE_END ?>]'
+				       value='<?php echo esc_attr( $facet_range_end ); ?>'/>
+
+			</div>
+			<div class='col_left'>
+				Range gap
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE ?>][<?php echo WPSOLR_Options_Facets::FACET_FIELD_RANGE_GAP ?>]'
+				       value='<?php echo esc_attr( $facet_range_gap ); ?>'/>
+
+			</div>
+		</div>
 
 	</div>
 </li>

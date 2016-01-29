@@ -659,21 +659,28 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				// Add the facet
 				if ( $extension_facets->get_facet_is_range( $facet ) ) {
 
+					// Set an interval facet.
+					// We don't use range intervals because it requires docValues and Solr 4.10
+					$solarium_facet = $facetSet->createFacetQuery( "$field_name" )->setQuery( "$field_name: [0 TO 20]" );
+
+				} else if ( $extension_facets->get_facet_is_range( $facet ) ) {
+
 					// Set a range facet
 					$solarium_facet = $facetSet->createFacetRange( "$field_name" );
 					$solarium_facet->setStart( $extension_facets->get_facet_range_start( $facet ) );
 					$solarium_facet->setEnd( $extension_facets->get_facet_range_end( $facet ) );
 					$solarium_facet->setGap( $extension_facets->get_facet_range_gap( $facet ) );
+
 				} else {
 
 					// Set a field facet
 					$solarium_facet = $facetSet->createFacetField( "$field_name" );
 					$solarium_facet->setLimit( $limit );
 					$solarium_facet->setSort( $extension_facets->get_facet_sort( $facet ) );
+					$solarium_facet->setField( "$field_name" );
 				}
 
 				// Facets generic options
-				$solarium_facet->setField( "$field_name" );
 
 				// Display facet items not in results ?
 				if ( $extension_facets->get_is_facet_in_exclusion_tag( $facet ) ) {
@@ -784,7 +791,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 						}
 
 						// In case the facet contains white space, we enclose it with "".
-						if ( ! $field_definition->get_is_range() ) {
+						if ( ! $field_definition->get_is_numeric() ) {
 							$filter_query_field_value_escaped = "\"$filter_query_field_value\"";
 
 						} else {
@@ -821,23 +828,19 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		switch ( $sort_field_name ) {
 
 			case WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_DESC:
-				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_DATE, $solarium_query::SORT_DESC );
+				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_DATE, Query::SORT_DESC );
 				break;
 
 			case WPSOLR_Options_Sorts::SORT_CODE_BY_DATE_ASC:
-				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_DATE, $solarium_query::SORT_ASC );
+				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_DATE, Query::SORT_ASC );
 				break;
 
 			case WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_DESC:
-				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS, $solarium_query::SORT_DESC );
+				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS, Query::SORT_DESC );
 				break;
 
 			case WPSOLR_Options_Sorts::SORT_CODE_BY_NUMBER_COMMENTS_ASC:
-				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS, $solarium_query::SORT_ASC );
-				break;
-
-			case WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC:
-				// Nothing to do, as relevancy is Solr default sort
+				$solarium_query->addSort( WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS, Query::SORT_ASC );
 				break;
 
 			case WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC:

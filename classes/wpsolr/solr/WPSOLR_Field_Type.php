@@ -24,7 +24,7 @@ class WPSOLR_Field_Type {
 	protected $dynamic_type;
 
 	// Is this a range type ?
-	protected $is_range;
+	protected $is_numeric;
 
 	/**
 	 * WPSOLR_Field_Type constructor.
@@ -38,7 +38,7 @@ class WPSOLR_Field_Type {
 		$this->id           = $id;
 		$this->name         = $name;
 		$this->dynamic_type = $dynamic_type;
-		$this->is_range     = $is_range;
+		$this->is_numeric   = $is_range;
 	}
 
 	/**
@@ -100,15 +100,15 @@ class WPSOLR_Field_Type {
 	/**
 	 * @return boolean
 	 */
-	public function get_is_range() {
-		return $this->is_range;
+	public function get_is_numeric() {
+		return $this->is_numeric;
 	}
 
 	/**
-	 * @param boolean $is_range
+	 * @param boolean $is_numeric
 	 */
-	public function set_is_range( $is_range ) {
-		$this->is_range = $is_range;
+	public function set_is_numeric( $is_numeric ) {
+		$this->is_numeric = $is_numeric;
 	}
 
 

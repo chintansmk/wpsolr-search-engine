@@ -3,7 +3,9 @@
 namespace wpsolr\ui\widget;
 
 use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\localization\WPSOLR_Localization;
+use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\ui\widget;
 use wpsolr\ui\WPSOLR_Data_Facets;
 use wpsolr\ui\WPSOLR_UI_Facets;
@@ -123,19 +125,41 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Radio boxes',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig'
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
 			'checkbox' => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Check boxes',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig'
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
 			'range'    => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric Range',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric even ranges',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig'
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
+				self::LAYOUT_FIELD_TYPES         => [
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
+				]
+			],
+			'query'    => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric uneven ranges',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_QUERY,
+				self::LAYOUT_FIELD_TYPES         => [
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
+				]
 			]
 		]
 	];

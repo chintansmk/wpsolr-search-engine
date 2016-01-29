@@ -10,12 +10,12 @@
         <fieldType name="double" class="solr.DoubleField" omitNorms="true" docValues="false"/>
         <fieldType name="sint" class="solr.TrieIntField" sortMissingLast="true" omitNorms="true" docValues="true"
                    required="true"/>
-        <fieldType name="slong" class="solr.TrieLongField" sortMissingLast="true" omitNorms="true"
-                   docValues="true" required="true"/>
-        <fieldType name="sfloat" class="solr.TrieFloatField" sortMissingLast="true" omitNorms="true"
-                   docValues="true" required="true"/>
-        <fieldType name="sdouble" class="solr.TrieDoubleField" sortMissingLast="true" omitNorms="true"
-                   docValues="true" required="true"/>
+        <fieldType name="slong" class="solr.TrieLongField" sortMissingLast="true" omitNorms="true" docValues="true"
+                   required="true"/>
+        <fieldType name="sfloat" class="solr.TrieFloatField" sortMissingLast="true" omitNorms="true" docValues="true"
+                   required="true"/>
+        <fieldType name="sdouble" class="solr.TrieDoubleField" sortMissingLast="true" omitNorms="true" docValues="true"
+                   required="true"/>
         <fieldType name="date" class="solr.TrieDateField" sortMissingLast="true" omitNorms="true" docValues="true"
                    required="true"/>
         <fieldType name="random" class="solr.RandomSortField" indexed="true" docValues="false"/>

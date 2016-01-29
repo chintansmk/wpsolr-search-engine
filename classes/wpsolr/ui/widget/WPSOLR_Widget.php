@@ -31,6 +31,8 @@ class WPSOLR_Widget extends \WP_Widget {
 	const LAYOUT_FIELD_TEMPLATE_CSS = 'template_css';
 	const LAYOUT_FIELD_TEMPLATE_JS = 'template_js';
 	const LAYOUT_FIELD_TEMPLATE_NAME = 'name';
+	const LAYOUT_FIELD_FACET_TYPE = 'facet_type';
+	const LAYOUT_FIELD_TYPES = 'field_types';
 
 	// Form fields
 	const FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_STRING = 'is_custom_twig_template_string';

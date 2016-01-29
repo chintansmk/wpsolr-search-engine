@@ -1,5 +1,6 @@
 <?php
 use wpsolr\extensions\WPSOLR_Extensions;
+use wpsolr\ui\widget\WPSOLR_Widget_Facet;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
@@ -77,6 +78,27 @@ use wpsolr\utilities\WPSOLR_Option;
 			event.preventDefault();
 		});
 
+
+		// Layouts
+		var layouts = <?php echo json_encode( WPSOLR_Widget_Facet::get_facets_layouts() ); ?>;
+
+		function display_facet_types(layout_element, layout_facet_type) {
+			layout_element.parent().parent().parent().children(".wpsolr_facet_type").hide(); // hide all facet type sections
+			layout_element.parent().parent().parent().children(".wpsolr_" + layout_facet_type).show(); // show facet section type of the selected layout
+		}
+
+		// Display facet sections depending on the select layout facet type
+		jQuery(".wpsolr_layout_select").each(function () {
+			var layout_facet_type = layouts[jQuery(this).val()].facet_type;
+			display_facet_types(jQuery(this), layout_facet_type);
+		});
+
+		// Change facet layout selection
+		jQuery(".wpsolr_layout_select").on("change", function (event) {
+			var layout_facet_type = layouts[jQuery(this).val()].facet_type;
+			display_facet_types(jQuery(this), layout_facet_type);
+		});
+
 	});
 </script>
 
@@ -145,9 +167,9 @@ use wpsolr\utilities\WPSOLR_Option;
 						array(
 							'options_name'         => $options_name,
 							'facets_group_uuid'    => $facets_group_uuid,
-							'layouts'              => $layouts,
+							'layouts'              => $layouts[ WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_id() ],
 							'facet_name'           => $facet_selected_name,
-							'is_range'             => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_is_range(),
+							'is_numeric'           => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_is_numeric(),
 							'facet'                => $facet_selected,
 							'facet_selected_class' => $facet_selected_class,
 							'image_plus_display'   => 'none',
@@ -169,9 +191,9 @@ use wpsolr\utilities\WPSOLR_Option;
 							array(
 								'options_name'         => $options_name,
 								'facets_group_uuid'    => $facets_group_uuid,
-								'layouts'              => $layouts,
+								'layouts'              => $layouts[ $field['solr_type'] ],
 								'facet_name'           => $field_name,
-								'is_range'             => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_is_range(),
+								'is_numeric'           => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_is_numeric(),
 								'facet'                => $field,
 								'facet_selected_class' => $facet_not_selected_class,
 								'image_plus_display'   => 'inline',

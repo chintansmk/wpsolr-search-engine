@@ -5,6 +5,7 @@ namespace wpsolr\extensions\facets;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\solr\WPSOLR_Schema;
+use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\widget\WPSOLR_Widget_Facet;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
@@ -15,6 +16,11 @@ use wpsolr\utilities\WPSOLR_Option;
  * Manage Facets
  */
 class WPSOLR_Options_Facets extends WPSOLR_Extensions {
+
+	// Facet types
+	const FACET_TYPE_FIELD = 'facet_field';
+	const FACET_TYPE_RANGE = 'facet_range';
+	const FACET_TYPE_QUERY = 'facet_query';
 
 	// Facet labels
 	const FACET_FIELD_LABEL = 'label'; // Facet label
@@ -33,14 +39,20 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	// Is a facet in an exclusion tag (show misssing elements)
 	const FACET_FIELD_IS_EXCLUSION = 'missing';
 
-	// Facet range start
-	const FACET_RANGE = 'range';
-	const FACET_RANGE_START = 'start';
-	const FACET_RANGE_START_DEFAULT = '0';
-	const FACET_RANGE_END = 'end';
-	const FACET_RANGE_END_DEFAULT = '100';
-	const FACET_RANGE_GAP = 'gap';
-	const FACET_RANGE_GAP_DEFAULT = '10';
+	// Facet range
+	const FACET_FIELD_RANGE = 'range';
+	const FACET_FIELD_RANGE_START = 'start';
+	const FACET_FILED_RANGE_START_DEFAULT = '0';
+	const FACET_FIELD_RANGE_END = 'end';
+	const FACET_FIELD_RANGE_END_DEFAULT = '100';
+	const FACET_FIELD_RANGE_GAP = 'gap';
+	const FACET_FIELD_RANGE_GAP_DEFAULT = '10';
+
+	// Facet query
+	const FACET_FIELD_QUERY = 'query';
+
+	// Layouts available for each field type
+	protected $layouts;
 
 	/**
 	 * Post constructor.
@@ -66,7 +78,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 					'options'                   => WPSOLR_Global::getOption()->get_option_facet(
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
-					'layouts'                   => WPSOLR_Widget_Facet::get_facets_layouts(),
+					'layouts'                   => $this->get_facets_layouts_by_field_types(),
 					'default_facets_group_uuid' => $this->get_default_facets_group_id(),
 					'new_facets_group_uuid'     => $new_facets_group_uuid,
 					'facets_groups'             => array_merge(
@@ -89,6 +101,32 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 				$plugin_parameters
 			)
 		);
+	}
+
+
+	/**
+	 * Get all layouts by field type
+	 *
+	 * @return array
+	 */
+	public function get_facets_layouts_by_field_types() {
+
+		$results = [ ];
+
+		$field_types_id = array_keys( WPSOLR_Global::getSolrFieldTypes()->get_field_types() );
+		$layouts        = WPSOLR_Widget_Facet::get_facets_layouts();
+
+		foreach ( $layouts as $layout_id => $layout ) {
+
+			$layout_field_types = isset( $layout[ WPSOLR_Widget::LAYOUT_FIELD_TYPES ] ) ? $layout[ WPSOLR_Widget::LAYOUT_FIELD_TYPES ] : $field_types_id;
+
+			foreach ( $layout_field_types as $layout_field_type ) {
+
+				$results[ $layout_field_type ][ $layout_id ] = $layout;
+			}
+		}
+
+		return $results;
 	}
 
 	/**
@@ -206,7 +244,16 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 * @param $facet
 	 */
 	public function get_facet_is_range( $facet ) {
-		return isset( $facet[ self::FACET_RANGE ] );
+		return isset( $facet[ self::FACET_FIELD_RANGE ] );
+	}
+
+	/**
+	 * Is facet intervals ?
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_is_intervals( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_QUERY ] );
 	}
 
 	/**
@@ -215,7 +262,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 * @param $facet
 	 */
 	public function get_facet_range_start( $facet ) {
-		return isset( $facet[ self::FACET_RANGE ] ) && isset( $facet[ self::FACET_RANGE ][ self::FACET_RANGE_START ] ) ? $facet[ self::FACET_RANGE ][ self::FACET_RANGE_START ] : self::FACET_RANGE_START_DEFAULT;
+		return isset( $facet[ self::FACET_FIELD_RANGE ] ) && isset( $facet[ self::FACET_FIELD_RANGE ][ self::FACET_FIELD_RANGE_START ] ) ? $facet[ self::FACET_FIELD_RANGE ][ self::FACET_FIELD_RANGE_START ] : self::FACET_FILED_RANGE_START_DEFAULT;
 	}
 
 	/**
@@ -224,7 +271,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 * @param $facet
 	 */
 	public function get_facet_range_end( $facet ) {
-		return isset( $facet[ self::FACET_RANGE ] ) && isset( $facet[ self::FACET_RANGE ][ self::FACET_RANGE_END ] ) ? $facet[ self::FACET_RANGE ][ self::FACET_RANGE_END ] : self::FACET_RANGE_END_DEFAULT;
+		return isset( $facet[ self::FACET_FIELD_RANGE ] ) && isset( $facet[ self::FACET_FIELD_RANGE ][ self::FACET_FIELD_RANGE_END ] ) ? $facet[ self::FACET_FIELD_RANGE ][ self::FACET_FIELD_RANGE_END ] : self::FACET_FIELD_RANGE_END_DEFAULT;
 	}
 
 	/**
@@ -233,7 +280,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 * @param $facet
 	 */
 	public function get_facet_range_gap( $facet ) {
-		return isset( $facet[ self::FACET_RANGE ] ) && isset( $facet[ self::FACET_RANGE ][ self::FACET_RANGE_GAP ] ) ? $facet[ self::FACET_RANGE ][ self::FACET_RANGE_GAP ] : self::FACET_RANGE_GAP_DEFAULT;
+		return isset( $facet[ self::FACET_FIELD_RANGE ] ) && isset( $facet[ self::FACET_FIELD_RANGE ][ self::FACET_FIELD_RANGE_GAP ] ) ? $facet[ self::FACET_FIELD_RANGE ][ self::FACET_FIELD_RANGE_GAP ] : self::FACET_FIELD_RANGE_GAP_DEFAULT;
 	}
 
 	/**
