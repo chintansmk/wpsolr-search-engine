@@ -293,6 +293,19 @@ function my_plugins_loaded() {
 	 * You can find our template file in this plugin's /languages/wpsolr.pot file
 	 */
 	load_plugin_textdomain( 'wpsolr', false, false );
+
+	/**
+	 * Load string translations
+	 */
+	if ( is_admin() ) {
+
+		do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
+			[
+				'translations' => WPSOLR_Global::getExtensionFacets()->get_strings_to_translate()
+			]
+		);
+	}
+
 }
 
 function my_enqueue() {

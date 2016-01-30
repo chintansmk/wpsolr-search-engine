@@ -16,4 +16,20 @@ class WPSOLR_Service_Polylang {
 		return null;
 	}
 
+
+	public static function pll_register_string( $name, $string, $group, $multiline ) {
+
+		if ( function_exists( '\pll_register_string' ) ) {
+			\pll_register_string( $name, $string, $group, $multiline );
+		}
+	}
+
+	public static function pll__( $string ) {
+
+		if ( function_exists( '\pll__' ) ) {
+			return \pll__( $string );
+		}
+
+	}
+
 }

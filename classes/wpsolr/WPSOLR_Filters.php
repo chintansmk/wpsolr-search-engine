@@ -62,4 +62,10 @@ class WPSOLR_Filters {
 
 	// Filter after retrieving an option value
 	const WPSOLR_FILTER_AFTER_GET_OPTION_VALUE = 'wpsolr_filter_after_get_option_value';
+
+	// Action to register translations strings to ML extensions
+	const WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS = 'wpsolr_action_translation_register_strings';
+
+	// Filter to get a translation string from ML extensions
+	const WPSOLR_FILTER_TRANSLATION_STRING = 'wpsolr_filter_translation_string';
 }

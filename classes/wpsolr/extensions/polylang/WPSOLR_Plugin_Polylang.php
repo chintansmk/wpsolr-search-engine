@@ -39,6 +39,17 @@ class WPSOLR_Plugin_Polylang extends WPSOLR_Plugin_Wpml {
 			'get_search_page_slug',
 		), 10, 1 );
 
+		WPSOLR_Service_Wordpress::add_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS, array(
+			$this,
+			'register_translation_strings',
+		), 10, 1 );
+
+		WPSOLR_Service_Wordpress::add_filter( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, array(
+			$this,
+			'get_translation_string',
+		), 10, 1 );
+
+
 	}
 
 	/**
@@ -223,4 +234,31 @@ class WPSOLR_Plugin_Polylang extends WPSOLR_Plugin_Wpml {
 		return WPSOLR_Global::getOption()->get_plugin_polylang_solr_index_indices();
 	}
 
+
+	/**
+	 * Register translation strings to POLYLANG translatable strings
+	 *
+	 * @param $parameters ["translations" => [ ["name" => "name1", "text" => "text 1", "is_multiligne" => true] ]
+	 */
+	function register_translation_strings( $parameters ) {
+
+		foreach ( $parameters['translations'] as $text_to_add ) {
+
+			WPSOLR_Service_Polylang::pll_register_string( $text_to_add['name'], $text_to_add['text'], 'wpsolr', $text_to_add['is_multiligne'] );
+		}
+
+		return;
+	}
+
+	/**
+	 * Add translation strings to POLYLANG translatable strings
+	 *
+	 * @param $parameters ["translations" => [ ["name" => "name1", "text" => "text 1", "is_multiligne" => true] ]
+	 */
+	function get_translation_string( $string ) {
+
+		$result = WPSOLR_Service_Polylang::pll__( $string );
+
+		return $result;
+	}
 }

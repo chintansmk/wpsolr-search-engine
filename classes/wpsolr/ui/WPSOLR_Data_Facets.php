@@ -102,7 +102,8 @@ class WPSOLR_Data_Facets {
 							}
 
 							$facet_value          = $facet_in_results[0];
-							$facet_label_expanded = $facet_in_results[0];
+							$facet_label_expanded = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $facet_label );
+							//$facet_label_expanded = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $facet_in_results[0] );
 							if ( isset( $facet['definition']['range'] ) ) {
 
 								$range_inf = $facet_value;
@@ -112,7 +113,11 @@ class WPSOLR_Data_Facets {
 								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
 
 								// Replace label pattern with values
-								$facet_label_expanded = sprintf( $facet_label, number_format_i18n( $range_inf ), number_format_i18n( $range_sup ), $count );
+								$facet_label_expanded = sprintf(
+									$facet_label_expanded,
+									is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
+									is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
+									$count );
 
 							} else if ( isset( $facet['definition']['query'] ) ) {
 
@@ -123,13 +128,20 @@ class WPSOLR_Data_Facets {
 								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
 
 								// Replace label pattern with values
-								$facet_label_expanded = sprintf( $facet_label, number_format_i18n( $range_inf ), number_format_i18n( $range_sup ), $count );
+								$facet_label_expanded = sprintf(
+									$facet_label_expanded,
+									is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
+									is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
+									$count );
+
 							} else {
 
-								if ( is_numeric( $facet_in_results[0] ) ) {
-									// Replace label pattern with values
-									$facet_label_expanded = sprintf( $facet_label, number_format_i18n( $facet_in_results[0] ), $count );
-								}
+								// Replace label pattern with values
+								$facet_label_expanded = sprintf(
+									$facet_label_expanded,
+									is_numeric( $facet_in_results[0] ) ? number_format_i18n( $facet_in_results[0] ) : $facet_in_results[0],
+									$count );
+
 							}
 
 							// Current item selected ?
