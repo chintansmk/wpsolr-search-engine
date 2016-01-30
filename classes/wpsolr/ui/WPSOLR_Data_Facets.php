@@ -80,73 +80,77 @@ class WPSOLR_Data_Facets {
 
 						$loop ++;
 
-						if ( ! isset( $facet['definition']['query'] ) ) {
+						$count = $facet_in_results[1];
 
-							// Which facet template to use ?
-							$facet_label = $facet_label_other;
-							switch ( $loop ) {
-								case 1:
-									$facet_label = $facet_label_first;
-									break;
-								case $nb_facets:
-									$facet_label = $facet_label_last;
-									break;
-							}
-						} else {
+						if ( ! empty( $count ) ) { // Do not display facets with 0 count
 
-							$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_LABEL ];
-						}
+							if ( ! isset( $facet['definition']['query'] ) ) {
 
-						$facet_value = $facet_in_results[0];
-						if ( isset( $facet['definition']['range'] ) ) {
-
-							// Facet range come as [10 TO 19]
-							$facet_value = sprintf( '[%s TO %s]', $facet_value, $facet_value + $facet['definition']['range']['gap'] - 1 );
-
-						} else if ( isset( $facet['definition']['query'] ) ) {
-
-							$range_inf = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_INF ];
-							$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_SUP ];
-
-							// Facet range come as [10 TO 19]
-							$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
-						}
-
-						// Current item selected ?
-						$item_selected = isset( $facets_selected[ $facet_to_display_id ] ) && ( in_array( $facet_value, $facets_selected[ $facet_to_display_id ] ) );
-
-						// Update, once, $results['has_facet_elements_selected'], if current element is selected
-						if ( $item_selected && ! $results['has_facet_elements_selected'] ) {
-							$results['has_facet_elements_selected'] = true;
-						}
-
-
-						$name = trim( $facet_in_results[0] );
-						if ( ! empty( $name ) || $name === '0' ) { // Only add facet if non blank name (it happens). '0' is authorized for ranges.
-
-							if ( isset( $facet['definition']['query'] ) ) {
-
-								array_push( $facet['items'], array(
-									'label'     => $facet_label,
-									'range_inf' => $range_inf,
-									'range_sup' => $range_sup,
-									'count'     => $facet_in_results[1],
-									'selected'  => $item_selected
-								) );
-
+								// Which facet template to use ?
+								$facet_label = $facet_label_other;
+								switch ( $loop ) {
+									case 1:
+										$facet_label = $facet_label_first;
+										break;
+									case $nb_facets:
+										$facet_label = $facet_label_last;
+										break;
+								}
 							} else {
 
-								array_push( $facet['items'], array(
-									'label'    => $facet_label,
-									'name'     => $facet_in_results[0],
-									'count'    => $facet_in_results[1],
-									'selected' => $item_selected
-								) );
-
+								$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_LABEL ];
 							}
 
-						}
+							$facet_value = $facet_in_results[0];
+							if ( isset( $facet['definition']['range'] ) ) {
 
+								// Facet range come as [10 TO 19]
+								$facet_value = sprintf( '[%s TO %s]', $facet_value, $facet_value + $facet['definition']['range']['gap'] - 1 );
+
+							} else if ( isset( $facet['definition']['query'] ) ) {
+
+								$range_inf = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_INF ];
+								$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_SUP ];
+
+								// Facet range come as [10 TO 19]
+								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+							}
+
+							// Current item selected ?
+							$item_selected = isset( $facets_selected[ $facet_to_display_id ] ) && ( in_array( $facet_value, $facets_selected[ $facet_to_display_id ] ) );
+
+							// Update, once, $results['has_facet_elements_selected'], if current element is selected
+							if ( $item_selected && ! $results['has_facet_elements_selected'] ) {
+								$results['has_facet_elements_selected'] = true;
+							}
+
+
+							$name = trim( $facet_in_results[0] );
+							if ( ! empty( $name ) || $name === '0' ) { // Only add facet if non blank name (it happens). '0' is authorized for ranges.
+
+								if ( isset( $facet['definition']['query'] ) ) {
+
+									array_push( $facet['items'], array(
+										'label'     => $facet_label,
+										'range_inf' => $range_inf,
+										'range_sup' => $range_sup,
+										'count'     => $facet_in_results[1],
+										'selected'  => $item_selected
+									) );
+
+								} else {
+
+									array_push( $facet['items'], array(
+										'label'    => $facet_label,
+										'name'     => $facet_in_results[0],
+										'count'    => $facet_in_results[1],
+										'selected' => $item_selected
+									) );
+
+								}
+
+							}
+						}
 					}
 
 					// Add current facet to results, if not empty
