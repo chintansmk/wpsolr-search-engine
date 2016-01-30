@@ -411,7 +411,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 					if ( ! empty( $facet_field[ $translatable_name ] ) ) {
 
 						$results[] = $this->get_string_to_translate(
-							sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
+							$facet_field[ $translatable_name ], //sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
 							$facet_field[ $translatable_name ],
 							'wpsolr',
 							$translatable['is_multiline']
@@ -426,7 +426,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 							$label = explode( '|', $line )[2];
 
 							$results[] = $this->get_string_to_translate(
-								sprintf( ' % s of % s % s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
+								$label, //sprintf( ' % s of % s % s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
 								$label,
 								'wpsolr',
 								$translatable['is_multiline']

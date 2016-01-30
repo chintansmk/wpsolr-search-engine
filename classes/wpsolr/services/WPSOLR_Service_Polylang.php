@@ -30,6 +30,7 @@ class WPSOLR_Service_Polylang {
 			return \pll__( $string );
 		}
 
+		return $string;
 	}
 
 }
