@@ -22,7 +22,7 @@
                 <li>
                     <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"
                        data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">
-                        {{ item.label|format( item.name, item.count ) }}
+                        {{ item.label }}
                     </a> {# Current facet item #}
 
                 </li>

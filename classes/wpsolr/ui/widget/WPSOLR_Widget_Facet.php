@@ -150,7 +150,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			],
 			'query'    => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric uneven ranges',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/query/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_QUERY,

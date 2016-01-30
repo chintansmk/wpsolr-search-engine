@@ -101,11 +101,18 @@ class WPSOLR_Data_Facets {
 								$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_LABEL ];
 							}
 
-							$facet_value = $facet_in_results[0];
+							$facet_value          = $facet_in_results[0];
+							$facet_label_expanded = $facet_in_results[0];
 							if ( isset( $facet['definition']['range'] ) ) {
 
+								$range_inf = $facet_value;
+								$range_sup = $facet_value + $facet['definition']['range']['gap'] - 1;
+
 								// Facet range come as [10 TO 19]
-								$facet_value = sprintf( '[%s TO %s]', $facet_value, $facet_value + $facet['definition']['range']['gap'] - 1 );
+								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+
+								// Replace label pattern with values
+								$facet_label_expanded = sprintf( $facet_label, number_format_i18n( $range_inf ), number_format_i18n( $range_sup ), $count );
 
 							} else if ( isset( $facet['definition']['query'] ) ) {
 
@@ -114,6 +121,15 @@ class WPSOLR_Data_Facets {
 
 								// Facet range come as [10 TO 19]
 								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+
+								// Replace label pattern with values
+								$facet_label_expanded = sprintf( $facet_label, number_format_i18n( $range_inf ), number_format_i18n( $range_sup ), $count );
+							} else {
+
+								if ( is_numeric( $facet_in_results[0] ) ) {
+									// Replace label pattern with values
+									$facet_label_expanded = sprintf( $facet_label, number_format_i18n( $facet_in_results[0] ), $count );
+								}
 							}
 
 							// Current item selected ?
@@ -128,10 +144,10 @@ class WPSOLR_Data_Facets {
 							$name = trim( $facet_in_results[0] );
 							if ( ! empty( $name ) || $name === '0' ) { // Only add facet if non blank name (it happens). '0' is authorized for ranges.
 
-								if ( isset( $facet['definition']['query'] ) ) {
+								if ( isset( $facet['definition']['range'] ) || isset( $facet['definition']['query'] ) ) {
 
 									array_push( $facet['items'], array(
-										'label'     => $facet_label,
+										'label'     => $facet_label_expanded,
 										'range_inf' => $range_inf,
 										'range_sup' => $range_sup,
 										'count'     => $facet_in_results[1],
@@ -141,7 +157,7 @@ class WPSOLR_Data_Facets {
 								} else {
 
 									array_push( $facet['items'], array(
-										'label'    => $facet_label,
+										'label'    => $facet_label_expanded,
 										'name'     => $facet_in_results[0],
 										'count'    => $facet_in_results[1],
 										'selected' => $item_selected
