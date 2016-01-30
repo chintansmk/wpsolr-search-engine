@@ -4,7 +4,7 @@
         // Init facets
         jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}.checked").each(function () {
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
-            wpsolr_facets.addFacetValue(facet); // add facet to facets
+            wpsolr_facets.addFacetRangeValue(facet); // add facet to facets
         });
 
         jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").on("click", function (event) {
