@@ -153,7 +153,20 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_QUERY,
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE_CUSTOM,
+				self::LAYOUT_FIELD_TYPES         => [
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
+				]
+			],
+			'slider'   => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Slider',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,

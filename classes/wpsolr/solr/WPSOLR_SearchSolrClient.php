@@ -422,11 +422,11 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 				if ( ! empty( $resultset->getFacetSet() ) ) {
 
-					if ( $extension_facets->get_facet_is_query( $facet ) ) {
+					if ( $extension_facets->get_facet_is_custom_range( $facet ) ) {
 
-						// Fetch all query ranges of the facet definition
+						// Fetch all custom ranges of the facet definition
 						$loop = 0;
-						foreach ( $extension_facets->get_facet_query_custom_ranges( $facet ) as $facet_custom_range ) {
+						foreach ( $extension_facets->get_facet_custom_ranges( $facet ) as $facet_custom_range ) {
 
 							$result_facet = $resultset->getFacetSet()->getFacet( 'query_' . "$field_name_dynamic" . '_' . $loop );
 
@@ -681,16 +681,16 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				}
 
 				// Add the facet
-				if ( $extension_facets->get_facet_is_query( $facet ) ) {
+				if ( $extension_facets->get_facet_is_custom_range( $facet ) ) {
 
 					// Set a query facet.
 					// We don't use range intervals because it requires docValues and Solr 4.10
 
 					$loop = 0;
-					foreach ( $extension_facets->get_facet_query_custom_ranges( $facet ) as $facet_custom_range ) {
+					foreach ( $extension_facets->get_facet_custom_ranges( $facet ) as $facet_custom_range ) {
 
-						$range_inf = $facet_custom_range[ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_INF ];
-						$range_sup = $facet_custom_range[ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_SUP ];
+						$range_inf = $facet_custom_range[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_INF ];
+						$range_sup = $facet_custom_range[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_SUP ];
 
 						$solarium_facet = $facetSet->createFacetQuery( 'query_' . $field_name . '_' . $loop )->setQuery( "$field_name: [$range_inf TO $range_sup]" );
 

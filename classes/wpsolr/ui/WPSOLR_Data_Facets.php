@@ -60,7 +60,7 @@ class WPSOLR_Data_Facets {
 					}
 
 					if ( isset( $facet_to_display['query'] ) ) {
-						$facet_query_custom_ranges = $extension_facets->get_facet_query_custom_ranges( $facet_to_display );
+						$facet_query_custom_ranges = $extension_facets->get_facet_custom_ranges( $facet_to_display );
 					}
 
 					$facet               = array();
@@ -98,7 +98,7 @@ class WPSOLR_Data_Facets {
 								}
 							} else {
 
-								$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_LABEL ];
+								$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_LABEL ];
 							}
 
 							$facet_value          = $facet_in_results[0];
@@ -121,8 +121,8 @@ class WPSOLR_Data_Facets {
 
 							} else if ( isset( $facet['definition']['query'] ) ) {
 
-								$range_inf = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_INF ];
-								$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_QUERY_RANGE_SUP ];
+								$range_inf = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_INF ];
+								$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_SUP ];
 
 								// Facet range come as [10 TO 19]
 								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );

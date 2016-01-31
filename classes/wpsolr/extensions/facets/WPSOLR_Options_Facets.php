@@ -21,7 +21,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	// Facet types
 	const FACET_TYPE_FIELD = 'facet_field';
 	const FACET_TYPE_RANGE = 'facet_range';
-	const FACET_TYPE_QUERY = 'facet_query';
+	const FACET_TYPE_RANGE_CUSTOM = 'facet_range_custom';
 
 	// Facet labels
 	const FACET_FIELD_LABEL = 'label'; // Facet label
@@ -49,13 +49,13 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	const FACET_FIELD_RANGE_GAP = 'gap';
 	const FACET_FIELD_RANGE_GAP_DEFAULT = '10';
 
-	// Facet query
-	const FACET_FIELD_QUERY = 'query';
-	const FACET_FIELD_QUERY_RANGES = 'custom_ranges';
-	const FACET_FIELD_QUERY_RANGES_DEFAULT = '0|10|%1$s - %2$s (%3$d)';
-	const FACET_FIELD_QUERY_RANGE_INF = 'range_inf';
-	const FACET_FIELD_QUERY_RANGE_SUP = 'range_sup';
-	const FACET_FIELD_QUERY_RANGE_LABEL = 'range_label';
+	// Facet custom range
+	const FACET_FIELD_CUSTOM_RANGE = 'custom_range';
+	const FACET_FIELD_CUSTOM_RANGE_RANGES = 'custom_ranges';
+	const FACET_FIELD_CUSTOM_RANGE_RANGES_DEFAULT = '0|10|%1$s - %2$s (%3$d)';
+	const FACET_FIELD_CUSTOM_RANGE_INF = 'range_inf';
+	const FACET_FIELD_CUSTOM_RANGE_SUP = 'range_sup';
+	const FACET_FIELD_CUSTOM_RANGE_LABEL = 'range_label';
 
 	// Layouts available for each field type
 	protected $layouts;
@@ -254,12 +254,12 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Is facet query ?
+	 * Is facet custom range ?
 	 *
 	 * @param $facet
 	 */
-	public function get_facet_is_query( $facet ) {
-		return isset( $facet[ self::FACET_FIELD_QUERY ] );
+	public function get_facet_is_custom_range( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_CUSTOM_RANGE ] );
 	}
 
 	/**
@@ -327,7 +327,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 
 	/**
-	 * Get an array of custom ranges for a range query facet
+	 * Get an array of custom ranges for a custom range facet
 	 *
 	 * 0|9|%1$s - %2$s (%3$d)
 	 * 10|20|%1$s TO %2$s (%3$d)
@@ -341,11 +341,11 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 *
 	 * @return array
 	 */
-	public function get_facet_query_custom_ranges( $facet ) {
+	public function get_facet_custom_ranges( $facet ) {
 
 		$results = [ ];
 
-		$custom_ranges_string = isset( $facet[ self::FACET_FIELD_QUERY ] ) && isset( $facet[ self::FACET_FIELD_QUERY ][ self::FACET_FIELD_QUERY_RANGES ] ) ? $facet[ self::FACET_FIELD_QUERY ][ self::FACET_FIELD_QUERY_RANGES ] : '';
+		$custom_ranges_string = isset( $facet[ self::FACET_FIELD_CUSTOM_RANGE ] ) && isset( $facet[ self::FACET_FIELD_CUSTOM_RANGE ][ self::FACET_FIELD_CUSTOM_RANGE_RANGES ] ) ? $facet[ self::FACET_FIELD_CUSTOM_RANGE ][ self::FACET_FIELD_CUSTOM_RANGE_RANGES ] : '';
 
 		if ( ! empty( $custom_ranges_string ) ) {
 
@@ -353,9 +353,9 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 				$custom_range = explode( '|', $custom_range_string );
 				$results[]    = [
-					self::FACET_FIELD_QUERY_RANGE_INF   => $custom_range[0],
-					self::FACET_FIELD_QUERY_RANGE_SUP   => $custom_range[1],
-					self::FACET_FIELD_QUERY_RANGE_LABEL => $custom_range[2]
+					self::FACET_FIELD_CUSTOM_RANGE_INF   => $custom_range[0],
+					self::FACET_FIELD_CUSTOM_RANGE_SUP   => $custom_range[1],
+					self::FACET_FIELD_CUSTOM_RANGE_LABEL => $custom_range[2]
 				];
 			}
 		}
@@ -395,10 +395,10 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 		// Fields that can be translated and their definition
 		$fields_translatable = [
-			self::FACET_FIELD_LABEL_FIRST  => [ 'name' => 'First facet Label', 'is_multiline' => false ],
-			self::FACET_FIELD_LABEL        => [ 'name' => 'Middle facet Label', 'is_multiline' => false ],
-			self::FACET_FIELD_LABEL_LAST   => [ 'name' => 'Last facet Label', 'is_multiline' => false ],
-			self::FACET_FIELD_QUERY_RANGES => [ 'name' => 'Uneven Range facet Labels', 'is_multiline' => true ]
+			self::FACET_FIELD_LABEL_FIRST         => [ 'name' => 'First facet Label', 'is_multiline' => false ],
+			self::FACET_FIELD_LABEL               => [ 'name' => 'Middle facet Label', 'is_multiline' => false ],
+			self::FACET_FIELD_LABEL_LAST          => [ 'name' => 'Last facet Label', 'is_multiline' => false ],
+			self::FACET_FIELD_CUSTOM_RANGE_RANGES => [ 'name' => 'Uneven Range facet Labels', 'is_multiline' => true ]
 		];
 
 		$groups = WPSOLR_Global::getOption()->get_facets_selected_array();
@@ -419,11 +419,11 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 						);
 					}
 
-					if ( ! empty( $field[ self::FACET_FIELD_QUERY ] ) && ! empty( $field[ self::FACET_FIELD_QUERY ][ $translatable_name ] ) ) {
+					if ( ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ] ) && ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) ) {
 
 						// Extract the 2rd column of each line
 						$label = '';
-						foreach ( WPSOLR_Regexp::split_lines( $field[ self::FACET_FIELD_QUERY ][ $translatable_name ] ) as $line ) {
+						foreach ( WPSOLR_Regexp::split_lines( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) as $line ) {
 							$label = explode( '|', $line )[2];
 
 							$results[] = $this->get_string_to_translate(
