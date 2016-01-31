@@ -300,11 +300,20 @@ function my_plugins_loaded() {
 	 */
 	if ( is_admin() ) {
 
+		// Translate facets
 		do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
 			[
 				'translations' => WPSOLR_Global::getExtensionFacets()->get_strings_to_translate()
 			]
 		);
+
+		// Translate sorts
+		do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
+			[
+				'translations' => WPSOLR_Global::getExtensionSorts()->get_strings_to_translate()
+			]
+		);
+
 	}
 
 }

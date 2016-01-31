@@ -244,7 +244,7 @@ class WPSOLR_Plugin_Polylang extends WPSOLR_Plugin_Wpml {
 
 		foreach ( $parameters['translations'] as $text_to_add ) {
 
-			WPSOLR_Service_Polylang::pll_register_string( $text_to_add['name'], $text_to_add['text'], 'wpsolr', $text_to_add['is_multiligne'] );
+			WPSOLR_Service_Polylang::pll_register_string( $text_to_add['name'], $text_to_add['text'], $text_to_add['domain'], $text_to_add['is_multiligne'] );
 		}
 
 		return;

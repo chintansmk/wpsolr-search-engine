@@ -5,6 +5,7 @@ namespace wpsolr\ui;
 use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\widget\WPSOLR_Widget_Sort;
 use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\WPSOLR_Filters;
 
 /**
  * Sort data
@@ -40,7 +41,7 @@ class WPSOLR_Data_Sort {
 
 				$sort = array(
 					'id'       => $sort_to_display_name,
-					'name'     => WPSOLR_Global::getExtensionSorts()->get_sort_label( $sort_to_display ),
+					'name'     => apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, WPSOLR_Global::getExtensionSorts()->get_sort_label( $sort_to_display ) ),
 					'selected' => ( $sort_to_display_name === ( ! empty( $sort_selected ) ? $sort_selected : $sort_default_name )
 					)
 				);

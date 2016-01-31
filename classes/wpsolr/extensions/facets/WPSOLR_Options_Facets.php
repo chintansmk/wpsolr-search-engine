@@ -374,7 +374,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 *
 	 * @return array
 	 */
-	public function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
+	protected function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
 
 		return [
 			'name'          => $name,
@@ -391,6 +391,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	public function get_strings_to_translate() {
 
 		$results = [ ];
+		$domain  = 'wpsolr facets'; // never change this
 
 		// Fields that can be translated and their definition
 		$fields_translatable = [
@@ -400,35 +401,35 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 			self::FACET_FIELD_QUERY_RANGES => [ 'name' => 'Uneven Range facet Labels', 'is_multiline' => true ]
 		];
 
-		$facets_groups = WPSOLR_Global::getOption()->get_facets_selected_array();
+		$groups = WPSOLR_Global::getOption()->get_facets_selected_array();
 
-		foreach ( $facets_groups as $facets_group_name => $facets_group ) {
+		foreach ( $groups as $group_name => $group ) {
 
-			foreach ( $facets_group as $facet_field ) {
+			foreach ( $group as $field ) {
 
 				foreach ( $fields_translatable as $translatable_name => $translatable ) {
 
-					if ( ! empty( $facet_field[ $translatable_name ] ) ) {
+					if ( ! empty( $field[ $translatable_name ] ) ) {
 
 						$results[] = $this->get_string_to_translate(
-							$facet_field[ $translatable_name ], //sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
-							$facet_field[ $translatable_name ],
-							'wpsolr',
+							$field[ $translatable_name ], //sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
+							$field[ $translatable_name ],
+							$domain,
 							$translatable['is_multiline']
 						);
 					}
 
-					if ( ! empty( $facet_field[ self::FACET_FIELD_QUERY ] ) && ! empty( $facet_field[ self::FACET_FIELD_QUERY ][ $translatable_name ] ) ) {
+					if ( ! empty( $field[ self::FACET_FIELD_QUERY ] ) && ! empty( $field[ self::FACET_FIELD_QUERY ][ $translatable_name ] ) ) {
 
 						// Extract the 2rd column of each line
 						$label = '';
-						foreach ( WPSOLR_Regexp::split_lines( $facet_field[ self::FACET_FIELD_QUERY ][ $translatable_name ] ) as $line ) {
+						foreach ( WPSOLR_Regexp::split_lines( $field[ self::FACET_FIELD_QUERY ][ $translatable_name ] ) as $line ) {
 							$label = explode( '|', $line )[2];
 
 							$results[] = $this->get_string_to_translate(
 								$label, //sprintf( ' % s of % s % s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
 								$label,
-								'wpsolr',
+								$domain,
 								$translatable['is_multiline']
 							);
 
