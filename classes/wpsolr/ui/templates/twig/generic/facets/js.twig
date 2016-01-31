@@ -226,6 +226,10 @@
 
         this.url = url1.toString();
 
+        // Display loaders on each facet
+        //jQuery(".wpsolr_any_facet_class li ul").children().hide();
+        jQuery(".wpsolr_any_facet_class li ul").addClass("wpsolr_loader");
+
         window.location.href = this.url;
 
         this.debugState();
