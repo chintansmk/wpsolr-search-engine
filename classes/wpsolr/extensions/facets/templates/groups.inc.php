@@ -38,47 +38,17 @@ use wpsolr\utilities\WPSOLR_Option;
 <script>
 	jQuery(document).ready(function () {
 
-		var tabs = jQuery(".tabs").tabs();
-		//tabs.open(0);
+		// Create tabs and activate the group tab selected in the url
+		var tabs = jQuery(".tabs").tabs({active: <?php echo $group_tab_selected; ?>});
 		tabs.delegate("span.ui-icon-close", "click", function () {
 			var panelId = jQuery(this).closest("li").remove().attr("aria-controls");
 			jQuery("#" + panelId).remove();
 			tabs.tabs("refresh");
 		});
 
-
+		// Group facets accordeon
 		jQuery(".sortable").sortable();
 		jQuery(".sortable").accordion({active: false, collapsible: true, heightStyle: "content"});
-
-		var dialog, form;
-
-		dialog = jQuery("#dialog_form_group").dialog({
-			autoOpen: false,
-			height: 300,
-			width: 350,
-			modal: true,
-			buttons: {
-				//"Create an account": addUser,
-				Cancel: function () {
-					dialog.dialog("close");
-				}
-			},
-			close: function () {
-				//form[0].reset();
-				//allFields.removeClass("ui-state-error");
-			}
-		});
-
-		form = dialog.find("form").on("submit", function (event) {
-			event.preventDefault();
-			addUser();
-		});
-
-		jQuery("input[name=create_group]").button().on("click", function () {
-			dialog.dialog("open");
-			event.preventDefault();
-		});
-
 
 		// Layouts
 		var layouts = <?php echo json_encode( WPSOLR_Widget_Facet::get_facets_layouts() ); ?>;

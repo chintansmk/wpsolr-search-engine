@@ -39,7 +39,8 @@ require_once 'autocomplete.php';
 add_action( 'wp_head', 'check_default_options_and_function' );
 add_action( 'admin_menu', 'fun_add_solr_settings' );
 add_action( 'admin_init', 'wpsolr_admin_init' );
-add_action( 'wp_enqueue_scripts', 'my_enqueue' );
+add_action( 'wp_enqueue_scripts', 'my_front_enqueue' );
+add_action( 'admin_enqueue_scripts', 'my_admin_enqueue' );
 
 // Register WpSolr widgets when current theme's search is used.
 if ( WPSOLR_Global::getOption()->get_search_is_use_current_theme_search_template() ) {
@@ -308,7 +309,7 @@ function my_plugins_loaded() {
 
 }
 
-function my_enqueue() {
+function my_front_enqueue() {
 
 	if ( ! WPSOLR_Global::getOption()->get_search_is_prevent_loading_front_end_css() ) {
 		wp_enqueue_style( 'solr_auto_css', plugins_url( 'css/bootstrap.min.css', __FILE__ ) );
@@ -363,3 +364,9 @@ function my_enqueue() {
 	}
 }
 
+
+function my_admin_enqueue() {
+
+	// Url utilities to manipulate the url parameters
+	wp_enqueue_script( 'urljs', plugins_url( 'bower_components/jsurl/url.min.js', __FILE__ ), array( 'jquery' ), false, true );
+}

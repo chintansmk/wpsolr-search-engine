@@ -4,6 +4,10 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 
 ?>
 
+<?php
+$group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
+?>
+
 
 <script xmlns="http://www.w3.org/1999/html">
 	jQuery(document).ready(function () {
@@ -23,7 +27,6 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 				}
 			}
 
-
 			// Remove all facets not selected
 			jQuery('.facet_not_selected').each(function () {
 				jQuery(this).detach();
@@ -33,6 +36,13 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 			jQuery('.facet_type_not_selected').each(function () {
 				jQuery(this).detach();
 			});
+
+			// Change the group selected in url referer
+			var url = new Url(window.location.href);
+			url.query["group_tab"] = jQuery(".tabs").tabs('option', 'active');
+			jQuery('[name=_wp_http_referer]').val(url.toString());
+			//console.log(jQuery('[name=_wp_http_referer]').val());
+
 
 			return true;
 		});
@@ -62,35 +72,8 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 <script>
 	jQuery(document).ready(function () {
 
-		var dialog, form;
-
 		// Collapsable instructions
 		jQuery(".instructions").accordion({active: false, collapsible: true});
-
-		dialog = jQuery(".dialog_form_layout").dialog({
-			autoOpen: false,
-			height: 800,
-			width: 1000,
-			modal: true,
-			buttons: {
-				"Delete": function () {
-				},
-				"Update": function () {
-				},
-				Cancel: function () {
-					dialog.dialog("close");
-				}
-			},
-			close: function () {
-				//form[0].reset();
-				//allFields.removeClass("ui-state-error");
-			}
-		});
-
-		form = dialog.find("form").on("submit", function (event) {
-			event.preventDefault();
-			addUser();
-		});
 
 		jQuery("input[name=button_edit_layout],input[name=button_clone_layout]").on("click", function () {
 			dialog.dialog("open");
@@ -99,39 +82,6 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 
 	});
 </script>
-
-
-<div class="dialog_form_layout" title="Create a new layout">
-	<p class="validateTips">Name a layout and customize it's html, css, js with Twig language. Select the layout on any
-		facet to adapt it's display and behaviour.</p>
-
-	<form>
-		<fieldset>
-			<label for="name">Name</label>
-			<input type="text" name="name" id="name" value="" class="text ui-widget-content ui-corner-all">
-
-			<div class="tabs" style="margin-top: 10px;">
-				<ul>
-					<li><a href="#tabs-1">html</a></li>
-					<li><a href="#tabs-2">css</a></li>
-					<li><a href="#tabs-3">js</a></li>
-				</ul>
-				<div id="tabs-1">
-					<p><textarea name="template_html" rows="30" cols="100">html here</textarea></p>
-				</div>
-				<div id="tabs-2">
-					<p><textarea name="template_css" rows="30" cols="100">css here</textarea></p>
-				</div>
-				<div id="tabs-3">
-					<p><textarea name="template_js" rows="30" cols="100">js here</textarea></p>
-				</div>
-			</div>
-
-			<!-- Allow form submission with keyboard without duplicating the dialog button -->
-			<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
-		</fieldset>
-	</form>
-</div>
 
 <div id="solr-facets-options" class="wdm-vertical-tabs-content">
 	<form action="options.php" method="POST">
@@ -175,6 +125,7 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 						WPSOLR_Extensions::OPTION_FACETS, 'groups.inc.php' ),
 						array(
 							'options_name'              => $options_name,
+							'group_tab_selected'        => $group_tab_selected,
 							'new_facets_group_uuid'     => $new_facets_group_uuid,
 							'layouts'                   => $layouts,
 							'default_facets_group_uuid' => $default_facets_group_uuid,
