@@ -147,7 +147,7 @@ class WPSOLR_Field_Types {
 
 		foreach ( $fields as $field_name => $field ) {
 
-			if ( $this->solr_field_types[ $field['solr_type'] ]->get_is_range() ) {
+			if ( $this->solr_field_types[ $field['solr_type'] ]->get_is_numeric() ) {
 
 				$results[ $field_name ] = $field;;
 			}

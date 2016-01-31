@@ -8,7 +8,6 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 ?>
 
-
 <script xmlns="http://www.w3.org/1999/html">
 	jQuery(document).ready(function () {
 
@@ -41,8 +40,6 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 			var url = new Url(window.location.href);
 			url.query["group_tab"] = jQuery(".tabs").tabs('option', 'active');
 			jQuery('[name=_wp_http_referer]').val(url.toString());
-			//console.log(jQuery('[name=_wp_http_referer]').val());
-
 
 			return true;
 		});

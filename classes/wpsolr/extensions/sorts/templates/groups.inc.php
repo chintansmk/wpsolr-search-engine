@@ -38,45 +38,15 @@ use wpsolr\utilities\WPSOLR_Option;
 <script>
 	jQuery(document).ready(function () {
 
-		var tabs = jQuery(".tabs").tabs();
+		var tabs = jQuery(".tabs").tabs({active: <?php echo $group_tab_selected; ?>});
 		tabs.delegate("span.ui-icon-close", "click", function () {
 			var panelId = jQuery(this).closest("li").remove().attr("aria-controls");
 			jQuery("#" + panelId).remove();
 			tabs.tabs("refresh");
 		});
 
-
 		jQuery(".sortable").sortable();
 		jQuery(".sortable").accordion({active: false, collapsible: true, heightStyle: "content"});
-
-		var dialog, form;
-
-		dialog = jQuery("#dialog_form_group").dialog({
-			autoOpen: false,
-			height: 300,
-			width: 350,
-			modal: true,
-			buttons: {
-				//"Create an account": addUser,
-				Cancel: function () {
-					dialog.dialog("close");
-				}
-			},
-			close: function () {
-				//form[0].reset();
-				//allFields.removeClass("ui-state-error");
-			}
-		});
-
-		form = dialog.find("form").on("submit", function (event) {
-			event.preventDefault();
-			addUser();
-		});
-
-		jQuery("input[name=create_group]").button().on("click", function () {
-			dialog.dialog("open");
-			event.preventDefault();
-		});
 
 	});
 </script>
@@ -158,7 +128,7 @@ use wpsolr\utilities\WPSOLR_Option;
 							'sorts_group_uuid'    => $sorts_group_uuid,
 							'layouts'             => $layouts,
 							'sort_name'           => $sort_selected_name,
-							'is_numeric'            => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $sort_selected_name )->get_is_numeric(),
+							'is_numeric'          => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $sort_selected_name )->get_is_numeric(),
 							'sort'                => $sort_selected,
 							'sort_selected_class' => $sort_selected_class,
 							'image_plus_display'  => 'none',
@@ -182,7 +152,7 @@ use wpsolr\utilities\WPSOLR_Option;
 								'sorts_group_uuid'    => $sorts_group_uuid,
 								'layouts'             => $layouts,
 								'sort_name'           => $field_name,
-								'is_numeric'            => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_is_numeric(),
+								'is_numeric'          => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_is_numeric(),
 								'sort'                => $field,
 								'sort_selected_class' => $sort_not_selected_class,
 								'image_plus_display'  => 'inline',
