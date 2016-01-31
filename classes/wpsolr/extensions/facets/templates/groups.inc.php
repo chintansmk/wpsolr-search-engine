@@ -39,7 +39,30 @@ use wpsolr\utilities\WPSOLR_Option;
 	jQuery(document).ready(function () {
 
 		// Create tabs and activate the group tab selected in the url
+		// Create tabs and activate group tab selected in url
 		var tabs = jQuery(".tabs").tabs({active: <?php echo $group_tab_selected; ?>});
+
+		// tabs are sortable.
+		tabs.find(".ui-tabs-nav").sortable({
+			axis: "x",
+			stop: function (event, ui) {
+				var container = jQuery(this); // ul
+
+				// Move the tab content with the tab nav
+				var panel;
+				jQuery(this).children().each(function () {
+					panel = jQuery(jQuery(this).find('a').attr('href'));
+					panel.insertAfter(container);
+					container = panel; // div
+				});
+
+				// Active the dragged tab
+				jQuery(".tabs").tabs("option", "active", event, ui);
+				console.log(ui.item.index() + 1);
+
+			}
+		});
+
 		tabs.delegate("span.ui-icon-close", "click", function () {
 			var panelId = jQuery(this).closest("li").remove().attr("aria-controls");
 			jQuery("#" + panelId).remove();
