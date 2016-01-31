@@ -837,9 +837,15 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 							);
 						}
 
-						// In case the facet contains white space, we enclose it with "".
 						if ( ! $field_definition->get_is_numeric() ) {
-							$filter_query_field_value_escaped = "\"$filter_query_field_value\"";
+							$filter_query_field_value_escaped = $filter_query_field_value;
+
+							// Escape special characters
+							$filter_query_field_value_escaped = WPSOLR_Regexp::remove_string_at_the_end( $filter_query_field_value_escaped, "\"" );
+							$filter_query_field_value_escaped = WPSOLR_Regexp::remove_string_at_the_begining( $filter_query_field_value_escaped, "\"" );
+
+							// In case the facet contains white space or special caracters, we enclose it with ""
+							$filter_query_field_value_escaped = "\"$filter_query_field_value_escaped\"";
 
 						} else {
 

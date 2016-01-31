@@ -47,6 +47,19 @@ class WPSOLR_Regexp {
 	}
 
 	/**
+	 * Remove $text_to_remove at the beginning of $text
+	 *
+	 * @param $text
+	 * @param $text_to_remove
+	 *
+	 * @return string
+	 */
+	static function remove_string_at_the_begining( $text, $text_to_remove ) {
+
+		return preg_replace( sprintf( '/^%s/', $text_to_remove ), '', $text );
+	}
+
+	/**
 	 * Extract individual field query from  a filter query
 	 * Facets: type:post => ['type:post']
 	 * Facets group filter query: type:post OR type:page AND (categories:Blog) => ['type:post', 'type:page', 'categories:Blog']

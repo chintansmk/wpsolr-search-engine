@@ -65,6 +65,39 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 		);
 	}
 
+	public function test_remove_string_at_the_beginning() {
+
+		// Usual case
+		$this->assertEquals(
+			'postfix',
+			WPSOLR_Regexp::remove_string_at_the_begining( 'str_postfix', 'str_' )
+		);
+
+		// Extension after
+		$this->assertEquals(
+			'postfix_str',
+			WPSOLR_Regexp::remove_string_at_the_begining( 'postfix_str', 'str_' )
+		);
+
+		// extension in the middle
+		$this->assertEquals(
+			'prefix_str_postfix',
+			WPSOLR_Regexp::remove_string_at_the_begining( 'prefix_str_postfix', 'str_' )
+		);
+
+		// Remove only the first extension
+		$this->assertEquals(
+			'str_postfix',
+			WPSOLR_Regexp::remove_string_at_the_begining( 'str_str_postfix', 'str_' )
+		);
+
+		// Empty string
+		$this->assertEquals(
+			'',
+			WPSOLR_Regexp::remove_string_at_the_begining( '', 'str_' )
+		);
+	}
+
 	public function test_extract_filter_query_simple() {
 
 		$matches = WPSOLR_Regexp::extract_filter_query( '' );
@@ -162,7 +195,7 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 
 		// 2 lines with a blank line
 		$this->assertEquals(
-			[ 'line 1', 'line 2' , ' ' ],
+			[ 'line 1', 'line 2', ' ' ],
 			WPSOLR_Regexp::split_lines( "line 1{$new_line_char}line 2{$new_line_char} " )
 		);
 
