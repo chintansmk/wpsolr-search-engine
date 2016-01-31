@@ -422,7 +422,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 				if ( ! empty( $resultset->getFacetSet() ) ) {
 
-					if ( $extension_facets->get_facet_is_custom_range( $facet ) ) {
+					if ( $extension_facets->get_facet_is_custom_range_type( $facet ) ) {
 
 						// Fetch all custom ranges of the facet definition
 						$loop = 0;
@@ -435,6 +435,19 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 							}
 
 							$loop ++;
+						}
+
+					} else if ( $extension_facets->get_facet_is_min_max_type( $facet ) ) {
+
+						// Extract statistics from results
+						$result_stats_fields = $resultset->getStats();
+
+						foreach ( $result_stats_fields as $result_stats_field ) {
+							$output[ $field_name ][] = [
+								$result_stats_field->getMin(),
+								$result_stats_field->getMax(),
+								$result_stats_field->getCount()
+							];
 						}
 
 					} else {
@@ -681,7 +694,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				}
 
 				// Add the facet
-				if ( $extension_facets->get_facet_is_custom_range( $facet ) ) {
+				if ( $extension_facets->get_facet_is_custom_range_type( $facet ) ) {
 
 					// Set a query facet.
 					// We don't use range intervals because it requires docValues and Solr 4.10
@@ -704,9 +717,15 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 						$loop ++;
 					}
 
+				} else if ( $extension_facets->get_facet_is_min_max_type( $facet ) ) {
+
+					// Add statistics to this field to get min/max results
+					$stats = $solarium_query->getStats();
+					$stats->createField( "$field_name" );
+
 				} else {
 
-					if ( $extension_facets->get_facet_is_range( $facet ) ) {
+					if ( $extension_facets->get_facet_is_range_type( $facet ) ) {
 
 						// Set a range facet
 						$solarium_facet = $facetSet->createFacetRange( "$field_name" );

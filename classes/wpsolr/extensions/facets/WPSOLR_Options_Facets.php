@@ -21,7 +21,12 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	// Facet types
 	const FACET_TYPE_FIELD = 'facet_field';
 	const FACET_TYPE_RANGE = 'facet_range';
-	const FACET_TYPE_RANGE_CUSTOM = 'facet_range_custom';
+	const FACET_TYPE_CUSTOM_RANGE = 'facet_range_custom';
+	const FACET_TYPE_MIN_MAX = 'facet_min_max';
+
+	// Facet type field
+	const FACET_FIELD_TYPE = 'type';
+
 
 	// Facet labels
 	const FACET_FIELD_LABEL = 'label'; // Facet label
@@ -31,6 +36,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	// Facet labels templates
 	const FACET_LABEL_TEMPLATE = '%1$s (%2$s)';
 	const FACET_LABEL_TEMPLATE_RANGE = '%1$s - %2$s (%3$d)';
+	const FACET_LABEL_TEMPLATE_MIN_MAX = 'From %1$s to %2$s (%3$d)';
 
 	// Facet sort
 	const FACET_FIELD_SORT = 'sort';
@@ -56,6 +62,9 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	const FACET_FIELD_CUSTOM_RANGE_INF = 'range_inf';
 	const FACET_FIELD_CUSTOM_RANGE_SUP = 'range_sup';
 	const FACET_FIELD_CUSTOM_RANGE_LABEL = 'range_label';
+
+	// Facet min/max
+	const FACET_FIELD_MIN_MAX = 'min_max';
 
 	// Layouts available for each field type
 	protected $layouts;
@@ -245,21 +254,49 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Is facet a range ?
+	 * Get facet type ?
 	 *
 	 * @param $facet
 	 */
-	public function get_facet_is_range( $facet ) {
-		return isset( $facet[ self::FACET_FIELD_RANGE ] );
+	public function get_facet_type( $facet ) {
+		return $facet[ self::FACET_FIELD_TYPE ];
+	}
+
+
+	/**
+	 * Is facet a field type ?
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_is_field_type( $facet ) {
+		return ( $this->get_facet_type( $facet ) == self::FACET_TYPE_FIELD );
 	}
 
 	/**
-	 * Is facet custom range ?
+	 * Is facet a range type ?
 	 *
 	 * @param $facet
 	 */
-	public function get_facet_is_custom_range( $facet ) {
-		return isset( $facet[ self::FACET_FIELD_CUSTOM_RANGE ] );
+	public function get_facet_is_range_type( $facet ) {
+		return ( $this->get_facet_type( $facet ) == self::FACET_TYPE_RANGE );
+	}
+
+	/**
+	 * Is facet a min/max type ?
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_is_min_max_type( $facet ) {
+		return ( $this->get_facet_type( $facet ) == self::FACET_TYPE_MIN_MAX );
+	}
+
+	/**
+	 * Is facet custom range type ?
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_is_custom_range_type( $facet ) {
+		return ( $this->get_facet_type( $facet ) == self::FACET_TYPE_CUSTOM_RANGE );
 	}
 
 	/**

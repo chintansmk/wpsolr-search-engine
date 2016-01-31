@@ -5,6 +5,11 @@ use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 
 <div
 	class="wdm_row wpsolr_facet_type wpsolr_<?php echo WPSOLR_Options_Facets::FACET_TYPE_RANGE; ?>">
+
+	<input type='hidden'
+	       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_TYPE; ?>]'
+	       value='<?php echo WPSOLR_Options_Facets::FACET_TYPE_RANGE; ?>'/>
+
 	<div class='col_left'>
 		Range start
 	</div>

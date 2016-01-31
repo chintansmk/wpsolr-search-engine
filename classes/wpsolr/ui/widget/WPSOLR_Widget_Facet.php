@@ -121,21 +121,21 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			]
 		],
 		self::TYPE_GROUP_ELEMENT_LAYOUT => [
-			'radiobox' => [
+			'radiobox'     => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Radio boxes',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
-			'checkbox' => [
+			'checkbox'     => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Check boxes',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
-			'range'    => [
+			'range'        => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric even ranges',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
@@ -148,12 +148,12 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
 				]
 			],
-			'query'    => [
+			'custom_range' => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric uneven ranges',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE_CUSTOM,
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
@@ -161,12 +161,12 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
 				]
 			],
-			'slider'   => [
+			'slider'       => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Slider',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,

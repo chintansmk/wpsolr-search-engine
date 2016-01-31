@@ -43,6 +43,8 @@ class WPSOLR_Data_Facets {
 
 				if ( isset( $facets_in_results[ $facet_to_display_id ] ) && count( $facets_in_results[ $facet_to_display_id ] ) > 0 ) {
 
+					$facet_to_display_type = $extension_facets->get_facet_type( $facet_to_display );
+
 					// Remove the ending "_str"
 					$facet_to_display_id_without_str = WPSOLR_Regexp::remove_string_at_the_end( $facet_to_display_id, WPSOLR_Field_Types::SOLR_TYPE_STRING );
 
@@ -53,14 +55,22 @@ class WPSOLR_Data_Facets {
 					$facet_to_display_name = ucfirst( $facet_to_display_name );
 
 					$facet_label = '';
-					if ( ! isset( $facet_to_display['query'] ) ) {
-						$facet_label_other = $extension_facets->get_facet_label( $facet_to_display );
-						$facet_label_first = $extension_facets->get_facet_label_first( $facet_to_display );
-						$facet_label_last  = $extension_facets->get_facet_label_last( $facet_to_display );
-					}
+					switch ( $facet_to_display_type ) {
 
-					if ( isset( $facet_to_display['query'] ) ) {
-						$facet_query_custom_ranges = $extension_facets->get_facet_custom_ranges( $facet_to_display );
+						case WPSOLR_Options_Facets::FACET_TYPE_FIELD:
+						case WPSOLR_Options_Facets::FACET_TYPE_RANGE:
+							$facet_label_other = $extension_facets->get_facet_label( $facet_to_display );
+							$facet_label_first = $extension_facets->get_facet_label_first( $facet_to_display );
+							$facet_label_last  = $extension_facets->get_facet_label_last( $facet_to_display );
+							break;
+
+						case WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE:
+							$facet_query_custom_ranges = $extension_facets->get_facet_custom_ranges( $facet_to_display );
+							break;
+
+						case WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX:
+							$facet_label_other = $extension_facets->get_facet_label( $facet_to_display );
+							break;
 					}
 
 					$facet               = array();
@@ -84,65 +94,90 @@ class WPSOLR_Data_Facets {
 
 						if ( ! empty( $count ) ) { // Do not display facets with 0 count
 
-							if ( ! isset( $facet['definition']['query'] ) ) {
+							switch ( $facet_to_display_type ) {
 
-								// Which facet template to use ?
-								$facet_label = $facet_label_other;
-								switch ( $loop ) {
-									case 1:
-										$facet_label = $facet_label_first;
-										break;
-									case $nb_facets:
-										$facet_label = $facet_label_last;
-										break;
-								}
-							} else {
+								case WPSOLR_Options_Facets::FACET_TYPE_FIELD:
+								case WPSOLR_Options_Facets::FACET_TYPE_RANGE:
+									// Which facet template to use depends on current loop
+									$facet_label = $facet_label_other;
+									switch ( $loop ) {
+										case 1:
+											$facet_label = $facet_label_first;
+											break;
+										case $nb_facets:
+											$facet_label = $facet_label_last;
+											break;
+									}
+									break;
 
-								$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_LABEL ];
+								case WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE:
+									$facet_label = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_LABEL ];
+									break;
+
+								case WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX:
+									$facet_label = $facet_label_other;
+									break;
 							}
+
 
 							$facet_value          = $facet_in_results[0];
 							$facet_label_expanded = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $facet_label );
-							//$facet_label_expanded = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $facet_in_results[0] );
-							if ( isset( $facet['definition']['range'] ) ) {
 
-								$range_inf = $facet_value;
-								$range_sup = $facet_value + $facet['definition']['range']['gap'] - 1;
 
-								// Facet range come as [10 TO 19]
-								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+							switch ( $facet_to_display_type ) {
 
-								// Replace label pattern with values
-								$facet_label_expanded = sprintf(
-									$facet_label_expanded,
-									is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
-									is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
-									$count );
+								case WPSOLR_Options_Facets::FACET_TYPE_FIELD:
+									// Replace label pattern with values
+									$facet_label_expanded = sprintf(
+										$facet_label_expanded,
+										is_numeric( $facet_in_results[0] ) ? number_format_i18n( $facet_in_results[0] ) : $facet_in_results[0],
+										$count );
 
-							} else if ( isset( $facet['definition']['query'] ) ) {
+									break;
 
-								$range_inf = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_INF ];
-								$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_SUP ];
+								case WPSOLR_Options_Facets::FACET_TYPE_RANGE:
+									$range_inf = $facet_value;
+									$range_sup = $facet_value + $facet['definition']['range']['gap'] - 1;
 
-								// Facet range come as [10 TO 19]
-								$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+									// Facet range come as [10 TO 19]
+									$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
 
-								// Replace label pattern with values
-								$facet_label_expanded = sprintf(
-									$facet_label_expanded,
-									is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
-									is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
-									$count );
+									// Replace label pattern with values
+									$facet_label_expanded = sprintf(
+										$facet_label_expanded,
+										is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
+										is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
+										$count );
 
-							} else {
+									break;
 
-								// Replace label pattern with values
-								$facet_label_expanded = sprintf(
-									$facet_label_expanded,
-									is_numeric( $facet_in_results[0] ) ? number_format_i18n( $facet_in_results[0] ) : $facet_in_results[0],
-									$count );
+								case WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE:
+									$range_inf = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_INF ];
+									$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_SUP ];
 
+									// Facet range come as [10 TO 19]
+									$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+
+									// Replace label pattern with values
+									$facet_label_expanded = sprintf(
+										$facet_label_expanded,
+										is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
+										is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
+										$count );
+
+									break;
+
+								case WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX:
+									// Replace label pattern with values
+									$facet_label_expanded = sprintf(
+										$facet_label_expanded,
+										number_format_i18n( $facet_in_results[0] ),
+										number_format_i18n( $facet_in_results[1] ),
+										number_format_i18n( $facet_in_results[2] )
+									);
+									break;
 							}
+
 
 							// Current item selected ?
 							$item_selected = isset( $facets_selected[ $facet_to_display_id ] ) && ( in_array( $facet_value, $facets_selected[ $facet_to_display_id ] ) );
@@ -152,28 +187,40 @@ class WPSOLR_Data_Facets {
 								$results['has_facet_elements_selected'] = true;
 							}
 
-
 							$name = trim( $facet_in_results[0] );
 							if ( ! empty( $name ) || $name === '0' ) { // Only add facet if non blank name (it happens). '0' is authorized for ranges.
 
-								if ( isset( $facet['definition']['range'] ) || isset( $facet['definition']['query'] ) ) {
+								switch ( $facet_to_display_type ) {
+									case WPSOLR_Options_Facets::FACET_TYPE_RANGE:
+									case WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE:
+										array_push( $facet['items'], array(
+											'label'     => $facet_label_expanded,
+											'range_inf' => $range_inf,
+											'range_sup' => $range_sup,
+											'count'     => $facet_in_results[1],
+											'selected'  => $item_selected
+										) );
 
-									array_push( $facet['items'], array(
-										'label'     => $facet_label_expanded,
-										'range_inf' => $range_inf,
-										'range_sup' => $range_sup,
-										'count'     => $facet_in_results[1],
-										'selected'  => $item_selected
-									) );
+										break;
 
-								} else {
+									case WPSOLR_Options_Facets::FACET_TYPE_FIELD:
+										array_push( $facet['items'], array(
+											'label'    => $facet_label_expanded,
+											'name'     => $facet_in_results[0],
+											'count'    => $facet_in_results[1],
+											'selected' => $item_selected
+										) );
+										break;
 
-									array_push( $facet['items'], array(
-										'label'    => $facet_label_expanded,
-										'name'     => $facet_in_results[0],
-										'count'    => $facet_in_results[1],
-										'selected' => $item_selected
-									) );
+									case WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX:
+										array_push( $facet['items'], array(
+											'label'    => $facet_label_expanded,
+											'min'      => $facet_in_results[0],
+											'max'      => $facet_in_results[1],
+											'count'    => $facet_in_results[2],
+											'selected' => $item_selected
+										) );
+										break;
 
 								}
 
