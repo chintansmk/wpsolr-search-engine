@@ -39,6 +39,7 @@ use wpsolr\utilities\WPSOLR_Option;
 	jQuery(document).ready(function () {
 
 		var tabs = jQuery(".tabs").tabs();
+		//tabs.open(0);
 		tabs.delegate("span.ui-icon-close", "click", function () {
 			var panelId = jQuery(this).closest("li").remove().attr("aria-controls");
 			jQuery("#" + panelId).remove();
