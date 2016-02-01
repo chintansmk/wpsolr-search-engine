@@ -722,8 +722,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 					// Add statistics to this field to get min/max results
 					$stats = $solarium_query->getStats();
-					$stats->createField( "$field_name" )->addE( [ $field_name ] );
-					//$stats->createField( "$field_name" );
+					$stats->createField( "$field_name" );
 
 				} else {
 
@@ -882,6 +881,16 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 					'key'   => "$filter_query_field",
 					'query' => "$filter_query_field",
 					'tag'   => "$fac_fd"
+				) );
+
+
+				// Add statistics to this field to get min/max results
+				$stats = $solarium_query->getStats();
+				$stats->createField( "{!test}acf_integer_i" );
+				$solarium_query->addFilterQuery( array(
+					'key'   => "acf_integer_i:*",
+					'query' => "acf_integer_i:*",
+					'tag'   => "test"
 				) );
 
 			}
