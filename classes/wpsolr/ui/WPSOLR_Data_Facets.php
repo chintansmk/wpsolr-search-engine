@@ -45,6 +45,8 @@ class WPSOLR_Data_Facets {
 
 					$facet_to_display_type = $extension_facets->get_facet_type( $facet_to_display );
 
+					$facet_min_count = $extension_facets->get_facet_min_count( $facet_to_display );
+
 					// Remove the ending "_str"
 					$facet_to_display_id_without_str = WPSOLR_Regexp::remove_string_at_the_end( $facet_to_display_id, WPSOLR_Field_Types::SOLR_TYPE_STRING );
 
@@ -92,7 +94,7 @@ class WPSOLR_Data_Facets {
 
 						$count = $facet_in_results[1];
 
-						if ( ! empty( $count ) ) { // Do not display facets with 0 count
+						if ( $count >= $facet_min_count ) { // Do not display facets under min count
 
 							switch ( $facet_to_display_type ) {
 

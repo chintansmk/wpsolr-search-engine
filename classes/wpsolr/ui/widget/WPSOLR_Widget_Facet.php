@@ -136,7 +136,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
 			'range'        => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric even ranges',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Even ranges',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
@@ -149,7 +149,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 				]
 			],
 			'custom_range' => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Numeric uneven ranges',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Custom ranges',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
@@ -163,9 +163,9 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			],
 			'slider'       => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Slider',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/slider/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/slider/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,

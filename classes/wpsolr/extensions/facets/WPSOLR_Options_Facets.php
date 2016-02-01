@@ -27,6 +27,8 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	// Facet type field
 	const FACET_FIELD_TYPE = 'type';
 
+	// Facet minimum count to show an element
+	const FACET_FIELD_MIN_COUNT = 'min_count';
 
 	// Facet labels
 	const FACET_FIELD_LABEL = 'label'; // Facet label
@@ -333,6 +335,15 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_is_facet_in_exclusion_tag( $facet ) {
 		return isset( $facet[ self::FACET_FIELD_IS_EXCLUSION ] );
+	}
+
+	/**
+	 * Get min count to show a label
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_min_count( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_MIN_COUNT ] ) ? $facet[ self::FACET_FIELD_MIN_COUNT ] : 1;
 	}
 
 	/**
