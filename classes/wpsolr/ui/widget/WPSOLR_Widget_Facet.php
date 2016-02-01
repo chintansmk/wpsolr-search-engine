@@ -164,7 +164,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			'slider'       => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Slider',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/slider/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/slider/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/slider/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX,
 				self::LAYOUT_FIELD_TYPES         => [

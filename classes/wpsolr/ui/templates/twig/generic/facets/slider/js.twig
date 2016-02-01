@@ -1,24 +1,59 @@
 <script>
     jQuery(document).ready(function () {
 
-        // Init facets
-        jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}.checked").each(function () {
-            var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
-            wpsolr_facets.addFacetRangeValue(facet); // add facet to facets
-        });
+        var facet = jQuery("#slider").data("wpsolr-facet-item-value");
+        wpsolr_facets.addFacetRangeValue(facet);
 
-        jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").on("click", function (event) {
+        //console.log(JSON.stringify(facet));
 
-            jQuery(".wpsolr_any_facet_class li .{{ facet_selector_class }}").not(this).removeClass("{{ facet_selected_class }}"); // Deactivate all facets, except current
-            jQuery(this).toggleClass("{{ facet_selected_class }}"); // Activate clicked facet
+        function slide(event, ui) {
+            // Allow time for exact positioning
+            setTimeout(function () {
+                jQuery(ui.handle).attr('title', ui.value).tooltip('fixTitle').tooltip('show');
+            }, 0);
+        }
 
-            var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
-            wpsolr_facets.removeFacetValue({"facet_id": facet.facet_id}); // Remove all elements of the facet
-            if (jQuery(this).hasClass("{{ facet_selected_class }}")) {
+        function create(event, ui, start, end) {
+            var handles = jQuery(event.target).find('span');
+            handles.eq(0).tooltip({
+                animation: false,
+                placement: 'top',
+                trigger: 'manual',
+                container: handles.eq(0),
+                title: start
+            }).tooltip('show');
+            handles.eq(1).tooltip({
+                animation: false,
+                placement: 'top',
+                trigger: 'manual',
+                container: handles.eq(1),
+                title: end
+            }).tooltip('show');
+        }
+
+        jQuery('#slider').slider({
+            range: true,
+            step: facet.facet_step,
+            min: facet.facet_value,
+            max: facet.range_sup,
+            values: [facet.facet_value, facet.range_sup],
+            slide: function (event, ui) {
+                slide(event, ui)
+            },
+            create: function (event, ui) {
+                create(event, ui, jQuery(this).slider('values', 0), jQuery(this).slider('values', 1))
+            },
+            change: function (event, ui) {
+
+                facet.facet_value = ui.values[0];
+                facet.range_sup = ui.values[1];
+
+                wpsolr_facets.removeFacetValue({"facet_id": facet.facet_id}); // Remove all elements of the facet
                 wpsolr_facets.addFacetRangeValue(facet); // add facet element if selected
+                wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
+                wpsolr_facets.create_url(); // Generate new url and redirect
+
             }
-            wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
-            wpsolr_facets.create_url(); // Generate new url and redirect
         });
     });
 </script>

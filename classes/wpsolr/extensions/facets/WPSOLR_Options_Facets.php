@@ -67,6 +67,8 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 	// Facet min/max
 	const FACET_FIELD_MIN_MAX = 'min_max';
+	const FACET_FIELD_MIN_MAX_STEP = 'step';
+	const FACET_FIELD_MIN_MAX_STEP_DEFAULT = '100';
 
 	// Layouts available for each field type
 	protected $layouts;
@@ -299,6 +301,16 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_facet_is_custom_range_type( $facet ) {
 		return ( $this->get_facet_type( $facet ) == self::FACET_TYPE_CUSTOM_RANGE );
+	}
+
+
+	/**
+	 * Get min max step of a facet
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_min_max_step( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_MIN_MAX ] ) && isset( $facet[ self::FACET_FIELD_MIN_MAX ][ self::FACET_FIELD_MIN_MAX_STEP ] ) ? $facet[ self::FACET_FIELD_MIN_MAX ][ self::FACET_FIELD_MIN_MAX_STEP ] : self::FACET_FIELD_MIN_MAX_STEP_DEFAULT;
 	}
 
 	/**

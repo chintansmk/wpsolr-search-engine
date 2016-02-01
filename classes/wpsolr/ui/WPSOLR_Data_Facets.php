@@ -170,11 +170,20 @@ class WPSOLR_Data_Facets {
 									break;
 
 								case WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX:
+
+									// [10 TO 19]
+									$facet_values = ! empty( $facets_selected[ $facet_to_display_id ] )
+										? WPSOLR_Regexp::extract_filter_range_values( $facets_selected[ $facet_to_display_id ][0] )
+										: null;
+
+									$range_inf = ( ! empty( $facet_values ) ? $facet_values[0] : $facet_in_results[0] );
+									$range_sup = ( ! empty( $facet_values ) ? $facet_values[1] : $facet_in_results[1] );
+
 									// Replace label pattern with values
 									$facet_label_expanded = sprintf(
 										$facet_label_expanded,
-										number_format_i18n( $facet_in_results[0] ),
-										number_format_i18n( $facet_in_results[1] ),
+										number_format_i18n( $range_inf ),
+										number_format_i18n( $range_sup ),
 										number_format_i18n( $facet_in_results[2] )
 									);
 									break;
@@ -216,11 +225,12 @@ class WPSOLR_Data_Facets {
 
 									case WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX:
 										array_push( $facet['items'], array(
-											'label'    => $facet_label_expanded,
-											'min'      => $facet_in_results[0],
-											'max'      => $facet_in_results[1],
-											'count'    => $facet_in_results[2],
-											'selected' => $item_selected
+											'label'     => $facet_label_expanded,
+											'min_value' => 0 + $range_inf, // convert to numeric
+											'max_value' => 0 + $range_sup, // convert to numeric
+											'step'      => 0 + $extension_facets->get_facet_min_max_step( $facet_to_display ),
+											'count'     => $facet_in_results[2],
+											'selected'  => $item_selected
 										) );
 										break;
 

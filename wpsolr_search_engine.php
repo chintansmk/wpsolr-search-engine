@@ -371,6 +371,17 @@ function my_front_enqueue() {
 				'SEARCH_PARAMETER_Q' => WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q,
 			) );
 	}
+
+	// Jquery js and css
+	wp_enqueue_style( 'jquery-ui-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css' );
+	wp_enqueue_script( 'jquery-ui-slider' );
+
+	// Bootstrap tooltips
+	wp_enqueue_style( 'bootstrap-style', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css' );
+	wp_register_script( 'tooltip', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js', 'jquery' );
+	wp_enqueue_script( 'tooltip' );
+
+
 }
 
 

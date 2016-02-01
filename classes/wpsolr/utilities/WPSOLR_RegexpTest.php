@@ -261,4 +261,22 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 			WPSOLR_Regexp::preg_match_lines_of_regexp( "1/", "1" )
 		);
 	}
+
+
+	public function test_extract_filter_range_values() {
+
+		$matches = WPSOLR_Regexp::extract_filter_range_values( '' );
+		$this->assertEquals(
+			[ ],
+			$matches
+		);
+
+		$matches = WPSOLR_Regexp::extract_filter_range_values( '[5 TO 10]' );
+		$this->assertEquals(
+			[ '5', '10' ],
+			$matches
+		);
+
+	}
+
 }

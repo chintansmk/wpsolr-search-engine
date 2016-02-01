@@ -18,4 +18,14 @@ use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 		       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL; ?>]'
 		       value='<?php echo esc_attr( ! empty( $facet_label ) ? $facet_label : WPSOLR_Options_Facets::FACET_LABEL_TEMPLATE_MIN_MAX ); ?>'/>
 	</div>
+
+	<div class='col_left'>
+		Step
+	</div>
+	<div class='col_right'>
+		<input type='text'
+		       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_MIN_MAX; ?>][<?php echo WPSOLR_Options_Facets::FACET_FIELD_MIN_MAX_STEP; ?>]'
+		       value='<?php echo esc_attr( $facet_min_max_step ); ?>'/>
+	</div>
+
 </div>

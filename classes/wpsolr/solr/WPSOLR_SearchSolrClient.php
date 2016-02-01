@@ -446,7 +446,8 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 							$output[ $field_name ][] = [
 								$result_stats_field->getMin(),
 								$result_stats_field->getMax(),
-								$result_stats_field->getCount()
+								$result_stats_field->getCount(),
+								$result_stats_field->getMissing()
 							];
 						}
 
@@ -721,7 +722,8 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 					// Add statistics to this field to get min/max results
 					$stats = $solarium_query->getStats();
-					$stats->createField( "$field_name" );
+					$stats->createField( "$field_name" )->addE( [ $field_name ] );
+					//$stats->createField( "$field_name" );
 
 				} else {
 

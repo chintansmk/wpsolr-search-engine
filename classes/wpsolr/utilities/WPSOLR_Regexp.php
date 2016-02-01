@@ -13,6 +13,35 @@ use wpsolr\exceptions\WPSOLR_Exception;
  */
 class WPSOLR_Regexp {
 
+	/**
+	 * Extract values from a range query parameter
+	 * '[5 TO 30]' => ['5', '30']
+	 *
+	 * @param $text
+	 *
+	 * @return string
+	 */
+	static function extract_filter_range_values( $text ) {
+
+		// Replace separator literals by a single special character. Much easier, because negate a literal is difficult with regexp.
+		$text = str_replace( [ ' TO ', '[', ']' ], ' | ', $text );
+
+		// Negate all special caracters to get the 'field:value' array
+		preg_match_all( '/[^|\s]+/', $text, $matches );
+
+		// Trim results
+		$results_with_some_empty_key = ! empty( $matches[0] ) ? array_map( 'trim', $matches[0] ) : [ ];
+
+		// Remove empty array rows (it happens), prevent duplicates.
+		$results = [ ];
+		foreach ( $results_with_some_empty_key as $result ) {
+			if ( ! empty( $result ) & ! in_array( $result, $results ) ) {
+				array_push( $results, $result );
+			}
+		}
+
+		return $results;
+	}
 
 	/**
 	 * Extract last occurence of a separator
