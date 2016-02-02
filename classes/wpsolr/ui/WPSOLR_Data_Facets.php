@@ -7,6 +7,7 @@ use wpsolr\services\WPSOLR_Service_Wordpress;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\widget\WPSOLR_Widget_Facet;
+use wpsolr\ui\widget\WPSOLR_Widget_Filter;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Regexp;
 use wpsolr\WPSOLR_Filters;
@@ -29,7 +30,7 @@ class WPSOLR_Data_Facets {
 	 *                  {"items":[{"name":"Blog","count":13,"selected":true}],"id":"categories","name":"Categories"}
 	 *                  ]
 	 */
-	public static function get_data( $facets_selected, $facets_to_display, $facets_in_results ) {
+	public static function get_data( $layout_type_id, $facets_selected, $facets_to_display, $facets_in_results ) {
 
 		$results                                = array();
 		$results['facets']                      = array();
@@ -81,10 +82,21 @@ class WPSOLR_Data_Facets {
 					$facet['name']       = $facet_to_display_name;
 					$facet['definition'] = $facet_to_display;
 
-					// Templates
-					$facet[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_HTML ] = WPSOLR_Widget_Facet::wpsolr_get_layout_template_html( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
-					$facet[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_CSS ]  = WPSOLR_Widget_Facet::wpsolr_get_layout_template_css( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
-					$facet[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_JS ]   = WPSOLR_Widget_Facet::wpsolr_get_layout_template_js( $facet_to_display[ WPSOLR_Widget_Facet::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+					// Facet templates or facet filter templates
+					switch ( $layout_type_id ) {
+
+						case WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID:
+							$class_widget = WPSOLR_Widget_Facet::class;
+							break;
+
+						case WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID:
+							$class_widget = WPSOLR_Widget_Filter::class;
+							break;
+					}
+
+					$facet[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_HTML ] = $class_widget::wpsolr_get_layout_template_html( $facet_to_display[ $layout_type_id ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+					$facet[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_CSS ]  = $class_widget::wpsolr_get_layout_template_css( $facet_to_display[ $layout_type_id ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+					$facet[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_JS ]   = $class_widget::wpsolr_get_layout_template_js( $facet_to_display[ $layout_type_id ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
 
 					$loop      = 0;
 					$nb_facets = count( $facets_in_results[ $facet_to_display_id ] );

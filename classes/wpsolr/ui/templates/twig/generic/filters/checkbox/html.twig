@@ -8,31 +8,24 @@
 
 
 <ul data-wpsolr-facet-description="{{ facet_definition|json_encode }}"
-    class="wpsolr_any_facet_class {{ facet_selector_class }}">
+    class="wpsolr_any_facet_filter_class {{ facet_selector_class }}">
 
-    <li>
-        <span>{{ facets_title|format(facet.name) }}</span> {# Facet name #}
+    {% for item in items %} {# Loop on facet items #}
 
-        <ul>
+        {% if item.selected %}
 
-            {% for item in items %} {# Loop on facet items #}
+            {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name} %}
 
-                ?????
+            <li>
+                <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"
+                   data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">
+                    {{ item.label }}
+                </a> {# Current facet item #}
+            </li>
 
-                {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name} %}
+        {% endif %}
 
-                <li>
-                    <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"
-                       data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">
-                        {{ item.label }}
-                    </a> {# Current facet item #}
+    {% endfor %} {# Loop on facet items #}
 
-                </li>
-
-            {% endfor %} {# Loop on facet items #}
-
-        </ul>
-
-    </li>
 </ul>
 

@@ -337,6 +337,8 @@ function my_front_enqueue() {
 		'urljs'
 	), false, true );
 
+	wp_enqueue_script( 'wpsolr_widgets', plugins_url( 'js/wpsolr_widgets.js', __FILE__ ), array( 'jquery' ), false, true );
+
 	wp_localize_script( 'autocomplete', 'wp_localize_script_autocomplete',
 		array(
 			'ajax_url'                    => admin_url( 'admin-ajax.php' ),

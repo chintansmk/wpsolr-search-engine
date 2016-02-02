@@ -3,6 +3,7 @@
 namespace wpsolr\ui\widget;
 
 use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\ui\widget;
 use wpsolr\ui\WPSOLR_Data_Facets;
@@ -24,11 +25,17 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget {
 			]
 		],
 		self::TYPE_GROUP_ELEMENT_LAYOUT => [
-			self::GENERIC_LAYOUT_ID => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Checkbox',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig'
+			'checkbox' => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Check boxes',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/filters/checkbox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/filters/checkbox/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/checkbox/js.twig'
+			],
+			'radiobox' => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Radio boxes',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/filters/checkbox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/filters/radiobox/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/radiobox/js.twig'
 			]
 		]
 	];
@@ -90,6 +97,7 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget {
 		echo WPSOLR_UI_Facets::Build(
 			$group_id,
 			WPSOLR_Data_Facets::get_data(
+				WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID,
 				WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
 				$facets,
 				$results[1] ),

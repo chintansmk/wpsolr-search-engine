@@ -145,6 +145,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		echo WPSOLR_UI_Facets::Build(
 			$group_id,
 			WPSOLR_Data_Facets::get_data(
+				WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID,
 				WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
 				$facets,
 				$results[1] ),
