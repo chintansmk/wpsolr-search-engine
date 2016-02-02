@@ -67,7 +67,7 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget {
 				// Sorts group of the widget
 				$group_id = $this->wpsolr_get_instance_group_id( $instance );
 				if ( empty( $group_id ) ) {
-					throw new WPSOLR_Exception( sprintf( 'Select a filter group.' ) );
+					throw new WPSOLR_Exception( sprintf( 'Select a facet group.' ) );
 				}
 			}
 
@@ -109,7 +109,7 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget {
 	}
 
 	public function wpsolr_get_groups() {
-		return WPSOLR_Global::getOption()->get_sorts_groups();
+		return WPSOLR_Global::getOption()->get_facets_groups();
 	}
 
 

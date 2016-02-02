@@ -164,7 +164,8 @@ use wpsolr\utilities\WPSOLR_Option;
 						array(
 							'options_name'         => $options_name,
 							'facets_group_uuid'    => $facets_group_uuid,
-							'layouts'              => $layouts[ WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_id() ],
+							'layouts_facets'       => $layouts_facets[ WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_id() ],
+							'layouts_filters'      => $layouts_filters,
 							'facet_name'           => $facet_selected_name,
 							'is_numeric'           => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_is_numeric(),
 							'facet'                => $facet_selected,
@@ -188,7 +189,8 @@ use wpsolr\utilities\WPSOLR_Option;
 							array(
 								'options_name'         => $options_name,
 								'facets_group_uuid'    => $facets_group_uuid,
-								'layouts'              => $layouts[ $field['solr_type'] ],
+								'layouts_facets'       => $layouts_facets[ $field['solr_type'] ],
+								'layouts_filters'      => $layouts_filters,
 								'facet_name'           => $field_name,
 								'is_numeric'           => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_is_numeric(),
 								'facet'                => $field,

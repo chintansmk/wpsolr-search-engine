@@ -8,7 +8,8 @@ use wpsolr\utilities\WPSOLR_Option;
 <?php
 $facet_option_array_name = sprintf( '%s[%s][%s][%s]', $options_name, WPSOLR_Option::OPTION_FACETS_FACETS, $facets_group_uuid, $facet_name );
 
-$facet_layout_id = ! empty( $facet['layout_id'] ) ? $facet['layout_id'] : '';
+$facet_layout_id        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID ] : '';
+$facet_filter_layout_id = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID ] : '';
 
 $facet_range_start = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_START ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_START ] : WPSOLR_Options_Facets::FACET_FILED_RANGE_START_DEFAULT;
 $facet_range_end   = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ] ) && ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_END ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_RANGE ][ WPSOLR_Options_Facets::FACET_FIELD_RANGE_END ] : WPSOLR_Options_Facets::FACET_FIELD_RANGE_END_DEFAULT;
@@ -59,24 +60,32 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 
 		<div class="wdm_row">
 			<div class='col_left'>
-				Display as
+				Display in widget "WPSOLR Facet" as
 			</div>
 			<div class='col_right'>
 				<select class="wpsolr_layout_select"
-				        name='<?php echo $facet_option_array_name; ?>[layout_id]'>
-					<?php foreach ( $layouts as $layout_id => $layout ) { ?>
+				        name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID; ?>]'>
+					<?php foreach ( $layouts_facets as $layout_id => $layout ) { ?>
 						<option
 							value='<?php echo $layout_id; ?>' <?php selected( $layout_id, $facet_layout_id, true ); ?>><?php echo $layout['name']; ?></option>
 					<?php } ?>
 				</select>
-				<!--
-				<input name="button_clone_layout"
-				       type="submit" class="button-primary wdm-save"
-				       value="Clone the layout"/>
-				<input name="button_edit_layout"
-				       type="submit" class="button-primary wdm-save"
-				       value="Edit the layout"/>
-				-->
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<div class="wdm_row">
+			<div class='col_left'>
+				Display in widget "WPSOLR filter" as
+			</div>
+			<div class='col_right'>
+				<select class="wpsolr_layout_select"
+				        name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID; ?>]'>
+					<?php foreach ( $layouts_filters as $layout_id => $layout ) { ?>
+						<option
+							value='<?php echo $layout_id; ?>' <?php selected( $layout_id, $facet_filter_layout_id, true ); ?>><?php echo $layout['name']; ?></option>
+					<?php } ?>
+				</select>
 				<div class="clear"></div>
 			</div>
 		</div>

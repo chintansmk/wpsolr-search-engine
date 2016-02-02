@@ -7,6 +7,7 @@ use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\solr\WPSOLR_Schema;
 use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\widget\WPSOLR_Widget_Facet;
+use wpsolr\ui\widget\WPSOLR_Widget_Filter;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 use wpsolr\utilities\WPSOLR_Regexp;
@@ -26,6 +27,12 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 	// Facet type field
 	const FACET_FIELD_TYPE = 'type';
+
+	// Layout of the facet
+	const FACET_FIELD_FACET_LAYOUT_ID = 'layout_id';
+
+	// Layout of the facet filter
+	const FACET_FIELD_FILTER_LAYOUT_ID = 'filter_layout_id';
 
 	// Facet minimum count to show an element
 	const FACET_FIELD_MIN_COUNT = 'min_count';
@@ -97,7 +104,8 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 					'options'                   => WPSOLR_Global::getOption()->get_option_facet(
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
-					'layouts'                   => $this->get_facets_layouts_by_field_types(),
+					'layouts_facets'            => $this->get_facets_layouts_by_field_types(),
+					'layouts_filters'           => WPSOLR_Widget_Filter::wpsolr_get_group_element_layouts(),
 					'default_facets_group_uuid' => $this->get_default_facets_group_id(),
 					'new_facets_group_uuid'     => $new_facets_group_uuid,
 					'facets_groups'             => array_merge(
