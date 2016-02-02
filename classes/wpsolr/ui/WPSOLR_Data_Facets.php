@@ -130,7 +130,7 @@ class WPSOLR_Data_Facets {
 
 								case WPSOLR_Options_Facets::FACET_TYPE_FIELD:
 									// Replace label pattern with values
-									$facet_label_expanded = sprintf(
+									$facet_label_expanded = @sprintf(
 										$facet_label_expanded,
 										is_numeric( $facet_in_results[0] ) ? number_format_i18n( $facet_in_results[0] ) : $facet_in_results[0],
 										$count );
@@ -142,10 +142,10 @@ class WPSOLR_Data_Facets {
 									$range_sup = $facet_value + $facet['definition']['range']['gap'] - 1;
 
 									// Facet range come as [10 TO 19]
-									$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+									$facet_value = @sprintf( '[%s TO %s]', $range_inf, $range_sup );
 
 									// Replace label pattern with values
-									$facet_label_expanded = sprintf(
+									$facet_label_expanded = @sprintf(
 										$facet_label_expanded,
 										is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
 										is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
@@ -158,10 +158,10 @@ class WPSOLR_Data_Facets {
 									$range_sup = $facet_query_custom_ranges[ $loop - 1 ][ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_SUP ];
 
 									// Facet range come as [10 TO 19]
-									$facet_value = sprintf( '[%s TO %s]', $range_inf, $range_sup );
+									$facet_value = @sprintf( '[%s TO %s]', $range_inf, $range_sup );
 
 									// Replace label pattern with values
-									$facet_label_expanded = sprintf(
+									$facet_label_expanded = @sprintf(
 										$facet_label_expanded,
 										is_numeric( $range_inf ) ? number_format_i18n( $range_inf ) : $range_inf,
 										is_numeric( $range_sup ) ? number_format_i18n( $range_sup ) : $range_sup,
@@ -180,7 +180,7 @@ class WPSOLR_Data_Facets {
 									$range_sup = ( ! empty( $facet_values ) ? $facet_values[1] : $facet_in_results[1] );
 
 									// Replace label pattern with values
-									$facet_label_expanded = sprintf(
+									$facet_label_expanded = @sprintf(
 										$facet_label_expanded,
 										number_format_i18n( $range_inf ),
 										number_format_i18n( $range_sup ),
