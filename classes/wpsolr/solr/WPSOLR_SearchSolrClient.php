@@ -885,13 +885,13 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 
 				// Add statistics to this field to get min/max results
-				$stats = $solarium_query->getStats();
+				/*$stats = $solarium_query->getStats();
 				$stats->createField( "{!test}acf_integer_i" );
 				$solarium_query->addFilterQuery( array(
 					'key'   => "acf_integer_i:*",
 					'query' => "acf_integer_i:*",
 					'tag'   => "test"
-				) );
+				) );*/
 
 			}
 		}

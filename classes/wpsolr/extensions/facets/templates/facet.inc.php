@@ -79,7 +79,7 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 				Display in widget "WPSOLR filter" as
 			</div>
 			<div class='col_right'>
-				<select class="wpsolr_layout_select"
+				<select class="wpsolr_filters_layout_select"
 				        name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID; ?>]'>
 					<?php foreach ( $layouts_filters as $layout_id => $layout ) { ?>
 						<option
