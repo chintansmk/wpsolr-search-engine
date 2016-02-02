@@ -12,24 +12,20 @@ use wpsolr\utilities\WPSOLR_Global;
 /**
  * WPSOLR Widget Sort List
  */
-class WPSOLR_Widget_Sort extends WPSOLR_Widget {
-
-	// Form fields
-	const FORM_FIELD_SORTS_GROUP_ID = 'sorts_group_id';
-	const FORM_FIELD_SORTS_GROUP_NAME = 'name';
+class WPSOLR_Widget_Filter extends WPSOLR_Widget {
 
 	protected static $wpsolr_layouts = [
 		self::TYPE_GROUP_LAYOUT         => [
 			self::GENERIC_LAYOUT_ID => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Drop down list',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig'
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'List',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/filters/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/filters/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/js.twig'
 			]
 		],
 		self::TYPE_GROUP_ELEMENT_LAYOUT => [
 			self::GENERIC_LAYOUT_ID => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Text',
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Link',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig'
@@ -42,9 +38,9 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 	 */
 	function __construct() {
 		parent::__construct(
-			'wpsolr_widget_sort', // Base ID
-			__( 'WPSOLR Sort List', 'wpsolr_admin' ), // Name
-			array( 'description' => __( 'Display Solr sort options', 'wpsolr_admin' ) ), // Args
+			'wpsolr_widget_filter', // Base ID
+			__( 'WPSOLR Filters', 'wpsolr_admin' ), // Name
+			array( 'description' => __( 'Display filters selected', 'wpsolr_admin' ) ), // Args
 			array() // controls
 		);
 	}
@@ -71,7 +67,7 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 				// Sorts group of the widget
 				$group_id = $this->wpsolr_get_instance_group_id( $instance );
 				if ( empty( $group_id ) ) {
-					throw new WPSOLR_Exception( sprintf( 'Select a sort group.' ) );
+					throw new WPSOLR_Exception( sprintf( 'Select a filter group.' ) );
 				}
 			}
 
@@ -115,5 +111,6 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 	public function wpsolr_get_groups() {
 		return WPSOLR_Global::getOption()->get_sorts_groups();
 	}
+
 
 }

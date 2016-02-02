@@ -23,101 +23,11 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 
 	protected static $wpsolr_layouts = [
 		self::TYPE_GROUP_LAYOUT         => [
-			'default'        => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'wpsolr/facets_html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'WPSOLR'
-			],
-			'customizr'      => [
+			self::GENERIC_LAYOUT_ID => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'List',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Customizr'
-			],
-			'graphene'       => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Graphene'
-			],
-			'hueman'         => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Hueman'
-			],
-			'spacious'       => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Spacious'
-			],
-			'twentyten'      => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Ten'
-			],
-			'twentyeleven'   => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Eleven'
-			],
-			'twentytwelve'   => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Twelve'
-			],
-			'twentythirteen' => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Thirteen'
-			],
-			'twentyfourteen' => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fourteen'
-			],
-			'twentyfifteen'  => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Fifteen'
-			],
-			'twentysixteen'  => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Twenty Sixteen'
-			],
-			'responsive'     => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'responsive/facets_css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Responsive'
-			],
-			'vantage'        => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Vantage'
-			],
-			'virtue'         => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Virtue'
-			],
-			'zerif-lite'     => [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig',
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Zerif Lite'
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig'
 			]
 		],
 		self::TYPE_GROUP_ELEMENT_LAYOUT => [
@@ -190,32 +100,6 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		);
 	}
 
-	public
-	function form(
-		$instance
-	) {
-		parent::form( $instance );
-
-		// Add facets group selection
-		$facets_group_id = ! empty( $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] : '';
-		$facets_groups   = WPSOLR_Global::getOption()->get_facets_groups();
-		?>
-
-		<p>
-			Use facets group:
-			<select id="<?php echo $this->get_field_id( self::FORM_FIELD_FACETS_GROUP_ID ); ?>"
-			        name="<?php echo $this->get_field_name( self::FORM_FIELD_FACETS_GROUP_ID ); ?>">
-				<?php foreach ( $facets_groups as $facet_group_id => $facets_group ) { ?>
-					<option
-						value="<?php echo $facet_group_id; ?>" <?php selected( $facets_group_id, $facet_group_id, true ) ?>><?php echo $facets_group[ self::FORM_FIELD_FACETS_GROUP_NAME ]; ?></option>
-				<?php } ?>
-			</select>
-		</p>
-
-		<?php
-	}
-
-
 	/**
 	 * Front-end display of widget.
 	 *
@@ -236,7 +120,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			if ( empty( $group_id ) ) {
 
 				// Facets group of the widget
-				$group_id = $this->wpsolr_get_instance_facets_group_id( $instance );
+				$group_id = $this->wpsolr_get_instance_group_id( $instance );
 				if ( empty( $group_id ) ) {
 					throw new WPSOLR_Exception( sprintf( 'Select a facets group.' ) );
 				}
@@ -290,35 +174,15 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 	}
 
 	/**
-	 * Get the facets group id from the widget instance
-	 *
-	 * @param $instance
-	 *
-	 * @return string facets group id
-	 */
-	private function wpsolr_get_instance_facets_group_id( $instance ) {
-
-		return ! empty( $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_FACETS_GROUP_ID ] : '';
-	}
-
-
-	/**
-	 * Get the solr query added to the solr request
-	 *
-	 * @param $instance
-	 *
-	 * @return string facets group id
-	 */
-	private function wpsolr_get_added_solr_query_parameters( $instance ) {
-
-		return ! empty( $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] ) ? $instance[ self::FORM_FIELD_SOLR_QUERY_PARAMETERS ] : '';
-	}
-
-	/**
 	 * Get all facets layouts
 	 * @return array
 	 */
 	public static function get_facets_layouts() {
 		return self::wpsolr_get_layout_definitions( self::TYPE_GROUP_ELEMENT_LAYOUT );
 	}
+
+	public function wpsolr_get_groups() {
+		return WPSOLR_Global::getOption()->get_facets_groups();
+	}
+
 }
