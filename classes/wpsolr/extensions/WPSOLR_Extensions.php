@@ -133,13 +133,13 @@ abstract class WPSOLR_Extensions {
 		self::EXTENSION_POLYLANG          =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Polylang::CLASS,
-				self::_CONFIG_PLUGIN_FUNCTION_NAME              => 'pll_get_post',
+				self::_CONFIG_PLUGIN_FUNCTION_NAME              => 'pll_get_post_language',
 				self::_CONFIG_EXTENSION_DIRECTORY               => 'polylang/',
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'polylang/WPSOLR_Plugin_Polylang.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'polylang/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Polylang',
-				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => 'https://polylang.wordpress.com/documentation/',
-				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '(>= 1.7.11)',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 1.8.1)',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://polylang.wordpress.com/documentation/',
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_PLUGIN_POLYLANG,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE

@@ -574,6 +574,9 @@ case 'solr_plugins':
 
 	case 'solr_operations':
 
+		// Load multi-language extensions
+		WPSOLR_Global::getActiveExtensions();
+
 		$option_indexes_object = WPSOLR_Global::getExtensionIndexes();
 
 		// Create the tabs from the Solr indexes already configured
