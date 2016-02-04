@@ -196,7 +196,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 	 * @return array
 	 * @throws Exception
 	 */
-	public function index_data( $batch_size = 100, $post = null, $is_debug_indexing = false ) {
+	public function index_data( $batch_size = 100, $post = null, $is_debug_indexing = false, $is_continue_at_conversion_error = false ) {
 
 		global $wpdb;
 
@@ -359,7 +359,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 						$doc_count ++;
 
 						// Get the posts data
-						$document = self::create_solr_document_from_post_or_attachment( $updateQuery, get_post( $postid ) );
+						$document = self::create_solr_document_from_post_or_attachment( $updateQuery, get_post( $postid ), null, $is_continue_at_conversion_error );
 
 						if ( $is_debug_indexing ) {
 							$this->add_debug_line( $debug_text, null, Array(
@@ -385,7 +385,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 						$attachment_body = self::extract_attachment_text_by_calling_solr_tika( $solarium_extract_query, get_post( $postid ) );
 
 						// Get the posts data
-						$document = self::create_solr_document_from_post_or_attachment( $updateQuery, get_post( $postid ), $attachment_body );
+						$document = self::create_solr_document_from_post_or_attachment( $updateQuery, get_post( $postid ), $attachment_body, $is_continue_at_conversion_error );
 
 						if ( $is_debug_indexing ) {
 							$this->add_debug_line( $debug_text, null, Array(
@@ -475,7 +475,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 	 */
 	public
 	function create_solr_document_from_post_or_attachment(
-		$solarium_update_query, $post_to_index, $attachment_body = null
+		$solarium_update_query, $post_to_index, $attachment_body = null, $is_continue_at_conversion_error = false
 	) {
 
 		$pid    = $post_to_index->ID;
@@ -617,7 +617,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		}
 
 		// Add custom fields to the document
-		$this->set_custom_fields( $solarium_document_for_update, $post_to_index, WPSOLR_Global::getOption()->get_fields_custom_fields_array() );
+		$this->set_custom_fields( $solarium_document_for_update, $post_to_index, WPSOLR_Global::getOption()->get_fields_custom_fields_array(), $is_continue_at_conversion_error );
 
 		// Last chance to customize the solarium update document
 		$solarium_document_for_update = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_SOLARIUM_DOCUMENT_FOR_UPDATE, $solarium_document_for_update, $this->solr_indexing_options, $post_to_index, $attachment_body );
@@ -635,7 +635,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 	 * @param \WP_Post $post
 	 * @param array $custom_fields Custom fields to be indexed
 	 */
-	function set_custom_fields( $solarium_document_for_update, $post, $custom_fields ) {
+	function set_custom_fields( $solarium_document_for_update, $post, $custom_fields, $is_continue_at_conversion_error = false ) {
 
 		if ( count( $custom_fields ) > 0 ) { // There are custom fields to index
 
@@ -668,15 +668,25 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 
 							if ( ! empty( trim( $field_value ) ) ) {
 
-								// Sanitize the value, depending on it's type
-								$field_value_sanitized = WPSOLR_Global::getSolrFieldTypes()->get_sanitized_value( $post, $custom_field_name, $field_value, $custom_field_type );
+								try {
 
-								array_push( $custom_field_with_dynamic_type, $field_value_sanitized );
-								//array_push( $array_nm2, $field_value_stripped );
+									// Sanitize the value, depending on it's type
+									$field_value_sanitized = WPSOLR_Global::getSolrFieldTypes()->get_sanitized_value( $post, $custom_field_name, 'toto', $custom_field_type );
 
-								// Add current custom field values to custom fields search field
-								// $field being an array, we add each of it's element
-								array_push( $existing_custom_fields, $field_value_sanitized );
+									array_push( $custom_field_with_dynamic_type, $field_value_sanitized );
+									//array_push( $array_nm2, $field_value_stripped );
+
+									// Add current custom field values to custom fields search field
+									// $field being an array, we add each of it's element
+									array_push( $existing_custom_fields, $field_value_sanitized );
+
+								} catch ( \Exception $e ) {
+
+									// Stop or continue
+									if ( ! $is_continue_at_conversion_error ) {
+										throw $e;
+									}
+								}
 							}
 						}
 

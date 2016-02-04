@@ -83,6 +83,7 @@ jQuery(document).ready(function () {
         batch_size = jQuery('#batch_size').val();
         is_debug_indexing = jQuery('#is_debug_indexing').prop('checked');
         is_reindexing_all_posts = jQuery('#is_reindexing_all_posts').prop('checked');
+        is_continue_at_conversion_error = jQuery('#is_continue_at_conversion_error').prop('checked');
 
         err = 1;
 
@@ -98,7 +99,7 @@ jQuery(document).ready(function () {
             return false;
         } else {
 
-            call_solr_index_data(solr_index_indice, batch_size, 0, is_debug_indexing, is_reindexing_all_posts);
+            call_solr_index_data(solr_index_indice, batch_size, 0, is_debug_indexing, is_reindexing_all_posts, is_continue_at_conversion_error);
 
             // Block submit
             return false;
@@ -108,7 +109,7 @@ jQuery(document).ready(function () {
 
 
     // Promise to the Ajax call
-    function call_solr_index_data(solr_index_indice, batch_size, nb_results, is_debug_indexing, is_reindexing_all_posts) {
+    function call_solr_index_data(solr_index_indice, batch_size, nb_results, is_debug_indexing, is_reindexing_all_posts, is_continue_at_conversion_error) {
 
         var nb_results_message = nb_results + ' documents indexed so far'
 
@@ -125,7 +126,8 @@ jQuery(document).ready(function () {
                 batch_size: batch_size,
                 nb_results: nb_results,
                 is_debug_indexing: is_debug_indexing,
-                is_reindexing_all_posts: is_reindexing_all_posts
+                is_reindexing_all_posts: is_reindexing_all_posts,
+                is_continue_at_conversion_error: is_continue_at_conversion_error
             },
             dataType: "json",
             timeout: 1000 * 3600 * 24
@@ -156,7 +158,7 @@ jQuery(document).ready(function () {
                 // If indexing completed, stop. Else, call once more.
                 // Do not re-index all, again !
                 is_reindexing_all_posts = false;
-                timeoutHandler = setTimeout(call_solr_index_data(solr_index_indice, batch_size, data.nb_results, is_debug_indexing, is_reindexing_all_posts), 100);
+                timeoutHandler = setTimeout(call_solr_index_data(solr_index_indice, batch_size, data.nb_results, is_debug_indexing, is_reindexing_all_posts, is_continue_at_conversion_error), 100);
 
 
             } else {
@@ -199,7 +201,6 @@ jQuery(document).ready(function () {
             return entityMap[s];
         });
     }
-
 
 
     jQuery('#save_sort_options_form').click(function () {

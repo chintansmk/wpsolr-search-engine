@@ -296,12 +296,15 @@ function return_solr_index_data() {
 		// Re-index all the data ?
 		$is_reindexing_all_posts = ( $_POST['is_reindexing_all_posts'] === "true" );
 
+		// Stop at first converion error ?
+		$is_continue_at_conversion_error = ( $_POST['is_continue_at_conversion_error'] === "true" );
+
 		$solr = WPSOLR_IndexSolrClient::create( $solr_index_indice );
 		// Reset documents if requested
 		if ( $is_reindexing_all_posts ) {
 			$solr->reset_documents();
 		}
-		$res_final = $solr->index_data( $batch_size, null, $is_debug_indexing );
+		$res_final = $solr->index_data( $batch_size, null, $is_debug_indexing, $is_continue_at_conversion_error );
 
 		// Increment nb of document sent until now
 		$res_final['nb_results'] += $nb_results;

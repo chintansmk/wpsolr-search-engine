@@ -687,6 +687,19 @@ case 'solr_plugins':
 						</div>
 						<div class="clear"></div>
 						<div class='col_left'>
+							Continue indexing on field type conversion errors.<br/>
+							If a field is declared a numeric, but contains a non numeric, skip indexing this field without stopping indexing other fields.
+						</div>
+						<div class='col_right'>
+							<input type='checkbox'
+							       id='is_continue_at_conversion_error'
+							       name='wdm_solr_operations_data[is_continue_at_conversion_error][<?php echo $current_index_indice ?>]'
+							       value='is_debug_indexing'
+								<?php checked( 'is_debug_indexing', isset( $solr_operations_options['is_continue_at_conversion_error'][ $current_index_indice ] ) ? $solr_operations_options['is_continue_at_conversion_error'][ $current_index_indice ] : '' ); ?>>
+							<span class='res_err'></span><br>
+						</div>
+						<div class="clear"></div>
+						<div class='col_left'>
 							Re-index all the data in place.<br/>
 							If you check this option, it will restart the indexing from start, without deleting the
 							data already in the Solr index.
