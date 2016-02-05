@@ -35,7 +35,7 @@ class WPSOLR_Regexp {
 		// Remove empty array rows (it happens), prevent duplicates.
 		$results = [ ];
 		foreach ( $results_with_some_empty_key as $result ) {
-			if ( ! empty( $result ) & ! in_array( $result, $results ) ) {
+			if ( ! empty( $result ) ) {
 				array_push( $results, $result );
 			}
 		}

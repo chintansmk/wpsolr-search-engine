@@ -519,26 +519,31 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		/*
 			Get all custom categories selected for indexing, including 'category'
 		*/
-		$cats   = array();
 		$taxo   = $this->solr_indexing_options['taxonomies'];
 		$aTaxo  = explode( ',', $taxo );
 		$newTax = array( 'category' ); // Add categories by default
 		if ( is_array( $aTaxo ) && count( $aTaxo ) ) {
-		}
-		foreach ( $aTaxo as $a ) {
 
-			// Add only non empty categories
-			if ( strlen( trim( $a ) ) > 0 ) {
-				array_push( $newTax, $a );
+			foreach ( $aTaxo as $a ) {
+
+				// Add only non empty categories
+				if ( strlen( trim( $a ) ) > 0 ) {
+
+					array_push( $newTax, $a );
+				}
 			}
 		}
 
-
 		// Get all taxonomy terms ot this post
-		$term_names = wp_get_post_terms( $post_to_index->ID, $newTax, array( "fields" => "names" ) );
-		if ( $term_names && ! is_wp_error( $term_names ) ) {
-			foreach ( $term_names as $term_name ) {
-				array_push( $cats, htmlspecialchars_decode( $term_name ) ); // Covert back B&amp;W in B&W, as post terms are stored escaped.
+		$terms       = wp_get_post_terms( $post_to_index->ID, $newTax, array( "fields" => "all" ) );
+		$terms_names = array();
+		$terms_slugs = array();
+		if ( $terms && ! is_wp_error( $terms ) ) {
+
+			foreach ( $terms as $term ) {
+
+				array_push( $terms_names, $term->name );
+				array_push( $terms_slugs, $term->slug );
 			}
 		}
 
@@ -546,9 +551,10 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		$tag_array = array();
 		$tags      = get_the_tags( $post_to_index->ID );
 		if ( ! $tags == null ) {
-			foreach ( $tags as $tag ) {
-				array_push( $tag_array, $tag->name );
 
+			foreach ( $tags as $tag ) {
+
+				array_push( $tag_array, $tag->name );
 			}
 		}
 
@@ -594,8 +600,8 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_PERMALINK ]          = $purl;
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_COMMENTS ]           = $pcomments;
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS ] = $pnumcomments;
-		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_CATEGORIES ]         = $cats;
-		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR ]     = $cats;
+		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_CATEGORIES ]         = $terms_names;
+		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR ]     = $terms_slugs;
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_TAGS ]               = $tag_array;
 
 		$taxonomies = (array) get_taxonomies( array( '_builtin' => false ), 'names' );
@@ -671,7 +677,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 								try {
 
 									// Sanitize the value, depending on it's type
-									$field_value_sanitized = WPSOLR_Global::getSolrFieldTypes()->get_sanitized_value( $post, $custom_field_name, 'toto', $custom_field_type );
+									$field_value_sanitized = WPSOLR_Global::getSolrFieldTypes()->get_sanitized_value( $post, $custom_field_name, $field_value, $custom_field_type );
 
 									array_push( $custom_field_with_dynamic_type, $field_value_sanitized );
 									//array_push( $array_nm2, $field_value_stripped );

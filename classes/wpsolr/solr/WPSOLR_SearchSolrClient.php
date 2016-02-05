@@ -849,31 +849,40 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 						$field_definition = WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name );
 
 						$fac_fd = "$filter_query_field_name";
-						if ( ! in_array( $filter_query_field_name, $special_fields ) ) {
-							// Add the solr type extension
-							$fac_fd = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
-								$filter_query_field_name,
-								WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name )->get_dynamic_type()
-							);
-						}
+						if ( WPSOLR_Schema::_FIELD_NAME_CATEGORIES === $filter_query_field_name ) {
 
-						if ( ! $field_definition->get_is_numeric() ) {
-							$filter_query_field_value_escaped = $filter_query_field_value;
-
-							// Escape special characters
-							$filter_query_field_value_escaped = WPSOLR_Regexp::remove_string_at_the_end( $filter_query_field_value_escaped, "\"" );
-							$filter_query_field_value_escaped = WPSOLR_Regexp::remove_string_at_the_begining( $filter_query_field_value_escaped, "\"" );
-
-							// In case the facet contains white space or special caracters, we enclose it with ""
-							$filter_query_field_value_escaped = "\"$filter_query_field_value_escaped\"";
+							$filter_query_field_name = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
+							$fac_fd                  = "$filter_query_field_name";
+							$filter_query_field      = "$filter_query_field_name:$filter_query_field_value";
 
 						} else {
 
-							// Create range [0 TO 10]
-							$filter_query_field_value_escaped = $filter_query_field_value;
-						}
+							if ( ! in_array( $filter_query_field_name, $special_fields ) ) {
+								// Add the solr type extension
+								$fac_fd = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_dynamic_extension(
+									$filter_query_field_name,
+									WPSOLR_Global::getExtensionFields()->get_field_type_definition( $filter_query_field_name )->get_dynamic_type()
+								);
+							}
 
-						$filter_query_field = str_replace( "$filter_query_field_name:$filter_query_field_value", "$fac_fd:$filter_query_field_value_escaped", $filter_query_field );
+							if ( ! $field_definition->get_is_numeric() ) {
+								$filter_query_field_value_escaped = $filter_query_field_value;
+
+								// Escape special characters
+								$filter_query_field_value_escaped = WPSOLR_Regexp::remove_string_at_the_end( $filter_query_field_value_escaped, "\"" );
+								$filter_query_field_value_escaped = WPSOLR_Regexp::remove_string_at_the_begining( $filter_query_field_value_escaped, "\"" );
+
+								// In case the facet contains white space or special caracters, we enclose it with ""
+								$filter_query_field_value_escaped = "\"$filter_query_field_value_escaped\"";
+
+							} else {
+
+								// Create range [0 TO 10]
+								$filter_query_field_value_escaped = $filter_query_field_value;
+							}
+
+							$filter_query_field = str_replace( "$filter_query_field_name:$filter_query_field_value", "$fac_fd:$filter_query_field_value_escaped", $filter_query_field );
+						}
 					}
 				}
 
@@ -972,7 +981,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 			WPSOLR_Schema::_FIELD_NAME_NUMBER_OF_COMMENTS,
 			WPSOLR_Schema::_FIELD_NAME_COMMENTS,
 			WPSOLR_Schema::_FIELD_NAME_DISPLAY_DATE,
-			WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR,
+			WPSOLR_Schema::_FIELD_NAME_CATEGORIES,
 			WPSOLR_Schema::_FIELD_NAME_AUTHOR
 		)
 	) {

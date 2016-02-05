@@ -574,9 +574,6 @@ case 'solr_plugins':
 
 	case 'solr_operations':
 
-		// Load multi-language extensions
-		WPSOLR_Global::getActiveExtensions();
-
 		$option_indexes_object = WPSOLR_Global::getExtensionIndexes();
 
 		// Create the tabs from the Solr indexes already configured
@@ -688,7 +685,8 @@ case 'solr_plugins':
 						<div class="clear"></div>
 						<div class='col_left'>
 							Continue indexing on field type conversion errors.<br/>
-							If a field is declared a numeric, but contains a non numeric, skip indexing this field without stopping indexing other fields.
+							If a field is declared a numeric, but contains a non numeric, skip indexing this field
+							without stopping indexing other fields.
 						</div>
 						<div class='col_right'>
 							<input type='checkbox'

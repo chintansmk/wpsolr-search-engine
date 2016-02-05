@@ -125,6 +125,13 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 			$matches
 		);
 
+
+		$matches = WPSOLR_Regexp::extract_filter_query( 'field1:"value1 (value)   "' );
+		$this->assertEquals(
+			[ 'field1:"field1:"value1 (value)   "' ],
+			$matches
+		);
+
 	}
 
 	public function test_extract_filter_query_complex() {
@@ -274,6 +281,13 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 		$matches = WPSOLR_Regexp::extract_filter_range_values( '[5 TO 10]' );
 		$this->assertEquals(
 			[ '5', '10' ],
+			$matches
+		);
+
+		// Same range bounds
+		$matches = WPSOLR_Regexp::extract_filter_range_values( '[5 TO 5]' );
+		$this->assertEquals(
+			[ '5', '5' ],
 			$matches
 		);
 

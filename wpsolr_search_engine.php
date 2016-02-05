@@ -283,7 +283,7 @@ function my_plugins_loaded() {
 		$g_wpsolr_extensions = new WPSOLR_Extensions();
 	}
 	*/
-	
+
 	/*
 	 * Load all active extensions
 	 */
