@@ -24,9 +24,6 @@ require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 require_once plugin_dir_path( __FILE__ ) . 'classes/wpsolr/WPSOLR_Autoloader.php';
 spl_autoload_register( array( '\\wpsolr\\WPSOLR_Autoloader', 'Load' ) );
 
-// Load all active extensions
-$active_extensions = WPSOLR_Global::getActiveExtensions();
-
 require_once 'ajax_solr_services.php';
 require_once 'dashboard_settings.php';
 require_once 'autocomplete.php';
@@ -286,6 +283,11 @@ function my_plugins_loaded() {
 		$g_wpsolr_extensions = new WPSOLR_Extensions();
 	}
 	*/
+	
+	/*
+	 * Load all active extensions
+	 */
+	WPSOLR_Global::getActiveExtensions();
 
 	/*
 	 * Load WPSOLR text domain to the Wordpress languages plugin directory (WP_LANG_DIR/plugins)
