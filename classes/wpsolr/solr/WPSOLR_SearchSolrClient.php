@@ -235,7 +235,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		/*
 		* Add query fields
 		*/
-		$this->add_filter_query_fields( $solarium_query, $wpsolr_query->get_filter_query_fields() );
+		$this->add_filter_query_fields( $solarium_query, $wpsolr_query->get_filter_query_fields(), $wpsolr_query->get_wpsolr_facets_fields() );
 
 		/*
 		* Add highlighting fields
@@ -822,15 +822,26 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	 *
 	 * @param Query $solarium_query
 	 * @param array $filter_query_fields
+	 * @param $facets_parameters
 	 */
 	private
 	function add_filter_query_fields(
-		Query $solarium_query, $filter_query_fields = array()
+		Query $solarium_query, $filter_query_fields, $facets_parameters
 	) {
 
 		$special_fields = WPSOLR_Global::getExtensionFacets()->get_special_fields();
 
+		$facets_or = [ ];
+
 		foreach ( $filter_query_fields as $filter_query_field ) {
+
+			// Is it a filter query, coming from a facet with a 'OR'
+			$is_facet_or             = false;
+			$filter_query_field_name = explode( ':', $filter_query_field )[0];
+			if ( isset( $facets_parameters[ $filter_query_field_name ] ) ) {
+
+				$is_facet_or = WPSOLR_Global::getExtensionFacets()->get_facet_is_query_operator_or( $facets_parameters[ $filter_query_field_name ] );
+			}
 
 			if ( ! empty( $filter_query_field ) ) {
 
@@ -854,6 +865,12 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 							$filter_query_field_name = WPSOLR_Schema::_FIELD_NAME_CATEGORIES_STR;
 							$fac_fd                  = "$filter_query_field_name";
 							$filter_query_field      = "$filter_query_field_name:$filter_query_field_value";
+
+							if ( $is_facet_or ) {
+
+								// Remember the OR query field for later
+								$facets_or[ $fac_fd ][] = $filter_query_field;
+							}
 
 						} else {
 
@@ -882,16 +899,26 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 							}
 
 							$filter_query_field = str_replace( "$filter_query_field_name:$filter_query_field_value", "$fac_fd:$filter_query_field_value_escaped", $filter_query_field );
+
+							if ( $is_facet_or ) {
+
+								// Remember the OR query field for later
+								$facets_or[ $fac_fd ][] = $filter_query_field;
+							}
+
 						}
 					}
 				}
 
-				$solarium_query->addFilterQuery( array(
-					'key'   => "$filter_query_field",
-					'query' => "$filter_query_field",
-					'tag'   => "$fac_fd"
-				) );
+				if ( ! $is_facet_or ) {
 
+					$solarium_query->addFilterQuery( array(
+						'key'   => "$filter_query_field",
+						'query' => "$filter_query_field",
+						'tag'   => "$fac_fd"
+					) );
+
+				}
 
 				// Add statistics to this field to get min/max results
 				/*$stats = $solarium_query->getStats();
@@ -904,6 +931,28 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 			}
 		}
+
+		// Add the query fields with a OR operator
+		foreach ( $facets_or as $fac_fd => $filter_query_fields ) {
+
+			$filter_query_field_or = '';
+			foreach ( $filter_query_fields as $filter_query_field ) {
+
+				$filter_query_field_or .= ( ! empty( $filter_query_field_or ) ? ' ' . Query::QUERY_OPERATOR_OR . ' ' : '' ) . $filter_query_field;
+			}
+
+			if ( ! empty( $filter_query_field_or ) ) {
+
+				$solarium_query->addFilterQuery( array(
+					'key'   => "$fac_fd",
+					'query' => "$filter_query_field_or",
+					'tag'   => "$fac_fd"
+				) );
+			}
+
+		}
+
+		return;
 	}
 
 	/**

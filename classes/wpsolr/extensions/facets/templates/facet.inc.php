@@ -1,4 +1,5 @@
 <?php
+use Solarium\QueryType\Select\Query\Query;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Option;
@@ -116,10 +117,13 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 				Operator inside the facet
 			</div>
 			<div class='col_right'>
-				<select name='<?php echo $facet_option_array_name; ?>[elements_operator]'>
-					<option value='AND' <?php selected( 'AND', $facet_elements_operator, true ); ?>>AND
+				<select
+					name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_QUERY_OPERATOR; ?>]'>
+					<option
+						value='<?php echo Query::QUERY_OPERATOR_AND; ?>' <?php selected( Query::QUERY_OPERATOR_AND, $facet_elements_operator, true ); ?> ><?php echo Query::QUERY_OPERATOR_AND; ?>
 					</option>
-					<option value='OR' <?php selected( 'OR', $facet_elements_operator, true ); ?>>OR</option>
+					<option
+						value='<?php echo Query::QUERY_OPERATOR_OR; ?>' <?php selected( Query::QUERY_OPERATOR_OR, $facet_elements_operator, true ); ?> ><?php echo Query::QUERY_OPERATOR_OR; ?></option>
 				</select>
 			</div>
 		</div>

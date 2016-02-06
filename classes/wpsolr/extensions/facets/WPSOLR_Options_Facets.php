@@ -2,6 +2,7 @@
 
 namespace wpsolr\extensions\facets;
 
+use Solarium\QueryType\Select\Query\Query;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\solr\WPSOLR_Schema;
@@ -54,6 +55,9 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 	// Is a facet in an exclusion tag (show misssing elements)
 	const FACET_FIELD_IS_EXCLUSION = 'missing';
+
+	// Operator between elements of a facet
+	const FACET_FIELD_QUERY_OPERATOR = 'elements_operator';
 
 	// Facet range
 	const FACET_FIELD_RANGE = 'range';
@@ -319,6 +323,15 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_facet_min_max_step( $facet ) {
 		return isset( $facet[ self::FACET_FIELD_MIN_MAX ] ) && isset( $facet[ self::FACET_FIELD_MIN_MAX ][ self::FACET_FIELD_MIN_MAX_STEP ] ) ? $facet[ self::FACET_FIELD_MIN_MAX ][ self::FACET_FIELD_MIN_MAX_STEP ] : self::FACET_FIELD_MIN_MAX_STEP_DEFAULT;
+	}
+
+	/**
+	 * Is facet a OR query ?
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_is_query_operator_or( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_QUERY_OPERATOR ] ) ? ( Query::QUERY_OPERATOR_OR === $facet[ self::FACET_FIELD_QUERY_OPERATOR ] ) : false;
 	}
 
 	/**
