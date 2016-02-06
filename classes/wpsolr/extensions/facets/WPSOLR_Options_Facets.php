@@ -174,6 +174,24 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		return ! empty( $facets_groups[ $facets_group_id ] ) ? $facets_groups[ $facets_group_id ] : [ ];
 	}
 
+	/**
+	 * Get exclusion flag of a facets group
+	 *
+	 * @param string $facets_group_id Group of facets
+	 *
+	 * @return array Facets of the group
+	 */
+	public function get_facets_group_is_exlusion( $facets_group_id ) {
+
+		$facets_group = $this->get_facets_group( $facets_group_id );
+
+		if ( isset( $facets_group ) ) {
+
+			return isset( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION ] );
+		}
+
+		return false;
+	}
 
 	/**
 	 * Get facets of default group

@@ -76,6 +76,8 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget {
 				if ( empty( $group_id ) ) {
 					throw new WPSOLR_Exception( sprintf( 'Select a facets group.' ) );
 				}
+
+				$wpsolr_query->set_wpsolr_facets_groups_id( $group_id );
 			}
 			// Facets of the facets groups
 			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $group_id );

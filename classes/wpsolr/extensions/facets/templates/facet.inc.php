@@ -104,7 +104,7 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 		</div>
 		<div class="wdm_row">
 			<div class='col_left'>
-				Show missing facet contents
+				Always show facet contents
 			</div>
 			<div class='col_right'>
 				<input type="checkbox"

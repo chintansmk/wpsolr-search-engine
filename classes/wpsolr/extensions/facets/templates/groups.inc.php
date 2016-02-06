@@ -143,6 +143,7 @@ use wpsolr\utilities\WPSOLR_Option;
 				</div>
 				<div class="clear"></div>
 			</div>
+
 			<div class="wdm_row">
 				<div class='col_left'>Group filter</div>
 				<div class='col_right'>
@@ -150,6 +151,16 @@ use wpsolr\utilities\WPSOLR_Option;
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][<?php echo WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY; ?>]"
 					       value="<?php echo ! empty( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) ? esc_attr( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) : ''; ?>"/>
 					<!--<input name="create_group" value="Clone the group"/>-->
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Always show facets</div>
+				<div class='col_right'>
+					<input type="checkbox"
+					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][<?php echo WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION; ?>]"
+					       value="1" <?php checked( ! empty( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION ] ) ); ?>/>
 				</div>
 				<div class="clear"></div>
 			</div>
