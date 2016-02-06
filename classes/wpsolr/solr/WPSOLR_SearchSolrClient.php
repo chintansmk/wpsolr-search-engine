@@ -872,6 +872,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 			if ( ! empty( $filter_query_field ) ) {
 
 				$matches = WPSOLR_Regexp::extract_filter_query( $filter_query_field );
+
 				foreach ( $matches as $match ) {
 
 					$filter_query_field_array = explode( ':', $match );

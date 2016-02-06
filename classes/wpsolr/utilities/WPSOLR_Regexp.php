@@ -13,6 +13,29 @@ use wpsolr\exceptions\WPSOLR_Exception;
  */
 class WPSOLR_Regexp {
 
+	public static $solr_special_caracters = [
+		'+',
+		'-',
+		'&&',
+		'||',
+		'!',
+		'(',
+		')',
+		'{',
+		'}',
+		//'[',
+		//']',
+		'^',
+		//'"',
+		'~',
+		'*',
+		'?',
+		//':',
+		'\\'
+	];
+
+	public static $regexp_special_caracters = [ '\\', '^', '$', '.', '|', '?', '*', '+', '(', ')', '[', '{' ];
+
 	/**
 	 * Extract values from a range query parameter
 	 * '[5 TO 30]' => ['5', '30']
@@ -102,12 +125,11 @@ class WPSOLR_Regexp {
 		// Replace separator literals by a single special character. Much easier, because negate a literal is difficult with regexp.
 		$text = str_replace( [ ' AND ', ' and ', ' OR ', ' or ' ], ' | ', $text );
 
-		// Negate all special caracters to get the 'field:value' array
-		preg_match_all( '/[^()|&!]+/', $text, $matches );
+		// Replace Solr special caracters
+		$text = self::replace_solr_special_caracters( $text, ' | ' );
 
-		// https://lucene.apache.org/core/2_9_4/queryparsersyntax.html#Escaping Special Characters
-		// [+ - && || ! ( ) { } [ ] ^ " ~ * ? : \]
-		// To escape these character use the \
+		// Negate all special caracters to get the 'field:value' array
+		preg_match_all( '/[^|]+/', $text, $matches );
 
 		// Trim results
 		$results_with_some_empty_key = ! empty( $matches[0] ) ? array_map( 'trim', $matches[0] ) : [ ];
@@ -122,6 +144,60 @@ class WPSOLR_Regexp {
 
 		return $results;
 
+	}
+
+
+	/**
+	 * Replace caracters not inside double quotes
+	 *
+	 * http://stackoverflow.com/questions/20767089/preg-replace-when-not-inside-double-quotes
+	 *
+	 * @param $text
+	 * @param $replace
+	 * @param $replace_by
+	 *
+	 * @return mixed
+	 */
+	static function replace_caracters_not_inside_quotes( $text, $replace, $replace_by ) {
+
+		foreach ( str_split( $replace ) as $replace_char ) {
+
+			if ( in_array( $replace_char, self::$regexp_special_caracters ) ) {
+
+				// Special regexp caracter
+				$replace = str_replace( $replace_char, '\\' . $replace_char, $replace );
+
+				// Replace once only
+				break;
+			}
+		}
+
+		return preg_replace( sprintf( '/%s(?=(?:(?:[^"]*"){2})*[^"]*$)/', $replace ), $replace_by, $text );
+	}
+
+
+	/**
+	 * Replace Solr special caracters
+	 *
+	 * https://lucene.apache.org/core/2_9_4/queryparsersyntax.html#Escaping Special Characters
+	 * [+ - && || ! ( ) { } [ ] ^ " ~ * ? : \]
+	 *
+	 * @param $text
+	 * @param $replace
+	 * @param $replace_by
+	 *
+	 * @return mixed
+	 */
+	static function replace_solr_special_caracters( $text, $replace_by ) {
+
+		$result = $text;
+
+		foreach ( self::$solr_special_caracters as $special_caracter
+		) {
+			$result = self::replace_caracters_not_inside_quotes( $result, $special_caracter, $replace_by );
+		}
+
+		return $result;
 	}
 
 	/**

@@ -135,7 +135,15 @@ class WPSOLR_Data_Facets {
 							}
 
 
-							$facet_value          = $facet_in_results[0];
+							$facet_value = $facet_in_results[0];
+							switch ( $facet_to_display_type ) {
+
+								case WPSOLR_Options_Facets::FACET_TYPE_FIELD:
+									// Add quotes to prevent Solr special caracters error
+									$facet_value = "\"$facet_value\"";
+									break;
+							}
+
 							$facet_label_expanded = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $facet_label );
 
 
@@ -247,7 +255,7 @@ class WPSOLR_Data_Facets {
 									case WPSOLR_Options_Facets::FACET_TYPE_FIELD:
 										array_push( $facet['items'], array(
 											'label'    => $facet_label_expanded,
-											'name'     => $facet_in_results[0],
+											'name'     => $facet_value,
 											'count'    => $facet_in_results[1],
 											'selected' => $item_selected
 										) );

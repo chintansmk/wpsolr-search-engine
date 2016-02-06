@@ -2,7 +2,6 @@
 
 namespace wpsolr\utilities;
 
-use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\WPSOLR_Unit_Test;
 
 class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
@@ -112,6 +111,12 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 			$matches
 		);
 
+		$matches = WPSOLR_Regexp::extract_filter_query( 'field1:[0 TO 10]' );
+		$this->assertEquals(
+			[ 'field1:[0 TO 10]' ],
+			$matches
+		);
+
 		// Do not remove blanks
 		$matches = WPSOLR_Regexp::extract_filter_query( 'field1:value1_begin   value1_end' );
 		$this->assertEquals(
@@ -128,7 +133,7 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 
 		$matches = WPSOLR_Regexp::extract_filter_query( 'field1:"value1 (value)   "' );
 		$this->assertEquals(
-			[ 'field1:"field1:"value1 (value)   "' ],
+			[ 'field1:"value1 (value)   "' ],
 			$matches
 		);
 
@@ -136,7 +141,7 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 
 	public function test_extract_filter_query_complex() {
 
-		foreach ( [ 'AND', 'and', 'OR', 'or', '|', '&', '&&', '!' ] as $separator ) {
+		foreach ( [ 'AND', 'and', 'OR', 'or', '|', '&&', '!' ] as $separator ) {
 
 			$matches = WPSOLR_Regexp::extract_filter_query( sprintf( 'field1:value1 %s field2:value2', $separator ) );
 			$this->assertEquals(
@@ -258,7 +263,7 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 	}
 
 	/**
-	 * @expectedException WPSOLR_Exception
+	 * @expectedException \wpsolr\exceptions\WPSOLR_Exception
 	 * */
 	public
 	function test_preg_match_limes_syntax_error() {
@@ -291,6 +296,87 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 			$matches
 		);
 
+	}
+
+
+	public function test_replace_caracters_not_inside_quotes() {
+
+		$this->assertEquals(
+			null,
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( null, '1', '2' )
+		);
+
+		$this->assertEquals(
+			'',
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( '', '1', '2' )
+		);
+
+		$this->assertEquals(
+			'3',
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( '3', '1', '2' )
+		);
+
+		$this->assertEquals(
+			'2',
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( '1', '1', '2' )
+		);
+
+		$this->assertEquals(
+			'2 2',
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( '1 1', '1', '2' )
+		);
+
+		$this->assertEquals(
+			'"1"',
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( '"1"', '1', '2' )
+		);
+
+		$this->assertEquals(
+			'"1" 2',
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( '"1" 1', '1', '2' )
+		);
+
+		$this->assertEquals(
+			'"1" "1"',
+			WPSOLR_Regexp::replace_caracters_not_inside_quotes( '"1" "1"', '1', '2' )
+		);
+
+
+		// Test all Solr special caracters
+		foreach ( WPSOLR_Regexp::$solr_special_caracters as $special_caracter
+		) {
+
+			$this->assertEquals(
+				'',
+				WPSOLR_Regexp::replace_caracters_not_inside_quotes( $special_caracter, $special_caracter, '' )
+			);
+
+			$this->assertEquals(
+				"\"$special_caracter\"",
+				WPSOLR_Regexp::replace_caracters_not_inside_quotes( "\"$special_caracter\"", $special_caracter, '' )
+			);
+
+		}
+
+	}
+
+	public function test_replace_solr_special_caracters() {
+
+		foreach (
+			WPSOLR_Regexp::$solr_special_caracters as $special_caracter
+		) {
+
+			$this->assertEquals(
+				'before  after',
+				WPSOLR_Regexp::replace_solr_special_caracters( "before $special_caracter after", '' )
+			);
+
+			$this->assertEquals(
+				"\"before $special_caracter after\"",
+				WPSOLR_Regexp::replace_solr_special_caracters( "\"before $special_caracter after\"", '' )
+			);
+
+		}
 	}
 
 }
