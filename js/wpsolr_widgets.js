@@ -154,6 +154,15 @@ WPSOLR_Facets.prototype.toggleFacetValue = function (facet) {
     this.debugState();
 };
 
+WPSOLR_Facets.prototype.toggleFacetRangeValue = function (facet) {
+    this.debug("toggleFacetRangeValue", facet);
+    this.debugState();
+
+    this.toggleFacetAnyValue(this.facets.range, facet);
+
+    this.debugState();
+};
+
 WPSOLR_Facets.prototype.addFacetValue = function (facet) {
     this.debug("add facet", facet);
     this.debugState();

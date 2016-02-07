@@ -31,25 +31,25 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			]
 		],
 		self::TYPE_GROUP_ELEMENT_LAYOUT => [
-			'radiobox'     => [
+			'radiobox'              => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Radio boxes',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
-			'checkbox'     => [
+			'checkbox'              => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Check boxes',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
 				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
-			'range'        => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Even ranges',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
+			'range'                 => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Regular ranges with radio boxes',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/radiobox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
@@ -58,11 +58,24 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
 				]
 			],
-			'custom_range' => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Custom ranges',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/range/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/js.twig',
+			'range_checkbox'        => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Regular ranges with check boxes',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/checkbox/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
+				self::LAYOUT_FIELD_TYPES         => [
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
+				]
+			],
+			'custom_range'          => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Irregular ranges with radio boxes',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/radiobox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
@@ -71,7 +84,20 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
 				]
 			],
-			'slider'       => [
+			'custom_range_checkbox' => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Irregular ranges with check boxes',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/checkbox/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE,
+				self::LAYOUT_FIELD_TYPES         => [
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
+					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
+					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
+				]
+			],
+			'slider'                => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Slider',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/slider/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/slider/css.twig',
