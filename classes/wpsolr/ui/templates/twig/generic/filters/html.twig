@@ -8,16 +8,6 @@
 
 <div id="res_filters">
 
-    <ul>
-        <li>
-            <a class="wpsolr_remove_facets_filters wpsolr_facet_checkbox {{ not facets.has_facet_elements_selected ? "checked" : "" }}" {# Do not remove class "select_opt". It is used as JQuery selector. You can override it's CSS however. #}
-               href="javascript:;"
-            >
-                {{ facets_element_all_results }}
-            </a>
-        </li>
-    </ul>
-
     {% for facet in facets.facets %} {# Loop on facets #}
 
         {% include facet.template_html with {'facets_element': facets_element, 'facets_title': facets_title, 'facet_definition': facet.definition, 'items': facet.items, 'plugin_dir_url': plugin_dir_url, 'template_css': facet.template_css, 'template_js': facet.template_js} %}
