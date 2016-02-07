@@ -33,9 +33,16 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		self::TYPE_GROUP_ELEMENT_LAYOUT => [
 			'dropdownlist'          => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Drop down list',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/dropdownlist/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/dropdownlist/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/dropdownlist/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/dropdownlist/single/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/dropdownlist/single/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/dropdownlist/single/js.twig',
+				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
+			],
+			'dropdownlist_multiple' => [
+				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Drop down list with multiple selection',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/dropdownlist/multiple/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/dropdownlist/multiple/css.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/dropdownlist/multiple/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
 			],
 			'radiobox'              => [
