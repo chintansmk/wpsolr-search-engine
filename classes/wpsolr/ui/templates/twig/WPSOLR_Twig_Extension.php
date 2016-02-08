@@ -6,6 +6,7 @@
 
 namespace wpsolr\ui\templates\twig;
 
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 
 class WPSOLR_Twig_Extension extends \Twig_Extension {
 
@@ -39,7 +40,8 @@ class WPSOLR_Twig_Extension extends \Twig_Extension {
 		];
 
 		switch ( $facet['definition']['type'] ) {
-			case 'facet_range':
+			case WPSOLR_Options_Facets::FACET_TYPE_RANGE:
+			case WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE:
 				$result['facet_value'] = $item['range_inf'];
 				$result['range_sup']   = $item['range_sup'];
 				break;

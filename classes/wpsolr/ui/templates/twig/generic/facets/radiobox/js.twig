@@ -13,7 +13,7 @@
             jQuery(this).toggleClass("{{ facet_selected_class }}"); // Activate clicked facet
 
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
-            wpsolr_facets.removeFacetValue({"facet_id": facet.facet_id}); // Remove all elements of the facet
+            wpsolr_facets.removeFacetValue({"facet_id": facet.facet_id, "facet_type": facet.facet_type}); // Remove all elements of the facet
             if (jQuery(this).hasClass("{{ facet_selected_class }}")) {
                 wpsolr_facets.addFacetValue(facet); // add facet element if selected
             }

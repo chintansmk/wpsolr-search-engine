@@ -153,12 +153,13 @@ WPSOLR_Facets.prototype.getFacetsByType = function (facet) {
 
     switch (facet.facet_type) {
         case "facet_range":
-            this.debug("toggleFacetValue result:", "range");
+        case "facet_range_custom":
+            this.debug("getFacetsByType result:", "range");
             result = this.facets.range;
             break;
 
         default:
-            this.debug("toggleFacetValue result:", "field");
+            this.debug("getFacetsByType result:", "field");
             result = this.facets.field;
             break;
     }
