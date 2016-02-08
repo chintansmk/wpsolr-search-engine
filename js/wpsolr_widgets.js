@@ -58,7 +58,7 @@ WPSOLR_Facets.prototype.extractUrl = function () {
             break;
         } else {
             if (this.is_pattern_range(value)) {
-                this.addFacetRangeValue({'facet_id': value.split(":")[0], 'facet_value': value.split(":")[1]});
+                this.addFacetValue({'facet_id': value.split(":")[0], 'facet_value': value.split(":")[1]});
             } else {
                 this.addFacetValue({'facet_id': value.split(":")[0], 'facet_value': value.split(":")[1]});
             }
@@ -105,7 +105,7 @@ WPSOLR_Facets.prototype.clear = function () {
 }
 
 WPSOLR_Facets.prototype.addFacetAnyValue = function (facets, facet) {
-    this.debug("add facet any", facet);
+    this.debug("addFacetAnyValue", facet);
     this.debugState();
 
     // Add facet
@@ -145,29 +145,42 @@ WPSOLR_Facets.prototype.toggleFacetAnyValue = function (facets, facet) {
     this.debugState();
 };
 
+WPSOLR_Facets.prototype.getFacetsByType = function (facet) {
+    this.debug("getFacetsByType", facet);
+    this.debugState();
+
+    var result = this.facets.field;
+
+    switch (facet.facet_type) {
+        case "facet_range":
+            this.debug("toggleFacetValue result:", "range");
+            result = this.facets.range;
+            break;
+
+        default:
+            this.debug("toggleFacetValue result:", "field");
+            result = this.facets.field;
+            break;
+    }
+
+
+    return result;
+}
+
 WPSOLR_Facets.prototype.toggleFacetValue = function (facet) {
     this.debug("toggleFacetValue", facet);
     this.debugState();
 
-    this.toggleFacetAnyValue(this.facets.field, facet);
-
-    this.debugState();
-};
-
-WPSOLR_Facets.prototype.toggleFacetRangeValue = function (facet) {
-    this.debug("toggleFacetRangeValue", facet);
-    this.debugState();
-
-    this.toggleFacetAnyValue(this.facets.range, facet);
+    this.toggleFacetAnyValue(this.getFacetsByType(facet), facet);
 
     this.debugState();
 };
 
 WPSOLR_Facets.prototype.addFacetValue = function (facet) {
-    this.debug("add facet", facet);
+    this.debug("addFacetValue", facet);
     this.debugState();
 
-    this.addFacetAnyValue(this.facets.field, facet);
+    this.addFacetAnyValue(this.getFacetsByType(facet), facet);
 
     this.debugState();
 };
@@ -176,22 +189,10 @@ WPSOLR_Facets.prototype.removeFacetValue = function (facet) {
     this.debug("removeFacetValue", facet);
     this.debugState();
 
-    this.removeFacetAnyValue(this.facets.field, facet);
-    this.removeFacetAnyValue(this.facets.range, facet);
+    this.removeFacetAnyValue(this.getFacetsByType(facet), facet);
 
     this.debugState();
 };
-
-WPSOLR_Facets.prototype.addFacetRangeValue = function (facet) {
-    this.debug("add facet range", facet);
-    this.debugState();
-
-    // Add facet
-    this.addFacetAnyValue(this.facets.range, facet);
-
-    this.debugState();
-};
-
 
 WPSOLR_Facets.prototype.updateLastFacetSelected = function (facet) {
     this.debug("updateLastFacetSelected", facet);

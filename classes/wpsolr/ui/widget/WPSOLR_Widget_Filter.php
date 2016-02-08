@@ -35,7 +35,7 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget {
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Radio boxes',
 				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/filters/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/filters/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/radiobox/js.twig'
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/checkbox/js.twig'
 			]
 		]
 	];

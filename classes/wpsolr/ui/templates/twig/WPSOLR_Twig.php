@@ -37,6 +37,9 @@ class WPSOLR_Twig {
 			'debug'       => $is_debug,
 		) );
 
+		// Register WPSOLR Twig extension
+		$twig->addExtension( new WPSOLR_Twig_Extension() );
+
 		if ( $is_debug ) {
 			// Add debugger, for dump function to be here: http://twig.sensiolabs.org/doc/functions/dump.html
 			$twig->addExtension( new \Twig_Extension_Debug() );

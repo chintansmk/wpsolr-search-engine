@@ -14,7 +14,7 @@
 
         {% if item.selected %}
 
-            {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name} %}
+            {% set data_wpsolr_facet = wpsolr_create_data_facet(facet, item) %}
 
             <li>
                 <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"

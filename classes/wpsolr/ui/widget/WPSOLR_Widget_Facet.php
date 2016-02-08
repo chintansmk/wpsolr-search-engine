@@ -61,9 +61,9 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			],
 			'range'                 => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Regular ranges with radio boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/radiobox/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
@@ -74,9 +74,9 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			],
 			'range_checkbox'        => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Regular ranges with check boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/checkbox/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
@@ -87,9 +87,9 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			],
 			'custom_range'          => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Irregular ranges with radio boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/radiobox/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
@@ -100,9 +100,9 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			],
 			'custom_range_checkbox' => [
 				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Irregular ranges with check boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/range/radiobox/html.twig',
+				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
 				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/range/checkbox/js.twig',
+				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
 				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE,
 				self::LAYOUT_FIELD_TYPES         => [
 					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,

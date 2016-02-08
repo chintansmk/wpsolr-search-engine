@@ -7,7 +7,7 @@
 
             {# Update url #}
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
-            wpsolr_facets.removeFacetValue({"facet_id": facet.facet_id}); // Remove all elements of the facet
+            wpsolr_facets.removeFacetValue(facet); // Remove all elements of the facet
             wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
             wpsolr_facets.create_url();
         });
