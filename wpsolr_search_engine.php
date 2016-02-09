@@ -63,6 +63,11 @@ function solr_post_save_admin_notice() {
 		echo "<div class=\"error\"><p>(WPSOLR) $out</p></div>";
 	}
 
+	if ( $out = get_transient( get_current_user_id() . 'wpsolr_generic_notice' ) ) {
+		delete_transient( get_current_user_id() . 'wpsolr_generic_notice' );
+		echo "<div class=\"error\"><p>(WPSOLR) $out</p></div>";
+	}
+
 }
 
 add_action( 'admin_notices', "solr_post_save_admin_notice" );
@@ -210,8 +215,6 @@ function curl_dependency_check() {
 
 		echo "<div class='updated'><p><b>cURL</b> is not installed on your server. In order to make <b>'Solr for WordPress'</b> plugin work, you need to install <b>cURL</b> on your server </p></div>";
 	}
-
-
 }
 
 
