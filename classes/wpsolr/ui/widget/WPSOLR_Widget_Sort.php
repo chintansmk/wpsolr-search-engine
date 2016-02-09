@@ -75,6 +75,13 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 				}
 			}
 
+		} else {
+
+			// No default sort group
+			if ( empty( $group_id ) ) {
+				throw new WPSOLR_Exception( sprintf( 'Select a default sort group.' ) );
+			}
+
 		}
 
 		// Sorts of the Sorts group
