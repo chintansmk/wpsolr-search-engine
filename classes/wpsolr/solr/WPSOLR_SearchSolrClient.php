@@ -21,6 +21,9 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 	protected $solarium_config;
 
+	// Solr tag for exclusion between facets of a group
+	const SOLR_EXCLUDE_ALL_TAG = "wpsolr_all";
+
 	// Search template
 	const _SEARCH_PAGE_TEMPLATE = 'wpsolr-search-engine/search.php';
 
@@ -772,13 +775,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 			foreach ( $solarium_query->getFacetSet()->getFacets() as $solarium_facet ) {
 
-				foreach ( $solarium_query->getFacetSet()->getFacets() as $solarium_facet_to_exlude ) {
-
-					if ( $solarium_facet->getKey() != $solarium_facet_to_exlude->getKey() ) {
-						$solarium_facet->addExclude( $solarium_facet_to_exlude->getKey() );
-					}
-				}
-
+				$solarium_facet->addExclude( self::SOLR_EXCLUDE_ALL_TAG );
 			}
 		}
 
@@ -942,7 +939,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 					$solarium_query->addFilterQuery( array(
 						'key'   => "$filter_query_field",
 						'query' => "$filter_query_field",
-						'tag'   => [ 'wpsolr_all', "$fac_fd" ]
+						'tag'   => [ self::SOLR_EXCLUDE_ALL_TAG, "$fac_fd" ]
 					) );
 
 				}
@@ -973,7 +970,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				$solarium_query->addFilterQuery( array(
 					'key'   => "$fac_fd",
 					'query' => "$filter_query_field_or",
-					'tag'   => [ 'wpsolr_all', "$fac_fd" ]
+					'tag'   => [ self::SOLR_EXCLUDE_ALL_TAG, "$fac_fd" ]
 				) );
 			}
 
