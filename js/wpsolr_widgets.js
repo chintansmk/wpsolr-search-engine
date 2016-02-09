@@ -244,7 +244,9 @@ WPSOLR_Facets.prototype.create_url = function () {
     url1.query["wpsolr_facets_group"] = this.groups_facet_id;
 
     // Last facet selected
-    url1.query["wpsolr_last_facet_selected"] = this.lastFacetSelected['facet_id'];
+    if (this.lastFacetSelected['facet_id'] != undefined) {
+        url1.query["wpsolr_last_facet_selected"] = this.lastFacetSelected['facet_id'];
+    }
 
 
     this.url = url1.toString();
