@@ -668,7 +668,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 			: self::DEFAULT_MAX_NB_ITEMS_BY_FACET;
 
 		// Min count
-		$min_count = isset( $facets_parameters[ self::PARAMETER_FACET_MIN_COUNT ] )
+		$min_count_global = isset( $facets_parameters[ self::PARAMETER_FACET_MIN_COUNT ] )
 			? $facets_parameters[ self::PARAMETER_FACET_MIN_COUNT ]
 			: self::DEFAULT_MIN_COUNT_BY_FACET;
 
@@ -683,10 +683,10 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 			$facetSet = $solarium_query->getFacetSet();
 
-			// Only display facets that contain data
-			$facetSet->setMinCount( $min_count );
-
 			foreach ( $fields as $field_name => $facet ) {
+
+				$facet_min_count = $extension_facets->get_facet_min_count( $facet );
+
 				$field_name = strtolower( $field_name );
 
 				// Field 'categories' are now treated as other fields (dynamic string type)
@@ -747,6 +747,9 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 						$solarium_facet->setField( "$field_name" );
 
+						// Set minimum count for this facet
+						$solarium_facet->setMinCount( $facet_min_count );
+
 					} else {
 
 						// Set a field facet
@@ -755,6 +758,9 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 						$solarium_facet->setSort( $extension_facets->get_facet_sort( $facet ) );
 
 						$solarium_facet->setField( "$field_name" );
+
+						// Set minimum count for this facet
+						$solarium_facet->setMinCount( $facet_min_count );
 					}
 
 					// Display facet items not in results ?
@@ -767,6 +773,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				}
 
 			}
+
 		}
 
 

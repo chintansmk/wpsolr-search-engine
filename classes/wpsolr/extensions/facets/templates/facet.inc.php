@@ -24,7 +24,7 @@ $facet_custom_range_ranges = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD
 
 $facet_elements_operator = ! empty( $facet['elements_operator'] ) ? $facet['elements_operator'] : 'AND';
 $facet_sort              = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] : WPSOLR_Options_Facets::FACET_SORT_COUNT;
-$facet_min_count         = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_MIN_COUNT ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_MIN_COUNT ] : '1';
+$facet_min_count         = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_MIN_COUNT ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_MIN_COUNT ] : '0';
 $facet_is_exclusion_tag  = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_IS_EXCLUSION ] );
 $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] : '0';
 $facet_label             = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL ] : '';
