@@ -15,7 +15,7 @@ class WPSOLR_Regexp {
 
 	public static $solr_special_caracters = [
 		'+',
-		'-',
+		//'-',
 		'&&',
 		'||',
 		'!',

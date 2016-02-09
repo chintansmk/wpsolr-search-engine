@@ -143,6 +143,12 @@ class WPSOLR_RegexpTest extends WPSOLR_Unit_Test {
 			$matches
 		);
 
+		$matches = WPSOLR_Regexp::extract_filter_query( 'field1:1-2' );
+		$this->assertEquals(
+			[ 'field1:1-2' ],
+			$matches
+		);
+
 	}
 
 	public function test_extract_filter_query_complex() {
