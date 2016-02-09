@@ -25,6 +25,7 @@ $facet_custom_range_ranges = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD
 $facet_elements_operator = ! empty( $facet['elements_operator'] ) ? $facet['elements_operator'] : 'AND';
 $facet_sort              = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_SORT ] : WPSOLR_Options_Facets::FACET_SORT_COUNT;
 $facet_min_count         = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_MIN_COUNT ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_MIN_COUNT ] : '0';
+$facet_js_delay_in_ms    = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_JS_REFRESH_DELAY_IN_MS ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_JS_REFRESH_DELAY_IN_MS ] : '0';
 $facet_is_exclusion_tag  = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_IS_EXCLUSION ] );
 $facet_is_active         = ! empty( $facet['is_active'] ) ? $facet['is_active'] : '0';
 $facet_label             = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL ] : '';
@@ -71,8 +72,8 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 							value='<?php echo $layout_id; ?>' <?php selected( $layout_id, $facet_layout_id, true ); ?>><?php echo $layout['name']; ?></option>
 					<?php } ?>
 				</select>
-				<div class="clear"></div>
 			</div>
+			<div class="clear"></div>
 		</div>
 
 		<div class="wdm_row">
@@ -87,31 +88,47 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 							value='<?php echo $layout_id; ?>' <?php selected( $layout_id, $facet_filter_layout_id, true ); ?>><?php echo $layout['name']; ?></option>
 					<?php } ?>
 				</select>
-				<div class="clear"></div>
 			</div>
+			<div class="clear"></div>
 		</div>
 
 		<!-- Facet common section-->
+		<div class="wdm_row">
+			<div class='col_left'>
+				Delay in milliseconds before a click on the facet refreshes the page
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_JS_REFRESH_DELAY_IN_MS; ?>]'
+				       value='<?php echo esc_attr( $facet_js_delay_in_ms ); ?>'/> ms
+			</div>
+			<div class="clear"></div>
+		</div>
+
 		<div class="wdm_row">
 			<div class='col_left'>
 				Show if count greater or equal than
 			</div>
 			<div class='col_right'>
 				<input type='text'
-				       name='<?php echo $facet_option_array_name; ?>[min_count]'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_MIN_COUNT; ?>]'
 				       value='<?php echo esc_attr( $facet_min_count ); ?>'/>
 			</div>
+			<div class="clear"></div>
 		</div>
+
 		<div class="wdm_row">
 			<div class='col_left'>
-				Always show facet contents
+				Show facet count as if no selection was made
 			</div>
 			<div class='col_right'>
 				<input type="checkbox"
 				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_IS_EXCLUSION; ?>]'
 				       value='1' <?php checked( $facet_is_exclusion_tag ); ?> />
 			</div>
+			<div class="clear"></div>
 		</div>
+
 		<div class="wdm_row">
 			<div class='col_left'>
 				Operator inside the facet
@@ -126,7 +143,9 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 						value='<?php echo Query::QUERY_OPERATOR_OR; ?>' <?php selected( Query::QUERY_OPERATOR_OR, $facet_elements_operator, true ); ?> ><?php echo Query::QUERY_OPERATOR_OR; ?></option>
 				</select>
 			</div>
+			<div class="clear"></div>
 		</div>
+
 		<div class="wdm_row">
 			<div class='col_left'>
 				Sort by
@@ -143,6 +162,7 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 					</option>
 				</select>
 			</div>
+			<div class="clear"></div>
 		</div>
 
 		<?php

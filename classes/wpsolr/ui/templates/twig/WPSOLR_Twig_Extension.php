@@ -35,15 +35,16 @@ class WPSOLR_Twig_Extension extends \Twig_Extension {
 	public static function wpsolr_create_data_facet( $facet, $item ) {
 
 		$result = [
-			'facet_id'   => $facet['id'],
-			'facet_type' => $facet['definition']['type']
+			'facet_id'          => $facet['id'],
+			'facet_type'        => $facet['definition'][ WPSOLR_Options_Facets::FACET_FIELD_TYPE ],
+			'facet_delay_in_ms' => $facet['definition'][ WPSOLR_Options_Facets::FACET_FIELD_JS_REFRESH_DELAY_IN_MS ]
 		];
 
-		switch ( $facet['definition']['type'] ) {
+		switch ( $facet['definition'][ WPSOLR_Options_Facets::FACET_FIELD_TYPE ] ) {
 			case WPSOLR_Options_Facets::FACET_TYPE_RANGE:
 			case WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE:
-				$result['facet_value'] = $item['range_inf'];
-				$result['range_sup']   = $item['range_sup'];
+				$result['facet_value'] = $item[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_INF ];
+				$result['range_sup']   = $item[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_SUP ];
 				break;
 
 			default:

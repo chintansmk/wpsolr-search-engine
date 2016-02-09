@@ -51,7 +51,7 @@
                 wpsolr_facets.removeFacetValue({"facet_id": facet.facet_id}); // Remove all elements of the facet
                 wpsolr_facets.addFacetValue(facet); // add facet element if selected
                 wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
-                wpsolr_facets.create_url(); // Generate new url and redirect
+                wpsolr_facets.create_url(facet.facet_delay_in_ms); // Generate new url and redirect
 
             }
         });

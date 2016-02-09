@@ -38,6 +38,9 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	// Facet minimum count to show an element
 	const FACET_FIELD_MIN_COUNT = 'min_count';
 
+	// Facet delay in ms before javascript triggers a search after a user clicks on the facet
+	const FACET_FIELD_JS_REFRESH_DELAY_IN_MS = 'js_refresh_delay_in_ms';
+
 	// Facet labels
 	const FACET_FIELD_LABEL = 'label'; // Facet label
 	const FACET_FIELD_LABEL_FIRST = 'label_first'; // Label of the first label element
@@ -395,6 +398,15 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_facet_min_count( $facet ) {
 		return isset( $facet[ self::FACET_FIELD_MIN_COUNT ] ) ? $facet[ self::FACET_FIELD_MIN_COUNT ] : 1;
+	}
+
+	/**
+	 * Get js delay in ms before a facet click triggers a page refresh
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_field_js_refresh_delay_in_ms( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_JS_REFRESH_DELAY_IN_MS ] ) ? $facet[ self::FACET_FIELD_JS_REFRESH_DELAY_IN_MS ] : 0;
 	}
 
 	/**

@@ -26,7 +26,7 @@
             wpsolr_facets.toggleFacetValue(facet); // Toogle facet
 
             wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
-            wpsolr_facets.create_url();
+            wpsolr_facets.create_url(facet.facet_delay_in_ms);
 
         });
 

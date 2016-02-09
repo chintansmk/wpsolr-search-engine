@@ -205,9 +205,12 @@ WPSOLR_Facets.prototype.updateLastFacetSelected = function (facet) {
     this.debugState();
 };
 
-WPSOLR_Facets.prototype.create_url = function () {
+WPSOLR_Facets.prototype.create_url = function (delay_in_ms) {
     this.debug("create_url", '');
     this.debugState();
+
+    // Init the delay if undefined
+    this.delay_in_ms = delay_in_ms || 0;
 
     var url1 = new Url(this.url);
 
@@ -251,13 +254,25 @@ WPSOLR_Facets.prototype.create_url = function () {
 
     this.url = url1.toString();
 
+    // Load the url with a delay. Reset the timer first.
+    if (this.timer_handle) {
+        clearTimeout(this.timer_handle);
+    }
+    this.timer_handle = setTimeout(this.timer.bind(this), this.delay_in_ms);
+
+
+    this.debugState();
+};
+
+WPSOLR_Facets.prototype.timer = function () {
+    this.debug("timer", this.delay_in_ms);
+
     // Display loaders on each facet
     jQuery(".wpsolr_any_facet_class li ul").addClass("wpsolr_loader");
 
     window.location.href = this.url;
 
-    this.debugState();
-};
+}
 
 
 // Global object used by one widget
