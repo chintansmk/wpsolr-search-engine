@@ -173,7 +173,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			$wpsolr_query->set_wpsolr_facets_fields( $facets );
 
 			// Add Solr query fields from the Widget filter
-			$wpsolr_query->wpsolr_add_query_fields( WPSOLR_Global::getExtensionFacets()->get_facets_group_filter_query( $group_id ) );
+			$wpsolr_query->set_wpsolr_facets_group_filter_query( WPSOLR_Global::getExtensionFacets()->get_facets_group_filter_query( $group_id ) );
 		} else {
 
 			// Facets of the group on the query url for a search url

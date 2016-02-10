@@ -23,6 +23,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 	// Solr tag for exclusion between facets of a group
 	const SOLR_EXCLUDE_ALL_TAG = "wpsolr_all";
+	const SOLR_NOT_EXCLUDE_ALL_TAG = 'wpsolr_none';
 
 	// Search template
 	const _SEARCH_PAGE_TEMPLATE = 'wpsolr-search-engine/search.php';
@@ -240,7 +241,16 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		/*
 		* Add query fields
 		*/
-		$this->add_filter_query_fields( $solarium_query, $wpsolr_query->get_filter_query_fields(), $wpsolr_query->get_wpsolr_facets_fields() );
+		if ( ! empty( $wpsolr_query->get_filter_query_fields() ) ) {
+			$this->add_filter_query_fields( $solarium_query, $wpsolr_query->get_filter_query_fields(), $wpsolr_query->get_wpsolr_facets_fields(), self::SOLR_EXCLUDE_ALL_TAG );
+		}
+
+		/*
+		* Add facets group query fields
+		*/
+		if ( ! empty( $wpsolr_query->get_wpsolr_facets_group_filter_query() ) ) {
+			$this->add_filter_query_fields( $solarium_query, [ $wpsolr_query->get_wpsolr_facets_group_filter_query() ], $wpsolr_query->get_wpsolr_facets_fields(), self::SOLR_NOT_EXCLUDE_ALL_TAG );
+		}
 
 		/*
 		* Add highlighting fields
@@ -856,7 +866,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	 */
 	private
 	function add_filter_query_fields(
-		Query $solarium_query, $filter_query_fields, $facets_parameters
+		Query $solarium_query, $filter_query_fields, $facets_parameters, $exclusion_tag
 	) {
 
 		$special_fields = WPSOLR_Global::getExtensionFacets()->get_special_fields();
@@ -946,7 +956,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 					$solarium_query->addFilterQuery( array(
 						'key'   => "$filter_query_field",
 						'query' => "$filter_query_field",
-						'tag'   => [ self::SOLR_EXCLUDE_ALL_TAG, "$fac_fd" ]
+						'tag'   => [ $exclusion_tag, "$fac_fd" ]
 					) );
 
 				}
@@ -977,7 +987,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				$solarium_query->addFilterQuery( array(
 					'key'   => "$fac_fd",
 					'query' => "$filter_query_field_or",
-					'tag'   => [ self::SOLR_EXCLUDE_ALL_TAG, "$fac_fd" ]
+					'tag'   => [ $exclusion_tag, "$fac_fd" ]
 				) );
 			}
 
