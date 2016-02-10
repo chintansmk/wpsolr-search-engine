@@ -15,6 +15,10 @@ $option_names_to_export = [
 		'description' => 'Search',
 		'data'        => WPSOLR_Global::getOption()->get_option_search()
 	],
+	WPSOLR_Option::OPTION_FIELDS             => [
+		'description' => 'Fields to index',
+		'data'        => WPSOLR_Global::getOption()->get_option_fields()
+	],
 	WPSOLR_Option::OPTION_FACETS             => [
 		'description' => 'Facet groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_facet()

@@ -5,8 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab468aab-fb21-4977-b005-a2c5caca8c3b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/extensions/facets/WPSOLR_Options_Facets.php" afterPath="$PROJECT_DIR$/classes/wpsolr/extensions/facets/WPSOLR_Options_Facets.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/extensions/facets/templates/groups.inc.php" afterPath="$PROJECT_DIR$/classes/wpsolr/extensions/facets/templates/groups.inc.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/extensions/importexport/admin_options.inc.php" afterPath="$PROJECT_DIR$/classes/wpsolr/extensions/importexport/admin_options.inc.php" />
     </list>
     <ignored path="wpsolr-search-engine.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -61,11 +60,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="groups.inc.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="groups.inc.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/wpsolr/extensions/facets/templates/groups.inc.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.58090615">
-              <caret line="137" column="59" selection-start-line="137" selection-start-column="59" selection-end-line="137" selection-end-column="59" />
+            <state vertical-scroll-proportion="-7.96">
+              <caret line="127" column="26" selection-start-line="127" selection-start-column="26" selection-end-line="127" selection-end-column="26" />
               <folding>
                 <element signature="e#6#46#0#PHP" expanded="true" />
                 <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
@@ -75,15 +74,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="admin_options.inc.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="admin_options.inc.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/classes/wpsolr/extensions/importexport/admin_options.inc.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.68">
-              <caret line="142" column="52" selection-start-line="142" selection-start-column="52" selection-end-line="142" selection-end-column="52" />
+            <state vertical-scroll-proportion="0.3883495">
+              <caret line="18" column="41" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="41" />
               <folding>
                 <element signature="e#6#46#0#PHP" expanded="true" />
-                <marker date="1455108546000" expanded="true" signature="3802:3848" placeholder="..." />
-                <marker date="1455108546000" expanded="true" signature="4244:4260" placeholder="..." />
+                <marker date="1455119537000" expanded="true" signature="3958:4004" placeholder="..." />
+                <marker date="1455119537000" expanded="true" signature="4400:4416" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -167,13 +166,13 @@
         <option value="$PROJECT_DIR$/classes/wpsolr/utilities/WPSOLR_Global.php" />
         <option value="$PROJECT_DIR$/dashboard_settings.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/utilities/WPSOLR_Option.php" />
-        <option value="$PROJECT_DIR$/classes/wpsolr/extensions/importexport/admin_options.inc.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/widget/WPSOLR_Widget_Facet.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/widget/WPSOLR_Widget_Filter.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/solr/WPSOLR_SearchSolrClient.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/extensions/facets/WPSOLR_Options_Facets.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/extensions/facets/templates/groups.inc.php" />
+        <option value="$PROJECT_DIR$/classes/wpsolr/extensions/importexport/admin_options.inc.php" />
       </list>
     </option>
   </component>
@@ -2687,26 +2686,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/extensions/importexport/admin_options.inc.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.68">
-          <caret line="142" column="52" selection-start-line="142" selection-start-column="52" selection-end-line="142" selection-end-column="52" />
-          <folding>
-            <element signature="e#6#46#0#PHP" expanded="true" />
-            <marker date="1455108546000" expanded="true" signature="3802:3848" placeholder="..." />
-            <marker date="1455108546000" expanded="true" signature="4244:4260" placeholder="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/extensions/facets/templates/groups.inc.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58090615">
-          <caret line="137" column="59" selection-start-line="137" selection-start-column="59" selection-end-line="137" selection-end-column="59" />
+        <state vertical-scroll-proportion="-7.96">
+          <caret line="127" column="26" selection-start-line="127" selection-start-column="26" selection-end-line="127" selection-end-column="26" />
           <folding>
             <element signature="e#6#46#0#PHP" expanded="true" />
             <element signature="n#style#0;n#input#0;n#div#1;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
             <element signature="n#style#0;n#input#0;n#div#1;n#div#2;n#div#0;n#div#1;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/extensions/importexport/admin_options.inc.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3883495">
+          <caret line="18" column="41" selection-start-line="18" selection-start-column="36" selection-end-line="18" selection-end-column="41" />
+          <folding>
+            <element signature="e#6#46#0#PHP" expanded="true" />
+            <marker date="1455119537000" expanded="true" signature="3958:4004" placeholder="..." />
+            <marker date="1455119537000" expanded="true" signature="4400:4416" placeholder="..." />
           </folding>
         </state>
       </provider>
