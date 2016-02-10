@@ -103,6 +103,10 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 		$new_facets_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
 
+		// Clone some groups
+		$facets_selected = WPSOLR_Global::getOption()->get_facets_selected_array();
+		$groups          = $this->clone_some_groups( WPSOLR_Global::getOption()->get_facets_groups(), $facets_selected );
+
 		// Add current plugin parameters to default parent parameters
 		parent::output_form(
 			$form_file,
@@ -116,14 +120,14 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 					'default_facets_group_uuid' => $this->get_default_facets_group_id(),
 					'new_facets_group_uuid'     => $new_facets_group_uuid,
 					'facets_groups'             => array_merge(
-						WPSOLR_Global::getOption()->get_facets_groups(),
+						$groups,
 						[
 							$new_facets_group_uuid => [
 								'name'                                          => 'New group',
 								WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY => ''
 							]
 						] ),
-					'facets_selected'           => WPSOLR_Global::getOption()->get_facets_selected_array(),
+					'facets_selected'           => $facets_selected,
 					'fields'                    => array_merge(
 						WPSOLR_Field_Types::add_fields_type( $this->get_special_fields(), WPSOLR_Field_Types::SOLR_TYPE_STRING ),
 						WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
@@ -574,6 +578,39 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Clone the groups marked.
+	 *
+	 * @param $facets_groups
+	 */
+	public function clone_some_groups( $facets_groups, &$facets_selected ) {
+
+		foreach ( $facets_groups as $facets_group_uuid => &$facets_group ) {
+
+			if ( ! empty( $facets_group['is_to_be_cloned'] ) ) {
+
+				unset( $facets_group['is_to_be_cloned'] );
+
+				// Clone the group
+				$facets_group_cloned         = $facets_group;
+				$facet_group_cloned_uuid     = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
+				$facets_group_cloned['name'] = 'Clone of ' . $facets_group_cloned['name'];
+
+				$facets_groups[ $facet_group_cloned_uuid ] = $facets_group_cloned;
+
+				// Now clone the group facets
+				if ( ! empty( $facets_selected[ $facets_group_uuid ] ) ) {
+
+					$facets_selected[ $facet_group_cloned_uuid ] = $facets_selected[ $facets_group_uuid ];
+
+				}
+			}
+
+		}
+
+		return $facets_groups;
 	}
 
 }
