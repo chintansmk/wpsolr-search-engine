@@ -6,6 +6,7 @@ use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
+use wpsolr\extensions\importexport\WPSOLR_Options_ImportExports;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
@@ -95,6 +96,9 @@ abstract class WPSOLR_Extensions {
 
 	// Extension: Sort
 	const OPTION_SORTS = 'sorts';
+
+	// Extension: Import/Export
+	const OPTION_IMPORTEXPORT = 'import_export';
 
 	/*
 	 * Extensions configuration
@@ -309,6 +313,21 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SORTS,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_IMPORTEXPORT         =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_ImportExports::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_ImportExports::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'importexport/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'importexport/WPSOLR_Options_ImportExports.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'importexport/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_IMPORTEXPORT,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			]

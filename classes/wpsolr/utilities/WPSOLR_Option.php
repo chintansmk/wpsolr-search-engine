@@ -709,4 +709,24 @@ class WPSOLR_Option {
 		return self::get_option( self::OPTION_INDEXES );
 	}
 
+	/***************************************************************************************************************
+	 *
+	 * Import/Export option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_IMPORTEXPORT = 'wpsolr_import_export';
+	const OPTION_IMPORTEXPORT_IS_SOLR_INDEXES = 'is_solr_indexes';
+	const OPTION_IMPORTEXPORT_IS_SEARCH = 'is_search';
+	const OPTION_IMPORTEXPORT_IS_FACETS_GROUPS = 'is_facets_groups';
+	const OPTION_IMPORTEXPORT_IS_SORTS_GROUPS = 'is_sorts_groups';
+	const OPTION_IMPORTEXPORT_IS_PLUGINS = 'is_plugins';
+
+	/**
+	 * Get options array
+	 * @return array
+	 */
+	public function get_option_importexports() {
+		return self::get_option( self::OPTION_IMPORTEXPORT, [ ] );
+	}
+
 }

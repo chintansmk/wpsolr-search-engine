@@ -90,6 +90,7 @@ function wpsolr_admin_init() {
 	register_setting( 'solr_facet_options', 'wdm_solr_facet_data' );
 	register_setting( 'solr_sort_options', WPSOLR_Option::OPTION_SORTS );
 	register_setting( 'solr_operations_options', 'wdm_solr_operations_data' );
+	register_setting( 'solr_importexports_options', WPSOLR_Option::OPTION_IMPORTEXPORT );
 }
 
 function fun_add_solr_settings() {
@@ -218,6 +219,10 @@ function fun_set_solr_options() {
 	}
 
 switch ( $tab ) {
+	case 'solr_importexports' :
+		WPSOLR_Global::getExtensionImportExports()->output_form();
+		break;
+
 	case 'solr_indexes' :
 		WPSOLR_Extensions::require_once_wpsolr_extension_admin_options( WPSOLR_Extensions::EXTENSION_INDEXES );
 		break;
@@ -762,12 +767,13 @@ function wpsolr_admin_tabs( $current = 'solr_indexes' ) {
 	$tabs                 = array();
 	$tabs['solr_indexes'] = $are_there_indexes ? '1. Define your Solr Indexes' : '1. Define your Solr Index';
 	if ( $are_there_indexes ) {
-		$tabs['solr_option']     = sprintf( "2. Define your search with '%s'",
+		$tabs['solr_option']        = sprintf( "2. Define your search with '%s'",
 			! isset( $default_search_solr_index )
 				? $are_there_indexes ? "<span class='text_error'>No index selected</span>" : ''
 				: $option_indexes->get_index_name( $default_search_solr_index ) );
-		$tabs['solr_plugins']    = '3. Define which plugins to work with';
-		$tabs['solr_operations'] = '4. Send your data';
+		$tabs['solr_plugins']       = '3. Define which plugins to work with';
+		$tabs['solr_operations']    = '4. Send your data to Solr';
+		$tabs['solr_importexports'] = '5. Import/Export your setup';
 	}
 
 	echo '<div id="icon-themes" class="icon32"><br></div>';
