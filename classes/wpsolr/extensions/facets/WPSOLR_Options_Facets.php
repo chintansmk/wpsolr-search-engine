@@ -519,51 +519,54 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 		$groups = WPSOLR_Global::getOption()->get_facets_selected_array();
 
-		foreach ( $groups as $group_uuid => $group ) {
+		if ( ! empty( $groups ) ) {
 
-			foreach ( $group as $field ) {
+			foreach ( $groups as $group_uuid => $group ) {
 
-				foreach ( $fields_translatable as $translatable_name => $translatable ) {
+				foreach ( $group as $field ) {
 
-					if ( ! empty( $field[ $translatable_name ] ) ) {
+					foreach ( $fields_translatable as $translatable_name => $translatable ) {
 
-						$results[] = $this->get_string_to_translate(
-							$field[ $translatable_name ], //sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
-							$field[ $translatable_name ],
-							$domain,
-							$translatable['is_multiline']
-						);
-					}
+						if ( ! empty( $field[ $translatable_name ] ) ) {
 
-					if ( ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ] ) && ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) ) {
+							$results[] = $this->get_string_to_translate(
+								$field[ $translatable_name ], //sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
+								$field[ $translatable_name ],
+								$domain,
+								$translatable['is_multiline']
+							);
+						}
 
-						// Extract the 2rd column of each line
-						$label = '';
-						foreach ( WPSOLR_Regexp::split_lines( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) as $line ) {
+						if ( ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ] ) && ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) ) {
 
-							if ( ! empty( trim( $line ) ) ) {
+							// Extract the 2rd column of each line
+							$label = '';
+							foreach ( WPSOLR_Regexp::split_lines( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) as $line ) {
 
-								$columns = explode( '|', $line );
+								if ( ! empty( trim( $line ) ) ) {
 
-								if ( count( $columns ) != 3 ) {
+									$columns = explode( '|', $line );
 
-									set_transient( get_current_user_id() . 'wpsolr_generic_notice', sprintf( 'Range facet "%s" from group "%s" should contain 3 columns separated by "|", rather than %d in current value "%s"', $field['name'], $this->get_facets_group( $group_uuid )['name'], count( $columns ), $line ) );
+									if ( count( $columns ) != 3 ) {
 
-									continue;
+										set_transient( get_current_user_id() . 'wpsolr_generic_notice', sprintf( 'Range facet "%s" from group "%s" should contain 3 columns separated by "|", rather than %d in current value "%s"', $field['name'], $this->get_facets_group( $group_uuid )['name'], count( $columns ), $line ) );
+
+										continue;
+									}
+
+									// The 3rd column contains the label to translate
+									$label = $columns[2];
+
+									$results[] = $this->get_string_to_translate(
+										$label, //sprintf( ' % s of % s % s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
+										$label,
+										$domain,
+										$translatable['is_multiline']
+									);
+
 								}
 
-								// The 3rd column contains the label to translate
-								$label = $columns[2];
-
-								$results[] = $this->get_string_to_translate(
-									$label, //sprintf( ' % s of % s % s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
-									$label,
-									$domain,
-									$translatable['is_multiline']
-								);
-
 							}
-
 						}
 					}
 				}
