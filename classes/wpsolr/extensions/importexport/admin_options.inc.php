@@ -21,7 +21,7 @@ $option_names_to_export = [
 		'description' => 'Sort groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_sort()
 	],
-	WPSOLR_Option::OPTION_LOCALIZATION              => [
+	WPSOLR_Option::OPTION_LOCALIZATION       => [
 		'description' => 'Localizations',
 		'data'        => WPSOLR_Global::getOption()->get_option_localization()
 	],
@@ -81,7 +81,9 @@ if ( ! empty( $_POST['wpsolr_action'] ) && ( 'wpsolr_action_import_settings' ===
 $exports = [ ];
 foreach ( $option_names_to_export as $option_name => $option ) {
 
-	if ( isset( $options[ $option_name ] ) ) {
+	if ( empty( $options ) || isset( $options[ $option_name ] ) ) {
+		// Export options selected, or everything if no option is selected
+
 		$exports[ $option_name ] = $option['data'];
 	}
 }
@@ -106,7 +108,8 @@ foreach ( $option_names_to_export as $option_name => $option ) {
 
 			<div class="wdm_row">
 				<div class='col_left'>
-					Data to export
+					Data to export.<br/>
+					To export everything, don't select any data.
 				</div>
 				<div class='col_right'>
 
