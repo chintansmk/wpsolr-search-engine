@@ -111,11 +111,16 @@ use wpsolr\utilities\WPSOLR_Option;
 			<div class="wdm_row">
 				<div class='col_left'>Group name</div>
 				<div class='col_right'>
-					<input type="text" id="<?php echo esc_attr( $sorts_group_uuid ); ?>_group_name"
+					<input style="width:40%" type="text" id="<?php echo esc_attr( $sorts_group_uuid ); ?>_group_name"
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_SORTS_GROUPS; ?>][<?php echo $sorts_group_uuid; ?>][name]"
 					       value="<?php echo $new_sorts_group_uuid == $sorts_group_uuid ? '' : esc_attr( $sorts_group['name'] ); ?>"/>
 
-					<!--<input name="create_group" value="Clone the group"/>-->
+					<?php if ( $new_sorts_group_uuid != $sorts_group_uuid ) { ?>
+								<input type="checkbox"
+								       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_SORTS_GROUPS; ?>][<?php echo $sorts_group_uuid; ?>][is_to_be_cloned]"
+								       value="1"/> Clone this group when saving
+					<?php } ?>
+
 				</div>
 				<div class="clear"></div>
 			</div>

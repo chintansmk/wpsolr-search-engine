@@ -61,6 +61,10 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 
 		$new_sorts_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
 
+		// Clone some groups
+		$sorts_selected = WPSOLR_Global::getOption()->get_sorts_selected_array();
+		$groups         = $this->clone_some_groups( WPSOLR_Global::getOption()->get_sorts_groups(), $sorts_selected );
+
 		// Add current plugin parameters to default parent parameters
 		parent::output_form(
 			$form_file,
@@ -73,13 +77,13 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 					'default_sorts_group_uuid' => $this->get_default_sorts_group_id(),
 					'new_sorts_group_uuid'     => $new_sorts_group_uuid,
 					'sorts_groups'             => array_merge(
-						WPSOLR_Global::getOption()->get_sorts_groups(),
+						$groups,
 						[
 							$new_sorts_group_uuid => [
 								'name' => 'New group'
 							]
 						] ),
-					'sorts_selected'           => WPSOLR_Global::getOption()->get_sorts_selected_array(),
+					'sorts_selected'           => $sorts_selected,
 					'fields'                   => $this->get_fields_sortable(),
 					'image_plus'               => plugins_url( '../../../../images/plus.png', __FILE__ ),
 					'image_minus'              => plugins_url( '../../../../images/success.png', __FILE__ )
@@ -318,6 +322,39 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Clone the groups marked.
+	 *
+	 * @param $sorts_groups
+	 */
+	public function clone_some_groups( $sorts_groups, &$sorts_selected ) {
+
+		foreach ( $sorts_groups as $sorts_group_uuid => &$sorts_group ) {
+
+			if ( ! empty( $sorts_group['is_to_be_cloned'] ) ) {
+
+				unset( $sorts_group['is_to_be_cloned'] );
+
+				// Clone the group
+				$sorts_group_cloned         = $sorts_group;
+				$facet_group_cloned_uuid    = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
+				$sorts_group_cloned['name'] = 'Clone of ' . $sorts_group_cloned['name'];
+
+				$sorts_groups[ $facet_group_cloned_uuid ] = $sorts_group_cloned;
+
+				// Now clone the group sorts
+				if ( ! empty( $sorts_selected[ $sorts_group_uuid ] ) ) {
+
+					$sorts_selected[ $facet_group_cloned_uuid ] = $sorts_selected[ $sorts_group_uuid ];
+
+				}
+			}
+
+		}
+
+		return $sorts_groups;
 	}
 
 }

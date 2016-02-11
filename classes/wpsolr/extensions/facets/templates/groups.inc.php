@@ -135,25 +135,20 @@ use wpsolr\utilities\WPSOLR_Option;
 			<div class="wdm_row">
 				<div class='col_left'>Group name</div>
 				<div class='col_right'>
-					<input type="text" style="width: 100%" id="<?php echo esc_attr( $facets_group_uuid ); ?>_group_name"
+					<input type="text" style="width: 40%" id="<?php echo esc_attr( $facets_group_uuid ); ?>_group_name"
 					       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][name]"
 					       value="<?php echo $new_facets_group_uuid == $facets_group_uuid ? '' : esc_attr( $facets_group['name'] ); ?>"/>
+
+					<?php if ( $new_facets_group_uuid != $facets_group_uuid ) { ?>
+						<input type="checkbox"
+						       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][is_to_be_cloned]"
+						       value="1"/> Clone this group when saving
+					<?php } ?>
+
 
 				</div>
 				<div class="clear"></div>
 			</div>
-
-			<?php if ( $new_facets_group_uuid != $facets_group_uuid ) { ?>
-				<div class="wdm_row">
-					<div class='col_left'>Clone this group when saving</div>
-					<div class='col_right'>
-						<input type="checkbox"
-						       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_FACETS_GROUPS; ?>][<?php echo $facets_group_uuid; ?>][is_to_be_cloned]"
-						       value="1"/>
-					</div>
-					<div class="clear"></div>
-				</div>
-			<?php } ?>
 
 			<div class="wdm_row">
 				<div class='col_left'>Group filter</div>
