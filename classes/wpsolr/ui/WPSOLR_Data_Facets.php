@@ -235,7 +235,7 @@ class WPSOLR_Data_Facets {
 							if ( ( WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID == $layout_type_id ) && ! $item_selected ) {
 								continue;
 							}
-							
+
 							// Update, once, $results['has_facet_elements_selected'], if current element is selected
 							if ( $item_selected && ! $results['has_facet_elements_selected'] ) {
 								$results['has_facet_elements_selected'] = true;

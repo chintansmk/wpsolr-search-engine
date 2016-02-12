@@ -3,19 +3,10 @@
 namespace wpsolr\ui\widget;
 
 use wpsolr\exceptions\WPSOLR_Exception;
-use wpsolr\services\WPSOLR_Service_Wordpress;
 use wpsolr\ui\WPSOLR_Query_Parameters;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Regexp;
 
-
-/**
- * Filters/Actions
- */
-WPSOLR_Service_Wordpress::add_filter( 'widget_display_callback', array(
-	WPSOLR_Widget::class,
-	'wpsolr_widget_display_callback',
-), 10, 3 );
 
 /**
  * Top level widget class from which all WPSOLR widgets inherit.
@@ -87,6 +78,13 @@ class WPSOLR_Widget extends \WP_Widget {
 			$this->wpsolr_widget_data = $this->wpsolr_get_data( $args, $instance );
 
 			if ( $this->wpsolr_url_is_authorized( $instance ) && ( $this->wpsolr_is_show_widget_when_empty( $instance ) || ! $this->wpsolr_is_widget_empty( $instance ) ) ) {
+
+				// Remove the title, eventually
+				if ( ! $this->wpsolr_is_show_title_on_front_end( $instance ) ) {
+					$instance['title']    = ' ';
+					$args['before_title'] = '';
+					$args['after_title']  = '';
+				}
 
 				$this->wpsolr_form( $args, $instance );
 			}
