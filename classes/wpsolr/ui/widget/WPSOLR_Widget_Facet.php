@@ -132,7 +132,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 	 * Register widget with WordPress.
 	 */
 	function __construct() {
-		parent::__construct(
+		WPSOLR_Widget::__construct(
 			'wpsolr_widget_facets', // Base ID
 			__( 'WPSOLR Facets', 'wpsolr_admin' ), // Name
 			array( 'description' => __( 'Display Solr Facets', 'wpsolr_admin' ) ), // Args
@@ -149,6 +149,53 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	protected function wpsolr_form( $args, $instance ) {
+
+		// Get data
+		$data = $this->wpsolr_get_data( $args, $instance );
+
+		// Build the facets UI
+		echo WPSOLR_UI_Facets::Build(
+			$data['group_id'],
+			$data['data'],
+			WPSOLR_Localization::get_options(),
+			$args,
+			$instance,
+			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
+		);
+
+	}
+
+
+	/**
+	 * Write the widget header
+	 *
+	 * @param $instance
+	 */
+	protected function wpsolr_header( $instance ) {
+		?>
+
+		<p>
+			Facets are dynamic filters that users can click on to filter out the search results, like categories, or
+			tags. Facets
+			must have been defined in WPSOLR admin pages.
+		</p>
+
+		<?php
+	}
+
+	/**
+	 * Get all facets layouts
+	 * @return array
+	 */
+	public static function get_facets_layouts() {
+		return self::wpsolr_get_layout_definitions( self::TYPE_GROUP_ELEMENT_LAYOUT );
+	}
+
+	public function wpsolr_get_groups() {
+		return WPSOLR_Global::getOption()->get_facets_groups();
+	}
+
+	protected function wpsolr_extract_data( $args, $instance ) {
 
 		// Widget can be on a search page ?s=
 		$wpsolr_query = WPSOLR_Global::getQuery();
@@ -183,49 +230,23 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		// Call and get Solr results
 		$results = WPSOLR_Global::getSolrClient()->display_results( $wpsolr_query );
 
-		// Build the facets UI
-		echo WPSOLR_UI_Facets::Build(
-			$group_id,
-			WPSOLR_Data_Facets::get_data(
-				WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID,
-				WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
-				$facets,
-				$results[1] ),
-			WPSOLR_Localization::get_options(),
-			$args,
-			$instance,
-			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
-		);
+		$data = WPSOLR_Data_Facets::get_data(
+			$this->wpsolr_get_facet_type(),
+			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
+			$facets,
+			$results[1] );
 
+
+		return [ 'group_id' => $group_id, 'data' => $data ];
 	}
 
-	/**
-	 * Write the widget header
-	 *
-	 * @param $instance
-	 */
-	protected function wpsolr_header( $instance ) {
-		?>
+	protected function wpsolr_is_widget_empty( $instance ) {
 
-		<p>
-			Facets are dynamic filters that users can click on to filter out the search results, like categories, or
-			tags. Facets
-			must have been defined in WPSOLR admin pages.
-		</p>
-
-		<?php
+		return ( ! isset( $this->wpsolr_widget_data ) || empty( $this->wpsolr_widget_data['data'] ) || ( count( $this->wpsolr_widget_data['data'][ WPSOLR_Options_Facets::OPTION_FACETS ] ) == 0 ) );
 	}
 
-	/**
-	 * Get all facets layouts
-	 * @return array
-	 */
-	public static function get_facets_layouts() {
-		return self::wpsolr_get_layout_definitions( self::TYPE_GROUP_ELEMENT_LAYOUT );
-	}
-
-	public function wpsolr_get_groups() {
-		return WPSOLR_Global::getOption()->get_facets_groups();
+	protected function wpsolr_get_facet_type() {
+		return WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID;
 	}
 
 }

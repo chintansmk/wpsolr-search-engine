@@ -231,6 +231,11 @@ class WPSOLR_Data_Facets {
 							// Current item selected ?
 							$item_selected = isset( $facets_selected[ $facet_to_display_id ] ) && ( in_array( $facet_value, $facets_selected[ $facet_to_display_id ] ) );
 
+							// For Facet filters, only keep selected items
+							if ( ( WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID == $layout_type_id ) && ! $item_selected ) {
+								continue;
+							}
+							
 							// Update, once, $results['has_facet_elements_selected'], if current element is selected
 							if ( $item_selected && ! $results['has_facet_elements_selected'] ) {
 								$results['has_facet_elements_selected'] = true;

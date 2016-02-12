@@ -22,6 +22,9 @@ WPSOLR_Service_Wordpress::add_filter( 'widget_display_callback', array(
  */
 class WPSOLR_Widget extends \WP_Widget {
 
+	// Widget data, cached.
+	protected $wpsolr_widget_data;
+
 	// All WPOLR Widget classes must begin with this prefix to be autoloaded.
 	const WPSOLR_WIDGET_CLASS_NAME_PREFIX = 'WPSOLR_Widget_';
 
@@ -54,6 +57,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	const FORM_FIELD_GROUP_ID = 'group_id';
 	const FORM_FIELD_GROUP_NAME = 'name';
 	const FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END = 'is_show_title_on_front_end';
+	const FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY = 'is_show_widget_when_empty';
 
 	/**
 	 * Front-end display of widget.
@@ -73,12 +77,16 @@ class WPSOLR_Widget extends \WP_Widget {
 		 * - Current url is a WP search page
 		 * - WPSOLR is replacing the default search
 		 * - WPSOLR displays the current theme search/seach form templates
+		 * - Current widget is not empty, or setup to show when empty
 		 *
 		 */
 
 		try {
 
-			if ( $this->wpsolr_url_is_authorized( $instance ) ) {
+			// Extract data
+			$this->wpsolr_widget_data = $this->wpsolr_get_data( $args, $instance );
+
+			if ( $this->wpsolr_url_is_authorized( $instance ) && ( $this->wpsolr_is_show_widget_when_empty( $instance ) || ! $this->wpsolr_is_widget_empty( $instance ) ) ) {
 
 				$this->wpsolr_form( $args, $instance );
 			}
@@ -144,7 +152,7 @@ class WPSOLR_Widget extends \WP_Widget {
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'WPSOLR Widget', 'text_domain' );
 
 		$is_show_title_on_front_end     = ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
-		$is_show_widget_when_no_content = ! empty( $instance['is_show_widget_when_no_content'] );
+		$is_show_widget_when_no_content = ! empty( $instance[ self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ] );
 
 		// Regexp: urls that display the widget
 		$url_regexp = ! empty( $instance[ self::FORM_FIELD_URL_REGEXP ] ) ? $instance[ self::FORM_FIELD_URL_REGEXP ] : '';
@@ -180,9 +188,10 @@ class WPSOLR_Widget extends \WP_Widget {
 		</p>
 		<p>
 			<label
-				for="<?php echo $this->get_field_id( 'is_show_widget_when_no_content' ); ?>"><?php _e( 'Show empty widget:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'is_show_widget_when_no_content' ); ?>"
-			       name="<?php echo $this->get_field_name( 'is_show_widget_when_no_content' ); ?>" type="checkbox"
+				for="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ); ?>"><?php _e( 'Show empty widget:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ); ?>"
+			       name="<?php echo $this->get_field_name( self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ); ?>"
+			       type="checkbox"
 				<?php checked( $is_show_widget_when_no_content ); ?>>
 		</p>
 		<p>
@@ -505,6 +514,63 @@ class WPSOLR_Widget extends \WP_Widget {
 		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
 	}
 
+	/**
+	 * Show $instance when empty ?
+	 *
+	 * @param $instance
+	 */
+	protected function wpsolr_is_show_widget_when_empty( $instance ) {
+
+		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ] );
+	}
+
+
+	/**
+	 * Is $instance widget empty ?
+	 *
+	 * @param $instance
+	 */
+	protected function wpsolr_is_widget_empty( $instance ) {
+
+		// Override in children
+		return false;
+	}
+
+	/**
+	 * Get data to be displayed by the widget.
+	 * Use the cached data if there.
+	 *
+	 * [ 'group_id' => $group_id, 'data' => $data ];
+	 *
+	 * @param $args
+	 * @param $instance
+	 */
+	protected function wpsolr_get_data( $args, $instance ) {
+
+		if ( isset( $this->wpsolr_widget_data ) ) {
+			// Get cache
+			return $this->wpsolr_widget_data;
+		}
+
+		// No cache: create it.
+		$this->wpsolr_widget_data = $this->wpsolr_extract_data( $args, $instance );
+
+		return $this->wpsolr_widget_data;
+	}
+
+	/**
+	 * Prepare data to be displayed by the widget.
+	 *
+	 * [ 'group_id' => $group_id, 'data' => $data ];
+	 *
+	 * @param $args
+	 * @param $instance
+	 */
+	protected function wpsolr_extract_data( $args, $instance ) {
+
+		// Override in children.
+		return [ ];
+	}
 
 	/**
 	 * Validate a regexp
