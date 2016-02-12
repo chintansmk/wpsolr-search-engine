@@ -3,10 +3,19 @@
 namespace wpsolr\ui\widget;
 
 use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\services\WPSOLR_Service_Wordpress;
 use wpsolr\ui\WPSOLR_Query_Parameters;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Regexp;
 
+
+/**
+ * Filters/Actions
+ */
+WPSOLR_Service_Wordpress::add_filter( 'widget_display_callback', array(
+	WPSOLR_Widget::class,
+	'wpsolr_widget_display_callback',
+), 10, 3 );
 
 /**
  * Top level widget class from which all WPSOLR widgets inherit.
@@ -44,6 +53,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	const FORM_FIELD_ERROR_MESSAGE = 'error_message';
 	const FORM_FIELD_GROUP_ID = 'group_id';
 	const FORM_FIELD_GROUP_NAME = 'name';
+	const FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END = 'is_show_title_on_front_end';
 
 	/**
 	 * Front-end display of widget.
@@ -65,11 +75,6 @@ class WPSOLR_Widget extends \WP_Widget {
 		 * - WPSOLR displays the current theme search/seach form templates
 		 *
 		 */
-
-		/*if ( \wpsolr\utilities\WPSOLR_Global::getOption()->get_search_is_replace_default_wp_search()
-		     && \wpsolr\utilities\WPSOLR_Global::getOption()->get_search_is_use_current_theme_search_template()
-		     && \wpsolr\ui\WPSOLR_Query_Parameters::is_wp_search()
-		) */
 
 		try {
 
@@ -100,6 +105,29 @@ class WPSOLR_Widget extends \WP_Widget {
 		echo 'Widget header not implemented!!!';
 	}
 
+
+	/**
+	 * Filter the widget $instance before display
+	 *
+	 * @param array $instance
+	 * @param WPSOLR_Widget $object
+	 * @param array $args
+	 */
+	public static function wpsolr_widget_display_callback( $instance, $object, $args ) {
+
+		if ( $object instanceof WPSOLR_Widget ) {
+
+			// Remove the title, eventually
+			if ( ! $object->wpsolr_is_show_title_on_front_end( $instance ) ) {
+				$instance['title']    = ' ';
+				$args['before_title'] = '';
+				$args['after_title']  = '';
+			}
+		}
+
+		return $instance;
+	}
+
 	/**
 	 * Back-end widget form.
 	 * All common elements are there.
@@ -114,6 +142,9 @@ class WPSOLR_Widget extends \WP_Widget {
 	) {
 
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'WPSOLR Widget', 'text_domain' );
+
+		$is_show_title_on_front_end     = ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
+		$is_show_widget_when_no_content = ! empty( $instance['is_show_widget_when_no_content'] );
 
 		// Regexp: urls that display the widget
 		$url_regexp = ! empty( $instance[ self::FORM_FIELD_URL_REGEXP ] ) ? $instance[ self::FORM_FIELD_URL_REGEXP ] : '';
@@ -137,6 +168,22 @@ class WPSOLR_Widget extends \WP_Widget {
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
 			       name="<?php echo $this->get_field_name( 'title' ); ?>" type="text"
 			       value="<?php echo esc_attr( $title ); ?>">
+		</p>
+		<p>
+			<label
+				for="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"><?php _e( 'Show title on front-end pages:' ); ?></label>
+			<input class="widefat"
+			       id="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"
+			       name="<?php echo $this->get_field_name( self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"
+			       type="checkbox"
+				<?php checked( $is_show_title_on_front_end ); ?>>
+		</p>
+		<p>
+			<label
+				for="<?php echo $this->get_field_id( 'is_show_widget_when_no_content' ); ?>"><?php _e( 'Show empty widget:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( 'is_show_widget_when_no_content' ); ?>"
+			       name="<?php echo $this->get_field_name( 'is_show_widget_when_no_content' ); ?>" type="checkbox"
+				<?php checked( $is_show_widget_when_no_content ); ?>>
 		</p>
 		<p>
 			Use layout:
@@ -447,6 +494,17 @@ class WPSOLR_Widget extends \WP_Widget {
 		// Is current url matching one of the regexp lines ?
 		return WPSOLR_Regexp::preg_match_lines_of_regexp( $url_regexp_lines, WPSOLR_Query_Parameters::get_current_page_url() );
 	}
+
+	/**
+	 * Show $instance title on front-end pages ?
+	 *
+	 * @param $instance
+	 */
+	protected function wpsolr_is_show_title_on_front_end( $instance ) {
+
+		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
+	}
+
 
 	/**
 	 * Validate a regexp
