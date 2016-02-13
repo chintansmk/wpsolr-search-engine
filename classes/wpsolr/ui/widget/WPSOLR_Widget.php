@@ -111,29 +111,6 @@ class WPSOLR_Widget extends \WP_Widget {
 		echo 'Widget header not implemented!!!';
 	}
 
-
-	/**
-	 * Filter the widget $instance before display
-	 *
-	 * @param array $instance
-	 * @param WPSOLR_Widget $object
-	 * @param array $args
-	 */
-	public static function wpsolr_widget_display_callback( $instance, $object, $args ) {
-
-		if ( $object instanceof WPSOLR_Widget ) {
-
-			// Remove the title, eventually
-			if ( ! $object->wpsolr_is_show_title_on_front_end( $instance ) ) {
-				$instance['title']    = ' ';
-				$args['before_title'] = '';
-				$args['after_title']  = '';
-			}
-		}
-
-		return $instance;
-	}
-
 	/**
 	 * Back-end widget form.
 	 * All common elements are there.
