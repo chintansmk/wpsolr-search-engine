@@ -108,6 +108,18 @@ use wpsolr\utilities\WPSOLR_Option;
 	<?php foreach ( $sorts_groups as $sorts_group_uuid => $sorts_group ) { ?>
 		<div id="<?php echo $sorts_group_uuid; ?>">
 
+			<?php if ( $new_sorts_group_uuid != $sorts_group_uuid ) { ?>
+				<div class="wdm_row">
+					<div class='col_left'>Group id<br/>
+						Used in shortcodes and urls
+					</div>
+					<div class='col_right'>
+						<?php echo $sorts_group_uuid; ?>
+					</div>
+					<div class="clear"></div>
+				</div>
+			<?php } ?>
+
 			<div class="wdm_row">
 				<div class='col_left'>Group name</div>
 				<div class='col_right'>
@@ -116,9 +128,9 @@ use wpsolr\utilities\WPSOLR_Option;
 					       value="<?php echo $new_sorts_group_uuid == $sorts_group_uuid ? '' : esc_attr( $sorts_group['name'] ); ?>"/>
 
 					<?php if ( $new_sorts_group_uuid != $sorts_group_uuid ) { ?>
-								<input type="checkbox"
-								       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_SORTS_GROUPS; ?>][<?php echo $sorts_group_uuid; ?>][is_to_be_cloned]"
-								       value="1"/> Clone this group when saving
+						<input type="checkbox"
+						       name="<?php echo $options_name; ?>[<?php echo WPSOLR_Option::OPTION_SORTS_GROUPS; ?>][<?php echo $sorts_group_uuid; ?>][is_to_be_cloned]"
+						       value="1"/> Clone this group when saving
 					<?php } ?>
 
 				</div>

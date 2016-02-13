@@ -132,6 +132,18 @@ use wpsolr\utilities\WPSOLR_Option;
 	<?php foreach ( $facets_groups as $facets_group_uuid => $facets_group ) { ?>
 		<div id="<?php echo $facets_group_uuid; ?>">
 
+			<?php if ( $new_facets_group_uuid != $facets_group_uuid ) { ?>
+				<div class="wdm_row">
+					<div class='col_left'>Group id<br/>
+						Used in shortcodes and urls
+					</div>
+					<div class='col_right'>
+						<?php echo $facets_group_uuid; ?>
+					</div>
+					<div class="clear"></div>
+				</div>
+			<?php } ?>
+
 			<div class="wdm_row">
 				<div class='col_left'>Group name</div>
 				<div class='col_right'>
