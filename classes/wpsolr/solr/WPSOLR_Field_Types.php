@@ -20,6 +20,7 @@ class WPSOLR_Field_Types {
 	const SOLR_TYPE_DATE = 'date';
 	const SOLR_TYPE_CUSTOM_FIELD = 'custom_field';
 
+
 	// Solr dynamic types added to the field name
 	const SOLR_DYNAMIC_TYPE_STRING = '_str';
 	const SOLR_DYNAMIC_TYPE_INTEGER = '_i';
@@ -155,6 +156,21 @@ class WPSOLR_Field_Types {
 		}
 
 		return $results;
+	}
+
+
+	/**
+	 * Get all numeric types
+	 *
+	 * @return array
+	 */
+	public function get_numeric_types() {
+		return [
+			self::SOLR_TYPE_INTEGER,
+			self::SOLR_TYPE_INTEGER_LONG,
+			self::SOLR_TYPE_FLOAT,
+			self::SOLR_TYPE_FLOAT_DOUBLE
+		];
 	}
 
 }

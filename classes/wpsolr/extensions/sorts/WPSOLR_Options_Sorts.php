@@ -4,9 +4,9 @@ namespace wpsolr\extensions\sorts;
 
 use Solarium\QueryType\Select\Query\Query;
 use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Schema;
-use wpsolr\ui\widget\WPSOLR_Widget_Sort;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 use wpsolr\utilities\WPSOLR_Regexp;
@@ -73,7 +73,7 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 					'options'                  => WPSOLR_Global::getOption()->get_option_sort(
 						[ WPSOLR_Option::OPTION_SORTS_SORTS => '' ]
 					),
-					'layouts'                  => WPSOLR_Widget_Sort::wpsolr_get_group_element_layouts(),
+					'layouts'                  => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT ),
 					'default_sorts_group_uuid' => $this->get_default_sorts_group_id(),
 					'new_sorts_group_uuid'     => $new_sorts_group_uuid,
 					'sorts_groups'             => array_merge(

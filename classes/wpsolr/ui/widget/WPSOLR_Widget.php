@@ -19,24 +19,6 @@ class WPSOLR_Widget extends \WP_Widget {
 	// All WPOLR Widget classes must begin with this prefix to be autoloaded.
 	const WPSOLR_WIDGET_CLASS_NAME_PREFIX = 'WPSOLR_Widget_';
 
-	// Layouts of the widgets
-	protected static $wpsolr_layouts;
-
-	// Layout types
-	const TYPE_GROUP_LAYOUT = 'type_group_layout';
-	const TYPE_GROUP_ELEMENT_LAYOUT = 'type_group_element_layout';
-
-	// Generic layout id
-	const GENERIC_LAYOUT_ID = 'generic';
-
-	// Layout fields in array definition
-	const LAYOUT_FIELD_TEMPLATE_HTML = 'template_html';
-	const LAYOUT_FIELD_TEMPLATE_CSS = 'template_css';
-	const LAYOUT_FIELD_TEMPLATE_JS = 'template_js';
-	const LAYOUT_FIELD_TEMPLATE_NAME = 'name';
-	const LAYOUT_FIELD_FACET_TYPE = 'facet_type';
-	const LAYOUT_FIELD_TYPES = 'field_types';
-
 	// Form fields
 	const FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_STRING = 'is_custom_twig_template_string';
 	const FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_CSS_STRING = 'is_custom_twig_template_css_string';
@@ -133,8 +115,8 @@ class WPSOLR_Widget extends \WP_Widget {
 		$url_regexp = ! empty( $instance[ self::FORM_FIELD_URL_REGEXP ] ) ? $instance[ self::FORM_FIELD_URL_REGEXP ] : '';
 
 		// Layout: display the widget
-		$layout_id = ! empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ self::FORM_FIELD_LAYOUT_ID ] : self::GENERIC_LAYOUT_ID;
-		$layouts   = $this->wpsolr_get_group_layouts();
+		$layout_id = ! empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ self::FORM_FIELD_LAYOUT_ID ] : '';
+		$layouts   = $this->wpsolr_get_layouts();
 
 		// Group: content of the widget
 		$group_id = ! empty( $instance[ self::FORM_FIELD_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_GROUP_ID ] : '';
@@ -174,9 +156,9 @@ class WPSOLR_Widget extends \WP_Widget {
 			<select
 				id="<?php echo $this->get_field_id( self::FORM_FIELD_LAYOUT_ID ); ?>"
 				name="<?php echo $this->get_field_name( self::FORM_FIELD_LAYOUT_ID ); ?>">
-				<?php foreach ( $layouts as $index => $layout ) { ?>
+				<?php foreach ( $layouts as $layouts_layout_id => $layout ) { ?>
 					<option
-						value="<?php echo $index; ?>" <?php selected( $layout_id, $index, true ) ?>><?php echo $layout[ self::LAYOUT_FIELD_TEMPLATE_NAME ]; ?></option>
+						value="<?php echo $layouts_layout_id; ?>" <?php selected( $layout_id, $layouts_layout_id, true ) ?>><?php echo WPSOLR_Global::getExtensionLayouts()->get_layout_name( $layout ); ?></option>
 				<?php } ?>
 			</select>
 		</p>
@@ -201,6 +183,7 @@ class WPSOLR_Widget extends \WP_Widget {
 
 
 		<?php
+		return;
 
 	}
 
@@ -209,119 +192,6 @@ class WPSOLR_Widget extends \WP_Widget {
 		return $new_instance;
 	}
 
-
-	/**
-	 * Retrieve the twig template for the widget: custom string or selected layout or default file
-	 *
-	 * @param $instance
-	 *
-	 * @param $type_layout
-	 * @param $template_type
-	 *
-	 * @return string
-	 * @throws WPSOLR_Exception
-	 */
-	protected
-	function wpsolr_get_instance_template(
-		$instance, $type_layout, $template_type
-	) {
-
-		switch ( $template_type ) {
-
-			case self::LAYOUT_FIELD_TEMPLATE_HTML:
-				$form_field_is_custom_template = self::FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_STRING;
-				$form_field_custom_template    = self::FORM_FIELD_CUSTOM_TWIG_TEMPLATE_STRING;
-				break;
-
-			case self::LAYOUT_FIELD_TEMPLATE_CSS:
-				$form_field_is_custom_template = self::FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_CSS_STRING;
-				$form_field_custom_template    = self::FORM_FIELD_CUSTOM_TWIG_TEMPLATE_CSS_STRING;
-				break;
-
-			default:
-				throw new WPSOLR_Exception( 'template type \'%s\' is unknkown', $template_type );
-		}
-
-		/**
-		 * Return the twig custom content if it exists
-		 */
-		if ( ! empty( $instance[ $form_field_is_custom_template ] ) ) {
-
-			return ! empty( $instance[ $form_field_custom_template ] ) ? $instance[ $form_field_custom_template ] : '';
-		}
-
-		/**
-		 * Return the layout's template selected
-		 */
-		return $this->wpsolr_get_layout_template( ! empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ self::FORM_FIELD_LAYOUT_ID ] : null, $type_layout, $template_type );
-	}
-
-
-	/**
-	 * Retrieve the Twig template from a layout id
-	 *
-	 * @param $layout_id
-	 * @param $type_layout Type of layout
-	 * @param $template_type Template type
-	 *
-	 * @return string
-	 */
-	public static function wpsolr_get_layout_template(
-		$layout_id, $type_layout, $template_type
-	) {
-
-		$layouts = self::wpsolr_get_layout_definitions( $type_layout );
-
-		if ( ! empty( $layouts[ $layout_id ] ) ) {
-
-			return $layouts[ $layout_id ][ $template_type ];
-		}
-
-		/**
-		 * Return the twig template of the default layout
-		 */
-		return $layouts[ self::GENERIC_LAYOUT_ID ][ $template_type ];
-	}
-
-	/**
-	 * Retrieve the Twig template html from a layout id
-	 *
-	 * @param $layout_id
-	 * @param $type_layout Type of layout
-	 *
-	 * @return string
-	 */
-	public static function wpsolr_get_layout_template_html( $layout_id, $type_layout ) {
-
-		return self::wpsolr_get_layout_template( $layout_id, $type_layout, self::LAYOUT_FIELD_TEMPLATE_HTML );
-	}
-
-	/**
-	 * Retrieve the Twig template css from a layout id
-	 *
-	 * @param $layout_id
-	 * @param $type_layout
-	 *
-	 * @return string
-	 */
-	public static function wpsolr_get_layout_template_css( $layout_id, $type_layout ) {
-
-		return self::wpsolr_get_layout_template( $layout_id, $type_layout, self::LAYOUT_FIELD_TEMPLATE_CSS );
-	}
-
-	/**
-	 * Retrieve the Twig template js from a layout id
-	 *
-	 * @param $layout_id
-	 * @param $type_layout
-	 *
-	 * @return string
-	 */
-	public static function wpsolr_get_layout_template_js( $layout_id, $type_layout ) {
-
-		return self::wpsolr_get_layout_template( $layout_id, $type_layout, self::LAYOUT_FIELD_TEMPLATE_JS );
-	}
-
 	/**
 	 * Retrieve the layout of a widget $instance
 	 *
@@ -333,36 +203,30 @@ class WPSOLR_Widget extends \WP_Widget {
 	 * @throws Exception
 	 * @throws WPSOLR_Exception
 	 */
-	protected function wpsolr_get_instance_layout( $instance, $type_layout ) {
+	protected function wpsolr_get_instance_layout( $instance ) {
 
 		if ( empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ) {
 
 			throw new WPSOLR_Exception( 'no layout selected.' );
 		}
 
-		$layout = $this->get_layout( $instance[ self::FORM_FIELD_LAYOUT_ID ], $type_layout );
-
-		$layout[ self::LAYOUT_FIELD_TEMPLATE_HTML ] = $this->wpsolr_get_instance_template( $instance, $type_layout, self::LAYOUT_FIELD_TEMPLATE_HTML );
-		$layout[ self::LAYOUT_FIELD_TEMPLATE_CSS ]  = $this->wpsolr_get_instance_template( $instance, $type_layout, self::LAYOUT_FIELD_TEMPLATE_CSS );
+		$layout = $this->get_layout( $instance[ self::FORM_FIELD_LAYOUT_ID ] );
 
 		return $layout;
 	}
 
 	/**
-	 * Retrieve the layout of a widget $instance
+	 * Retrieve the layout of a widget
 	 *
-	 * @param $layout_id
-	 * @param $type_layout
+	 * @param string $layout_id
 	 *
 	 * @return array Layout of the widget instance
 	 * @throws Exception
-	 * @internal param $instance
-	 *
 	 */
-	protected function get_layout( $layout_id, $type_layout ) {
+	protected function get_layout( $layout_id ) {
 
 
-		$layouts = $this->wpsolr_get_layout_definitions( $type_layout );
+		$layouts = $this->wpsolr_get_layouts();
 
 		if ( ! empty( $layouts[ $layout_id ] ) ) {
 
@@ -370,24 +234,6 @@ class WPSOLR_Widget extends \WP_Widget {
 		}
 
 		throw new WPSOLR_Exception( sprintf( 'Undefined layout \'%s\'', $layout_id ) );
-	}
-
-
-	/**
-	 * Retrieve the default twig template file for the widget
-	 *
-	 * @param $template_field_name
-	 *
-	 * @param $type_layout
-	 *
-	 * @return string
-	 */
-	protected
-	function wpsolr_get_default_twig_template_name(
-		$template_field_name, $type_layout
-	) {
-
-		return $this->wpsolr_get_layout_template( self::GENERIC_LAYOUT_ID, $type_layout, $template_field_name );
 	}
 
 	/**
@@ -418,53 +264,19 @@ class WPSOLR_Widget extends \WP_Widget {
 	/**
 	 * Get all Twig template layouts of this widget
 	 *
-	 * @param string $type_layout Type of layout
-	 *
-	 * @return array
+	 * @return array Layouts
 	 */
-	protected
-	static function wpsolr_get_layout_definitions(
-		$type_layout
-	) {
-		return static::$wpsolr_layouts[ $type_layout ];
-	}
-
-	/**
-	 * Get default layout definition
-	 *
-	 * @return array
-	 */
-	public
-	static function wpsolr_get_default_layout_definition() {
-		return static::wpsolr_get_layout_definitions()[ self::GENERIC_LAYOUT_ID ];
-	}
-
-	/**
-	 * Get all layouts file content
-	 *
-	 * @param string $type_layout Type of layout
-	 *
-	 * @return array
-	 */
-	private function get_twig_layout_contents( $type_layout ) {
-		$results = [ ];
-		$layouts = $this->wpsolr_get_layout_definitions( $type_layout );
-
-		foreach ( $layouts as $key => $layout ) {
-
-			$results[ $key ] = [
-				self::LAYOUT_FIELD_TEMPLATE_HTML => WPSOLR_Global::getTwig()->get_twig_template_file_content( $layout[ self::LAYOUT_FIELD_TEMPLATE_HTML ] ),
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => WPSOLR_Global::getTwig()->get_twig_template_file_content( $layout[ self::LAYOUT_FIELD_TEMPLATE_CSS ] )
-			];
-		}
-
-		return $results;
+	protected static function wpsolr_get_layouts() {
+		die( 'wpsolr_get_layouts undefined' );
 	}
 
 	/**
 	 * Is the current url in the $instance regexp definition ?
 	 *
 	 * @param $instance
+	 *
+	 * @return bool
+	 * @throws WPSOLR_Exception
 	 */
 	protected function wpsolr_url_is_authorized( $instance ) {
 
@@ -568,6 +380,13 @@ class WPSOLR_Widget extends \WP_Widget {
 		return ( $preg_match !== false );
 	}
 
+	/**
+	 * Get instance url regexp
+	 *
+	 * @param $instance
+	 *
+	 * @return null
+	 */
 	protected function wpsolr_get_instance_url_regexp( $instance ) {
 
 		return ! empty( $instance[ self::FORM_FIELD_URL_REGEXP ] ) ? $instance[ self::FORM_FIELD_URL_REGEXP ] : null;
@@ -576,10 +395,10 @@ class WPSOLR_Widget extends \WP_Widget {
 	/**
 	 * List of groups available for the widget
 	 *
-	 * @throws Exception
+	 * @throws WPSOLR_Exception
 	 */
 	public function wpsolr_get_groups() {
-		throw new Exception( "Groups list not implemented in the widget." );
+		throw new WPSOLR_Exception( "Groups list not implemented in the widget." );
 	}
 
 	/**
@@ -592,22 +411,6 @@ class WPSOLR_Widget extends \WP_Widget {
 	public function wpsolr_get_instance_group_id( $instance ) {
 
 		return ! empty( $instance[ self::FORM_FIELD_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_GROUP_ID ] : '';
-	}
-
-	/**
-	 * Get all content layouts of the widget
-	 * @return array
-	 */
-	public static function wpsolr_get_group_element_layouts() {
-		return self::wpsolr_get_layout_definitions( self::TYPE_GROUP_ELEMENT_LAYOUT );
-	}
-
-	/**
-	 * Get all group layouts of the widget
-	 * @return array
-	 */
-	public static function wpsolr_get_group_layouts() {
-		return self::wpsolr_get_layout_definitions( self::TYPE_GROUP_LAYOUT );
 	}
 
 }

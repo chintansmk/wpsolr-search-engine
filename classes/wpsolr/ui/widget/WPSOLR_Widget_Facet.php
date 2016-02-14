@@ -4,8 +4,8 @@ namespace wpsolr\ui\widget;
 
 use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
-use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\ui\widget;
 use wpsolr\ui\WPSOLR_Data_Facets;
 use wpsolr\ui\WPSOLR_UI_Facets;
@@ -15,118 +15,6 @@ use wpsolr\utilities\WPSOLR_Global;
  * WPSOLR Widget Facets.
  */
 class WPSOLR_Widget_Facet extends WPSOLR_Widget {
-
-	// Form fields
-	const FORM_FIELD_FACETS_GROUP_ID = 'facets_group_id';
-	const FORM_FIELD_FACETS_GROUP_NAME = 'name';
-	const FORM_FIELD_SOLR_QUERY_PARAMETERS = 'added_solr_query';
-
-	protected static $wpsolr_layouts = [
-		self::TYPE_GROUP_LAYOUT         => [
-			self::GENERIC_LAYOUT_ID => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'List',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/js.twig'
-			]
-		],
-		self::TYPE_GROUP_ELEMENT_LAYOUT => [
-			'dropdownlist'          => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Drop down list',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/dropdownlist/single/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/dropdownlist/single/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/dropdownlist/single/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
-			],
-			'dropdownlist_multiple' => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Drop down list with multiple selection',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/dropdownlist/multiple/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/dropdownlist/multiple/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/dropdownlist/multiple/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
-			],
-			'radiobox'              => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Radio boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
-			],
-			'checkbox'              => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Check boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_FIELD
-			],
-			'range'                 => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Regular ranges with radio boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
-				self::LAYOUT_FIELD_TYPES         => [
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
-				]
-			],
-			'range_checkbox'        => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Regular ranges with check boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_RANGE,
-				self::LAYOUT_FIELD_TYPES         => [
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
-				]
-			],
-			'custom_range'          => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Irregular ranges with radio boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/radiobox/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE,
-				self::LAYOUT_FIELD_TYPES         => [
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
-				]
-			],
-			'custom_range_checkbox' => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Irregular ranges with check boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/checkbox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/checkbox/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_CUSTOM_RANGE,
-				self::LAYOUT_FIELD_TYPES         => [
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
-				]
-			],
-			'slider'                => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Slider',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/facets/slider/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/facets/slider/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/facets/slider/js.twig',
-				self::LAYOUT_FIELD_FACET_TYPE    => WPSOLR_Options_Facets::FACET_TYPE_MIN_MAX,
-				self::LAYOUT_FIELD_TYPES         => [
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER,
-					WPSOLR_Field_Types::SOLR_TYPE_INTEGER_LONG,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT,
-					WPSOLR_Field_Types::SOLR_TYPE_FLOAT_DOUBLE
-				]
-			]
-		]
-	];
-
 
 	/**
 	 * Register widget with WordPress.
@@ -160,7 +48,7 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 			WPSOLR_Localization::get_options(),
 			$args,
 			$instance,
-			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
+			$this->wpsolr_get_instance_layout( $instance)
 		);
 
 	}
@@ -183,12 +71,8 @@ class WPSOLR_Widget_Facet extends WPSOLR_Widget {
 		<?php
 	}
 
-	/**
-	 * Get all facets layouts
-	 * @return array
-	 */
-	public static function get_facets_layouts() {
-		return self::wpsolr_get_layout_definitions( self::TYPE_GROUP_ELEMENT_LAYOUT );
+	protected static function wpsolr_get_layouts() {
+		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_GROUP );
 	}
 
 	public function wpsolr_get_groups() {

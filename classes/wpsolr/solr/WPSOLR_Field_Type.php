@@ -32,13 +32,13 @@ class WPSOLR_Field_Type {
 	 * @param $id
 	 * @param $name
 	 * @param $dynamic_type
-	 * @param $is_range
+	 * @param $is_numeric
 	 */
-	public function __construct( $id, $name, $dynamic_type, $is_range ) {
+	public function __construct( $id, $name, $dynamic_type, $is_numeric ) {
 		$this->id           = $id;
 		$this->name         = $name;
 		$this->dynamic_type = $dynamic_type;
-		$this->is_numeric   = $is_range;
+		$this->is_numeric   = $is_numeric;
 	}
 
 	/**

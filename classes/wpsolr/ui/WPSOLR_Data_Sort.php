@@ -2,8 +2,7 @@
 
 namespace wpsolr\ui;
 
-use wpsolr\ui\widget\WPSOLR_Widget;
-use wpsolr\ui\widget\WPSOLR_Widget_Sort;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
 
@@ -33,6 +32,8 @@ class WPSOLR_Data_Sort {
 		$results          = array();
 		$results['items'] = array();
 
+		$extension_layouts = WPSOLR_Global::getExtensionLayouts();
+
 		if ( count( $sorts_to_display ) ) {
 
 			foreach ( $sorts_to_display as $sort_to_display ) {
@@ -47,9 +48,10 @@ class WPSOLR_Data_Sort {
 				);
 
 				// Templates
-				$sort[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_HTML ] = WPSOLR_Widget_Sort::wpsolr_get_layout_template_html( $sort_to_display[ WPSOLR_Widget::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
-				$sort[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_CSS ]  = WPSOLR_Widget_Sort::wpsolr_get_layout_template_css( $sort_to_display[ WPSOLR_Widget::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
-				$sort[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_JS ]   = WPSOLR_Widget_Sort::wpsolr_get_layout_template_js( $sort_to_display[ WPSOLR_Widget::FORM_FIELD_LAYOUT_ID ], WPSOLR_Widget::TYPE_GROUP_ELEMENT_LAYOUT );
+				$layout                                                     = $extension_layouts->get_layout_from_type_and_id( WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT, $sort_to_display[ WPSOLR_Options_Layouts::LAYOUT_FIELD_LAYOUT_ID ] );
+				$sort[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ] = $extension_layouts->get_layout_template_html( $layout );
+				$sort[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ]  = $extension_layouts->get_layout_template_css( $layout );
+				$sort[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ]   = $extension_layouts->get_layout_template_js( $layout );
 
 				array_push( $results['items'], $sort );
 			}

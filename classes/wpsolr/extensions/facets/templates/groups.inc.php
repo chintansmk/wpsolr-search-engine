@@ -1,6 +1,6 @@
 <?php
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\WPSOLR_Extensions;
-use wpsolr\ui\widget\WPSOLR_Widget_Facet;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
@@ -74,7 +74,7 @@ use wpsolr\utilities\WPSOLR_Option;
 		jQuery(".sortable").accordion({active: false, collapsible: true, heightStyle: "content"});
 
 		// Layouts
-		var layouts = <?php echo json_encode( WPSOLR_Widget_Facet::get_facets_layouts() ); ?>;
+		var layouts = <?php echo json_encode( WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET ) ); ?>;
 
 		function display_facet_types(layout_element, layout_facet_type) {
 			layout_element.parent().parent().parent().children(".wpsolr_facet_type").hide(); // hide all facet type sections

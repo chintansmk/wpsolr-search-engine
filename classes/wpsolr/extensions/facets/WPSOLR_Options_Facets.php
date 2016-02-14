@@ -3,12 +3,10 @@
 namespace wpsolr\extensions\facets;
 
 use Solarium\QueryType\Select\Query\Query;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\solr\WPSOLR_Schema;
-use wpsolr\ui\widget\WPSOLR_Widget;
-use wpsolr\ui\widget\WPSOLR_Widget_Facet;
-use wpsolr\ui\widget\WPSOLR_Widget_Filter;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 use wpsolr\utilities\WPSOLR_Regexp;
@@ -116,7 +114,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 						[ WPSOLR_Option::OPTION_FACETS_FACETS => '' ]
 					),
 					'layouts_facets'            => $this->get_facets_layouts_by_field_types(),
-					'layouts_filters'           => WPSOLR_Widget_Filter::wpsolr_get_group_element_layouts(),
+					'layouts_filters'           => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER ),
 					'default_facets_group_uuid' => $this->get_default_facets_group_id(),
 					'new_facets_group_uuid'     => $new_facets_group_uuid,
 					'facets_groups'             => array_merge(
@@ -152,11 +150,11 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		$results = [ ];
 
 		$field_types_id = array_keys( WPSOLR_Global::getSolrFieldTypes()->get_field_types() );
-		$layouts        = WPSOLR_Widget_Facet::get_facets_layouts();
+		$layouts        = WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET );
 
 		foreach ( $layouts as $layout_id => $layout ) {
 
-			$layout_field_types = isset( $layout[ WPSOLR_Widget::LAYOUT_FIELD_TYPES ] ) ? $layout[ WPSOLR_Widget::LAYOUT_FIELD_TYPES ] : $field_types_id;
+			$layout_field_types = isset( $layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TYPES ] ) ? $layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TYPES ] : $field_types_id;
 
 			foreach ( $layout_field_types as $layout_field_type ) {
 
