@@ -80,7 +80,7 @@ class WPSOLR_Data_Facets {
 					$facet               = [ ];
 					$facet['items']      = [ ];
 					$facet['id']         = $facet_to_display_id;
-					$facet['name']       = $facet_to_display_name;
+					$facet['name']       = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $extension_facets->get_facet_label_front_end( $facet_to_display ) );
 					$facet['definition'] = $facet_to_display;
 
 					// Facet templates or facet filter templates

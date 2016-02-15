@@ -34,6 +34,8 @@ $facet_label_last        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_L
 
 $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE ] : [ ];
 
+$facet_field_name_front_end = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_FRONT_END ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_LABEL_FRONT_END ] : $facet_name;
+
 ?>
 
 <li class='facets <?php echo $facet_selected_class; ?>'>
@@ -56,6 +58,19 @@ $facet_query = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE 
 				<input type='checkbox' id="<?php echo $facets_group_uuid . '_' . $facet_name; ?>_is_active"
 				       name='<?php echo $facet_option_array_name; ?>[is_active]' value='1'
 					<?php checked( '1', $facet_is_active, true ); ?>/>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="wdm_row">
+			<div class='col_left'>
+				Label displayed on front-end<br/>
+				Translated as string.
+			</div>
+			<div class='col_right'>
+				<input type='text'
+				       name='<?php echo $facet_option_array_name; ?>[<?php echo WPSOLR_Options_Facets::FACET_FIELD_LABEL_FRONT_END; ?>]'
+				       value='<?php echo esc_attr( $facet_field_name_front_end ); ?>'/>
 			</div>
 			<div class="clear"></div>
 		</div>

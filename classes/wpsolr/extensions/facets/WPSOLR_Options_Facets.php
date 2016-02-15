@@ -41,6 +41,9 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	// Facet delay in ms before javascript triggers a search after a user clicks on the facet
 	const FACET_FIELD_JS_REFRESH_DELAY_IN_MS = 'js_refresh_delay_in_ms';
 
+	// Label of facet showed on front-end (translated as string)
+	const FACET_FIELD_LABEL_FRONT_END = 'label_front_end';
+
 	// Facet labels
 	const FACET_FIELD_LABEL = 'label'; // Facet label
 	const FACET_FIELD_LABEL_FIRST = 'label_first'; // Label of the first label element
@@ -305,6 +308,16 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 
 	/**
+	 * Get facet front-end label
+	 *
+	 * @param $facet
+	 */
+	public function get_facet_label_front_end( $facet ) {
+		return isset( $facet[ self::FACET_FIELD_LABEL_FRONT_END ] ) ? $facet[ self::FACET_FIELD_LABEL_FRONT_END ] : '';
+	}
+
+
+	/**
 	 * Is facet a field type ?
 	 *
 	 * @param $facet
@@ -515,6 +528,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 		// Fields that can be translated and their definition
 		$fields_translatable = [
+			self::FACET_FIELD_LABEL_FRONT_END     => [ 'name' => 'Facet Label on front-end', 'is_multiline' => false ],
 			self::FACET_FIELD_LABEL_FIRST         => [ 'name' => 'First facet Label', 'is_multiline' => false ],
 			self::FACET_FIELD_LABEL               => [ 'name' => 'Middle facet Label', 'is_multiline' => false ],
 			self::FACET_FIELD_LABEL_LAST          => [ 'name' => 'Last facet Label', 'is_multiline' => false ],
