@@ -3,6 +3,7 @@
 namespace wpsolr\ui\widget;
 
 use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\ui\widget;
 use wpsolr\ui\WPSOLR_Data_Sort;
@@ -13,29 +14,6 @@ use wpsolr\utilities\WPSOLR_Global;
  * WPSOLR Widget Sort List
  */
 class WPSOLR_Widget_Sort extends WPSOLR_Widget {
-
-	// Form fields
-	const FORM_FIELD_SORTS_GROUP_ID = 'sorts_group_id';
-	const FORM_FIELD_SORTS_GROUP_NAME = 'name';
-
-	protected static $wpsolr_layouts = [
-		self::TYPE_GROUP_LAYOUT         => [
-			self::GENERIC_LAYOUT_ID => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Drop down list',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig'
-			]
-		],
-		self::TYPE_GROUP_ELEMENT_LAYOUT => [
-			self::GENERIC_LAYOUT_ID => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Text',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig'
-			]
-		]
-	];
 
 	/**
 	 * Register widget with WordPress.
@@ -98,7 +76,7 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 			WPSOLR_Localization::get_options(),
 			$args,
 			$instance,
-			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
+			$this->wpsolr_get_instance_layout( $instance )
 		);
 
 	}
@@ -117,6 +95,10 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 		</p>
 
 		<?php
+	}
+
+	protected static function wpsolr_get_layouts() {
+		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT_GROUP );
 	}
 
 	public function wpsolr_get_groups() {

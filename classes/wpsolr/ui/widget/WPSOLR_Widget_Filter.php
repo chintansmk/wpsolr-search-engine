@@ -3,6 +3,7 @@
 namespace wpsolr\ui\widget;
 
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\ui\widget;
 use wpsolr\utilities\WPSOLR_Global;
 
@@ -10,31 +11,6 @@ use wpsolr\utilities\WPSOLR_Global;
  * WPSOLR Widget Sort List
  */
 class WPSOLR_Widget_Filter extends WPSOLR_Widget_facet {
-
-	protected static $wpsolr_layouts = [
-		self::TYPE_GROUP_LAYOUT         => [
-			self::GENERIC_LAYOUT_ID => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'List',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/filters/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/filters/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/js.twig'
-			]
-		],
-		self::TYPE_GROUP_ELEMENT_LAYOUT => [
-			'checkbox' => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Check boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/filters/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/filters/checkbox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/checkbox/js.twig'
-			],
-			'radiobox' => [
-				self::LAYOUT_FIELD_TEMPLATE_NAME => 'Radio boxes',
-				self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/filters/checkbox/html.twig',
-				self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/filters/radiobox/css.twig',
-				self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/filters/checkbox/js.twig'
-			]
-		]
-	];
 
 	/**
 	 * Register widget with WordPress.
@@ -62,6 +38,10 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget_facet {
 		</p>
 
 		<?php
+	}
+
+	protected static function wpsolr_get_layouts() {
+		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER_GROUP );
 	}
 
 	public function wpsolr_get_groups() {

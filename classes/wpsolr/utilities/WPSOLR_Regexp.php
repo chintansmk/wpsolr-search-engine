@@ -218,8 +218,8 @@ class WPSOLR_Regexp {
 	 * Match a text with lines of regexp expressions
 	 *
 	 *
-	 * @param $regexp_lines Lines of regexp
-	 * @param $text Text to match
+	 * @param string $regexp_lines Lines of regexp
+	 * @param string $text Text to match
 	 *
 	 * @return bool True if at least one regexp matches the text
 	 * @throws WPSOLR_Exception

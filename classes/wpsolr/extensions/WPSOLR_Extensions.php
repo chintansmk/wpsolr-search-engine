@@ -8,6 +8,7 @@ use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
 use wpsolr\extensions\importexport\WPSOLR_Options_ImportExports;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
@@ -99,6 +100,9 @@ abstract class WPSOLR_Extensions {
 
 	// Extension: Import/Export
 	const OPTION_IMPORTEXPORT = 'import_export';
+
+	// Extension: layouts
+	const OPTION_LAYOUTS = 'layouts';
 
 	/*
 	 * Extensions configuration
@@ -328,6 +332,21 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_IMPORTEXPORT,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_LAYOUTS              =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Layouts::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Layouts::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'layouts/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'layouts/WPSOLR_Options_Layouts.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'layouts/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_LAYOUTS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			]

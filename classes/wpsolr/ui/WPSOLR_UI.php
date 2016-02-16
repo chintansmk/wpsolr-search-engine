@@ -2,7 +2,7 @@
 
 namespace wpsolr\ui;
 
-use wpsolr\ui\widget\WPSOLR_Widget;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\utilities\WPSOLR_Global;
 
 /**
@@ -43,7 +43,7 @@ class WPSOLR_UI {
 
 		// JS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$layout[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_JS ],
+			$layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ],
 			array_merge(
 				$twig_parameters,
 				array(
@@ -54,7 +54,7 @@ class WPSOLR_UI {
 
 		// CSS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$layout[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_CSS ],
+			$layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ],
 			array_merge(
 				$twig_parameters,
 				array(
@@ -65,7 +65,7 @@ class WPSOLR_UI {
 
 		// HTML template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$layout[ WPSOLR_Widget::LAYOUT_FIELD_TEMPLATE_HTML ],
+			$layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
 			array_merge(
 				$twig_parameters,
 				array(

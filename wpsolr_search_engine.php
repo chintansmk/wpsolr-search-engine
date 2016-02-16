@@ -12,6 +12,7 @@ use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\solr\WPSOLR_IndexSolrClient;
 use wpsolr\solr\WPSOLR_SearchSolrClient;
+use wpsolr\ui\shortcode\WPSOLR_Shortcode;
 use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\WPSOLR_Query_Parameters;
 use wpsolr\utilities\WPSOLR_Global;
@@ -43,6 +44,9 @@ add_action( 'admin_enqueue_scripts', 'my_admin_enqueue' );
 if ( WPSOLR_Global::getOption()->get_search_is_use_current_theme_search_template() ) {
 	WPSOLR_Widget::wpsolr_autoload();
 }
+
+// Add all shortcodes
+WPSOLR_Shortcode::add_shortcodes();
 
 /*
  * Display Solr errors in admin when a save on a post can't index to Solr

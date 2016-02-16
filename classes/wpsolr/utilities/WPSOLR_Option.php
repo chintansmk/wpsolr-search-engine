@@ -729,4 +729,19 @@ class WPSOLR_Option {
 		return self::get_option( self::OPTION_IMPORTEXPORT, [ ] );
 	}
 
+	/***************************************************************************************************************
+	 *
+	 * Layouts option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_LAYOUTS = 'wpsolr_layouts';
+
+	/**
+	 * Get layouts options array
+	 * @return array
+	 */
+	public function get_option_layouts() {
+		return self::get_option( self::OPTION_LAYOUTS, [ ] );
+	}
+
 }

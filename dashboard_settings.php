@@ -239,6 +239,7 @@ switch ( $tab ) {
 				'facet_opt'            => '2.3 Facets',
 				'sort_opt'             => '2.4 Sorting',
 				'localization_options' => '2.5 Localization',
+				'layout_options'       => '2.6 Layouts'
 			);
 
 			$subtab = wpsolr_admin_sub_tabs( $subtabs );
@@ -546,6 +547,10 @@ switch ( $tab ) {
 
 				case 'localization_options':
 					WPSOLR_Extensions::require_once_wpsolr_extension_admin_options( WPSOLR_Extensions::OPTION_LOCALIZATION );
+					break;
+
+				case 'layout_options':
+					WPSOLR_Global::getExtensionLayouts()->output_form();
 					break;
 
 			}

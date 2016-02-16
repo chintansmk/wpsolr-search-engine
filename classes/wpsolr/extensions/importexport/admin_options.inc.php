@@ -31,6 +31,10 @@ $option_names_to_export = [
 		'description' => 'Localizations',
 		'data'        => WPSOLR_Global::getOption()->get_option_localization()
 	],
+	WPSOLR_Option::OPTION_LAYOUTS            => [
+		'description' => 'Layouts',
+		'data'        => WPSOLR_Global::getOption()->get_option_layouts()
+	],
 	WPSOLR_Option::OPTION_PLUGIN_ACF         => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_ACF ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_acf()
