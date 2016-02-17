@@ -10,7 +10,7 @@ class WPSOLR_Data_FacetsTest extends WPSOLR_Unit_Test {
 
 	public function testAllEmptyArray() {
 
-		$result = WPSOLR_Data_Facets::get_data( array(), array(), array() );
+		$result = WPSOLR_Data_Facets::format_data( array(), array(), array() );
 
 		$this->assertEquals(
 			array(
@@ -30,7 +30,7 @@ class WPSOLR_Data_FacetsTest extends WPSOLR_Unit_Test {
 
 		$this->wpsolr_mock_apply_filter( WPSOLR_Filters::WPSOLR_FILTER_SEARCH_PAGE_FACET_NAME, m::any(), m::any(), 1, null );
 
-		$result = WPSOLR_Data_Facets::get_data( [ ], [ 'custom1_str' ], [
+		$result = WPSOLR_Data_Facets::format_data( [ ], [ 'custom1_str' ], [
 			'custom1_str' =>
 				[
 					[
@@ -82,7 +82,7 @@ class WPSOLR_Data_FacetsTest extends WPSOLR_Unit_Test {
 
 		$this->wpsolr_mock_apply_filter( WPSOLR_Filters::WPSOLR_FILTER_SEARCH_PAGE_FACET_NAME, m::any(), m::any(), 4, null );
 
-		$result = WPSOLR_Data_Facets::get_data( array(),
+		$result = WPSOLR_Data_Facets::format_data( array(),
 			[
 				'type',
 				'author',

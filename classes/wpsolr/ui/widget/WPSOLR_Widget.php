@@ -3,9 +3,8 @@
 namespace wpsolr\ui\widget;
 
 use wpsolr\exceptions\WPSOLR_Exception;
-use wpsolr\ui\WPSOLR_Query_Parameters;
+use wpsolr\ui\WPSOLR_UI;
 use wpsolr\utilities\WPSOLR_Global;
-use wpsolr\utilities\WPSOLR_Regexp;
 
 
 /**
@@ -45,38 +44,21 @@ class WPSOLR_Widget extends \WP_Widget {
 		$args, $instance
 	) {
 
-		/**
-		 * Only display a widget when:
-		 * - Current url is a WP search page
-		 * - WPSOLR is replacing the default search
-		 * - WPSOLR displays the current theme search/seach form templates
-		 * - Current widget is not empty, or setup to show when empty
-		 *
-		 */
+		$result = $this->get_ui()->display(
+			$args['widget_name'],
+			$this->wpsolr_get_instance_layout_id( $instance ),
+			$this->wpsolr_get_instance_group_id( $instance ),
+			$this->wpsolr_get_instance_url_regexp( $instance ),
+			$this->wpsolr_get_instance_is_show_widget_when_empty( $instance ),
+			$this->wpsolr_get_instance_is_show_title_on_front_end( $instance ),
+			! empty( $instance['title'] ) ? $instance['title'] : '',
+			! empty( $args['before_title'] ) ? $args['before_title'] : '',
+			! empty( $args['after_title'] ) ? $args['after_title'] : '',
+			! empty( $args['before_widget'] ) ? $args['before_widget'] : '',
+			! empty( $args['after_widget'] ) ? $args['after_widget'] : ''
+		);
 
-		try {
-
-			// Extract data
-			$this->wpsolr_widget_data = $this->wpsolr_get_data( $args, $instance );
-
-			if ( $this->wpsolr_url_is_authorized( $instance ) && ( $this->wpsolr_is_show_widget_when_empty( $instance ) || ! $this->wpsolr_is_widget_empty( $instance ) ) ) {
-
-				// Remove the title, eventually
-				if ( ! $this->wpsolr_is_show_title_on_front_end( $instance ) ) {
-					$instance['title']    = ' ';
-					$args['before_title'] = '';
-					$args['after_title']  = '';
-				}
-
-				$this->wpsolr_form( $args, $instance );
-			}
-
-		} catch ( WPSOLR_Exception $e ) {
-
-			// Display custom error in Widget area
-			echo sprintf( '<div style=\'margin:10px;\'>Error in \'%s\': %s</div>', $args['widget_name'], $e->get_message() );
-		}
-
+		echo $result;
 	}
 
 	protected
@@ -192,49 +174,6 @@ class WPSOLR_Widget extends \WP_Widget {
 		return $new_instance;
 	}
 
-	/**
-	 * Retrieve the layout of a widget $instance
-	 *
-	 * @param $instance
-	 *
-	 * @param $type_layout
-	 *
-	 * @return array Layout of the widget instance
-	 * @throws Exception
-	 * @throws WPSOLR_Exception
-	 */
-	protected function wpsolr_get_instance_layout( $instance ) {
-
-		if ( empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ) {
-
-			throw new WPSOLR_Exception( 'no layout selected.' );
-		}
-
-		$layout = $this->get_layout( $instance[ self::FORM_FIELD_LAYOUT_ID ] );
-
-		return $layout;
-	}
-
-	/**
-	 * Retrieve the layout of a widget
-	 *
-	 * @param string $layout_id
-	 *
-	 * @return array Layout of the widget instance
-	 * @throws Exception
-	 */
-	protected function get_layout( $layout_id ) {
-
-
-		$layouts = $this->wpsolr_get_layouts();
-
-		if ( ! empty( $layouts[ $layout_id ] ) ) {
-
-			return $layouts[ $layout_id ];
-		}
-
-		throw new WPSOLR_Exception( sprintf( 'Undefined layout \'%s\'', $layout_id ) );
-	}
 
 	/**
 	 * Load all widget classes in this very directory.
@@ -271,27 +210,6 @@ class WPSOLR_Widget extends \WP_Widget {
 	}
 
 	/**
-	 * Is the current url in the $instance regexp definition ?
-	 *
-	 * @param $instance
-	 *
-	 * @return bool
-	 * @throws WPSOLR_Exception
-	 */
-	protected function wpsolr_url_is_authorized( $instance ) {
-
-		$url_regexp_lines = $this->wpsolr_get_instance_url_regexp( $instance );
-
-		if ( $url_regexp_lines == null ) {
-			// No url regexp defined on the widget: all url are authorized.
-			return true;
-		}
-
-		// Is current url matching one of the regexp lines ?
-		return WPSOLR_Regexp::preg_match_lines_of_regexp( $url_regexp_lines, WPSOLR_Query_Parameters::get_current_page_url() );
-	}
-
-	/**
 	 * Show $instance title on front-end pages ?
 	 *
 	 * @param $instance
@@ -323,41 +241,6 @@ class WPSOLR_Widget extends \WP_Widget {
 		return false;
 	}
 
-	/**
-	 * Get data to be displayed by the widget.
-	 * Use the cached data if there.
-	 *
-	 * [ 'group_id' => $group_id, 'data' => $data ];
-	 *
-	 * @param $args
-	 * @param $instance
-	 */
-	protected function wpsolr_get_data( $args, $instance ) {
-
-		if ( isset( $this->wpsolr_widget_data ) ) {
-			// Get cache
-			return $this->wpsolr_widget_data;
-		}
-
-		// No cache: create it.
-		$this->wpsolr_widget_data = $this->wpsolr_extract_data( $args, $instance );
-
-		return $this->wpsolr_widget_data;
-	}
-
-	/**
-	 * Prepare data to be displayed by the widget.
-	 *
-	 * [ 'group_id' => $group_id, 'data' => $data ];
-	 *
-	 * @param $args
-	 * @param $instance
-	 */
-	protected function wpsolr_extract_data( $args, $instance ) {
-
-		// Override in children.
-		return [ ];
-	}
 
 	/**
 	 * Validate a regexp
@@ -411,6 +294,48 @@ class WPSOLR_Widget extends \WP_Widget {
 	public function wpsolr_get_instance_group_id( $instance ) {
 
 		return ! empty( $instance[ self::FORM_FIELD_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_GROUP_ID ] : '';
+	}
+
+	/**
+	 * Get the layout id from the widget instance
+	 *
+	 * @param $instance
+	 *
+	 * @return string Layout id
+	 */
+	public function wpsolr_get_instance_layout_id( $instance ) {
+
+		return ! empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ self::FORM_FIELD_LAYOUT_ID ] : '';
+	}
+
+	/**
+	 * Returns the UI object
+	 *
+	 * @return WPSOLR_UI
+	 */
+	protected function get_ui() {
+		die( 'get_ui not implemented' );
+	}
+
+	/**
+	 * Show widget when no data ?
+	 *
+	 * @return bool
+	 */
+	public function wpsolr_get_instance_is_show_widget_when_empty( $instance ) {
+		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ] );
+	}
+
+
+	/**
+	 * Show title on front-end ?
+	 *
+	 * @param $instance
+	 *
+	 * @return bool
+	 */
+	public function wpsolr_get_instance_is_show_title_on_front_end( $instance ) {
+		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
 	}
 
 }

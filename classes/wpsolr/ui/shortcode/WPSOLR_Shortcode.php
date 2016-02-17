@@ -6,8 +6,7 @@
 namespace wpsolr\ui\shortcode;
 
 
-use wpsolr\exceptions\WPSOLR_Exception;
-use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\ui\WPSOLR_UI;
 
 /**
  * Class WPSOLR_Shortcode
@@ -19,8 +18,22 @@ class WPSOLR_Shortcode {
 	// All WPSOLR shortcode classes must begin with this prefix to be autoloaded.
 	const WPSOLR_SHORTCODE_CLASS_NAME_PREFIX = 'WPSOLR_Shortcode_';
 
-	// Shortcode name
-	const SHORTCODE_NAME = 'wpsolr_shortcode';
+	// Shorcode attributes
+	const ATTRIBUTE_GROUP_ID = 'group_id';
+	const ATTRIBUTE_GROUP_LAYOUT_ID = 'layout_id';
+
+	protected $group_id;
+	protected $layout_id;
+	protected $is_show_when_no_data;
+	protected $is_show_title_on_front_end;
+	protected $layout;
+	protected $title;
+	protected $before_title;
+	protected $after_title;
+	protected $before_ui;
+	protected $after_ui;
+	protected $layout_type;
+	protected $shortcode_name;
 
 	/**
 	 * Add all shortcodes present in this directory
@@ -35,7 +48,8 @@ class WPSOLR_Shortcode {
 			$shortcode_class_name = __NAMESPACE__ . '\\' . basename( $file, '.php' );
 
 			// Register shortcode
-			add_shortcode( $shortcode_class_name::SHORTCODE_NAME, array( $shortcode_class_name, 'output' ) );
+			$shortcode_object = new $shortcode_class_name();
+			add_shortcode( $shortcode_object->shortcode_name, array( $shortcode_object, 'output' ) );
 		}
 
 	}
@@ -48,60 +62,44 @@ class WPSOLR_Shortcode {
 	 *
 	 * @return string
 	 */
-	public static function output( $attributes, $content = "" ) {
-		return sprintf( 'Shortcode not implemented: %s', __CLASS__ );
+	public function output( $attributes, $content = "" ) {
+
+		$this->layout_id                  = ! empty( $attributes['layout_id'] ) ? $attributes['layout_id'] : '';
+		$this->group_id                   = ! empty( $attributes['group_id'] ) ? $attributes['group_id'] : '';
+		$this->url_regexp_lines           = ! empty( $attributes['url_regexp_lines'] ) ? $attributes['url_regexp_lines'] : '';
+		$this->is_show_when_no_data       = ! empty( $attributes['is_show_when_no_data'] ) ? $attributes['is_show_when_no_data'] : '';
+		$this->is_show_title_on_front_end = ! empty( $attributes['is_show_title_on_front_end'] ) ? $attributes['is_show_title_on_front_end'] : '';
+		$this->title                      = ! empty( $attributes['title'] ) ? $attributes['title'] : '';
+		$this->before_title               = ! empty( $attributes['before_title'] ) ? $attributes['before_title'] : '';
+		$this->after_title                = ! empty( $attributes['after_title'] ) ? $attributes['after_title'] : '';
+		$this->before_ui                  = ! empty( $attributes['before_ui'] ) ? $attributes['before_ui'] : '';
+		$this->after_ui                   = ! empty( $attributes['after_ui'] ) ? $attributes['after_ui'] : '';
+
+
+		$result = $this->get_ui()->display(
+			sprintf( 'shortcode %s', $this->shortcode_name ),
+			$this->layout_id,
+			$this->group_id,
+			$this->url_regexp_lines,
+			$this->is_show_when_no_data,
+			$this->is_show_title_on_front_end,
+			$this->title,
+			$this->before_title,
+			$this->after_title,
+			$this->before_ui,
+			$this->after_ui
+		);
+
+		return $result;
 	}
 
 	/**
-	 * Retrieve the layout of the shortcode
+	 * Returns the UI object
 	 *
-	 * @param string $layout_id
-	 *
-	 * @return array Layout of the shortcode
-	 * @throws WPSOLR_Exception
+	 * @return WPSOLR_UI
 	 */
-	protected static function get_layout( $layout_type, $layout_id ) {
-
-		$layouts = WPSOLR_Global::getExtensionLayouts()->get_layout_from_type_and_id( $layout_type, $layout_id );
-
-		if ( ! empty( $layouts ) ) {
-
-			return $layouts;
-		}
-
-		throw new WPSOLR_Exception( sprintf( 'Shortcode \'%s\': undefined layout \'%s\'.', static::SHORTCODE_NAME, $layout_id ) );
-	}
-
-	/**
-	 * Retrieve the group of the shortcode
-	 *
-	 * @param string $group_id
-	 *
-	 * @return array Group of the shortcode
-	 * @throws WPSOLR_Exception
-	 */
-	protected static function get_group( $group_id ) {
-
-		$group = static::get_group_child( $group_id );
-
-		if ( ! empty( $group ) ) {
-
-			return $group;
-		}
-
-		throw new WPSOLR_Exception( sprintf( 'Shortcode \'%s\': undefined group \'%s\'.', static::SHORTCODE_NAME, $group_id ) );
-	}
-
-
-	/**
-	 * Implement get_group in children
-	 *
-	 * @param $group_id
-	 *
-	 * @return array Group
-	 */
-	protected static function get_group_child( $group_id ) {
-		die( 'get_group_child not implemented.' );
+	protected function get_ui() {
+		die( 'get_ui not implemented' );
 	}
 
 }

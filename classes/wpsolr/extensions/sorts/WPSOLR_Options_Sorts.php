@@ -129,6 +129,10 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 
 		$sorts_groups = WPSOLR_Global::getOption()->get_sorts_selected_array();
 
+		if ( ! isset( $sorts_groups[ $sorts_group_id ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'sorts group \'%s\' is unknown.', $sorts_group_id ) );
+		}
+
 		return ! empty( $sorts_groups[ $sorts_group_id ] ) ? $sorts_groups[ $sorts_group_id ] : [ ];
 	}
 

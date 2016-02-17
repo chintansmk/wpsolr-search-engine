@@ -2,14 +2,30 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
+use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\utilities\WPSOLR_Regexp;
 
 /**
  * Facets root.
  *
  */
 class WPSOLR_UI {
+
+	// Data extracted from Solr search resuylts
+	protected $data;
+
+	protected $group_id;
+	protected $layout_id;
+	protected $layout;
+	protected $title;
+	protected $before_title;
+	protected $after_title;
+	protected $before_ui;
+	protected $after_ui;
+	protected $layout_type;
 
 	/**
 	 * Calculate the plugin root directory url.
@@ -18,6 +34,147 @@ class WPSOLR_UI {
 	protected static function plugin_dir_url() {
 
 		return substr_replace( plugin_dir_url( __FILE__ . '../../../../../..' ), "", - 1 );
+	}
+
+	/**
+	 * Front-end display of UI.
+	 *
+	 */
+	public function display(
+		$name, $layout_id, $group_id, $url_regexp_lines, $is_show_when_no_data, $is_show_title_on_front_end,
+		$title, $before_title, $after_title, $before_ui, $after_ui
+	) {
+
+		/**
+		 * Only display a widget when:
+		 * - Current url is a WP search page
+		 * - WPSOLR is replacing the default search
+		 * - WPSOLR displays the current theme search/seach form templates
+		 * - Current widget is not empty, or setup to show when empty
+		 *
+		 */
+
+		try {
+
+			// ui elements
+			$this->name         = $name;
+			$this->title        = $is_show_title_on_front_end ? $title : '';
+			$this->before_title = $is_show_title_on_front_end ? $before_title : '';
+			$this->after_title  = $is_show_title_on_front_end ? $after_title : '';
+			$this->before_ui    = $before_ui;
+			$this->after_ui     = $after_ui;
+
+			$this->group_id  = $group_id;
+			$this->layout_id = $layout_id;
+			$this->layout    = $this->get_layout();
+
+			// Extract data
+			$this->data = $this->extract_data_with_cache();
+
+			if ( $this->url_is_authorized( $url_regexp_lines ) && ( $is_show_when_no_data || ! $this->is_data_empty() ) ) {
+
+				return $this->get_display_form();
+			}
+
+		} catch ( WPSOLR_Exception $e ) {
+
+			// Display custom error in Widget area
+			return sprintf( '<div style=\'margin:10px;\'>Error in %s: %s</div>', $this->name, $e->get_message() );
+		}
+
+	}
+
+	/**
+	 * Retrieve the layout
+	 *
+	 * @param string $layout_id
+	 *
+	 * @return array Layout of the widget instance
+	 * @throws Exception
+	 */
+	protected function get_layout() {
+
+		$layout = WPSOLR_Global::getExtensionLayouts()->get_layout_from_type_and_id( $this->layout_type, $this->layout_id );
+
+		return $layout;
+	}
+
+	/**
+	 * Get the form to be displayed on front-end.
+	 *
+	 * @return string
+	 */
+	protected function get_display_form() {
+
+		return $this->build_from_templates(
+			WPSOLR_Localization::get_options()
+		);
+
+	}
+
+	/**
+	 * Is the current url in the regexp definition ?
+	 *
+	 * @param $instance
+	 *
+	 * @return bool
+	 * @throws WPSOLR_Exception
+	 */
+	protected function url_is_authorized( $url_regexp_lines ) {
+
+		if ( $url_regexp_lines == null ) {
+			// No url regexp defined on the widget: all url are authorized.
+			return true;
+		}
+
+		// Is current url matching one of the regexp lines ?
+		return WPSOLR_Regexp::preg_match_lines_of_regexp( $url_regexp_lines, WPSOLR_Query_Parameters::get_current_page_url() );
+	}
+
+	/**
+	 * Verify if data is empty
+	 *
+	 * @return bool
+	 */
+	protected function is_data_empty() {
+		// Override in children
+		return false;
+	}
+
+
+	/**
+	 * Get data to be displayed by the widget.
+	 * Use the cached data if there.
+	 *
+	 * [ 'group_id' => $group_id, 'data' => $data ];
+	 *
+	 * @return array
+	 */
+	protected function extract_data_with_cache() {
+
+		if ( isset( $this->data ) ) {
+			// Get cache
+			return $this->data;
+		}
+
+		// No cache: create it.
+		$this->data = $this->extract_data();
+
+		return $this->data;
+	}
+
+	/**
+	 * Prepare data to be displayed by the widget.
+	 *
+	 * [ 'group_id' => $group_id, 'data' => $data ];
+	 *
+	 * @param $args
+	 * @param $instance
+	 */
+	protected function extract_data() {
+
+		// Override in children.
+		return [ ];
 	}
 
 	/**
@@ -34,27 +191,27 @@ class WPSOLR_UI {
 	 *
 	 * @return string
 	 */
-	public static function Build( $group_id, $data, $localization_options, $widget_args, $widget_instance, $layout ) {
+	public function build_from_templates( $localization_options ) {
 
 		$html = '';
 
 		// Twig parameters delegated to child classes
-		$twig_parameters = static::create_twig_parameters( $data, $localization_options, $widget_instance );
+		$twig_parameters = static::create_twig_parameters( $localization_options );
 
 		// JS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ],
+			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ],
 			array_merge(
 				$twig_parameters,
 				array(
-					'group_id' => $group_id
+					'group_id' => $this->group_id
 				)
 			)
 		);
 
 		// CSS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ],
+			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ],
 			array_merge(
 				$twig_parameters,
 				array(
@@ -65,12 +222,17 @@ class WPSOLR_UI {
 
 		// HTML template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
+			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
 			array_merge(
 				$twig_parameters,
 				array(
-					'group_id'       => $group_id,
-					'widget_args'    => $widget_args,
+					'group_id'       => $this->group_id,
+					'widget_args'    => [
+						'before_widget' => $this->before_ui,
+						'after_widget'  => $this->after_ui,
+						'before_title'  => $this->before_title,
+						'after_title'   => $this->after_title
+					],
 					'plugin_dir_url' => self::plugin_dir_url()
 				)
 			)
@@ -90,7 +252,7 @@ class WPSOLR_UI {
 	 *
 	 * @return array
 	 */
-	public static function create_twig_parameters( $data, $localization_options, $widget_instance ) {
+	public function create_twig_parameters( $localization_options ) {
 		dies( 'Missing implementation.' );
 	}
 

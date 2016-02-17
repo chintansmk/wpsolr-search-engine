@@ -3,6 +3,7 @@
 namespace wpsolr\ui;
 
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
+use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
 
@@ -11,6 +12,46 @@ use wpsolr\WPSOLR_Filters;
  *
  */
 class WPSOLR_Data_Sort {
+
+	public static function extract_data( $ui_group_id ) {
+
+		// Widget can be on a search page ?s=
+		$wpsolr_query = WPSOLR_Global::getQuery();
+		$group_id     = $wpsolr_query->get_wpsolr_sorts_groups_id();
+
+		if ( ! $wpsolr_query->get_wpsolr_is_search() ) {
+
+			// Sorts of the group on the query url
+			if ( empty( $group_id ) ) {
+
+				// Sorts group of the widget
+				$group_id = $ui_group_id;
+				if ( empty( $group_id ) ) {
+					throw new WPSOLR_Exception( sprintf( 'Select a sort group.' ) );
+				}
+			}
+
+		} else {
+
+			// No default sort group
+			if ( empty( $group_id ) ) {
+				throw new WPSOLR_Exception( sprintf( 'Select a default sort group.' ) );
+			}
+
+		}
+
+		// Sorts of the Sorts group
+		$sorts = WPSOLR_Global::getExtensionSorts()->get_sorts_from_group( $group_id );
+
+		$data = static::format_data(
+			WPSOLR_Global::getQuery()->get_wpsolr_sort(),
+			$sorts,
+			WPSOLR_Global::getExtensionSorts()->get_sort_default_name( WPSOLR_Global::getExtensionSorts()->get_sorts_group( $group_id ) ),
+			WPSOLR_Localization::get_options() );
+
+
+		return [ 'group_id' => $group_id, 'data' => $data ];
+	}
 
 	/**
 	 * @param string $sort_selected The sort currently selected.
@@ -27,7 +68,7 @@ class WPSOLR_Data_Sort {
 	 *                      ]
 	 *                  ]
 	 */
-	public static function get_data( $sort_selected, $sorts_to_display, $sort_default_name, $localization_options ) {
+	public static function format_data( $sort_selected, $sorts_to_display, $sort_default_name, $localization_options ) {
 
 		$results          = array();
 		$results['items'] = array();

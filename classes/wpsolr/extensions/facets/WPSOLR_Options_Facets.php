@@ -3,6 +3,7 @@
 namespace wpsolr\extensions\facets;
 
 use Solarium\QueryType\Select\Query\Query;
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
@@ -178,6 +179,10 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	public function get_facets_from_group( $facets_group_id ) {
 
 		$facets_groups = WPSOLR_Global::getOption()->get_facets_selected_array();
+
+		if ( ! isset( $facets_groups[ $facets_group_id ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'facets group \'%s\' is unknown.', $facets_group_id ) );
+		}
 
 		return ! empty( $facets_groups[ $facets_group_id ] ) ? $facets_groups[ $facets_group_id ] : [ ];
 	}

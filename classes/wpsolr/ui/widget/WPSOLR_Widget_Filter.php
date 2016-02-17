@@ -2,9 +2,10 @@
 
 namespace wpsolr\ui\widget;
 
-use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\ui\widget;
+use wpsolr\ui\WPSOLR_UI_Facet;
+use wpsolr\ui\WPSOLR_UI_Filter;
 use wpsolr\utilities\WPSOLR_Global;
 
 /**
@@ -48,8 +49,13 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget_facet {
 		return WPSOLR_Global::getOption()->get_facets_groups();
 	}
 
-	protected function wpsolr_get_facet_type() {
-		return WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID;
+	/**
+	 * Returns the UI object
+	 *
+	 * @return WPSOLR_UI_Facet
+	 */
+	protected function get_ui() {
+		return new WPSOLR_UI_Filter();
 	}
 
 }

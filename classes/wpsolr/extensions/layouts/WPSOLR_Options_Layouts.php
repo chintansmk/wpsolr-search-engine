@@ -3,6 +3,7 @@
 namespace wpsolr\extensions\layouts;
 
 use Solarium\QueryType\Select\Query\Query;
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
@@ -279,6 +280,10 @@ class WPSOLR_Options_Layouts extends WPSOLR_Extensions {
 	public function get_layout_from_type_and_id( $layout_type, $layout_id ) {
 
 		$layouts = $this->get_layouts_from_type( $layout_type );
+
+		if ( empty( $layouts ) || empty( $layouts[ $layout_id ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'layout \'%s\' is unknown.', $layout_id ) );
+		}
 
 		return ! empty( $layouts ) && ! empty( $layouts[ $layout_id ] ) ? $layouts[ $layout_id ] : [ ];
 	}

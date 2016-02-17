@@ -2,6 +2,7 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\services\WPSOLR_Service_Wordpress;
@@ -18,6 +19,60 @@ use wpsolr\WPSOLR_Filters;
  */
 class WPSOLR_Data_Facets {
 
+
+	/**
+	 * Extract facets data from Solr results
+	 *
+	 * @param $attributes
+	 * ['group_id' => '123', 'group_facets_type' => 'xyz']
+	 *
+	 * @return array
+	 * @throws WPSOLR_Exception
+	 */
+	public static function extract_data( $ui_group_id ) {
+
+		// Widget can be on a search page ?s=
+		$wpsolr_query = WPSOLR_Global::getQuery();
+		$group_id     = $wpsolr_query->get_wpsolr_facets_groups_id();
+
+		if ( ! $wpsolr_query->get_wpsolr_is_search() ) {
+
+			// Facets of the group on the query url
+			if ( empty( $group_id ) ) {
+
+				// Facets group of the widget
+				$group_id = $ui_group_id;
+				if ( empty( $group_id ) ) {
+					throw new WPSOLR_Exception( sprintf( 'Select a facets group.' ) );
+				}
+
+				$wpsolr_query->set_wpsolr_facets_groups_id( $group_id );
+			}
+			// Facets of the facets groups
+			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $group_id );
+
+			$wpsolr_query->set_wpsolr_facets_fields( $facets );
+
+			// Add Solr query fields from the Widget filter
+			$wpsolr_query->set_wpsolr_facets_group_filter_query( WPSOLR_Global::getExtensionFacets()->get_facets_group_filter_query( $group_id ) );
+		} else {
+
+			// Facets of the group on the query url for a search url
+			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $group_id );
+		}
+
+		// Call and get Solr results
+		$results = WPSOLR_Global::getSolrClient()->display_results( $wpsolr_query );
+
+		$data = static::format_data(
+			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
+			$facets,
+			$results[1] );
+
+
+		return [ 'group_id' => $group_id, 'data' => $data ];
+	}
+
 	/**
 	 * @param $facets_selected
 	 * @param $facets_to_display
@@ -29,7 +84,7 @@ class WPSOLR_Data_Facets {
 	 *                  {"items":[{"name":"Blog","count":13,"selected":true}],"id":"categories","name":"Categories"}
 	 *                  ]
 	 */
-	public static function get_data( $layout_type_id, $facets_selected, $facets_to_display, $facets_in_results ) {
+	public static function format_data( $facets_selected, $facets_to_display, $facets_in_results ) {
 
 		$results                                = [ ];
 		$results['facets']                      = [ ];
@@ -83,16 +138,7 @@ class WPSOLR_Data_Facets {
 					$facet['definition'] = $facet_to_display;
 
 					// Facet templates or facet filter templates
-					switch ( $layout_type_id ) {
-
-						case WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID:
-							$layout_type = WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER;
-							break;
-
-						default:
-							$layout_type = WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET;
-							break;
-					}
+					$layout_type = static::get_layout_type();
 
 					$layout                                                      = $extension_layouts->get_layout_from_type_and_id( $layout_type, $facet_to_display[ WPSOLR_Options_Layouts::LAYOUT_FIELD_LAYOUT_ID ] );
 					$facet[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ] = $extension_layouts->get_layout_template_html( $layout );
@@ -232,7 +278,7 @@ class WPSOLR_Data_Facets {
 							$item_selected = isset( $facets_selected[ $facet_to_display_id ] ) && ( in_array( $facet_value, $facets_selected[ $facet_to_display_id ] ) );
 
 							// For Facet filters, only keep selected items
-							if ( ( WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID == $layout_type_id ) && ! $item_selected ) {
+							if ( static::discard_unselected_items() && ! $item_selected ) {
 								continue;
 							}
 
@@ -294,6 +340,24 @@ class WPSOLR_Data_Facets {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Layout type ?
+	 *
+	 * @return string
+	 */
+	protected static function get_layout_type() {
+		return WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET;
+	}
+
+	/**
+	 * Discard items not selected ?
+	 *
+	 * @return bool
+	 */
+	protected static function discard_unselected_items() {
+		return false;
 	}
 
 }
