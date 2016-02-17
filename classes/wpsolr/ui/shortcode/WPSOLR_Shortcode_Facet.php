@@ -1,39 +1,63 @@
 <?php
 
-/**
- * WPSOLR shorcode to display facets
- */
-
 namespace wpsolr\ui\shortcode;
 
+use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
+use wpsolr\utilities\WPSOLR_Global;
 
+/**
+ * Class WPSOLR_Shortcode_Facet
+ * Display facets shorcode
+ * @package wpsolr\ui\shortcode
+ */
 class WPSOLR_Shortcode_Facet extends WPSOLR_Shortcode {
 
 	// Shortcode name
 	const SHORTCODE_NAME = 'wpsolr_shortcode_facet';
 
+	// Shorcode attributes
+	const ATTRIBUTE_GROUP_ID = 'group_id';
+	const ATTRIBUTE_GROUP_LAYOUT_ID = 'layout_id';
+
 	public static function output( $attributes, $content = "" ) {
 
-		return 'hello there !!';
+		try {
+			$attribute_group_id = ! empty( $attributes[ self::ATTRIBUTE_GROUP_ID ] ) ? $attributes[ self::ATTRIBUTE_GROUP_ID ] : '';
+			$attribute_group    = self::get_group( $attribute_group_id );
 
-		$group_id = ! empty( $attributes['group_id'] ) ? $attributes['group_id'] : '';
-
-		/*
-		// Get data
-		$data = self::get_data( $group_id );
-
-		// Build the facets UI
-		return WPSOLR_UI_Facets::Build(
-			$data['group_id'],
-			$data['data'],
-			WPSOLR_Localization::get_options(),
-			null,
-			null,
-			$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
-		);
-		*/
+			$attribute_group_layout_id = ! empty( $attributes[ self::ATTRIBUTE_GROUP_LAYOUT_ID ] ) ? $attributes[ self::ATTRIBUTE_GROUP_LAYOUT_ID ] : '';
+			$attribute_group_layout    = self::get_layout( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_GROUP, $attribute_group_layout_id );
 
 
+			/*
+				// Get data
+				$data = self::get_data( $group_id );
+
+				// Build the facets UI
+				return WPSOLR_UI_Facets::Build(
+					$data['group_id'],
+					$data['data'],
+					WPSOLR_Localization::get_options(),
+					null,
+					null,
+					$this->wpsolr_get_instance_layout( $instance, self::TYPE_GROUP_LAYOUT )
+				);
+				*/
+
+			return 'hello there !!';
+
+		} catch ( WPSOLR_Exception $e ) {
+
+			// Display error
+			return $e->get_message();
+		}
+
+	}
+
+	protected static function get_group_child( $group_id ) {
+
+		return WPSOLR_Global::getExtensionFacets()->get_facets_group( $group_id );
 	}
 
 
@@ -79,7 +103,7 @@ class WPSOLR_Shortcode_Facet extends WPSOLR_Shortcode {
 			$results[1] );
 
 
-		return [ 'group_id' => $group_id, 'data' => $data ];
+		return [ self::ATTRIBUTE_GROUP_ID => $group_id, 'data' => $data ];
 	}
 
 	protected static function get_facet_type() {
