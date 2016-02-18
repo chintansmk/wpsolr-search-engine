@@ -23,13 +23,8 @@ class WPSOLR_Widget extends \WP_Widget {
 	const FORM_FIELD_IS_CUSTOM_TWIG_TEMPLATE_CSS_STRING = 'is_custom_twig_template_css_string';
 	const FORM_FIELD_CUSTOM_TWIG_TEMPLATE_STRING = 'custom_twig_template_string';
 	const FORM_FIELD_CUSTOM_TWIG_TEMPLATE_CSS_STRING = 'custom_twig_template_css_string';
-	const FORM_FIELD_LAYOUT_ID = 'layout_id';
-	const FORM_FIELD_URL_REGEXP = 'url_regexp';
 	const FORM_FIELD_ERROR_MESSAGE = 'error_message';
-	const FORM_FIELD_GROUP_ID = 'group_id';
 	const FORM_FIELD_GROUP_NAME = 'name';
-	const FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END = 'is_show_title_on_front_end';
-	const FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY = 'is_show_widget_when_empty';
 
 	/**
 	 * Front-end display of widget.
@@ -90,19 +85,19 @@ class WPSOLR_Widget extends \WP_Widget {
 
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'WPSOLR Widget', 'text_domain' );
 
-		$is_show_title_on_front_end     = ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
-		$is_show_widget_when_no_content = ! empty( $instance[ self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ] );
+		$is_show_title_on_front_end     = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
+		$is_show_widget_when_no_content = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ] );
 
 		// Regexp: urls that display the widget
-		$url_regexp = ! empty( $instance[ self::FORM_FIELD_URL_REGEXP ] ) ? $instance[ self::FORM_FIELD_URL_REGEXP ] : '';
+		$url_regexp = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_URL_REGEXP ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_URL_REGEXP ] : '';
 
 		// Layout: display the widget
-		$layout_id = ! empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ self::FORM_FIELD_LAYOUT_ID ] : '';
+		$layout_id = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_LAYOUT_ID ] : '';
 		$layouts   = $this->wpsolr_get_layouts();
 
 		// Group: content of the widget
-		$group_id = ! empty( $instance[ self::FORM_FIELD_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_GROUP_ID ] : '';
-		$groups   = $this->wpsolr_get_groups();
+		$group_id = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] : '';
+		$groups   = $this->get_ui()->get_groups();
 		?>
 
 		<?php
@@ -118,26 +113,26 @@ class WPSOLR_Widget extends \WP_Widget {
 		</p>
 		<p>
 			<label
-				for="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"><?php _e( 'Show title on front-end pages:' ); ?></label>
+				for="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"><?php _e( 'Show title on front-end pages:' ); ?></label>
 			<input class="widefat"
-			       id="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"
-			       name="<?php echo $this->get_field_name( self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"
+			       id="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"
+			       name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"
 			       type="checkbox"
 				<?php checked( $is_show_title_on_front_end ); ?>>
 		</p>
 		<p>
 			<label
-				for="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ); ?>"><?php _e( 'Show empty widget:' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ); ?>"
-			       name="<?php echo $this->get_field_name( self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ); ?>"
+				for="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ); ?>"><?php _e( 'Show empty widget:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ); ?>"
+			       name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ); ?>"
 			       type="checkbox"
 				<?php checked( $is_show_widget_when_no_content ); ?>>
 		</p>
 		<p>
 			Use layout:
 			<select
-				id="<?php echo $this->get_field_id( self::FORM_FIELD_LAYOUT_ID ); ?>"
-				name="<?php echo $this->get_field_name( self::FORM_FIELD_LAYOUT_ID ); ?>">
+				id="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_LAYOUT_ID ); ?>"
+				name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_LAYOUT_ID ); ?>">
 				<?php foreach ( $layouts as $layouts_layout_id => $layout ) { ?>
 					<option
 						value="<?php echo $layouts_layout_id; ?>" <?php selected( $layout_id, $layouts_layout_id, true ) ?>><?php echo WPSOLR_Global::getExtensionLayouts()->get_layout_name( $layout ); ?></option>
@@ -147,8 +142,8 @@ class WPSOLR_Widget extends \WP_Widget {
 
 		<p>
 			Use group:
-			<select id="<?php echo $this->get_field_id( self::FORM_FIELD_GROUP_ID ); ?>"
-			        name="<?php echo $this->get_field_name( self::FORM_FIELD_GROUP_ID ); ?>">
+			<select id="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_GROUP_ID ); ?>"
+			        name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_GROUP_ID ); ?>">
 				<?php foreach ( $groups as $current_group_id => $current_group ) { ?>
 					<option
 						value="<?php echo $current_group_id; ?>" <?php selected( $group_id, $current_group_id, true ) ?>><?php echo $current_group[ self::FORM_FIELD_GROUP_NAME ]; ?></option>
@@ -159,8 +154,8 @@ class WPSOLR_Widget extends \WP_Widget {
 		<p>
 			The widget is displayed for <a href="https://regex101.com/" target="_blank">Regexp</a> url(s):
 			<textarea rows="3" class="widefat"
-			          id="<?php echo $this->get_field_id( self::FORM_FIELD_URL_REGEXP ); ?>"
-			          name="<?php echo $this->get_field_name( self::FORM_FIELD_URL_REGEXP ); ?>"><?php echo $url_regexp; ?></textarea>
+			          id="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_URL_REGEXP ); ?>"
+			          name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_URL_REGEXP ); ?>"><?php echo $url_regexp; ?></textarea>
 		</p>
 
 
@@ -216,7 +211,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	 */
 	protected function wpsolr_is_show_title_on_front_end( $instance ) {
 
-		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
 	}
 
 	/**
@@ -226,7 +221,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	 */
 	protected function wpsolr_is_show_widget_when_empty( $instance ) {
 
-		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ] );
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ] );
 	}
 
 
@@ -272,16 +267,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	 */
 	protected function wpsolr_get_instance_url_regexp( $instance ) {
 
-		return ! empty( $instance[ self::FORM_FIELD_URL_REGEXP ] ) ? $instance[ self::FORM_FIELD_URL_REGEXP ] : null;
-	}
-
-	/**
-	 * List of groups available for the widget
-	 *
-	 * @throws WPSOLR_Exception
-	 */
-	public function wpsolr_get_groups() {
-		throw new WPSOLR_Exception( "Groups list not implemented in the widget." );
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_URL_REGEXP ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_URL_REGEXP ] : null;
 	}
 
 	/**
@@ -293,7 +279,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	 */
 	public function wpsolr_get_instance_group_id( $instance ) {
 
-		return ! empty( $instance[ self::FORM_FIELD_GROUP_ID ] ) ? $instance[ self::FORM_FIELD_GROUP_ID ] : '';
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] : '';
 	}
 
 	/**
@@ -305,7 +291,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	 */
 	public function wpsolr_get_instance_layout_id( $instance ) {
 
-		return ! empty( $instance[ self::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ self::FORM_FIELD_LAYOUT_ID ] : '';
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_LAYOUT_ID ] : '';
 	}
 
 	/**
@@ -323,7 +309,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	 * @return bool
 	 */
 	public function wpsolr_get_instance_is_show_widget_when_empty( $instance ) {
-		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_WIDGET_WHEN_EMPTY ] );
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ] );
 	}
 
 
@@ -335,7 +321,7 @@ class WPSOLR_Widget extends \WP_Widget {
 	 * @return bool
 	 */
 	public function wpsolr_get_instance_is_show_title_on_front_end( $instance ) {
-		return ! empty( $instance[ self::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
 	}
 
 }

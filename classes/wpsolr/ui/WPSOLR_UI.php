@@ -14,7 +14,20 @@ use wpsolr\utilities\WPSOLR_Regexp;
  */
 class WPSOLR_UI {
 
-	// Data extracted from Solr search resuylts
+	// Form fields
+	const FORM_FIELD_GROUP_ID = 'group_id';
+	const FORM_FIELD_GROUP_NAME = 'name';
+	const FORM_FIELD_LAYOUT_ID = 'layout_id';
+	const FORM_FIELD_URL_REGEXP = 'url_regexp';
+	const FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END = 'is_show_title_on_front_end';
+	const FORM_FIELD_IS_SHOW_WHEN_EMPTY = 'is_show_widget_when_empty';
+	const FORM_FIELD_TITLE = 'title';
+	const FORM_FIELD_BEFORE_TITLE = 'before_title';
+	const FORM_FIELD_AFTER_TITLE = 'after_title';
+	const FORM_FIELD_BEFORE_UI = 'before_widget';
+	const FORM_FIELD_AFTER_UI = 'after_widget';
+
+	// Data extracted from Solr search results
 	protected $data;
 
 	protected $group_id;
@@ -26,6 +39,8 @@ class WPSOLR_UI {
 	protected $before_ui;
 	protected $after_ui;
 	protected $layout_type;
+	protected $is_show_when_no_data;
+	protected $is_show_title_on_front_end;
 
 	/**
 	 * Calculate the plugin root directory url.
@@ -57,12 +72,14 @@ class WPSOLR_UI {
 		try {
 
 			// ui elements
-			$this->name         = $name;
-			$this->title        = $is_show_title_on_front_end ? $title : '';
-			$this->before_title = $is_show_title_on_front_end ? $before_title : '';
-			$this->after_title  = $is_show_title_on_front_end ? $after_title : '';
-			$this->before_ui    = $before_ui;
-			$this->after_ui     = $after_ui;
+			$this->name                 = $name;
+			$this->is_show_title_on_front_end = $is_show_title_on_front_end;
+			$this->is_show_when_no_data = $is_show_when_no_data;
+			$this->title                = $is_show_title_on_front_end ? $title : '';
+			$this->before_title         = $is_show_title_on_front_end ? $before_title : '';
+			$this->after_title          = $is_show_title_on_front_end ? $after_title : '';
+			$this->before_ui            = $before_ui;
+			$this->after_ui             = $after_ui;
 
 			$this->group_id  = $group_id;
 			$this->layout_id = $layout_id;
@@ -254,6 +271,15 @@ class WPSOLR_UI {
 	 */
 	public function create_twig_parameters( $localization_options ) {
 		dies( 'Missing implementation.' );
+	}
+
+	/**
+	 * Returns the groups of a ui
+	 *
+	 * @return object
+	 */
+	public function get_groups() {
+		die( 'get_groups not implemented' );
 	}
 
 }

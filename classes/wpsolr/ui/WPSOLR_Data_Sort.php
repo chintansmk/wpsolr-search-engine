@@ -2,6 +2,7 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\utilities\WPSOLR_Global;

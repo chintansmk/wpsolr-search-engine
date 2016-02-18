@@ -11,6 +11,7 @@ use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
+use wpsolr\extensions\shortcodes\WPSOLR_Options_Shortcodes;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
@@ -232,5 +233,11 @@ class WPSOLR_Global {
 		return self::getObject( WPSOLR_Extensions::OPTION_LAYOUTS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_LAYOUTS );
 	}
 
+	/**
+	 * @return WPSOLR_Options_Shortcodes
+	 */
+	public static function getExtensionShortcodes() {
+		return self::getObject( WPSOLR_Extensions::OPTION_SHORTCODES, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_SHORTCODES );
+	}
 }
 

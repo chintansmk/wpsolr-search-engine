@@ -45,10 +45,6 @@ class WPSOLR_Widget_Filter extends WPSOLR_Widget_facet {
 		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER_GROUP );
 	}
 
-	public function wpsolr_get_groups() {
-		return WPSOLR_Global::getOption()->get_facets_groups();
-	}
-
 	/**
 	 * Returns the UI object
 	 *

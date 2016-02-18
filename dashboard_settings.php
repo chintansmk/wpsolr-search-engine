@@ -233,14 +233,15 @@ switch ( $tab ) {
 
 			<?php
 
-			$subtabs = array(
+			$subtabs = [
 				'result_opt'           => '2.1 Search',
 				'fields_opt'           => '2.2 Fields',
 				'facet_opt'            => '2.3 Facets',
 				'sort_opt'             => '2.4 Sorting',
 				'localization_options' => '2.5 Localization',
-				'layout_options'       => '2.6 Layouts'
-			);
+				'layout_options'       => '2.6 Layouts',
+				'shortcode_options'    => '2.7 Shortcodes'
+			];
 
 			$subtab = wpsolr_admin_sub_tabs( $subtabs );
 
@@ -551,6 +552,10 @@ switch ( $tab ) {
 
 				case 'layout_options':
 					WPSOLR_Global::getExtensionLayouts()->output_form();
+					break;
+
+				case 'shortcode_options':
+					WPSOLR_Global::getExtensionShortcodes()->output_form();
 					break;
 
 			}

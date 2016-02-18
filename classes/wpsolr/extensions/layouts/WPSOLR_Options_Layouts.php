@@ -367,4 +367,11 @@ class WPSOLR_Options_Layouts extends WPSOLR_Extensions {
 		return $layouts;
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function get_predefined_layouts() {
+		return self::$predefined_layouts;
+	}
+
 }

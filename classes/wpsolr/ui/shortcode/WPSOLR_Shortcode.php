@@ -6,7 +6,10 @@
 namespace wpsolr\ui\shortcode;
 
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\ui\WPSOLR_UI;
+use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\WPSOLR_Filters;
 
 /**
  * Class WPSOLR_Shortcode
@@ -19,9 +22,12 @@ class WPSOLR_Shortcode {
 	const WPSOLR_SHORTCODE_CLASS_NAME_PREFIX = 'WPSOLR_Shortcode_';
 
 	// Shorcode attributes
-	const ATTRIBUTE_GROUP_ID = 'group_id';
-	const ATTRIBUTE_GROUP_LAYOUT_ID = 'layout_id';
+	const ATTRIBUTE_SHORTCODE_ID = 'id';
 
+	// Shortcode definitions
+	protected static $shortcodes;
+
+	protected $shortcode_id;
 	protected $group_id;
 	protected $layout_id;
 	protected $is_show_when_no_data;
@@ -40,6 +46,8 @@ class WPSOLR_Shortcode {
 	 */
 	public static function add_shortcodes() {
 
+		self::$shortcodes = [ ];
+
 		// Loop on all shortcode files in current directory
 		$shortcode_file_pattern = dirname( __FILE__ ) . "/" . self::WPSOLR_SHORTCODE_CLASS_NAME_PREFIX . "*.php";
 		foreach ( glob( $shortcode_file_pattern ) as $file ) {
@@ -50,8 +58,34 @@ class WPSOLR_Shortcode {
 			// Register shortcode
 			$shortcode_object = new $shortcode_class_name();
 			add_shortcode( $shortcode_object->shortcode_name, array( $shortcode_object, 'output' ) );
+
+			// Register shortcode definition
+			self::$shortcodes[ $shortcode_object->shortcode_name ] = $shortcode_object;
 		}
 
+	}
+
+	/**
+	 * Get all shortcodes
+	 *
+	 * @return WPSOLR_Shortcode[]
+	 */
+	public static function get_shortcodes() {
+		return self::$shortcodes;
+	}
+
+	/**
+	 * Get a shortcode
+	 *
+	 * @return WPSOLR_Shortcode
+	 */
+	public static function get_shortcode( $shortcode_name ) {
+
+		if ( ! isset( self::$shortcodes[ $shortcode_name ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'unknow shortcode %s.' ), $shortcode_name );
+		}
+
+		return self::$shortcodes[ $shortcode_name ];
 	}
 
 	/**
@@ -64,33 +98,47 @@ class WPSOLR_Shortcode {
 	 */
 	public function output( $attributes, $content = "" ) {
 
-		$this->layout_id                  = ! empty( $attributes['layout_id'] ) ? $attributes['layout_id'] : '';
-		$this->group_id                   = ! empty( $attributes['group_id'] ) ? $attributes['group_id'] : '';
-		$this->url_regexp_lines           = ! empty( $attributes['url_regexp_lines'] ) ? $attributes['url_regexp_lines'] : '';
-		$this->is_show_when_no_data       = ! empty( $attributes['is_show_when_no_data'] ) ? $attributes['is_show_when_no_data'] : '';
-		$this->is_show_title_on_front_end = ! empty( $attributes['is_show_title_on_front_end'] ) ? $attributes['is_show_title_on_front_end'] : '';
-		$this->title                      = ! empty( $attributes['title'] ) ? $attributes['title'] : '';
-		$this->before_title               = ! empty( $attributes['before_title'] ) ? $attributes['before_title'] : '';
-		$this->after_title                = ! empty( $attributes['after_title'] ) ? $attributes['after_title'] : '';
-		$this->before_ui                  = ! empty( $attributes['before_ui'] ) ? $attributes['before_ui'] : '';
-		$this->after_ui                   = ! empty( $attributes['after_ui'] ) ? $attributes['after_ui'] : '';
+		try {
+
+			$extension_shortcodes = WPSOLR_Global::getExtensionShortcodes();
+
+			$this->shortcode_id = ! empty( $attributes[ self::ATTRIBUTE_SHORTCODE_ID ] ) ? $attributes[ self::ATTRIBUTE_SHORTCODE_ID ] : '';
+			$shortcode          = $extension_shortcodes->get_shortcode_by_type_and_id( $this->get_shortcode_name(), $this->shortcode_id );
 
 
-		$result = $this->get_ui()->display(
-			sprintf( 'shortcode %s', $this->shortcode_name ),
-			$this->layout_id,
-			$this->group_id,
-			$this->url_regexp_lines,
-			$this->is_show_when_no_data,
-			$this->is_show_title_on_front_end,
-			$this->title,
-			$this->before_title,
-			$this->after_title,
-			$this->before_ui,
-			$this->after_ui
-		);
+			$this->layout_id                  = $extension_shortcodes->get_shortcode_layout_id( $shortcode );
+			$this->group_id                   = $extension_shortcodes->get_shortcode_group_id( $shortcode );
+			$this->url_regexp_lines           = $extension_shortcodes->get_shortcode_url_regexp_lines( $shortcode );
+			$this->is_show_when_no_data       = $extension_shortcodes->get_shortcode_is_show_when_empty( $shortcode );
+			$this->is_show_title_on_front_end = $extension_shortcodes->get_shortcode_is_show_title_on_front_end( $shortcode );
+			$this->title                      = $extension_shortcodes->get_shortcode_title( $shortcode );
+			$this->before_title               = $extension_shortcodes->get_shortcode_before_title( $shortcode );
+			$this->after_title                = $extension_shortcodes->get_shortcode_after_title( $shortcode );
+			$this->before_ui                  = $extension_shortcodes->get_shortcode_before_ui( $shortcode );
+			$this->after_ui                   = $extension_shortcodes->get_shortcode_after_ui( $shortcode );
 
-		return $result;
+
+			$result = $this->get_ui()->display(
+				sprintf( 'shortcode %s', $this->shortcode_name ),
+				$this->layout_id,
+				$this->group_id,
+				$this->url_regexp_lines,
+				$this->is_show_when_no_data,
+				$this->is_show_title_on_front_end,
+				apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $this->title ),
+				$this->before_title,
+				$this->after_title,
+				$this->before_ui,
+				$this->after_ui
+			);
+
+			return $result;
+
+		} catch ( WPSOLR_Exception $e ) {
+
+			return $e->get_message();
+		}
+
 	}
 
 	/**
@@ -98,8 +146,27 @@ class WPSOLR_Shortcode {
 	 *
 	 * @return WPSOLR_UI
 	 */
-	protected function get_ui() {
+	public function get_ui() {
 		die( 'get_ui not implemented' );
 	}
+
+	/**
+	 * Get shortcode name
+	 *
+	 * @return string
+	 */
+	public function get_shortcode_name() {
+		return $this->shortcode_name;
+	}
+
+	/**
+	 * Get layout type
+	 *
+	 * @return String
+	 */
+	public function get_layout_type() {
+		return $this->layout_type;
+	}
+
 
 }

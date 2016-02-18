@@ -44,10 +44,6 @@ class WPSOLR_Widget_Sort extends WPSOLR_Widget {
 		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT_GROUP );
 	}
 
-	public function wpsolr_get_groups() {
-		return WPSOLR_Global::getOption()->get_sorts_groups();
-	}
-
 	/**
 	 * Returns the UI object
 	 *

@@ -4,6 +4,7 @@ namespace wpsolr\ui;
 
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
+use wpsolr\utilities\WPSOLR_Global;
 
 /**
  * Display Sort List
@@ -21,7 +22,7 @@ class WPSOLR_UI_Sort extends WPSOLR_UI {
 	public function create_twig_parameters( $localization_options ) {
 
 		return array(
-			'sort_header' => ! empty( $this->title ) ? $this->title : WPSOLR_Localization::get_term( $localization_options, 'sort_header' ),
+			'sort_header' => ! $this->is_show_title_on_front_end ? '' : ( ! empty( $this->title ) ? $this->title : WPSOLR_Localization::get_term( $localization_options, 'sort_header' ) ),
 			'sort_list'   => $this->data['data']
 		);
 
@@ -41,6 +42,13 @@ class WPSOLR_UI_Sort extends WPSOLR_UI {
 	protected function extract_data() {
 
 		return WPSOLR_Data_Sort::extract_data( $this->group_id );
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function get_groups() {
+		return WPSOLR_Global::getOption()->get_sorts_groups();
 	}
 
 }

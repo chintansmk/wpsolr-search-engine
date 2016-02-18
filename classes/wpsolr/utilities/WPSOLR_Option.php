@@ -744,4 +744,19 @@ class WPSOLR_Option {
 		return self::get_option( self::OPTION_LAYOUTS, [ ] );
 	}
 
+	/***************************************************************************************************************
+	 *
+	 * Layouts option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_SHORTCODES = 'wpsolr_shortcodes';
+
+	/**
+	 * Get shortcode options array
+	 * @return array
+	 */
+	public function get_option_shortcodes() {
+		return self::get_option( self::OPTION_SHORTCODES, [ ] );
+	}
+
 }

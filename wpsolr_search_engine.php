@@ -323,6 +323,13 @@ function my_plugins_loaded() {
 			]
 		);
 
+		// Translate shortcodes
+		do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
+			[
+				'translations' => WPSOLR_Global::getExtensionShortcodes()->get_strings_to_translate()
+			]
+		);
+
 	}
 
 }
