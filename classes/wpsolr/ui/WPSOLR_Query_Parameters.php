@@ -138,9 +138,6 @@ class WPSOLR_Query_Parameters {
 	 */
 	public static function get_query_parameter_name() {
 
-		// Extract all url parameters in an array
-		$url_parameters = self::parse_query_string();
-
 		if ( WPSOLR_Global::getOption()->get_search_is_use_current_theme_search_template() ) {
 			// Option says it is a WP search parameter
 

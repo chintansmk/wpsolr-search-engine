@@ -1,0 +1,14 @@
+<script>
+
+    // Create a global WPSOLR facets object
+    jQuery(document).ready(function () {
+
+        // Global object used by one widget
+        wpsolr_facets["{{ ui_id }}"] = new WPSOLR_Facets();
+
+        wpsolr_facets["{{ ui_id }}"].set_groups_facet_id("{{ group_id }}");
+        wpsolr_facets["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
+
+    });
+
+</script>

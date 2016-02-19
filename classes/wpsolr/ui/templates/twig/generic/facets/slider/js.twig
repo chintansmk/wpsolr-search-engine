@@ -2,7 +2,7 @@
     jQuery(document).ready(function () {
 
         var facet = jQuery("#slider").data("wpsolr-facet-item-value");
-        wpsolr_facets.addFacetValue(facet);
+        wpsolr_facets["{{ ui_id }}"].addFacetValue(facet);
 
         //console.log(JSON.stringify(facet));
 
@@ -48,10 +48,10 @@
                 facet.facet_value = ui.values[0];
                 facet.range_sup = ui.values[1];
 
-                wpsolr_facets.removeFacetValue({"facet_id": facet.facet_id}); // Remove all elements of the facet
-                wpsolr_facets.addFacetValue(facet); // add facet element if selected
-                wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
-                wpsolr_facets.create_url(facet.facet_delay_in_ms); // Generate new url and redirect
+                wpsolr_facets["{{ ui_id }}"].removeFacetValue({"facet_id": facet.facet_id}); // Remove all elements of the facet
+                wpsolr_facets["{{ ui_id }}"].addFacetValue(facet); // add facet element if selected
+                wpsolr_facets["{{ ui_id }}"].updateLastFacetSelected(facet); // Add current selection to url
+                wpsolr_facets["{{ ui_id }}"].create_url(facet.facet_delay_in_ms); // Generate new url and redirect
 
             }
         });

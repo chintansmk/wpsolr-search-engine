@@ -3,12 +3,16 @@
     // Create a global WPSOLR facets object
     jQuery(document).ready(function () {
 
-        wpsolr_facets.set_groups_facet_id("{{ group_id }}");
+        // Global object used by one widget
+        wpsolr_facets["{{ ui_id }}"] = new WPSOLR_Facets();
 
-        jQuery(".wpsolr_remove_facets").on("click", function (event) {
+        wpsolr_facets["{{ ui_id }}"].set_groups_facet_id("{{ group_id }}");
+        wpsolr_facets["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
 
-            wpsolr_facets.clear(); // clear all facets
-            wpsolr_facets.create_url();
+        jQuery(".{{ ui_id }} .wpsolr_remove_facets").on("click", function (event) {
+
+            wpsolr_facets["{{ ui_id }}"].clear(); // clear all facets
+            wpsolr_facets["{{ ui_id }}"].create_url();
         });
 
     });

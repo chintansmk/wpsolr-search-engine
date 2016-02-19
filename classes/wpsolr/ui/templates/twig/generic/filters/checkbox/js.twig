@@ -1,15 +1,15 @@
 <script>
     jQuery(document).ready(function () {
 
-        jQuery(".wpsolr_any_facet_filter_class li .{{ facet_selector_class }}").on("click", function (event) {
+        jQuery(".{{ ui_id }} .wpsolr_any_facet_filter_class li .{{ facet_selector_class }}").on("click", function (event) {
 
             jQuery(this).toggleClass("{{ facet_selected_class }}"); {# check/uncheck clicked facet #}
 
             {# Update url #}
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
-            wpsolr_facets.removeFacetValue(facet); // Remove all elements of the facet
-            wpsolr_facets.updateLastFacetSelected(facet); // Add current selection to url
-            wpsolr_facets.create_url(facet.facet_delay_in_ms);
+            wpsolr_facets["{{ ui_id }}"].removeFacetValue(facet); // Remove all elements of the facet
+            wpsolr_facets["{{ ui_id }}"].updateLastFacetSelected(facet); // Add current selection to url
+            wpsolr_facets["{{ ui_id }}"].create_url(facet.facet_delay_in_ms);
         });
 
     });

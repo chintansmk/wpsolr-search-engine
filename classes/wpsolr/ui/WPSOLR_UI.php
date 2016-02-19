@@ -72,14 +72,14 @@ class WPSOLR_UI {
 		try {
 
 			// ui elements
-			$this->name                 = $name;
+			$this->name                       = $name;
 			$this->is_show_title_on_front_end = $is_show_title_on_front_end;
-			$this->is_show_when_no_data = $is_show_when_no_data;
-			$this->title                = $is_show_title_on_front_end ? $title : '';
-			$this->before_title         = $is_show_title_on_front_end ? $before_title : '';
-			$this->after_title          = $is_show_title_on_front_end ? $after_title : '';
-			$this->before_ui            = $before_ui;
-			$this->after_ui             = $after_ui;
+			$this->is_show_when_no_data       = $is_show_when_no_data;
+			$this->title                      = $is_show_title_on_front_end ? $title : '';
+			$this->before_title               = $is_show_title_on_front_end ? $before_title : '';
+			$this->after_title                = $is_show_title_on_front_end ? $after_title : '';
+			$this->before_ui                  = $before_ui;
+			$this->after_ui                   = $after_ui;
 
 			$this->group_id  = $group_id;
 			$this->layout_id = $layout_id;
@@ -215,14 +215,21 @@ class WPSOLR_UI {
 		// Twig parameters delegated to child classes
 		$twig_parameters = static::create_twig_parameters( $localization_options );
 
+		// Twig common parameters
+		$twig_common_parameters = [
+			'ui_id'                => WPSOLR_Global::getExtensionIndexes()->generate_uuid(),
+			'group_id'             => $this->group_id,
+			'query_parameter_name' => WPSOLR_Query_Parameters::get_query_parameter_name(),
+			'plugin_dir_url'       => self::plugin_dir_url()
+		];
+
+
 		// JS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
 			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ],
 			array_merge(
-				$twig_parameters,
-				array(
-					'group_id' => $this->group_id
-				)
+				$twig_common_parameters,
+				$twig_parameters
 			)
 		);
 
@@ -230,10 +237,8 @@ class WPSOLR_UI {
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
 			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ],
 			array_merge(
-				$twig_parameters,
-				array(
-					'plugin_dir_url' => self::plugin_dir_url()
-				)
+				$twig_common_parameters,
+				$twig_parameters
 			)
 		);
 
@@ -241,17 +246,16 @@ class WPSOLR_UI {
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
 			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
 			array_merge(
-				$twig_parameters,
+				$twig_common_parameters,
 				array(
-					'group_id'       => $this->group_id,
-					'widget_args'    => [
+					'widget_args' => [
 						'before_widget' => $this->before_ui,
 						'after_widget'  => $this->after_ui,
 						'before_title'  => $this->before_title,
 						'after_title'   => $this->after_title
-					],
-					'plugin_dir_url' => self::plugin_dir_url()
-				)
+					]
+				),
+				$twig_parameters
 			)
 		);
 

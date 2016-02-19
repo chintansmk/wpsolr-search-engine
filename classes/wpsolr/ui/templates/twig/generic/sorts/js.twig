@@ -1,95 +1,15 @@
 <script>
 
-    var wpsolr_sorts = function (groups_sort_id) {
-        console.log("Sorts constructor");
-
-        this.groups_sort_id = groups_sort_id;
-        this.sort = "";
-    };
-
-    wpsolr_sorts.prototype.debug = function (message, object) {
-        console.log("=> " + message + ": " + JSON.stringify(object));
-    };
-
-    wpsolr_sorts.prototype.debugState = function () {
-        console.log("  ++ sort: " + JSON.stringify(this.sort));
-        console.log("  ++ url: " + JSON.stringify(this.url));
-    };
-
-    wpsolr_sorts.prototype.clear = function () {
-        this.debug("clear", '');
-        this.debugState();
-
-        this.sort = "";
-        var url1 = new Url(window.location.href);
-        this.debug("toto", url1);
-        //delete url1.query["wpsolr_sort"];
-        this.url = url1.toString();
-
-        this.debugState();
-    }
-
-    wpsolr_sorts.prototype.addValue = function (sort) {
-        this.debug("add sort", sort);
-        this.debugState();
-
-        // Add sort
-        this.sort = sort
-
-        this.debugState();
-    };
-
-    wpsolr_sorts.prototype.removeValue = function (sort) {
-        this.debug("remove sort", sort);
-        this.debugState();
-
-        this.sort = "";
-
-        this.debugState();
-    };
-
-    wpsolr_sorts.prototype.create_url = function (external_parameters) {
-        this.debug("url", '');
-        this.debugState();
-
-        var url1 = new Url(this.url);
-
-        // query: keep it, or add one empty to go to search page on click
-        url1.query["s"] = url1.query["s"] || '';
-
-
-        if (this.sort) {
-            url1.query["wpsolr_sort"] = this.sort;
-        } else {
-            delete url1.query["wpsolr_sort"];
-        }
-
-        url1.query["wpsolr_sorts_group"] = this.groups_sort_id;
-
-        // External parameters
-        if (external_parameters) {
-            url1.query[external_parameters.name] = external_parameters.value;
-        }
-
-        this.url = url1.toString();
-
-        window.location.href = this.url;
-
-        this.debugState();
-    };
-
-    // Create a global WPSOLR sorts object
-    var wpsolr_sorts;
     jQuery(document).ready(function () {
 
         // Global object used by one widget
-        wpsolr_sorts = new wpsolr_sorts("{{ group_id }}");
+        wpsolr_sorts["{{ ui_id }}"] = new WPSOLR_Sorts("{{ group_id }}");
 
         jQuery(".{{ group_id }}").on("change", function (event) {
 
-            wpsolr_sorts.clear(); // clear all Sorts
-            wpsolr_sorts.addValue(jQuery(this).val());
-            wpsolr_sorts.create_url((window.wpsolr_facets) ? wpsolr_facets.get_parameter_group_id() : {});
+            wpsolr_sorts["{{ ui_id }}"].clear(); // clear all Sorts
+            wpsolr_sorts["{{ ui_id }}"].addValue(jQuery(this).val());
+            wpsolr_sorts["{{ ui_id }}"].create_url((window.wpsolr_facets) ? wpsolr_facets.get_parameter_group_id() : {});
         });
 
     });
