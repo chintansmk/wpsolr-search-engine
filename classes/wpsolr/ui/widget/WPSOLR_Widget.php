@@ -2,7 +2,6 @@
 
 namespace wpsolr\ui\widget;
 
-use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\ui\WPSOLR_UI;
 use wpsolr\utilities\WPSOLR_Global;
 
@@ -41,6 +40,7 @@ class WPSOLR_Widget extends \WP_Widget {
 
 		$result = $this->get_ui()->display(
 			$args['widget_name'],
+			$this->wpsolr_get_results_page( $instance ),
 			$this->wpsolr_get_instance_layout_id( $instance ),
 			$this->wpsolr_get_instance_group_id( $instance ),
 			$this->wpsolr_get_instance_url_regexp( $instance ),
@@ -98,6 +98,8 @@ class WPSOLR_Widget extends \WP_Widget {
 		// Group: content of the widget
 		$group_id = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] : '';
 		$groups   = $this->get_ui()->get_groups();
+
+		$results_page_id = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
 		?>
 
 		<?php
@@ -111,6 +113,22 @@ class WPSOLR_Widget extends \WP_Widget {
 			       name="<?php echo $this->get_field_name( 'title' ); ?>" type="text"
 			       value="<?php echo esc_attr( $title ); ?>">
 		</p>
+
+		<p>
+			Select a page where to display results:
+			<?php
+			$args = array(
+				'selected'          => $results_page_id,
+				'echo'              => 1,
+				'name'              => $this->get_field_name( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
+				'id'                => $this->get_field_id( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
+				'show_option_none'  => 'My theme search page',
+				'option_none_value' => ''
+			);
+			wp_dropdown_pages( $args );
+			?>
+		</p>
+
 		<p>
 			<label
 				for="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ); ?>"><?php _e( 'Show title on front-end pages:' ); ?></label>
@@ -292,6 +310,18 @@ class WPSOLR_Widget extends \WP_Widget {
 	public function wpsolr_get_instance_layout_id( $instance ) {
 
 		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_LAYOUT_ID ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_LAYOUT_ID ] : '';
+	}
+
+	/**
+	 * Get the results page from the widget instance
+	 *
+	 * @param $instance
+	 *
+	 * @return string Results page
+	 */
+	public function wpsolr_get_results_page( $instance ) {
+
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
 	}
 
 	/**

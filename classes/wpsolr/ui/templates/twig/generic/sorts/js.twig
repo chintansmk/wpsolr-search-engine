@@ -5,11 +5,14 @@
         // Global object used by one widget
         wpsolr_sorts["{{ ui_id }}"] = new WPSOLR_Sorts("{{ group_id }}");
 
-        jQuery(".{{ group_id }}").on("change", function (event) {
+        wpsolr_sorts["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
+        wpsolr_sorts["{{ ui_id }}"].set_query_page("{{ query_page }}");
+        wpsolr_sorts["{{ ui_id }}"].set_query_parameter_name("{{ query_parameter_name }}");
 
-            wpsolr_sorts["{{ ui_id }}"].clear(); // clear all Sorts
+        jQuery(".{{ ui_id }}").on("change", function (event) {
+
             wpsolr_sorts["{{ ui_id }}"].addValue(jQuery(this).val());
-            wpsolr_sorts["{{ ui_id }}"].create_url((window.wpsolr_facets) ? wpsolr_facets.get_parameter_group_id() : {});
+            wpsolr_sorts["{{ ui_id }}"].create_url(0);
         });
 
     });

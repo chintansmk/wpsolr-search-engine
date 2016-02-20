@@ -140,6 +140,18 @@ class WPSOLR_Options_Shortcodes extends WPSOLR_Extensions {
 	}
 
 	/**
+	 * Get results page
+	 *
+	 * @param $shortcode
+	 *
+	 * @return string
+	 */
+	public function get_results_page( $shortcode ) {
+
+		return ! empty( $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
+	}
+
+	/**
 	 * Get shortcode layout id
 	 *
 	 * @param $shortcode

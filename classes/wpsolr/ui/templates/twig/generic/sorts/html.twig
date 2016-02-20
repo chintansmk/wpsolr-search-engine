@@ -11,7 +11,7 @@
     {{ sort_header }} {# Title 'Sort by' #}
 {{ widget_args.after_title| raw }} {# After title HTML #}
 
-<select class="wpsolr_any_facet_class {{ group_id }}">
+<select class="wpsolr_any_facet_class {{ ui_id }} {{ group_id }}">
 
     {% for sort in sort_list.items %} {# Loop on sort items #}
 

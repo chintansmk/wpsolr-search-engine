@@ -352,9 +352,6 @@ function my_front_enqueue() {
 		'solr_auto_js1',
 		'urljs'
 	), false, true );
-
-	wp_enqueue_script( 'wpsolr_widgets', plugins_url( 'js/wpsolr_widgets.js', __FILE__ ), array( 'jquery' ), false, true );
-
 	wp_localize_script( 'autocomplete', 'wp_localize_script_autocomplete',
 		array(
 			'ajax_url'                    => admin_url( 'admin-ajax.php' ),
@@ -366,6 +363,13 @@ function my_front_enqueue() {
 			'SEARCH_PARAMETER_SORT'       => WPSOLR_Query_Parameters::SEARCH_PARAMETER_SORT,
 			'SEARCH_PARAMETER_PAGE'       => WPSOLR_Query_Parameters::SEARCH_PARAMETER_PAGE,
 			'SORT_CODE_BY_RELEVANCY_DESC' => WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC,
+		) );
+
+	wp_enqueue_script( 'wpsolr_ui', plugins_url( 'js/wpsolr_ui.js', __FILE__ ), array( 'jquery' ), false, true );
+	wp_localize_script( 'wpsolr_ui', 'wp_localize_script_wpsolr_ui',
+		array(
+			'SEARCH_PARAMETER_Q' => WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q,
+			'SEARCH_PARAMETER_S' => WPSOLR_Query_Parameters::SEARCH_PARAMETER_S,
 		) );
 
 	/*

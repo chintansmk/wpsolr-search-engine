@@ -1,6 +1,12 @@
 <script>
     jQuery(document).ready(function () {
 
+        // Init facets
+        jQuery(".{{ ui_id }} li .{{ facet_selector_class }}.checked").each(function () {
+            var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
+            wpsolr_facets["{{ ui_id }}"].addFacetValue(facet); // add facet to facets
+        });
+
         jQuery(".{{ ui_id }} .wpsolr_any_facet_filter_class li .{{ facet_selector_class }}").on("click", function (event) {
 
             jQuery(this).toggleClass("{{ facet_selected_class }}"); {# check/uncheck clicked facet #}

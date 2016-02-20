@@ -40,6 +40,7 @@ class WPSOLR_Shortcode {
 	protected $after_ui;
 	protected $layout_type;
 	protected $shortcode_name;
+	protected $results_page;
 
 	/**
 	 * Add all shortcodes present in this directory
@@ -106,6 +107,7 @@ class WPSOLR_Shortcode {
 			$shortcode          = $extension_shortcodes->get_shortcode_by_type_and_id( $this->get_shortcode_name(), $this->shortcode_id );
 
 
+			$this->results_page               = $extension_shortcodes->get_results_page( $shortcode );
 			$this->layout_id                  = $extension_shortcodes->get_shortcode_layout_id( $shortcode );
 			$this->group_id                   = $extension_shortcodes->get_shortcode_group_id( $shortcode );
 			$this->url_regexp_lines           = $extension_shortcodes->get_shortcode_url_regexp_lines( $shortcode );
@@ -120,6 +122,7 @@ class WPSOLR_Shortcode {
 
 			$result = $this->get_ui()->display(
 				sprintf( 'shortcode %s', $this->shortcode_name ),
+				$this->results_page,
 				$this->layout_id,
 				$this->group_id,
 				$this->url_regexp_lines,

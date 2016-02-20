@@ -15,6 +15,7 @@ use wpsolr\utilities\WPSOLR_Regexp;
 class WPSOLR_UI {
 
 	// Form fields
+	const FORM_FIELD_RESULTS_PAGE = 'results_page';
 	const FORM_FIELD_GROUP_ID = 'group_id';
 	const FORM_FIELD_GROUP_NAME = 'name';
 	const FORM_FIELD_LAYOUT_ID = 'layout_id';
@@ -30,6 +31,7 @@ class WPSOLR_UI {
 	// Data extracted from Solr search results
 	protected $data;
 
+	protected $results_page;
 	protected $group_id;
 	protected $layout_id;
 	protected $layout;
@@ -56,23 +58,15 @@ class WPSOLR_UI {
 	 *
 	 */
 	public function display(
-		$name, $layout_id, $group_id, $url_regexp_lines, $is_show_when_no_data, $is_show_title_on_front_end,
+		$name, $results_page, $layout_id, $group_id, $url_regexp_lines, $is_show_when_no_data, $is_show_title_on_front_end,
 		$title, $before_title, $after_title, $before_ui, $after_ui
 	) {
-
-		/**
-		 * Only display a widget when:
-		 * - Current url is a WP search page
-		 * - WPSOLR is replacing the default search
-		 * - WPSOLR displays the current theme search/seach form templates
-		 * - Current widget is not empty, or setup to show when empty
-		 *
-		 */
 
 		try {
 
 			// ui elements
 			$this->name                       = $name;
+			$this->results_page               = $results_page;
 			$this->is_show_title_on_front_end = $is_show_title_on_front_end;
 			$this->is_show_when_no_data       = $is_show_when_no_data;
 			$this->title                      = $is_show_title_on_front_end ? $title : '';
@@ -218,8 +212,9 @@ class WPSOLR_UI {
 		// Twig common parameters
 		$twig_common_parameters = [
 			'ui_id'                => WPSOLR_Global::getExtensionIndexes()->generate_uuid(),
+			'query_page'           => $this->get_results_page_permalink(),
+			'query_parameter_name' => $this->get_results_page_query_parameter_name(),
 			'group_id'             => $this->group_id,
-			'query_parameter_name' => WPSOLR_Query_Parameters::get_query_parameter_name(),
 			'plugin_dir_url'       => self::plugin_dir_url()
 		];
 
@@ -284,6 +279,32 @@ class WPSOLR_UI {
 	 */
 	public function get_groups() {
 		die( 'get_groups not implemented' );
+	}
+
+	/**
+	 * Get permalink of the results page
+	 *
+	 * @return string
+	 */
+	private function get_results_page_permalink() {
+
+		// Standard search, or wpsolr search
+		$result = empty( trim( $this->results_page ) ) ? get_home_url() : get_permalink( $this->results_page );
+
+		return $result;
+	}
+
+	/**
+	 * Get query parameter name of the results page
+	 *
+	 * @return string
+	 */
+	private function get_results_page_query_parameter_name() {
+
+		// Standard search, or wpsolr search
+		$result = empty( trim( $this->results_page ) ) ? WPSOLR_Query_Parameters::SEARCH_PARAMETER_S : WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q;
+
+		return $result;
 	}
 
 }

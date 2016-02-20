@@ -125,6 +125,26 @@ $current_shortcode_option_name = sprintf( "%s[%s]", $options_name, $shortcode_ty
 			</div>
 
 			<div class="wdm_row">
+				<div class='col_left'>
+					Page where to display results:
+				</div>
+				<div class='col_right'>
+					<?php
+					$value = isset( $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
+					$args  = array(
+						'selected'          => $value,
+						'echo'              => 1,
+						'name'              => sprintf( "%s[%s][%s]", $current_shortcode_option_name, $shortcode_uuid, WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
+						'show_option_none'  => 'My theme search page',
+						'option_none_value' => ''
+					);
+					wp_dropdown_pages( $args );
+					?>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
 				<div class='col_left'>Group</div>
 				<div class='col_right'>
 					<?php $value = isset( $shortcode[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] ) ? $shortcode[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] : ''; ?>
