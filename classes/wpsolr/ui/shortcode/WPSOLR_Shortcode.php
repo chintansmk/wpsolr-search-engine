@@ -111,6 +111,7 @@ class WPSOLR_Shortcode {
 			$this->layout_id                  = $extension_shortcodes->get_shortcode_layout_id( $shortcode );
 			$this->group_id                   = $extension_shortcodes->get_shortcode_group_id( $shortcode );
 			$this->url_regexp_lines           = $extension_shortcodes->get_shortcode_url_regexp_lines( $shortcode );
+			$this->is_debug_js                = $extension_shortcodes->get_shortcode_is_debug_js( $shortcode );
 			$this->is_show_when_no_data       = $extension_shortcodes->get_shortcode_is_show_when_empty( $shortcode );
 			$this->is_show_title_on_front_end = $extension_shortcodes->get_shortcode_is_show_title_on_front_end( $shortcode );
 			$this->title                      = $extension_shortcodes->get_shortcode_title( $shortcode );
@@ -126,6 +127,7 @@ class WPSOLR_Shortcode {
 				$this->layout_id,
 				$this->group_id,
 				$this->url_regexp_lines,
+				$this->is_debug_js,
 				$this->is_show_when_no_data,
 				$this->is_show_title_on_front_end,
 				apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, $this->title ),

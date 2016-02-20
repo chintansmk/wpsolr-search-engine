@@ -2,23 +2,30 @@
  * Class WPSOLR_UI (from which others inherit)
  */
 var WPSOLR_UI = function () {
-    console.log("WPSOLR_UI constructor");
+    if (this.is_debug_js) {
+        console.log("WPSOLR_UI constructor");
+    }
 
     this.url = "";
     this.ui_id = "";
     this.query_page = "";
     this.query_parameter_name = "";
+    this.is_debug_js = false;
 };
 
 WPSOLR_UI.prototype.debug = function (message, object) {
-    console.log("=> " + message + ": " + JSON.stringify(object));
+    if (this.is_debug_js) {
+        console.log("=> " + message + ": " + JSON.stringify(object));
+    }
 };
 
 WPSOLR_UI.prototype.debugState = function () {
-    console.log("  ++ url: " + JSON.stringify(this.url));
-    console.log("  ++ ui_id: " + JSON.stringify(this.ui_id));
-    console.log("  ++ query_page: " + JSON.stringify(this.query_page));
-    console.log("  ++ query_parameter_name: " + JSON.stringify(this.query_parameter_name));
+    if (this.is_debug_js) {
+        console.log("  ++ url: " + JSON.stringify(this.url));
+        console.log("  ++ ui_id: " + JSON.stringify(this.ui_id));
+        console.log("  ++ query_page: " + JSON.stringify(this.query_page));
+        console.log("  ++ query_parameter_name: " + JSON.stringify(this.query_parameter_name));
+    }
 };
 
 WPSOLR_UI.prototype.get_url_query = function () {
@@ -43,6 +50,11 @@ WPSOLR_UI.prototype.clear = function () {
 
     this.debugState();
 }
+
+WPSOLR_UI.prototype.set_is_debug_js = function (is_debug_js) {
+    this.debug("is_debug_js", is_debug_js);
+    this.is_debug_js = is_debug_js;
+};
 
 WPSOLR_UI.prototype.set_ui_id = function (ui_id) {
     this.debug("ui_id", ui_id);
@@ -114,7 +126,9 @@ WPSOLR_UI.prototype.timer = function () {
  * Class WPSOLR_Sorts used by WPSOLR Widgets
  */
 function WPSOLR_Sorts(groups_sort_id) {
-    console.log("WPSOLR_Sorts constructor");
+    if (this.is_debug_js) {
+        console.log("WPSOLR_Sorts constructor");
+    }
 
     this.groups_sort_id = groups_sort_id;
     this.sort = "";
@@ -125,10 +139,12 @@ WPSOLR_Sorts.prototype.constructor = WPSOLR_Sorts;
 
 
 WPSOLR_Sorts.prototype.debugState = function () {
-    WPSOLR_UI.prototype.debugState.call(this);
+    if (this.is_debug_js) {
+        WPSOLR_UI.prototype.debugState.call(this);
 
-    console.log("  ++ sort: " + JSON.stringify(this.sort));
-    console.log("  ++ url: " + JSON.stringify(this.url));
+        console.log("  ++ sort: " + JSON.stringify(this.sort));
+        console.log("  ++ url: " + JSON.stringify(this.url));
+    }
 };
 
 WPSOLR_Sorts.prototype._clear = function () {
@@ -175,7 +191,9 @@ WPSOLR_Sorts.prototype._create_url = function (current_url) {
  * Class WPSOLR_Facets used by WPSOLR Widgets
  */
 function WPSOLR_Facets() {
-    console.log("WPSOLR_Facets constructor");
+    if (this.is_debug_js) {
+        console.log("WPSOLR_Facets constructor");
+    }
 
     this.groups_facet_id = "";
     this.lastFacetSelected = {};
@@ -204,11 +222,13 @@ WPSOLR_Facets.prototype.is_pattern_range = function (parameter) {
 };
 
 WPSOLR_Facets.prototype.debugState = function () {
-    WPSOLR_UI.prototype.debugState.call(this)
+    if (this.is_debug_js) {
+        WPSOLR_UI.prototype.debugState.call(this)
 
-    console.log("  ++ facets: " + JSON.stringify(this.facets));
-    console.log("  ++ last selection: " + JSON.stringify(this.lastFacetSelected));
-    console.log("  ++ facets group: " + JSON.stringify(this.groups_facet_id));
+        console.log("  ++ facets: " + JSON.stringify(this.facets));
+        console.log("  ++ last selection: " + JSON.stringify(this.lastFacetSelected));
+        console.log("  ++ facets group: " + JSON.stringify(this.groups_facet_id));
+    }
 };
 
 WPSOLR_Facets.prototype.extractUrl = function () {

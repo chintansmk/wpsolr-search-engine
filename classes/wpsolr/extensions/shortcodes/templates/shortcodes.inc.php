@@ -260,6 +260,18 @@ $current_shortcode_option_name = sprintf( "%s[%s]", $options_name, $shortcode_ty
 				<div class="clear"></div>
 			</div>
 
+			<div class="wdm_row">
+				<div class='col_left'>Show javascript debug messages in console</div>
+				<div class='col_right'>
+					<?php $value = isset( $shortcode[ WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS ] ); ?>
+					<input type="checkbox"
+					       name="<?php echo $current_shortcode_option_name; ?>[<?php echo $shortcode_uuid; ?>][<?php echo WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS; ?>]"
+						<?php checked( $value ); ?>
+					/>
+				</div>
+				<div class="clear"></div>
+			</div>
+
 		</div>
 
 	<?php } ?>

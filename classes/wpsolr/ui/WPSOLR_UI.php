@@ -27,6 +27,7 @@ class WPSOLR_UI {
 	const FORM_FIELD_AFTER_TITLE = 'after_title';
 	const FORM_FIELD_BEFORE_UI = 'before_widget';
 	const FORM_FIELD_AFTER_UI = 'after_widget';
+	const FORM_FIELD_IS_DEBUG_JS = 'is_debug_js';
 
 	// Data extracted from Solr search results
 	protected $data;
@@ -43,6 +44,7 @@ class WPSOLR_UI {
 	protected $layout_type;
 	protected $is_show_when_no_data;
 	protected $is_show_title_on_front_end;
+	protected $is_debug_js;
 
 	/**
 	 * Calculate the plugin root directory url.
@@ -58,7 +60,7 @@ class WPSOLR_UI {
 	 *
 	 */
 	public function display(
-		$name, $results_page, $layout_id, $group_id, $url_regexp_lines, $is_show_when_no_data, $is_show_title_on_front_end,
+		$name, $results_page, $layout_id, $group_id, $url_regexp_lines, $is_debug_js, $is_show_when_no_data, $is_show_title_on_front_end,
 		$title, $before_title, $after_title, $before_ui, $after_ui
 	) {
 
@@ -67,8 +69,9 @@ class WPSOLR_UI {
 			// ui elements
 			$this->name                       = $name;
 			$this->results_page               = $results_page;
-			$this->is_show_title_on_front_end = $is_show_title_on_front_end;
+			$this->is_debug_js                = $is_debug_js;
 			$this->is_show_when_no_data       = $is_show_when_no_data;
+			$this->is_show_title_on_front_end = $is_show_title_on_front_end;
 			$this->title                      = $is_show_title_on_front_end ? $title : '';
 			$this->before_title               = $is_show_title_on_front_end ? $before_title : '';
 			$this->after_title                = $is_show_title_on_front_end ? $after_title : '';
@@ -215,7 +218,9 @@ class WPSOLR_UI {
 			'query_page'           => $this->get_results_page_permalink(),
 			'query_parameter_name' => $this->get_results_page_query_parameter_name(),
 			'group_id'             => $this->group_id,
-			'plugin_dir_url'       => self::plugin_dir_url()
+			'plugin_dir_url'       => self::plugin_dir_url(),
+			'is_debug_js'          => json_encode( $this->is_debug_js )
+			// encoding required for true/false being sent to twig
 		];
 
 

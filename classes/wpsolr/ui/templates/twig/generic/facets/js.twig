@@ -10,6 +10,7 @@
         wpsolr_facets["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
         wpsolr_facets["{{ ui_id }}"].set_query_page("{{ query_page }}");
         wpsolr_facets["{{ ui_id }}"].set_query_parameter_name("{{ query_parameter_name }}");
+        wpsolr_facets["{{ ui_id }}"].set_is_debug_js({{ is_debug_js }});
 
         jQuery(".{{ ui_id }} .wpsolr_remove_facets").on("click", function (event) {
 

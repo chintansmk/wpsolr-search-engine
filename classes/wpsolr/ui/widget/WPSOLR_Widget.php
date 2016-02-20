@@ -44,6 +44,7 @@ class WPSOLR_Widget extends \WP_Widget {
 			$this->wpsolr_get_instance_layout_id( $instance ),
 			$this->wpsolr_get_instance_group_id( $instance ),
 			$this->wpsolr_get_instance_url_regexp( $instance ),
+			$this->wpsolr_get_instance_is_debug_js( $instance ),
 			$this->wpsolr_get_instance_is_show_widget_when_empty( $instance ),
 			$this->wpsolr_get_instance_is_show_title_on_front_end( $instance ),
 			! empty( $instance['title'] ) ? $instance['title'] : '',
@@ -85,6 +86,7 @@ class WPSOLR_Widget extends \WP_Widget {
 
 		$title = ! empty( $instance['title'] ) ? $instance['title'] : __( 'WPSOLR Widget', 'text_domain' );
 
+		$is_debug_js                    = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS ] );
 		$is_show_title_on_front_end     = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END ] );
 		$is_show_widget_when_no_content = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ] );
 
@@ -176,6 +178,14 @@ class WPSOLR_Widget extends \WP_Widget {
 			          name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_URL_REGEXP ); ?>"><?php echo $url_regexp; ?></textarea>
 		</p>
 
+		<p>
+			<label
+				for="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS ); ?>"><?php _e( 'Debug widget javascript in console:' ); ?></label>
+			<input class="widefat" id="<?php echo $this->get_field_id( WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS ); ?>"
+			       name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS ); ?>"
+			       type="checkbox"
+				<?php checked( $is_debug_js ); ?>>
+		</p>
 
 		<?php
 		return;
@@ -334,6 +344,15 @@ class WPSOLR_Widget extends \WP_Widget {
 	}
 
 	/**
+	 * Debug widget js ?
+	 *
+	 * @return bool
+	 */
+	public function wpsolr_get_instance_is_debug_js( $instance ) {
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS ] );
+	}
+
+	/**
 	 * Show widget when no data ?
 	 *
 	 * @return bool
@@ -341,7 +360,6 @@ class WPSOLR_Widget extends \WP_Widget {
 	public function wpsolr_get_instance_is_show_widget_when_empty( $instance ) {
 		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_IS_SHOW_WHEN_EMPTY ] );
 	}
-
 
 	/**
 	 * Show title on front-end ?

@@ -188,6 +188,18 @@ class WPSOLR_Options_Shortcodes extends WPSOLR_Extensions {
 	}
 
 	/**
+	 * Get shortcode is_debug_js
+	 *
+	 * @param $shortcode
+	 *
+	 * @return boolean
+	 */
+	public function get_shortcode_is_debug_js( $shortcode ) {
+
+		return ! empty( $shortcode[ WPSOLR_UI::FORM_FIELD_IS_DEBUG_JS ] );
+	}
+
+	/**
 	 * Get shortcode is_show_when_empty
 	 *
 	 * @param $shortcode
