@@ -226,8 +226,9 @@ class WPSOLR_UI {
 			'query_parameter_name' => $this->get_results_page_query_parameter_name(),
 			'group_id'             => $this->group_id,
 			'plugin_dir_url'       => self::plugin_dir_url(),
-			'is_debug_js'          => json_encode( $this->is_debug_js )
+			'is_debug_js'          => json_encode( $this->is_debug_js ),
 			// encoding required for true/false being sent to twig
+			'is_ajax'              => json_encode( $this->get_is_search_method_ajax() )
 		];
 
 
@@ -350,5 +351,15 @@ class WPSOLR_UI {
 	private function get_is_search_method_custom_page() {
 
 		return ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE );
+	}
+
+	/**
+	 * Is search method ajax ?
+	 *
+	 * @return boolean
+	 */
+	private function get_is_search_method_ajax() {
+
+		return ( ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX ) || ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX_WITH_PARAMETERS ) );
 	}
 }

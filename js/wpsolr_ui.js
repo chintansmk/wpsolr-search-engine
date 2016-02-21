@@ -11,6 +11,7 @@ var WPSOLR_UI = function () {
     this.query_page = "";
     this.query_parameter_name = "";
     this.is_debug_js = false;
+    this.is_ajax = false;
 };
 
 WPSOLR_UI.prototype.debug = function (message, object) {
@@ -25,6 +26,8 @@ WPSOLR_UI.prototype.debugState = function () {
         console.log("  ++ ui_id: " + JSON.stringify(this.ui_id));
         console.log("  ++ query_page: " + JSON.stringify(this.query_page));
         console.log("  ++ query_parameter_name: " + JSON.stringify(this.query_parameter_name));
+        console.log("  ++ is_debug_js: " + JSON.stringify(this.is_debug_js));
+        console.log("  ++ is_ajax: " + JSON.stringify(this.is_ajax));
     }
 };
 
@@ -54,6 +57,11 @@ WPSOLR_UI.prototype.clear = function () {
 WPSOLR_UI.prototype.set_is_debug_js = function (is_debug_js) {
     this.debug("is_debug_js", is_debug_js);
     this.is_debug_js = is_debug_js;
+};
+
+WPSOLR_UI.prototype.set_is_ajax = function (is_ajax) {
+    this.debug("is_ajax", is_ajax);
+    this.is_ajax = is_ajax;
 };
 
 WPSOLR_UI.prototype.set_ui_id = function (ui_id) {
