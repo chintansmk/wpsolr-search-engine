@@ -40,6 +40,7 @@ class WPSOLR_Widget extends \WP_Widget {
 
 		$result = $this->get_ui()->display(
 			$args['widget_name'],
+			$this->wpsolr_get_search_method( $instance ),
 			$this->wpsolr_get_results_page( $instance ),
 			$this->wpsolr_get_instance_layout_id( $instance ),
 			$this->wpsolr_get_instance_group_id( $instance ),
@@ -101,6 +102,7 @@ class WPSOLR_Widget extends \WP_Widget {
 		$group_id = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] : '';
 		$groups   = $this->get_ui()->get_groups();
 
+		$search_method   = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] : WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE;
 		$results_page_id = ! empty( $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
 		?>
 
@@ -117,18 +119,37 @@ class WPSOLR_Widget extends \WP_Widget {
 		</p>
 
 		<p>
-			Select a page where to display results:
-			<?php
-			$args = array(
-				'selected'          => $results_page_id,
-				'echo'              => 1,
-				'name'              => $this->get_field_name( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
-				'id'                => $this->get_field_id( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
-				'show_option_none'  => 'My theme search page',
-				'option_none_value' => ''
-			);
-			wp_dropdown_pages( $args );
+		Select a page where to display results:
+		<?php
+		$options = array(
+			array(
+				'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE,
+				'label' => 'Page: '
+			),
+			array(
+				'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_NO_AJAX,
+				'label' => 'Current page'
+			)
+		);
+		foreach ( $options as $option ) {
 			?>
+			<p>
+				<input type="radio"
+				       name="<?php echo $this->get_field_name( WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ); ?>]"
+				       value="<?php echo $option['code'] ?>" <?php checked( $option['code'], $search_method ); ?> /> <?php echo $option['label']; ?>
+				<?php if ( WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE == $option['code'] ) {
+					$args = array(
+						'selected'          => $results_page_id,
+						'echo'              => 1,
+						'name'              => $this->get_field_name( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
+						'id'                => $this->get_field_id( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
+						'show_option_none'  => 'My theme search page',
+						'option_none_value' => ''
+					);
+					wp_dropdown_pages( $args );
+				} ?>
+			</p>
+		<?php } ?>
 		</p>
 
 		<p>
@@ -332,6 +353,18 @@ class WPSOLR_Widget extends \WP_Widget {
 	public function wpsolr_get_results_page( $instance ) {
 
 		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
+	}
+
+	/**
+	 * Get the search method from the widget instance
+	 *
+	 * @param $instance
+	 *
+	 * @return string Search method
+	 */
+	public function wpsolr_get_search_method( $instance ) {
+
+		return ! empty( $instance[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] ) ? $instance[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] : WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE;
 	}
 
 	/**

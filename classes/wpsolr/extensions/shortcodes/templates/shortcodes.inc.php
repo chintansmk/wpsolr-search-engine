@@ -130,16 +130,46 @@ $current_shortcode_option_name = sprintf( "%s[%s]", $options_name, $shortcode_ty
 				</div>
 				<div class='col_right'>
 					<?php
-					$value = isset( $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
-					$args  = array(
-						'selected'          => $value,
-						'echo'              => 1,
-						'name'              => sprintf( "%s[%s][%s]", $current_shortcode_option_name, $shortcode_uuid, WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
-						'show_option_none'  => 'My theme search page',
-						'option_none_value' => ''
+					$value = isset( $shortcode[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] ) ? $shortcode[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] : WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE; ?>
+
+					<?php
+					$options = array(
+						array(
+							'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE,
+							'label' => 'Page: '
+						),
+						array(
+							'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_NO_AJAX,
+							'label' => 'Current page. No Ajax.'
+						),
+						array(
+							'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX,
+							'label' => 'Current page. Ajax.'
+						),
+						array(
+							'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX_WITH_PARAMETERS,
+							'label' => 'Current page. Ajax. Show parameters in url'
+						)
 					);
-					wp_dropdown_pages( $args );
-					?>
+					foreach ( $options as $option ) {
+						?>
+						<p>
+							<input type="radio"
+							       name="<?php echo $current_shortcode_option_name; ?>[<?php echo $shortcode_uuid; ?>][<?php echo WPSOLR_UI::FORM_FIELD_SEARCH_METHOD; ?>]"
+							       value="<?php echo $option['code'] ?>" <?php checked( $option['code'], $value ); ?> /> <?php echo $option['label']; ?>
+							<?php if ( WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE == $option['code'] ) {
+								$args = array(
+									'selected'          => $value,
+									'echo'              => 1,
+									'name'              => sprintf( "%s[%s][%s]", $current_shortcode_option_name, $shortcode_uuid, WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
+									'show_option_none'  => 'My theme search page',
+									'option_none_value' => ''
+								);
+								wp_dropdown_pages( $args );
+							} ?>
+						</p>
+					<?php } ?>
+
 				</div>
 				<div class="clear"></div>
 			</div>

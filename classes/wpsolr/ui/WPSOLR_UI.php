@@ -16,6 +16,11 @@ class WPSOLR_UI {
 
 	// Form fields
 	const FORM_FIELD_RESULTS_PAGE = 'results_page';
+	const FORM_FIELD_SEARCH_METHOD = 'search_method';
+	const FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE = 'use_custom_page';
+	const FORM_FIELD_SEARCH_METHOD_VALUE_NO_AJAX = 'no_ajax';
+	const FORM_FIELD_SEARCH_METHOD_VALUE_AJAX = 'ajax';
+	const FORM_FIELD_SEARCH_METHOD_VALUE_AJAX_WITH_PARAMETERS = 'ajax_with_parameters';
 	const FORM_FIELD_GROUP_ID = 'group_id';
 	const FORM_FIELD_GROUP_NAME = 'name';
 	const FORM_FIELD_LAYOUT_ID = 'layout_id';
@@ -45,6 +50,7 @@ class WPSOLR_UI {
 	protected $is_show_when_no_data;
 	protected $is_show_title_on_front_end;
 	protected $is_debug_js;
+	protected $search_method;
 
 	/**
 	 * Calculate the plugin root directory url.
@@ -60,7 +66,7 @@ class WPSOLR_UI {
 	 *
 	 */
 	public function display(
-		$name, $results_page, $layout_id, $group_id, $url_regexp_lines, $is_debug_js, $is_show_when_no_data, $is_show_title_on_front_end,
+		$name, $search_method, $results_page, $layout_id, $group_id, $url_regexp_lines, $is_debug_js, $is_show_when_no_data, $is_show_title_on_front_end,
 		$title, $before_title, $after_title, $before_ui, $after_ui
 	) {
 
@@ -68,6 +74,7 @@ class WPSOLR_UI {
 
 			// ui elements
 			$this->name                       = $name;
+			$this->search_method              = $search_method;
 			$this->results_page               = $results_page;
 			$this->is_debug_js                = $is_debug_js;
 			$this->is_show_when_no_data       = $is_show_when_no_data;
@@ -293,10 +300,23 @@ class WPSOLR_UI {
 	 */
 	private function get_results_page_permalink() {
 
-		// Standard search, or wpsolr search
-		$result = empty( trim( $this->results_page ) ) ? get_home_url() : get_permalink( $this->results_page );
+		// Standard search
+		if ( $this->get_is_results_page_theme_search_page() ) {
+			return get_home_url();
+		}
 
-		return $result;
+		// A custom page
+		if ( $this->get_is_search_method_custom_page() ) {
+			return get_permalink( $this->results_page );
+		}
+
+		// Current home page
+		if ( is_home() ) {
+			return get_home_url();
+		}
+
+		// Current page
+		return get_permalink( get_post() );
 	}
 
 	/**
@@ -307,9 +327,28 @@ class WPSOLR_UI {
 	private function get_results_page_query_parameter_name() {
 
 		// Standard search, or wpsolr search
-		$result = empty( trim( $this->results_page ) ) ? WPSOLR_Query_Parameters::SEARCH_PARAMETER_S : WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q;
+		$result = $this->get_is_results_page_theme_search_page() ? WPSOLR_Query_Parameters::SEARCH_PARAMETER_S : WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q;
 
 		return $result;
 	}
 
+	/**
+	 * Is results page the theme search page ?
+	 *
+	 * @return boolean
+	 */
+	private function get_is_results_page_theme_search_page() {
+
+		return ( $this->get_is_search_method_custom_page() && empty( trim( $this->results_page ) ) );
+	}
+
+	/**
+	 * Is search method a custom page ?
+	 *
+	 * @return boolean
+	 */
+	private function get_is_search_method_custom_page() {
+
+		return ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE );
+	}
 }

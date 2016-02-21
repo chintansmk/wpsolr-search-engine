@@ -108,9 +108,9 @@ class WPSOLR_Options_Shortcodes extends WPSOLR_Extensions {
 					unset( $shortcode['is_to_be_cloned'] );
 
 					// Clone the shortcode
-					$shortcode_cloned         = $shortcode;
-					$shortcode_cloned_uuid    = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
-					$shortcode_cloned['name'] = 'Clone of ' . $shortcode_cloned[ WPSOLR_UI::FORM_FIELD_TITLE ];
+					$shortcode_cloned                                = $shortcode;
+					$shortcode_cloned_uuid                           = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
+					$shortcode_cloned[ WPSOLR_UI::FORM_FIELD_TITLE ] = 'Clone of ' . $shortcode_cloned[ WPSOLR_UI::FORM_FIELD_TITLE ];
 
 					$shortcodes[ $shortcode_type_name ][ $shortcode_cloned_uuid ] = $shortcode_cloned;
 
@@ -150,6 +150,19 @@ class WPSOLR_Options_Shortcodes extends WPSOLR_Extensions {
 
 		return ! empty( $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $shortcode[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '';
 	}
+
+	/**
+	 * Get search method
+	 *
+	 * @param $shortcode
+	 *
+	 * @return string
+	 */
+	public function get_search_method( $shortcode ) {
+
+		return ! empty( $shortcode[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] ) ? $shortcode[ WPSOLR_UI::FORM_FIELD_SEARCH_METHOD ] : WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE;
+	}
+
 
 	/**
 	 * Get shortcode layout id
