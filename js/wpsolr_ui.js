@@ -1,3 +1,6 @@
+// Global array of WPSOLR components
+var wpsolr_components = {};
+
 /**
  * Class WPSOLR_UI (from which others inherit)
  */
@@ -130,8 +133,19 @@ WPSOLR_UI.prototype.timer = function () {
     if (!this.is_ajax) {
         window.location.href = this.url;
     } else {
-        alert('ajax');
+
+        this.debug("timer", wpsolr_components);
+
+        // Call ajax on all components
+        for (ui_id in wpsolr_components) {
+            wpsolr_components[ui_id].call_ajax(this.url);
+        }
     }
+}
+
+WPSOLR_UI.prototype.call_ajax = function (url) {
+    this.debug("call_ajax", url);
+
 }
 
 /**
@@ -438,7 +452,3 @@ WPSOLR_Facets.prototype._create_url = function (current_url) {
 
 };
 
-
-// Global array of WPSOLR UIs
-var wpsolr_facets = [];
-var wpsolr_sorts = [];

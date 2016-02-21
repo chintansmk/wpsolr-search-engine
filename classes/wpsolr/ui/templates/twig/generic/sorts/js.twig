@@ -3,18 +3,18 @@
     jQuery(document).ready(function () {
 
         // Global object used by one widget
-        wpsolr_sorts["{{ ui_id }}"] = new WPSOLR_Sorts("{{ group_id }}");
+        wpsolr_components["{{ ui_id }}"] = new WPSOLR_Sorts("{{ group_id }}");
 
-        wpsolr_sorts["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
-        wpsolr_sorts["{{ ui_id }}"].set_query_page("{{ query_page }}");
-        wpsolr_sorts["{{ ui_id }}"].set_query_parameter_name("{{ query_parameter_name }}");
-        wpsolr_sorts["{{ ui_id }}"].set_is_debug_js({{ is_debug_js }});
-        wpsolr_sorts["{{ ui_id }}"].set_is_ajax({{ is_ajax }});
+        wpsolr_components["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
+        wpsolr_components["{{ ui_id }}"].set_query_page("{{ query_page }}");
+        wpsolr_components["{{ ui_id }}"].set_query_parameter_name("{{ query_parameter_name }}");
+        wpsolr_components["{{ ui_id }}"].set_is_debug_js({{ is_debug_js }});
+        wpsolr_components["{{ ui_id }}"].set_is_ajax({{ is_ajax }});
 
         jQuery(".{{ ui_id }}").on("change", function (event) {
 
-            wpsolr_sorts["{{ ui_id }}"].addValue(jQuery(this).val());
-            wpsolr_sorts["{{ ui_id }}"].create_url(0);
+            wpsolr_components["{{ ui_id }}"].addValue(jQuery(this).val());
+            wpsolr_components["{{ ui_id }}"].create_url(0);
         });
 
     });

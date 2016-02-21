@@ -4,14 +4,14 @@
     jQuery(document).ready(function () {
 
         // Global object used by one widget
-        wpsolr_facets["{{ ui_id }}"] = new WPSOLR_Facets();
+        wpsolr_components["{{ ui_id }}"] = new WPSOLR_Facets();
 
-        wpsolr_facets["{{ ui_id }}"].set_groups_facet_id("{{ group_id }}");
-        wpsolr_facets["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
-        wpsolr_facets["{{ ui_id }}"].set_query_page("{{ query_page }}");
-        wpsolr_facets["{{ ui_id }}"].set_query_parameter_name("{{ query_parameter_name }}");
-        wpsolr_facets["{{ ui_id }}"].set_is_debug_js({{ is_debug_js }});
-        wpsolr_facets["{{ ui_id }}"].set_is_ajax({{ is_ajax }});
+        wpsolr_components["{{ ui_id }}"].set_groups_facet_id("{{ group_id }}");
+        wpsolr_components["{{ ui_id }}"].set_ui_id("{{ ui_id }}");
+        wpsolr_components["{{ ui_id }}"].set_query_page("{{ query_page }}");
+        wpsolr_components["{{ ui_id }}"].set_query_parameter_name("{{ query_parameter_name }}");
+        wpsolr_components["{{ ui_id }}"].set_is_debug_js({{ is_debug_js }});
+        wpsolr_components["{{ ui_id }}"].set_is_ajax({{ is_ajax }});
 
     });
 
