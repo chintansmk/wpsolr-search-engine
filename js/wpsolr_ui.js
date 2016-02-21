@@ -127,7 +127,11 @@ WPSOLR_UI.prototype.timer = function () {
     jQuery("." + this.ui_id + " ul").addClass("wpsolr_loader");
     //jQuery("select." + this.ui_id).addClass("wpsolr_loader");
 
-    window.location.href = this.url;
+    if (!this.is_ajax) {
+        window.location.href = this.url;
+    } else {
+        alert('ajax');
+    }
 }
 
 /**

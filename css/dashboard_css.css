@@ -1,3 +1,7 @@
+.wpsolr_wp_dropdown_pages {
+    width: 80%;
+}
+
 .wpsolr-1col {
     float: left;
     width: 99%;
@@ -26,7 +30,7 @@
 .nav-tab.wpsolr-nav-tab-active {
     border-bottom-color: #fff;
     background-color: rgba(138, 22, 193, 0.42);
-    background:rgb(10, 83, 116) none repeat scroll 0% 0%;
+    background: rgb(10, 83, 116) none repeat scroll 0% 0%;
     box-shadow: 0px 1px rgba(255, 255, 255, 0.1) inset, 0px 1px rgba(255, 255, 255, 0.1);
     color: #FFF;
 }

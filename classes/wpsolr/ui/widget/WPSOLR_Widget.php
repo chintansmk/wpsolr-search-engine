@@ -128,9 +128,18 @@ class WPSOLR_Widget extends \WP_Widget {
 			),
 			array(
 				'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_NO_AJAX,
-				'label' => 'Current page'
+				'label' => 'Current page. No Ajax.'
+			),
+			array(
+				'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX,
+				'label' => 'Current page. Ajax.'
+			),
+			array(
+				'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX_WITH_PARAMETERS,
+				'label' => 'Current page. Ajax. Show parameters in url'
 			)
 		);
+
 		foreach ( $options as $option ) {
 			?>
 			<p>
@@ -144,7 +153,8 @@ class WPSOLR_Widget extends \WP_Widget {
 						'name'              => $this->get_field_name( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
 						'id'                => $this->get_field_id( WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
 						'show_option_none'  => 'My theme search page',
-						'option_none_value' => ''
+						'option_none_value' => '',
+						'class'             => 'wpsolr_wp_dropdown_pages'
 					);
 					wp_dropdown_pages( $args );
 				} ?>
