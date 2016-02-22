@@ -12,7 +12,7 @@ use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
-use wpsolr\extensions\shortcodes\WPSOLR_Options_Shortcodes;
+use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
@@ -105,14 +105,14 @@ abstract class WPSOLR_Extensions {
 	// Extension: layouts
 	const OPTION_LAYOUTS = 'layouts';
 
-	// Extension: shortcodes
-	const OPTION_SHORTCODES = 'shortcodes';
+	// Extension: components
+	const OPTION_COMPONENTS = 'components';
 
 	/*
 	 * Extensions configuration
 	 */
 	private static $extensions_array = [
-		self::EXTENSION_WOOCOMMERCE       =>
+		self::EXTENSION_WOOCOMMERCE =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Woocommerce::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => 'WooCommerce',
@@ -339,7 +339,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_LAYOUTS              =>
+		self::OPTION_LAYOUTS        =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Layouts::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Layouts::CLASS,
@@ -354,18 +354,18 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_SHORTCODES           =>
+		self::OPTION_COMPONENTS     =>
 			[
-				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Shortcodes::CLASS,
-				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Shortcodes::CLASS,
-				self::_CONFIG_EXTENSION_DIRECTORY               => 'shortcodes/',
-				self::_CONFIG_EXTENSION_FILE_PATH               => 'shortcodes/WPSOLR_Options_Shortcodes.php',
-				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'shortcodes/admin_options.inc.php',
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Components::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Components::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'components/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'components/WPSOLR_Options_Components.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'components/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
-					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SHORTCODES,
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_COMPONENTS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			]

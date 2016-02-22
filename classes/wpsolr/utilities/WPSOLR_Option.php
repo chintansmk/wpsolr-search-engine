@@ -749,14 +749,14 @@ class WPSOLR_Option {
 	 * Layouts option
 	 *
 	 **************************************************************************************************************/
-	const OPTION_SHORTCODES = 'wpsolr_shortcodes';
+	const OPTION_COMPONENTS = 'wpsolr_components';
 
 	/**
-	 * Get shortcode options array
+	 * Get component options array
 	 * @return array
 	 */
-	public function get_option_shortcodes() {
-		return self::get_option( self::OPTION_SHORTCODES, [ ] );
+	public function get_option_components() {
+		return self::get_option( self::OPTION_COMPONENTS, [ ] );
 	}
 
 }

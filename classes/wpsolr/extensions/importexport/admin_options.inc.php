@@ -19,31 +19,31 @@ $option_names_to_export = [
 		'description' => 'Fields to index',
 		'data'        => WPSOLR_Global::getOption()->get_option_fields()
 	],
-	WPSOLR_Option::OPTION_FACETS             => [
+	WPSOLR_Option::OPTION_FACETS        => [
 		'description' => 'Facet groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_facet()
 	],
-	WPSOLR_Option::OPTION_SORTS              => [
+	WPSOLR_Option::OPTION_SORTS         => [
 		'description' => 'Sort groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_sort()
 	],
-	WPSOLR_Option::OPTION_LOCALIZATION       => [
+	WPSOLR_Option::OPTION_LOCALIZATION  => [
 		'description' => 'Localizations',
 		'data'        => WPSOLR_Global::getOption()->get_option_localization()
 	],
-	WPSOLR_Option::OPTION_LAYOUTS            => [
+	WPSOLR_Option::OPTION_LAYOUTS       => [
 		'description' => 'Layouts',
 		'data'        => WPSOLR_Global::getOption()->get_option_layouts()
 	],
-	WPSOLR_Option::OPTION_SHORTCODES         => [
+	WPSOLR_Option::OPTION_COMPONENTS    => [
 		'description' => 'Shortcodes',
-		'data'        => WPSOLR_Global::getOption()->get_option_shortcodes()
+		'data'        => WPSOLR_Global::getOption()->get_option_components()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_ACF         => [
+	WPSOLR_Option::OPTION_PLUGIN_ACF    => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_ACF ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_acf()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_GROUPS      => [
+	WPSOLR_Option::OPTION_PLUGIN_GROUPS => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_GROUPS ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_groups()
 	],

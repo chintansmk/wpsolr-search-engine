@@ -7,6 +7,7 @@ use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Regexp;
+use wpsolr\WPSOLR_Filters;
 
 /**
  * Facets root.
@@ -33,6 +34,8 @@ class WPSOLR_UI {
 	const FORM_FIELD_BEFORE_UI = 'before_widget';
 	const FORM_FIELD_AFTER_UI = 'after_widget';
 	const FORM_FIELD_IS_DEBUG_JS = 'is_debug_js';
+	const FORM_FIELD_COMPONENT_TYPE = 'component_type';
+	const FORM_FIELD_COMPONENT_ID = 'component_id';
 
 	// Data extracted from Solr search results
 	protected $data;
@@ -40,17 +43,20 @@ class WPSOLR_UI {
 	protected $results_page;
 	protected $group_id;
 	protected $layout_id;
+	protected $layout_type;
 	protected $layout;
 	protected $title;
 	protected $before_title;
 	protected $after_title;
 	protected $before_ui;
 	protected $after_ui;
-	protected $layout_type;
+	protected $component_type;
 	protected $is_show_when_no_data;
 	protected $is_show_title_on_front_end;
 	protected $is_debug_js;
 	protected $search_method;
+	protected $url_regexp_lines;
+	protected $component_id;
 
 	/**
 	 * Calculate the plugin root directory url.
@@ -66,33 +72,37 @@ class WPSOLR_UI {
 	 *
 	 */
 	public function display(
-		$name, $search_method, $results_page, $layout_id, $group_id, $url_regexp_lines, $is_debug_js, $is_show_when_no_data, $is_show_title_on_front_end,
-		$title, $before_title, $after_title, $before_ui, $after_ui
+		$name, $component_id, $title, $before_title, $after_title, $before_ui, $after_ui
 	) {
 
 		try {
 
-			// ui elements
-			$this->name                       = $name;
-			$this->search_method              = $search_method;
-			$this->results_page               = $results_page;
-			$this->is_debug_js                = $is_debug_js;
-			$this->is_show_when_no_data       = $is_show_when_no_data;
-			$this->is_show_title_on_front_end = $is_show_title_on_front_end;
-			$this->title                      = $is_show_title_on_front_end ? $title : '';
-			$this->before_title               = $is_show_title_on_front_end ? $before_title : '';
-			$this->after_title                = $is_show_title_on_front_end ? $after_title : '';
-			$this->before_ui                  = $before_ui;
-			$this->after_ui                   = $after_ui;
+			$extension_components = WPSOLR_Global::getExtensionComponents();
+			$component            = $extension_components->get_component_by_id( $component_id );
 
-			$this->group_id  = $group_id;
-			$this->layout_id = $layout_id;
+			// Component elements
+			$this->component_id               = $component_id;
+			$this->name                       = $name;
+			$this->search_method              = $extension_components->get_search_method( $component );
+			$this->results_page               = $extension_components->get_results_page( $component );
+			$this->is_debug_js                = $extension_components->get_component_is_debug_js( $component );
+			$this->is_show_when_no_data       = $extension_components->get_component_is_show_when_empty( $component );
+			$this->is_show_title_on_front_end = $extension_components->get_component_is_show_title_on_front_end( $component );
+			$this->title                      = $this->is_show_title_on_front_end ? apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, ! empty( $title ) ? $title : $extension_components->get_component_title( $component ) ) : '';
+			$this->before_title               = $this->is_show_title_on_front_end ? ! empty( $before_title ) ? $before_title : $extension_components->get_component_before_title( $component ) : '';
+			$this->after_title                = $this->is_show_title_on_front_end ? ! empty( $after_title ) ? $after_title : $extension_components->get_component_after_title( $component ) : '';
+			$this->before_ui                  = ! empty( $before_ui ) ? $before_ui : $extension_components->get_component_before_ui( $component );
+			$this->after_ui                   = ! empty( $after_ui ) ? $after_ui : $extension_components->get_component_after_ui( $component );
+			$this->url_regexp_lines           = $extension_components->get_component_url_regexp_lines( $component );
+
+			$this->group_id  = $extension_components->get_component_group_id( $component );
+			$this->layout_id = $extension_components->get_component_layout_id( $component );
 			$this->layout    = $this->get_layout();
 
 			// Extract data
 			$this->data = $this->extract_data_with_cache();
 
-			if ( $this->url_is_authorized( $url_regexp_lines ) && ( $is_show_when_no_data || ! $this->is_data_empty() ) ) {
+			if ( $this->url_is_authorized( $this->url_regexp_lines ) && ( $this->is_show_when_no_data || ! $this->is_data_empty() ) ) {
 
 				return $this->get_display_form();
 			}
@@ -221,7 +231,7 @@ class WPSOLR_UI {
 
 		// Twig common parameters
 		$twig_common_parameters = [
-			'ui_id'                => WPSOLR_Global::getExtensionIndexes()->generate_uuid(),
+			'ui_id'                => $this->component_id,
 			'query_page'           => $this->get_results_page_permalink(),
 			'query_parameter_name' => $this->get_results_page_query_parameter_name(),
 			'group_id'             => $this->group_id,
@@ -230,7 +240,6 @@ class WPSOLR_UI {
 			// encoding required for true/false being sent to twig
 			'is_ajax'              => json_encode( $this->get_is_search_method_ajax() )
 		];
-
 
 		// JS template
 		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
@@ -288,10 +297,19 @@ class WPSOLR_UI {
 	/**
 	 * Returns the groups of a ui
 	 *
-	 * @return object
+	 * @return array
 	 */
 	public function get_groups() {
 		die( 'get_groups not implemented' );
+	}
+
+	/**
+	 * Returns the layouts of a ui
+	 *
+	 * @return array
+	 */
+	public function get_layouts() {
+		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( $this->layout_id );
 	}
 
 	/**
@@ -362,4 +380,24 @@ class WPSOLR_UI {
 
 		return ( ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX ) || ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_AJAX_WITH_PARAMETERS ) );
 	}
+
+	/**
+	 * Get component type
+	 *
+	 * @return string
+	 */
+	public function get_component_type() {
+		return $this->component_type;
+	}
+
+	/**
+	 * Get components for the UI
+	 *
+	 * @return array
+	 */
+	public function get_components() {
+		return WPSOLR_Global::getExtensionComponents()->get_components_from_type( $this->get_component_type() );
+	}
+
+
 }

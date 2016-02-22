@@ -3,6 +3,7 @@
 namespace wpsolr\utilities;
 
 use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
+use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
@@ -234,10 +235,10 @@ class WPSOLR_Global {
 	}
 
 	/**
-	 * @return WPSOLR_Options_Shortcodes
+	 * @return WPSOLR_Options_Components
 	 */
-	public static function getExtensionShortcodes() {
-		return self::getObject( WPSOLR_Extensions::OPTION_SHORTCODES, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_SHORTCODES );
+	public static function getExtensionComponents() {
+		return self::getObject( WPSOLR_Extensions::OPTION_COMPONENTS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_COMPONENTS );
 	}
 }
 

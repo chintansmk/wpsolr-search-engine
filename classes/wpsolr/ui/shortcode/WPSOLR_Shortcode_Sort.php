@@ -2,7 +2,6 @@
 
 namespace wpsolr\ui\shortcode;
 
-use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\ui\WPSOLR_UI_Sort;
 
 /**
@@ -17,17 +16,7 @@ class WPSOLR_Shortcode_Sort extends WPSOLR_Shortcode {
 	 */
 	public function __construct() {
 		$this->shortcode_name = 'wpsolr_shortcode_sorts';
-		$this->layout_type    = WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT_GROUP;
-	}
-
-
-	/**
-	 * Returns the UI object
-	 *
-	 * @return WPSOLR_UI_Sort
-	 */
-	public function get_ui() {
-		return new WPSOLR_UI_Sort();
+		$this->ui             = new WPSOLR_UI_Sort();
 	}
 
 }

@@ -240,7 +240,7 @@ switch ( $tab ) {
 				'sort_opt'             => '2.4 Sorting',
 				'localization_options' => '2.5 Localization',
 				'layout_options'       => '2.6 Layouts',
-				'shortcode_options'    => '2.7 Shortcodes'
+				'component_options'    => '2.7 Components'
 			];
 
 			$subtab = wpsolr_admin_sub_tabs( $subtabs );
@@ -554,8 +554,8 @@ switch ( $tab ) {
 					WPSOLR_Global::getExtensionLayouts()->output_form();
 					break;
 
-				case 'shortcode_options':
-					WPSOLR_Global::getExtensionShortcodes()->output_form();
+				case 'component_options':
+					WPSOLR_Global::getExtensionComponents()->output_form();
 					break;
 
 			}

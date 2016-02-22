@@ -373,5 +373,5 @@ class WPSOLR_Options_Layouts extends WPSOLR_Extensions {
 	public function get_predefined_layouts() {
 		return self::$predefined_layouts;
 	}
-
+	
 }

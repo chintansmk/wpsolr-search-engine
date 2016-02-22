@@ -2,6 +2,7 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\utilities\WPSOLR_Global;
@@ -16,7 +17,8 @@ class WPSOLR_UI_Sort extends WPSOLR_UI {
 	 * @inheritDoc
 	 */
 	public function __construct() {
-		$this->layout_type = WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT_GROUP;
+		$this->component_type = WPSOLR_Options_Components::COMPONENT_TYPE_SORTS;
+		$this->layout_type    = WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT_GROUP;
 	}
 
 	public function create_twig_parameters( $localization_options ) {

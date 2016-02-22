@@ -2,6 +2,7 @@
 
 namespace wpsolr\ui;
 
+use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
@@ -18,7 +19,8 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 	 * @inheritDoc
 	 */
 	public function __construct() {
-		$this->layout_type = WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_GROUP;
+		$this->component_type = WPSOLR_Options_Components::COMPONENT_TYPE_FACETS;
+		$this->layout_type    = WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_GROUP;
 	}
 
 	public function create_twig_parameters( $localization_options ) {
@@ -55,6 +57,5 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 	public function get_groups() {
 		return WPSOLR_Global::getOption()->get_facets_groups();
 	}
-
 
 }
