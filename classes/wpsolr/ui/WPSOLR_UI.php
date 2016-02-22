@@ -59,15 +59,6 @@ class WPSOLR_UI {
 	protected $component_id;
 
 	/**
-	 * Calculate the plugin root directory url.
-	 * Use in templates to include images, css and js documents.
-	 */
-	protected static function plugin_dir_url() {
-
-		return substr_replace( plugin_dir_url( __FILE__ . '../../../../../..' ), "", - 1 );
-	}
-
-	/**
 	 * Front-end display of UI.
 	 *
 	 */
@@ -235,7 +226,7 @@ class WPSOLR_UI {
 			'query_page'           => $this->get_results_page_permalink(),
 			'query_parameter_name' => $this->get_results_page_query_parameter_name(),
 			'group_id'             => $this->group_id,
-			'plugin_dir_url'       => self::plugin_dir_url(),
+			'plugin_dir_url'       => WPSOLR_Global::get_plugin_dir_url(),
 			'is_debug_js'          => json_encode( $this->is_debug_js ),
 			// encoding required for true/false being sent to twig
 			'is_ajax'              => json_encode( $this->get_is_search_method_ajax() )

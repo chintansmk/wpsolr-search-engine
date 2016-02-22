@@ -240,5 +240,13 @@ class WPSOLR_Global {
 	public static function getExtensionComponents() {
 		return self::getObject( WPSOLR_Extensions::OPTION_COMPONENTS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_COMPONENTS );
 	}
+
+	/**
+	 * Get the plugin directory url (for js/css/images ...)
+	 * @return string
+	 */
+	public static function get_plugin_dir_url() {
+		return WPSOLR_DEFINE_PLUGIN_DIR_URL;
+	}
 }
 
