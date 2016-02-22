@@ -15,6 +15,7 @@ var WPSOLR_UI = function () {
     this.query_parameter_name = "";
     this.is_debug_js = false;
     this.is_ajax = false;
+    this.is_own_ajax = false;
 };
 
 WPSOLR_UI.prototype.debug = function (message, object) {
@@ -31,6 +32,7 @@ WPSOLR_UI.prototype.debugState = function () {
         console.log("  ++ query_parameter_name: " + JSON.stringify(this.query_parameter_name));
         console.log("  ++ is_debug_js: " + JSON.stringify(this.is_debug_js));
         console.log("  ++ is_ajax: " + JSON.stringify(this.is_ajax));
+        console.log("  ++ is_own_ajax: " + JSON.stringify(this.is_own_ajax));
     }
 };
 
@@ -65,6 +67,11 @@ WPSOLR_UI.prototype.set_is_debug_js = function (is_debug_js) {
 WPSOLR_UI.prototype.set_is_ajax = function (is_ajax) {
     this.debug("is_ajax", is_ajax);
     this.is_ajax = is_ajax;
+};
+
+WPSOLR_UI.prototype.set_is_own_ajax = function (is_own_ajax) {
+    this.debug("is_own_ajax", is_own_ajax);
+    this.is_own_ajax = is_own_ajax;
 };
 
 WPSOLR_UI.prototype.set_ui_id = function (ui_id) {
@@ -126,25 +133,117 @@ WPSOLR_UI.prototype.create_url = function (delay_in_ms) {
 WPSOLR_UI.prototype.timer = function () {
     this.debug("timer", this.delay_in_ms);
 
-    // Display loaders on each facet
-    jQuery("." + this.ui_id + " ul").addClass("wpsolr_loader");
-    //jQuery("select." + this.ui_id).addClass("wpsolr_loader");
-
     if (!this.is_ajax) {
+
+        // Display the loader
+        jQuery("." + this.ui_id + " ul").addClass("wpsolr_loader");
+
+        // Simply load the url
         window.location.href = this.url;
+
     } else {
 
         this.debug("timer", wpsolr_components);
 
-        // Call ajax on all components
-        for (ui_id in wpsolr_components) {
-            wpsolr_components[ui_id].call_ajax(this.url);
+        var components_not_own_ajax_ids = [this.ui_id];
+        var components_own_ajax_ids = [];
+        for (component_id in wpsolr_components) {
+
+            if (component_id != this.ui_id) {
+
+                if (wpsolr_components[component_id].is_own_ajax) {
+
+                    // This component calls it's own Ajax
+                    components_own_ajax_ids.push(component_id);
+
+                } else {
+
+                    // This component  does not call it's own Ajax
+                    components_not_own_ajax_ids.push(component_id);
+                }
+
+            }
+
         }
+
+        // First, call Ajax for current component, and all not own ajax components
+        this.call_ajax(this.url, components_not_own_ajax_ids);
+
+        // Then, call components with their own Ajax
+        for (var loop = 0; loop < components_own_ajax_ids.length; loop++) {
+
+            wpsolr_components[components_own_ajax_ids[loop]].call_ajax(this.url, [components_own_ajax_ids[loop]]);
+        }
+
     }
 }
 
-WPSOLR_UI.prototype.call_ajax = function (url) {
-    this.debug("call_ajax", url);
+WPSOLR_UI.prototype.call_ajax = function (url, component_ids) {
+    this.debug("call_ajax", [url, component_ids, this.ui_id]);
+
+    // Display the loaders
+    jQuery("." + this.ui_id + " ul").addClass("wpsolr_loader");
+
+    // Get only parameters
+    url1 = new Url(url);
+    url_parameters = url1.query.toString();
+
+    // Generate Ajax data object
+    var data = {
+        action: wp_localize_script_wpsolr_ui.ajax_action,
+        url_parameters: url_parameters,
+        component_id: component_ids
+    };
+    var this_component = this;
+
+    // Pass parameters to Ajax
+    jQuery.ajax({
+        url: wp_localize_script_wpsolr_ui.ajax_url,
+        type: "post",
+        data: data,
+        success: function (data1) {
+
+            data = JSON.parse(data1);
+            this_component.debug("call_ajax results", data);
+
+            if (data['error_message'] !== undefined) {
+
+                // Display all components errors
+                for (component_id in data['error_message']) {
+                    this_component.debug("call_ajax error for " + component_id, data['error_message'][component_id]);
+
+                    // Display error message before the current component
+                    jQuery("." + component_id + " .wpsolr_error_ajax").text(data['error_message'][component_id]);
+                    jQuery("." + component_id + " ul").removeClass("wpsolr_loader");
+                }
+            }
+
+            // Display all components
+            if (data['components'] != undefined) {
+                for (component_id in data['components']) {
+                    this_component.debug("call_ajax results for " + component_id, data['components'][component_id]);
+
+                    // Clear the component data
+                    wpsolr_components[component_id].clear();
+
+                    // Update the component html
+                    jQuery("." + component_id).replaceWith(data['components'][component_id]);
+                    jQuery("." + component_id + " ul").removeClass("wpsolr_loader");
+                }
+            }
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+
+            // Display error message before the current component
+            jQuery("." + this_component.ui_id + " .wpsolr_error_ajax").text("Ajax error: " + textStatus);
+            jQuery("." + this_component.ui_id + " ul").removeClass("wpsolr_loader");
+
+        },
+        always: function () {
+            // Not called.
+        }
+    });
 
 }
 

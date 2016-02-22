@@ -19,6 +19,7 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 	 * @inheritDoc
 	 */
 	public function __construct() {
+
 		$this->component_type = WPSOLR_Options_Components::COMPONENT_TYPE_FACETS;
 		$this->layout_type    = WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_GROUP;
 	}

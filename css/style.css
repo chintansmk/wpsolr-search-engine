@@ -1,3 +1,8 @@
+.wpsolr_error_ajax {
+    color: red;
+    font-weight: bold;
+}
+
 .wpsolr_loader {
     background: url(../images/gif-load.gif) no-repeat;
     display: block;

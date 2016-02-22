@@ -180,6 +180,20 @@ $current_component_option_name = sprintf( "%s[%s]", $options_name, $component_ty
 			</div>
 
 			<div class="wdm_row">
+				<div class='col_left'>Display in it's own Ajax call.<br/>
+					By default, all components displays are refreshed in a single Ajax call.
+				</div>
+				<div class='col_right'>
+					<?php $value = isset( $component[ WPSOLR_UI::FORM_FIELD_IS_OWN_AJAX ] ); ?>
+					<input type="checkbox"
+					       name="<?php echo $current_component_option_name; ?>[<?php echo $component_uuid; ?>][<?php echo WPSOLR_UI::FORM_FIELD_IS_OWN_AJAX; ?>]"
+						<?php checked( $value ); ?>
+					/>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
 				<div class='col_left'>Group</div>
 				<div class='col_right'>
 					<?php $value = isset( $component[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] ) ? $component[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] : ''; ?>

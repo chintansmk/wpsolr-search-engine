@@ -33,6 +33,7 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	const SHORTCODE_FIELD_CODE = 'shortcode_code';
 	const COMPONENT_FIELD_TYPE = 'type';
 
+
 	/**
 	 * Post constructor.
 	 */
@@ -276,6 +277,18 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	}
 
 	/**
+	 * Get component is_own_ajax
+	 *
+	 * @param $component
+	 *
+	 * @return boolean
+	 */
+	public function get_component_is_own_ajax( $component ) {
+
+		return ! empty( $component[ WPSOLR_UI::FORM_FIELD_IS_OWN_AJAX ] );
+	}
+
+	/**
 	 * Get component is_show_when_empty
 	 *
 	 * @param $component
@@ -345,6 +358,34 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	public function get_component_before_ui( $component ) {
 
 		return ! empty( $component[ WPSOLR_UI::FORM_FIELD_BEFORE_UI ] ) ? $component[ WPSOLR_UI::FORM_FIELD_BEFORE_UI ] : '';
+	}
+
+	/**
+	 * Get component type
+	 *
+	 * @param $component
+	 *
+	 * @return string
+	 */
+	public function get_component_type( $component ) {
+
+		return ! empty( $component[ WPSOLR_UI::FORM_FIELD_COMPONENT_TYPE ] ) ? $component[ WPSOLR_UI::FORM_FIELD_COMPONENT_TYPE ] : '';
+	}
+
+	/**
+	 * Get component UI
+	 *
+	 * @param $component
+	 *
+	 * @return string
+	 */
+	public function get_component_ui( $component_type ) {
+
+		if ( ! empty( $component_type ) && ! empty( $this->components_types()[ $component_type ] ) ) {
+			return $this->components_types()[ $component_type ][ self::COMPONENT_FIELD_UI ];
+		}
+
+		throw new WPSOLR_Exception( sprintf( 'unknown component type %s', $component_type ) );
 	}
 
 	/**

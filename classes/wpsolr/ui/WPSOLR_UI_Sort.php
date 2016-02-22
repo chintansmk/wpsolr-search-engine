@@ -17,6 +17,7 @@ class WPSOLR_UI_Sort extends WPSOLR_UI {
 	 * @inheritDoc
 	 */
 	public function __construct() {
+
 		$this->component_type = WPSOLR_Options_Components::COMPONENT_TYPE_SORTS;
 		$this->layout_type    = WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT_GROUP;
 	}

@@ -36,6 +36,9 @@ class WPSOLR_UI {
 	const FORM_FIELD_IS_DEBUG_JS = 'is_debug_js';
 	const FORM_FIELD_COMPONENT_TYPE = 'component_type';
 	const FORM_FIELD_COMPONENT_ID = 'component_id';
+	const FORM_FIELD_IS_OWN_AJAX = 'is_own_ajax';
+
+	const METHOD_DISPLAY_AJAX = 'display_ajax';
 
 	// Data extracted from Solr search results
 	protected $data;
@@ -57,6 +60,65 @@ class WPSOLR_UI {
 	protected $search_method;
 	protected $url_regexp_lines;
 	protected $component_id;
+	protected $templates_to_load;
+	protected $is_own_ajax;
+
+	/**
+	 * Front-end display of UI, returned by ajax
+	 */
+	public static function display_ajax() {
+
+		$component_ids = ! empty( $_POST[ self::FORM_FIELD_COMPONENT_ID ] ) ? $_POST[ self::FORM_FIELD_COMPONENT_ID ] : '';
+
+
+		$results = [ 'components' => [ ] ];
+
+		// Display all components
+		foreach ( $component_ids as $component_id ) {
+
+			try {
+				$extension_components = WPSOLR_Global::getExtensionComponents();
+				$component            = $extension_components->get_component_by_id( $component_id );
+
+				// Find the right UI
+				$ui = $extension_components->get_component_ui( $extension_components->get_component_type( $component ) );
+
+				// Ajax require reloading HTML only
+				$ui->templates_to_load = [ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ];
+
+				$display = $ui->display( '???name', $component_id, '', '', '', '', '' );
+
+				// Store current component's display
+				$results['components'][ $component_id ] = $display;
+
+			} catch ( WPSOLR_Exception $e ) {
+
+				$results['error_message'][ $component_id ] = self::create_error_message( $e );
+
+			} catch ( \Exception $e ) {
+
+				$results['error_message'][ $component_id ] = self::create_error_message( $e );
+			}
+
+		}
+
+		$result = json_encode( $results );
+
+		die( $result );
+	}
+
+
+	/**
+	 * Create a json structure for any exception
+	 *
+	 * @param \Exception|WPSOLR_Exception $e
+	 *
+	 * @return string
+	 */
+	protected static function create_error_message( $e ) {
+
+		return sprintf( 'Unexpected error: %s. The component could not be updated.', $e->getMessage() );
+	}
 
 	/**
 	 * Front-end display of UI.
@@ -67,6 +129,14 @@ class WPSOLR_UI {
 	) {
 
 		try {
+
+			if ( empty( $this->templates_to_load ) ) {
+				$this->templates_to_load = [
+					WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML,
+					WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS,
+					WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS
+				];
+			}
 
 			$extension_components = WPSOLR_Global::getExtensionComponents();
 			$component            = $extension_components->get_component_by_id( $component_id );
@@ -85,6 +155,7 @@ class WPSOLR_UI {
 			$this->before_ui                  = ! empty( $before_ui ) ? $before_ui : $extension_components->get_component_before_ui( $component );
 			$this->after_ui                   = ! empty( $after_ui ) ? $after_ui : $extension_components->get_component_after_ui( $component );
 			$this->url_regexp_lines           = $extension_components->get_component_url_regexp_lines( $component );
+			$this->is_own_ajax                = $extension_components->get_component_is_own_ajax( $component );
 
 			$this->group_id  = $extension_components->get_component_group_id( $component );
 			$this->layout_id = $extension_components->get_component_layout_id( $component );
@@ -222,50 +293,57 @@ class WPSOLR_UI {
 
 		// Twig common parameters
 		$twig_common_parameters = [
-			'ui_id'                => $this->component_id,
-			'query_page'           => $this->get_results_page_permalink(),
-			'query_parameter_name' => $this->get_results_page_query_parameter_name(),
-			'group_id'             => $this->group_id,
-			'plugin_dir_url'       => WPSOLR_Global::get_plugin_dir_url(),
-			'is_debug_js'          => json_encode( $this->is_debug_js ),
+			'ui_id'                      => $this->component_id,
+			'query_page'                 => $this->get_results_page_permalink(),
+			'query_parameter_name'       => $this->get_results_page_query_parameter_name(),
+			'group_id'                   => $this->group_id,
+			'plugin_dir_url'             => WPSOLR_Global::get_plugin_dir_url(),
+			'is_debug_js'                => json_encode( $this->is_debug_js ),
 			// encoding required for true/false being sent to twig
-			'is_ajax'              => json_encode( $this->get_is_search_method_ajax() )
+			'is_ajax'                    => json_encode( $this->get_is_search_method_ajax() ),
+			self::FORM_FIELD_IS_OWN_AJAX => $this->is_own_ajax
 		];
 
-		// JS template
-		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ],
-			array_merge(
-				$twig_common_parameters,
-				$twig_parameters
-			)
-		);
+		if ( in_array( WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS, $this->templates_to_load ) ) {
+			// JS template
+			$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
+				$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ],
+				array_merge(
+					$twig_common_parameters,
+					$twig_parameters
+				)
+			);
+		}
 
 		// CSS template
-		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ],
-			array_merge(
-				$twig_common_parameters,
-				$twig_parameters
-			)
-		);
+		if ( in_array( WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS, $this->templates_to_load ) ) {
+			$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
+				$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ],
+				array_merge(
+					$twig_common_parameters,
+					$twig_parameters
+				)
+			);
+		}
 
 		// HTML template
-		$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-			$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
-			array_merge(
-				$twig_common_parameters,
-				array(
-					'widget_args' => [
-						'before_widget' => $this->before_ui,
-						'after_widget'  => $this->after_ui,
-						'before_title'  => $this->before_title,
-						'after_title'   => $this->after_title
-					]
-				),
-				$twig_parameters
-			)
-		);
+		if ( in_array( WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML, $this->templates_to_load ) ) {
+			$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
+				$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
+				array_merge(
+					$twig_common_parameters,
+					array(
+						'widget_args' => [
+							'before_widget' => $this->before_ui,
+							'after_widget'  => $this->after_ui,
+							'before_title'  => $this->before_title,
+							'after_title'   => $this->after_title
+						]
+					),
+					$twig_parameters
+				)
+			);
+		}
 
 		return $html;
 
@@ -300,7 +378,7 @@ class WPSOLR_UI {
 	 * @return array
 	 */
 	public function get_layouts() {
-		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( $this->layout_id );
+		return WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( $this->layout_type );
 	}
 
 	/**

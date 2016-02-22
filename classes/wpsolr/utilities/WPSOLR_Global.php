@@ -12,7 +12,6 @@ use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
-use wpsolr\extensions\shortcodes\WPSOLR_Options_Shortcodes;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
@@ -24,6 +23,7 @@ use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\ui\templates\twig\WPSOLR_Twig;
 use wpsolr\ui\WPSOLR_Query;
 use wpsolr\ui\WPSOLR_Query_Parameters;
+use wpsolr\ui\WPSOLR_UI;
 
 /**
  * Replace class WP_Query by the child class WPSOLR_query
@@ -40,6 +40,10 @@ class WPSOLR_Global {
 	private static $objects = array();
 
 	public static function action_wp_loaded() {
+
+		// Add ajax actions
+		add_action( 'wp_ajax_nopriv_' . WPSOLR_UI::METHOD_DISPLAY_AJAX, [ WPSOLR_UI::class, WPSOLR_UI::METHOD_DISPLAY_AJAX ] );
+		add_action( 'wp_ajax_' . WPSOLR_UI::METHOD_DISPLAY_AJAX, [ WPSOLR_UI::class, WPSOLR_UI::METHOD_DISPLAY_AJAX ] );
 
 		if ( WPSOLR_Query_Parameters::is_replace_wp_search() ) {
 

@@ -17,6 +17,7 @@ class WPSOLR_UI_Filter extends WPSOLR_UI_Facet {
 	 * @inheritDoc
 	 */
 	public function __construct() {
+
 		$this->component_type = WPSOLR_Options_Components::COMPONENT_TYPE_FILTERS;
 		$this->layout_type    = WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER_GROUP;
 	}

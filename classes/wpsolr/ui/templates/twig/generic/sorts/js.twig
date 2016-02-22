@@ -10,6 +10,7 @@
         wpsolr_components["{{ ui_id }}"].set_query_parameter_name("{{ query_parameter_name }}");
         wpsolr_components["{{ ui_id }}"].set_is_debug_js({{ is_debug_js }});
         wpsolr_components["{{ ui_id }}"].set_is_ajax({{ is_ajax }});
+        wpsolr_components["{{ ui_id }}"].set_is_own_ajax({{ is_own_ajax }});
 
         jQuery(".{{ ui_id }}").on("change", function (event) {
 

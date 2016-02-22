@@ -15,6 +15,7 @@ use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\ui\shortcode\WPSOLR_Shortcode;
 use wpsolr\ui\widget\WPSOLR_Widget;
 use wpsolr\ui\WPSOLR_Query_Parameters;
+use wpsolr\ui\WPSOLR_UI;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
 
@@ -373,6 +374,8 @@ function my_front_enqueue() {
 		array(
 			'SEARCH_PARAMETER_Q' => WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q,
 			'SEARCH_PARAMETER_S' => WPSOLR_Query_Parameters::SEARCH_PARAMETER_S,
+			'ajax_url'           => admin_url( 'admin-ajax.php' ),
+			'ajax_action'        => WPSOLR_UI::METHOD_DISPLAY_AJAX
 		) );
 
 	/*
