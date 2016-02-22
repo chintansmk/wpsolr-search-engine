@@ -1,3 +1,7 @@
+.wpsolr_component_empty {
+    display: none;
+}
+
 .wpsolr_error_ajax {
     color: red;
     font-weight: bold;

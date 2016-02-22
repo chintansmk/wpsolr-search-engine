@@ -164,7 +164,7 @@ class WPSOLR_UI {
 			// Extract data
 			$this->data = $this->extract_data_with_cache();
 
-			if ( $this->url_is_authorized( $this->url_regexp_lines ) && ( $this->is_show_when_no_data || ! $this->is_data_empty() ) ) {
+			if ( $this->url_is_authorized( $this->url_regexp_lines ) ) {
 
 				return $this->get_display_form();
 			}
@@ -328,21 +328,31 @@ class WPSOLR_UI {
 
 		// HTML template
 		if ( in_array( WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML, $this->templates_to_load ) ) {
-			$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
-				$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
-				array_merge(
-					$twig_common_parameters,
-					array(
-						'widget_args' => [
-							'before_widget' => $this->before_ui,
-							'after_widget'  => $this->after_ui,
-							'before_title'  => $this->before_title,
-							'after_title'   => $this->after_title
-						]
-					),
-					$twig_parameters
-				)
-			);
+
+			if ( $this->is_show_when_no_data || ! $this->is_data_empty() ) {
+
+				$html .= WPSOLR_Global::getTwig()->getTwigEnvironment()->render(
+					$this->layout[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ],
+					array_merge(
+						$twig_common_parameters,
+						array(
+							'widget_args' => [
+								'before_widget' => $this->before_ui,
+								'after_widget'  => $this->after_ui,
+								'before_title'  => $this->before_title,
+								'after_title'   => $this->after_title
+							]
+						),
+						$twig_parameters
+					)
+				);
+
+			} else {
+
+				// No data. Display just a skeleton, so that the component can appear in a later Ajax call.
+				$html .= sprintf( '<div class="wpsolr_component_empty %s"></div>', $this->component_id );
+			}
+
 		}
 
 		return $html;
