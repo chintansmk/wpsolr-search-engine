@@ -94,9 +94,14 @@ WPSOLR_UI.prototype.set_url_query = function () {
     // query: keep it, or add one empty to go to search page on click
     var current_url = new Url(this.url);
 
+    // Delete the other parameter only, to keep query parameter in first postion
+    if (( this.query_parameter_name != wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_Q) && (current_url.query[wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_Q] != undefined)) {
+        delete current_url.query[wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_Q];
+    }
+    if (( this.query_parameter_name != wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_S) && (current_url.query[wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_S] != undefined)) {
+        delete current_url.query[wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_S];
+    }
     var current_query = this.get_url_query(this.url);
-    delete current_url.query[wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_Q];
-    delete current_url.query[wp_localize_script_wpsolr_ui.SEARCH_PARAMETER_S];
     current_url.query[this.query_parameter_name] = current_query;
 
     return current_url;
