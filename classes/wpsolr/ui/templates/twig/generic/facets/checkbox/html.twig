@@ -20,7 +20,7 @@
                 {% set data_wpsolr_facet = wpsolr_create_data_facet(facet, item) %}
 
                 <li>
-                    <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }}"
+                    <a class="{{ facet_selector_class }} {{ item.selected ? facet_selected_class : "" }} {{ data_wpsolr_facet.count == 0 ? " wpsolr_disabled " : "" }}"
                        data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">
                         {{ item.label }}
                     </a> {# Current facet item #}

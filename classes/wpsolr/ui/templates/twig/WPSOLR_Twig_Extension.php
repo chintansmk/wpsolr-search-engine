@@ -37,7 +37,8 @@ class WPSOLR_Twig_Extension extends \Twig_Extension {
 		$result = [
 			'facet_id'          => $facet['id'],
 			'facet_type'        => $facet['definition'][ WPSOLR_Options_Facets::FACET_FIELD_TYPE ],
-			'facet_delay_in_ms' => $facet['definition'][ WPSOLR_Options_Facets::FACET_FIELD_JS_REFRESH_DELAY_IN_MS ]
+			'facet_delay_in_ms' => $facet['definition'][ WPSOLR_Options_Facets::FACET_FIELD_JS_REFRESH_DELAY_IN_MS ],
+			'count'             => $item['count']
 		];
 
 		switch ( $facet['definition'][ WPSOLR_Options_Facets::FACET_FIELD_TYPE ] ) {
