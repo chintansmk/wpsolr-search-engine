@@ -407,7 +407,12 @@ class WPSOLR_UI {
 	 */
 	private function get_results_page_permalink() {
 
-		// Standard search
+		// Ajax
+		if ( ! empty( $this->ajax_url ) ) {
+			return $this->ajax_url;
+		}
+
+		// Search required
 		if ( $this->get_is_results_page_theme_search_page() ) {
 			return get_home_url();
 		}
@@ -427,8 +432,27 @@ class WPSOLR_UI {
 			return get_home_url();
 		}
 
-		// Current page
-		return get_permalink( get_post() );
+		// Current page is a category
+		if ( is_category() ) {
+			return get_category_link( get_category( get_query_var( 'cat' ) ) );
+		}
+
+		// Current page is a page
+		if ( is_page() ) {
+			return get_permalink( get_post() );
+		}
+
+		// Standard search
+		if ( is_search() ) {
+			return get_home_url();
+		}
+
+		throw new WPSOLR_Exception( 'we could not calculate a redirect permalink for this component.' );
+	}
+
+
+	public function get_redirect_url() {
+
 	}
 
 	/**
@@ -439,7 +463,9 @@ class WPSOLR_UI {
 	private function get_results_page_query_parameter_name() {
 
 		// Standard search, or wpsolr search
-		$result = $this->get_is_results_page_theme_search_page() || $this->get_is_search_method_custom_category() ? WPSOLR_Query_Parameters::SEARCH_PARAMETER_S : WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q;
+		$result = ( is_search() || $this->get_is_results_page_theme_search_page() || $this->get_is_search_method_custom_category() || is_category() )
+			? WPSOLR_Query_Parameters::SEARCH_PARAMETER_S
+			: WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q;
 
 		return $result;
 	}

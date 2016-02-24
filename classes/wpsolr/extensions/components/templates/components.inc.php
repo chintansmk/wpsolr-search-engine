@@ -131,7 +131,7 @@ $current_component_option_name = sprintf( "%s[%s]", $options_name, $component_ty
 
 			<div class="wdm_row">
 				<div class='col_left'>
-					Page where to display results:
+					Redirect to:
 				</div>
 				<div class='col_right'>
 					<?php
