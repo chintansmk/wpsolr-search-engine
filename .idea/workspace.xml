@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ab468aab-fb21-4977-b005-a2c5caca8c3b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/wpsolr_ui.js" afterPath="$PROJECT_DIR$/js/wpsolr_ui.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php" afterPath="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php" />
     </list>
     <ignored path="wpsolr-search-engine.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,19 +48,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="WPSOLR_UI.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_UI.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-9.36">
-              <caret line="419" column="24" selection-start-line="419" selection-start-column="24" selection-end-line="419" selection-end-column="24" />
-              <folding>
-                <element signature="e#29#68#0#PHP" expanded="true" />
-                <marker date="1456329978000" expanded="true" signature="6894:6906" placeholder="..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="WPSOLR_Global.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/wpsolr/utilities/WPSOLR_Global.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -78,6 +65,18 @@
               <caret line="232" column="0" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
               <folding>
                 <element signature="e#46#92#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WPSOLR_Query.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.6666667">
+              <caret line="309" column="38" selection-start-line="309" selection-start-column="16" selection-end-line="309" selection-end-column="38" />
+              <folding>
+                <element signature="e#29#59#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -113,10 +112,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="wpsolr_ui.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="wpsolr_ui.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/wpsolr_ui.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.47171825">
+            <state vertical-scroll-proportion="0.0">
               <caret line="100" column="15" selection-start-line="100" selection-start-column="15" selection-end-line="100" selection-end-column="15" />
               <folding />
             </state>
@@ -208,7 +207,6 @@
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/templates/twig/generic/facets/html.twig" />
         <option value="$PROJECT_DIR$/classes/wpsolr/extensions/layouts/WPSOLR_Options_Layouts.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_UI_Filter.php" />
-        <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/extensions/components/WPSOLR_Options_Components.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Data_Facets.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Data_Filter.php" />
@@ -226,6 +224,7 @@
         <option value="$PROJECT_DIR$/classes/wpsolr/WPSOLR_Filters.php" />
         <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_UI.php" />
         <option value="$PROJECT_DIR$/js/wpsolr_ui.js" />
+        <option value="$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php" />
       </list>
     </option>
   </component>
@@ -2567,14 +2566,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.4">
-          <caret line="306" column="43" selection-start-line="306" selection-start-column="43" selection-end-line="306" selection-end-column="43" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classes/wpsolr/utilities/WPSOLR_Regexp.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-11.2">
@@ -2606,20 +2597,6 @@
         <state vertical-scroll-proportion="0.34567901">
           <caret line="78" column="9" selection-start-line="78" selection-start-column="9" selection-end-line="78" selection-end-column="9" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../wp-includes/query.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36070853">
-          <caret line="573" column="9" selection-start-line="573" selection-start-column="9" selection-end-line="573" selection-end-column="9" />
-          <folding>
-            <marker date="1454441191000" expanded="true" signature="95032:95123" placeholder="SELECT ${$di... wp_comments" />
-            <marker date="1454441191000" expanded="true" signature="103326:103422" placeholder="SELECT ${$fo... wp_posts" />
-            <marker date="1454441191000" expanded="true" signature="105274:105378" placeholder="SELECT ${$fo... wp_posts" />
-            <marker date="1454441191000" expanded="true" signature="107781:107862" placeholder="SELECT wp_co... wp_comments" />
-            <marker date="1454441191000" expanded="true" signature="143909:144046" placeholder="SELECT post_... wp_postmeta" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -2814,22 +2791,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_UI.php">
+    <entry file="file://$PROJECT_DIR$/js/wpsolr_ui.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-9.36">
-          <caret line="419" column="24" selection-start-line="419" selection-start-column="24" selection-end-line="419" selection-end-column="24" />
-          <folding>
-            <element signature="e#29#68#0#PHP" expanded="true" />
-            <marker date="1456329978000" expanded="true" signature="6894:6906" placeholder="..." />
-          </folding>
+        <state vertical-scroll-proportion="0.0">
+          <caret line="100" column="15" selection-start-line="100" selection-start-column="15" selection-end-line="100" selection-end-column="15" />
+          <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/wpsolr_ui.js">
+    <entry file="file://$PROJECT_DIR$/classes/wpsolr/ui/WPSOLR_Query.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47171825">
-          <caret line="100" column="15" selection-start-line="100" selection-start-column="15" selection-end-line="100" selection-end-column="15" />
-          <folding />
+        <state vertical-scroll-proportion="0.6666667">
+          <caret line="309" column="38" selection-start-line="309" selection-start-column="16" selection-end-line="309" selection-end-column="38" />
+          <folding>
+            <element signature="e#29#59#0#PHP" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
