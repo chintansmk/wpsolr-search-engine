@@ -17,8 +17,10 @@ class WPSOLR_UI {
 
 	// Form fields
 	const FORM_FIELD_RESULTS_PAGE = 'results_page';
+	const FORM_FIELD_RESULTS_CATEGORY = 'results_category';
 	const FORM_FIELD_SEARCH_METHOD = 'search_method';
 	const FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE = 'use_custom_page';
+	const FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_CATEGORY = 'use_custom_category';
 	const FORM_FIELD_SEARCH_METHOD_VALUE_NO_AJAX = 'no_ajax';
 	const FORM_FIELD_SEARCH_METHOD_VALUE_AJAX = 'ajax';
 	const FORM_FIELD_SEARCH_METHOD_VALUE_AJAX_WITH_PARAMETERS = 'ajax_with_parameters';
@@ -39,11 +41,14 @@ class WPSOLR_UI {
 	const FORM_FIELD_IS_OWN_AJAX = 'is_own_ajax';
 
 	const METHOD_DISPLAY_AJAX = 'display_ajax';
+	const AJAX_ACTION_URL = 'url';
 
 	// Data extracted from Solr search results
 	protected $data;
 
+	protected $ajax_url;
 	protected $results_page;
+	protected $results_category;
 	protected $group_id;
 	protected $layout_id;
 	protected $layout_type;
@@ -62,6 +67,7 @@ class WPSOLR_UI {
 	protected $component_id;
 	protected $templates_to_load;
 	protected $is_own_ajax;
+	protected $name;
 
 	/**
 	 * Front-end display of UI, returned by ajax
@@ -69,6 +75,7 @@ class WPSOLR_UI {
 	public static function display_ajax() {
 
 		$component_ids = ! empty( $_POST[ self::FORM_FIELD_COMPONENT_ID ] ) ? $_POST[ self::FORM_FIELD_COMPONENT_ID ] : '';
+		$ajax_url      = ! empty( $_POST[ self::AJAX_ACTION_URL ] ) ? $_POST[ self::AJAX_ACTION_URL ] : '';
 
 
 		$results = [ 'components' => [ ] ];
@@ -85,6 +92,7 @@ class WPSOLR_UI {
 
 				// Ajax require reloading HTML only
 				$ui->templates_to_load = [ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ];
+				$ui->ajax_url          = $ajax_url;
 
 				$display = $ui->display( '???name', $component_id, '', '', '', '', '' );
 
@@ -146,6 +154,7 @@ class WPSOLR_UI {
 			$this->name                       = $name;
 			$this->search_method              = $extension_components->get_search_method( $component );
 			$this->results_page               = $extension_components->get_results_page( $component );
+			$this->results_category           = $extension_components->get_results_category( $component );
 			$this->is_debug_js                = $extension_components->get_component_is_debug_js( $component );
 			$this->is_show_when_no_data       = $extension_components->get_component_is_show_when_empty( $component );
 			$this->is_show_title_on_front_end = $extension_components->get_component_is_show_title_on_front_end( $component );
@@ -221,7 +230,7 @@ class WPSOLR_UI {
 		}
 
 		// Is current url matching one of the regexp lines ?
-		return WPSOLR_Regexp::preg_match_lines_of_regexp( $url_regexp_lines, WPSOLR_Query_Parameters::get_current_page_url() );
+		return WPSOLR_Regexp::preg_match_lines_of_regexp( $url_regexp_lines, ! empty( $this->ajax_url ) ? $this->ajax_url : WPSOLR_Query_Parameters::get_current_page_url() );
 	}
 
 	/**
@@ -408,6 +417,11 @@ class WPSOLR_UI {
 			return get_permalink( $this->results_page );
 		}
 
+		// A category
+		if ( $this->get_is_search_method_custom_category() ) {
+			return get_category_link( $this->results_category );
+		}
+
 		// Current home page
 		if ( is_home() ) {
 			return get_home_url();
@@ -425,7 +439,7 @@ class WPSOLR_UI {
 	private function get_results_page_query_parameter_name() {
 
 		// Standard search, or wpsolr search
-		$result = $this->get_is_results_page_theme_search_page() ? WPSOLR_Query_Parameters::SEARCH_PARAMETER_S : WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q;
+		$result = $this->get_is_results_page_theme_search_page() || $this->get_is_search_method_custom_category() ? WPSOLR_Query_Parameters::SEARCH_PARAMETER_S : WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q;
 
 		return $result;
 	}
@@ -440,6 +454,7 @@ class WPSOLR_UI {
 		return ( $this->get_is_search_method_custom_page() && empty( trim( $this->results_page ) ) );
 	}
 
+
 	/**
 	 * Is search method a custom page ?
 	 *
@@ -449,6 +464,17 @@ class WPSOLR_UI {
 
 		return ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE );
 	}
+
+	/**
+	 * Is search method a category ?
+	 *
+	 * @return boolean
+	 */
+	private function get_is_search_method_custom_category() {
+
+		return ( $this->search_method == self::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_CATEGORY );
+	}
+
 
 	/**
 	 * Is search method ajax ?

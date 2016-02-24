@@ -216,6 +216,18 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	}
 
 	/**
+	 * Get results category
+	 *
+	 * @param $component
+	 *
+	 * @return string
+	 */
+	public function get_results_category( $component ) {
+
+		return ! empty( $component[ WPSOLR_UI::FORM_FIELD_RESULTS_CATEGORY ] ) ? $component[ WPSOLR_UI::FORM_FIELD_RESULTS_CATEGORY ] : '';
+	}
+
+	/**
 	 * Get search method
 	 *
 	 * @param $component

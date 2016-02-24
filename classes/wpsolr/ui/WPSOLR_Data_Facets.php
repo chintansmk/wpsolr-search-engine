@@ -140,7 +140,7 @@ class WPSOLR_Data_Facets {
 					// Facet templates or facet filter templates
 					$layout_type = static::get_layout_type();
 
-					$layout                                                      = $extension_layouts->get_layout_from_type_and_id( $layout_type, $facet_to_display[ WPSOLR_Options_Layouts::LAYOUT_FIELD_LAYOUT_ID ] );
+					$layout                                                      = $extension_layouts->get_layout_from_type_and_id( $layout_type, $facet_to_display[ static::get_layout_field_name() ] );
 					$facet[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_HTML ] = $extension_layouts->get_layout_template_html( $layout );
 					$facet[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_CSS ]  = $extension_layouts->get_layout_template_css( $layout );
 					$facet[ WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS ]   = $extension_layouts->get_layout_template_js( $layout );
@@ -358,6 +358,10 @@ class WPSOLR_Data_Facets {
 	 */
 	protected static function discard_unselected_items() {
 		return false;
+	}
+
+	protected static function get_layout_field_name() {
+		return WPSOLR_Options_Layouts::LAYOUT_FIELD_LAYOUT_ID;
 	}
 
 }

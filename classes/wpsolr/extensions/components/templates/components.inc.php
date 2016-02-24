@@ -144,6 +144,10 @@ $current_component_option_name = sprintf( "%s[%s]", $options_name, $component_ty
 							'label' => 'Page: '
 						),
 						array(
+							'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_CATEGORY,
+							'label' => 'Category: '
+						),
+						array(
 							'code'  => WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_NO_AJAX,
 							'label' => 'Current page. No Ajax.'
 						),
@@ -158,20 +162,33 @@ $current_component_option_name = sprintf( "%s[%s]", $options_name, $component_ty
 					);
 					foreach ( $options as $option ) {
 						?>
-						<p>
-							<input type="radio"
-							       name="<?php echo $current_component_option_name; ?>[<?php echo $component_uuid; ?>][<?php echo WPSOLR_UI::FORM_FIELD_SEARCH_METHOD; ?>]"
-							       value="<?php echo $option['code'] ?>" <?php checked( $option['code'], $value ); ?> /> <?php echo $option['label']; ?>
-							<?php if ( WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE == $option['code'] ) {
+						<input type="radio"
+						       name="<?php echo $current_component_option_name; ?>[<?php echo $component_uuid; ?>][<?php echo WPSOLR_UI::FORM_FIELD_SEARCH_METHOD; ?>]"
+						       value="<?php echo $option['code'] ?>" <?php checked( $option['code'], $value ); ?> /> <?php echo $option['label']; ?>
+						<?php
+						switch ( $option['code'] ) {
+							case WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_PAGE:
 								$args = array(
-									'selected'          => $value,
+									'selected'          => isset( $component[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] ) ? $component[ WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ] : '',
 									'echo'              => 1,
 									'name'              => sprintf( "%s[%s][%s]", $current_component_option_name, $component_uuid, WPSOLR_UI::FORM_FIELD_RESULTS_PAGE ),
 									'show_option_none'  => 'My theme search page',
 									'option_none_value' => ''
 								);
 								wp_dropdown_pages( $args );
-							} ?>
+								break;
+
+							case WPSOLR_UI::FORM_FIELD_SEARCH_METHOD_VALUE_USE_CUSTOM_CATEGORY:
+								$args = array(
+									'selected'          => isset( $component[ WPSOLR_UI::FORM_FIELD_RESULTS_CATEGORY ] ) ? $component[ WPSOLR_UI::FORM_FIELD_RESULTS_CATEGORY ] : '',
+									'echo'              => 1,
+									'name'              => sprintf( "%s[%s][%s]", $current_component_option_name, $component_uuid, WPSOLR_UI::FORM_FIELD_RESULTS_CATEGORY ),
+									'show_option_none'  => '',
+									'option_none_value' => ''
+								);
+								wp_dropdown_categories( $args );
+								break;
+						} ?>
 						</p>
 					<?php } ?>
 

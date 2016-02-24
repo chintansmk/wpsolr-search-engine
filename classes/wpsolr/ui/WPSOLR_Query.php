@@ -307,7 +307,7 @@ class WPSOLR_Query extends \WP_Query {
 		$posts_in_results_unordered = get_posts( array(
 				'numberposts' => count( $posts_ids ),
 				'post_type'   => 'any',
-				'post_status' => array( 'published', 'inherit' ), // override default status to get also attachements
+				//'post_status' => array( 'published', 'inherit' ), // override default status to get also attachements
 				'post__in'    => $posts_ids
 			)
 		);

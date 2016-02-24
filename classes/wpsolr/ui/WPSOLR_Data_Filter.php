@@ -1,6 +1,8 @@
 <?php
 
 namespace wpsolr\ui;
+
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 
 /**
@@ -22,6 +24,10 @@ class WPSOLR_Data_Filter extends WPSOLR_Data_Facets {
 	 */
 	protected static function discard_unselected_items() {
 		return true;
+	}
+
+	protected static function get_layout_field_name() {
+		return WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID;
 	}
 
 }

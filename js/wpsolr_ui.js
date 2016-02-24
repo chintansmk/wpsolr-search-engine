@@ -192,6 +192,7 @@ WPSOLR_UI.prototype.call_ajax = function (url, component_ids) {
     var data = {
         action: wp_localize_script_wpsolr_ui.ajax_action,
         url_parameters: url_parameters,
+        url: url,
         component_id: component_ids
     };
     var this_component = this;
