@@ -68,4 +68,7 @@ class WPSOLR_Filters {
 
 	// Filter to get a translation string from ML extensions
 	const WPSOLR_FILTER_TRANSLATION_STRING = 'wpsolr_filter_translation_string';
+
+	// Filter to get the home page url from ML extensions
+	const WPSOLR_FILTER_HOME_URL = 'wpsolr_filter_home_url';
 }

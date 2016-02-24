@@ -170,10 +170,10 @@ class WPSOLR_UI {
 			$this->layout_id = $extension_components->get_component_layout_id( $component );
 			$this->layout    = $this->get_layout();
 
-			// Extract data
-			$this->data = $this->extract_data_with_cache();
-
 			if ( $this->url_is_authorized( $this->url_regexp_lines ) ) {
+
+				// Extract data
+				$this->data = $this->extract_data_with_cache();
 
 				return $this->get_display_form();
 			}
@@ -414,7 +414,7 @@ class WPSOLR_UI {
 
 		// Search required
 		if ( $this->get_is_results_page_theme_search_page() ) {
-			return get_home_url();
+			return get_search_link();
 		}
 
 		// A custom page
@@ -429,7 +429,7 @@ class WPSOLR_UI {
 
 		// Current home page
 		if ( is_home() ) {
-			return get_home_url();
+			return apply_filters( WPSOLR_Filters::WPSOLR_FILTER_HOME_URL, get_home_url() );
 		}
 
 		// Current page is a category
@@ -444,7 +444,7 @@ class WPSOLR_UI {
 
 		// Standard search
 		if ( is_search() ) {
-			return get_home_url();
+			return get_search_link();
 		}
 
 		throw new WPSOLR_Exception( 'we could not calculate a redirect permalink for this component.' );

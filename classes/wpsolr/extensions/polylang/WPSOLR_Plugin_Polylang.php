@@ -49,6 +49,10 @@ class WPSOLR_Plugin_Polylang extends WPSOLR_Plugin_Wpml {
 			'get_translation_string',
 		), 10, 1 );
 
+		WPSOLR_Service_Wordpress::add_filter( WPSOLR_Filters::WPSOLR_FILTER_HOME_URL, array(
+			$this,
+			'get_home_url',
+		), 10, 1 );
 
 	}
 
@@ -222,6 +226,11 @@ class WPSOLR_Plugin_Polylang extends WPSOLR_Plugin_Wpml {
 		// POLYLANG cannot accept 2 pages with the same slug.
 		// So, add the language to the slug.
 		return WPSOLR_SearchSolrClient::_SEARCH_PAGE_SLUG . "-" . $this->get_current_language_code();
+	}
+
+	function get_home_url() {
+
+		return WPSOLR_Service_Polylang::pll_home_url();
 	}
 
 	/**

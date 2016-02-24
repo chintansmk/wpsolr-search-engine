@@ -33,4 +33,10 @@ class WPSOLR_Service_Polylang {
 		return $string;
 	}
 
+	public static function pll_home_url() {
+		if ( function_exists( '\pll_home_url' ) ) {
+			return \pll_home_url();
+		}
+	}
+
 }
