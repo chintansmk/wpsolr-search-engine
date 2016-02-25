@@ -11,8 +11,9 @@
         wpsolr_components["{{ ui_id }}"].set_is_debug_js({{ is_debug_js }});
         wpsolr_components["{{ ui_id }}"].set_is_ajax({{ is_ajax }});
         wpsolr_components["{{ ui_id }}"].set_is_own_ajax({{ is_own_ajax }});
+        wpsolr_components["{{ ui_id }}"].set_is_prevent_redirection({{ is_prevent_redirection }});
 
-        jQuery(".{{ ui_id }}").on("change", function (event) {
+        jQuery(".{{ ui_id }} select").on("change", function (event) {
 
             wpsolr_components["{{ ui_id }}"].addValue(jQuery(this).val());
             wpsolr_components["{{ ui_id }}"].create_url(0);

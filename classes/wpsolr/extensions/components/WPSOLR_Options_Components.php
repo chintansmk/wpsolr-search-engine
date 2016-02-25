@@ -314,6 +314,18 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	}
 
 	/**
+	 * Get component prevent redirection
+	 *
+	 * @param $component
+	 *
+	 * @return boolean
+	 */
+	public function get_component_is_prevent_redirection( $component ) {
+
+		return ! empty( $component[ WPSOLR_UI::FORM_FIELD_IS_PREVENT_REDIRECTION ] );
+	}
+
+	/**
 	 * Get component is_own_ajax
 	 *
 	 * @param $component

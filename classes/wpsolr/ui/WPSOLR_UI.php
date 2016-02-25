@@ -39,6 +39,7 @@ class WPSOLR_UI {
 	const FORM_FIELD_COMPONENT_TYPE = 'component_type';
 	const FORM_FIELD_COMPONENT_ID = 'component_id';
 	const FORM_FIELD_IS_OWN_AJAX = 'is_own_ajax';
+	const FORM_FIELD_IS_PREVENT_REDIRECTION = 'is_prevent_redirection';
 
 	const METHOD_DISPLAY_AJAX = 'display_ajax';
 	const AJAX_ACTION_URL = 'url';
@@ -68,6 +69,7 @@ class WPSOLR_UI {
 	protected $templates_to_load;
 	protected $is_own_ajax;
 	protected $name;
+	protected $is_prevent_redirection;
 
 	/**
 	 * Front-end display of UI, returned by ajax
@@ -156,6 +158,7 @@ class WPSOLR_UI {
 			$this->results_page               = $extension_components->get_results_page( $component );
 			$this->results_category           = $extension_components->get_results_category( $component );
 			$this->is_debug_js                = $extension_components->get_component_is_debug_js( $component );
+			$this->is_prevent_redirection     = $extension_components->get_component_is_prevent_redirection( $component );
 			$this->is_show_when_no_data       = $extension_components->get_component_is_show_when_empty( $component );
 			$this->is_show_title_on_front_end = $extension_components->get_component_is_show_title_on_front_end( $component );
 			$this->title                      = $this->is_show_title_on_front_end ? apply_filters( WPSOLR_Filters::WPSOLR_FILTER_TRANSLATION_STRING, ! empty( $title ) ? $title : $extension_components->get_component_title( $component ) ) : '';
@@ -310,7 +313,8 @@ class WPSOLR_UI {
 			'is_debug_js'                => json_encode( $this->is_debug_js ),
 			// encoding required for true/false being sent to twig
 			'is_ajax'                    => json_encode( $this->get_is_search_method_ajax() ),
-			self::FORM_FIELD_IS_OWN_AJAX => $this->is_own_ajax
+			self::FORM_FIELD_IS_OWN_AJAX => $this->is_own_ajax,
+			'is_prevent_redirection'     => json_encode( $this->is_prevent_redirection )
 		];
 
 		if ( in_array( WPSOLR_Options_Layouts::LAYOUT_FIELD_TEMPLATE_JS, $this->templates_to_load ) ) {
