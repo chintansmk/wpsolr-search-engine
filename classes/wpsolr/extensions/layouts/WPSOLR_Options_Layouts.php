@@ -22,6 +22,8 @@ class WPSOLR_Options_Layouts extends WPSOLR_Extensions {
 	const TYPE_LAYOUT_FACET_FILTER = 'type_layout_facet_filter';
 	const TYPE_LAYOUT_SORT_GROUP = 'type_layout_sort_group';
 	const TYPE_LAYOUT_SORT = 'type_layout_sort';
+	const TYPE_LAYOUT_RESULT_ROW_GROUP = 'type_layout_result_group';
+	const TYPE_LAYOUT_RESULT_ROW = 'type_layout_result';
 
 	const TYPE_LAYOUT_FIELD_NAME = 'name';
 	const TYPE_LAYOUT_FIELD_LAYOUTS = 'layouts';
@@ -48,6 +50,28 @@ class WPSOLR_Options_Layouts extends WPSOLR_Extensions {
 		$numeric_types = WPSOLR_Global::getSolrFieldTypes()->get_numeric_types();
 
 		self::$predefined_layouts = [
+			self::TYPE_LAYOUT_RESULT_ROW_GROUP   => [
+				self::TYPE_LAYOUT_FIELD_NAME    => 'Results rows group',
+				self::TYPE_LAYOUT_FIELD_LAYOUTS => [
+					self::GENERIC_LAYOUT_ID => [
+						self::LAYOUT_FIELD_TEMPLATE_NAME => 'WPSOLR - list',
+						self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/html.twig',
+						self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/css.twig',
+						self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/js.twig'
+					]
+				]
+			],
+			self::TYPE_LAYOUT_RESULT_ROW         => [
+				self::TYPE_LAYOUT_FIELD_NAME    => 'Results rows line',
+				self::TYPE_LAYOUT_FIELD_LAYOUTS => [
+					self::GENERIC_LAYOUT_ID => [
+						self::LAYOUT_FIELD_TEMPLATE_NAME => 'WPSOLR - Line',
+						self::LAYOUT_FIELD_TEMPLATE_HTML => 'generic/sorts/select/html.twig',
+						self::LAYOUT_FIELD_TEMPLATE_CSS  => 'generic/sorts/select/css.twig',
+						self::LAYOUT_FIELD_TEMPLATE_JS   => 'generic/sorts/select/js.twig'
+					]
+				]
+			],
 			self::TYPE_LAYOUT_SORT_GROUP         => [
 				self::TYPE_LAYOUT_FIELD_NAME    => 'Sort group',
 				self::TYPE_LAYOUT_FIELD_LAYOUTS => [
@@ -246,7 +270,13 @@ class WPSOLR_Options_Layouts extends WPSOLR_Extensions {
 
 		// No custom layouts of this type
 		if ( empty( $layouts ) || empty( $layouts[ $layout_type ] ) || empty( $layouts[ $layout_type ][ self::TYPE_LAYOUT_FIELD_LAYOUTS ] ) ) {
-			return self::$predefined_layouts[ $layout_type ][ self::TYPE_LAYOUT_FIELD_LAYOUTS ];
+
+			// Must be a predefined layout
+			if ( isset( self::$predefined_layouts[ $layout_type ] ) && isset( self::$predefined_layouts[ $layout_type ][ self::TYPE_LAYOUT_FIELD_LAYOUTS ] ) ) {
+				return self::$predefined_layouts[ $layout_type ][ self::TYPE_LAYOUT_FIELD_LAYOUTS ];
+			}
+
+			throw new WPSOLR_Exception( sprintf( 'layout type %s is unknown', $layout_type ) );
 		}
 
 		// Fill the fields of custom layouts with their model fields
@@ -373,5 +403,5 @@ class WPSOLR_Options_Layouts extends WPSOLR_Extensions {
 	public function get_predefined_layouts() {
 		return self::$predefined_layouts;
 	}
-	
+
 }

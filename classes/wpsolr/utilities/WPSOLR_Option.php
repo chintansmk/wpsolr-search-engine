@@ -746,7 +746,7 @@ class WPSOLR_Option {
 
 	/***************************************************************************************************************
 	 *
-	 * Layouts option
+	 * Components option
 	 *
 	 **************************************************************************************************************/
 	const OPTION_COMPONENTS = 'wpsolr_components';
@@ -757,6 +757,67 @@ class WPSOLR_Option {
 	 */
 	public function get_option_components() {
 		return self::get_option( self::OPTION_COMPONENTS, [ ] );
+	}
+
+
+	/***************************************************************************************************************
+	 *
+	 * Results rows option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_RESULTS_ROWS = 'wpsolr_results_rows';
+
+	/**
+	 * Get results rows options array
+	 * @return array
+	 */
+	public function get_option_results_rows() {
+		return self::get_option( self::OPTION_RESULTS_ROWS, [ ] );
+	}
+
+	/***************************************************************************************************************
+	 *
+	 * Results header option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_RESULTS_HEADERS = 'wpsolr_results_headers';
+
+	/**
+	 * Get results header options array
+	 * @return array
+	 */
+	public function get_option_results_header() {
+		return self::get_option( self::OPTION_RESULTS_HEADERS, [ ] );
+	}
+
+	/***************************************************************************************************************
+	 *
+	 * Results page navigation option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_RESULTS_PAGE_NAVIGATION = 'wpsolr_results_page_navigations';
+
+	/**
+	 * Get results page navigation options array
+	 * @return array
+	 */
+	public function get_option_results_page_navigation() {
+		return self::get_option( self::OPTION_RESULTS_PAGE_NAVIGATION, [ ] );
+	}
+
+	/***************************************************************************************************************
+	 *
+	 * Search form option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_SEARCH_FORM = 'wpsolr_search_forms';
+
+	/**
+	 * Get search form options array
+	 * @return array
+	 */
+	public function get_option_search_form() {
+		return self::get_option( self::OPTION_SEARCH_FORM, [ ] );
 	}
 
 }

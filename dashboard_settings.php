@@ -234,19 +234,23 @@ switch ( $tab ) {
 			<?php
 
 			$subtabs = [
-				'result_opt'           => '2.1 Search',
-				'fields_opt'           => '2.2 Fields',
-				'facet_opt'            => '2.3 Facets',
-				'sort_opt'             => '2.4 Sorting',
-				'localization_options' => '2.5 Localization',
-				'layout_options'       => '2.6 Layouts',
-				'component_options'    => '2.7 Components'
+				WPSOLR_Option::OPTION_SEARCH                  => '2.1 Search',
+				WPSOLR_Option::OPTION_FIELDS                  => '2.2 Fields',
+				WPSOLR_Option::OPTION_FACETS                  => '2.3 Facets',
+				WPSOLR_Option::OPTION_SORTS                   => '2.4 Sorting',
+				WPSOLR_Option::OPTION_RESULTS_ROWS            => '2.x Results rows',
+				WPSOLR_Option::OPTION_RESULTS_HEADERS         => '2.x Results headers',
+				WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION => '2.x Results page navigations',
+				WPSOLR_Option::OPTION_SEARCH_FORM             => '2.x Search forms',
+				'localization_options'                        => '2.5 Localization',
+				'layout_options'                              => '2.6 Layouts',
+				'component_options'                           => '2.7 Components'
 			];
 
 			$subtab = wpsolr_admin_sub_tabs( $subtabs );
 
 			switch ( $subtab ) {
-				case 'result_opt':
+				case WPSOLR_Option::OPTION_SEARCH:
 
 					$solr_indexes = WPSOLR_Global::getExtensionIndexes()->get_indexes();
 
@@ -534,15 +538,15 @@ switch ( $tab ) {
 					<?php
 					break;
 
-				case 'fields_opt':
+				case WPSOLR_Option::OPTION_FIELDS:
 					WPSOLR_Global::getExtensionFields()->output_form();
 					break;
 
-				case 'facet_opt':
+				case WPSOLR_Option::OPTION_FACETS:
 					WPSOLR_Global::getExtensionFacets()->output_form();
 					break;
 
-				case 'sort_opt':
+				case WPSOLR_Option::OPTION_SORTS:
 					WPSOLR_Global::getExtensionSorts()->output_form();
 					break;
 
@@ -558,6 +562,21 @@ switch ( $tab ) {
 					WPSOLR_Global::getExtensionComponents()->output_form();
 					break;
 
+				case WPSOLR_Option::OPTION_RESULTS_ROWS:
+					WPSOLR_Global::getExtensionResultsRows()->output_form();
+					break;
+
+				case WPSOLR_Option::OPTION_RESULTS_HEADERS:
+					WPSOLR_Global::getExtensionResultsHeaders()->output_form();
+					break;
+
+				case WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION:
+					WPSOLR_Global::getExtensionResultsPageNavigations()->output_form();
+					break;
+
+				case WPSOLR_Option::OPTION_SEARCH_FORM:
+					WPSOLR_Global::getExtensionSearchForm()->output_form();
+					break;
 			}
 
 			?>

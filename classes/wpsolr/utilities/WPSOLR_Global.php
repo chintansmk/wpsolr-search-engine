@@ -11,6 +11,8 @@ use wpsolr\extensions\importexport\WPSOLR_Options_ImportExports;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
+use wpsolr\extensions\results\WPSOLR_Options_ResultsRows;
+use wpsolr\extensions\resultsheaders\WPSOLR_Options_Result_Header;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
@@ -42,7 +44,10 @@ class WPSOLR_Global {
 	public static function action_wp_loaded() {
 
 		// Add ajax actions
-		add_action( 'wp_ajax_nopriv_' . WPSOLR_UI::METHOD_DISPLAY_AJAX, [ WPSOLR_UI::class, WPSOLR_UI::METHOD_DISPLAY_AJAX ] );
+		add_action( 'wp_ajax_nopriv_' . WPSOLR_UI::METHOD_DISPLAY_AJAX, [
+			WPSOLR_UI::class,
+			WPSOLR_UI::METHOD_DISPLAY_AJAX
+		] );
 		add_action( 'wp_ajax_' . WPSOLR_UI::METHOD_DISPLAY_AJAX, [ WPSOLR_UI::class, WPSOLR_UI::METHOD_DISPLAY_AJAX ] );
 
 		if ( WPSOLR_Query_Parameters::is_replace_wp_search() ) {
@@ -251,6 +256,34 @@ class WPSOLR_Global {
 	 */
 	public static function get_plugin_dir_url() {
 		return WPSOLR_DEFINE_PLUGIN_DIR_URL;
+	}
+
+	/**
+	 * @return WPSOLR_Options_ResultsRows
+	 */
+	public static function getExtensionResultsRows() {
+		return self::getObject( WPSOLR_Extensions::OPTION_RESULTS_ROWS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_RESULTS_ROWS );
+	}
+
+	/**
+	 * @return WPSOLR_Options_Result_Header
+	 */
+	public static function getExtensionResultsHeaders() {
+		return self::getObject( WPSOLR_Extensions::OPTION_RESULTS_HEADERS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_RESULTS_HEADERS );
+	}
+
+	/**
+	 * @return WPSOLR_Options_ResultsRows
+	 */
+	public static function getExtensionResultsPageNavigations() {
+		return self::getObject( WPSOLR_Extensions::OPTION_RESULTS_PAGE_NAVIGATIONS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_RESULTS_PAGE_NAVIGATIONS );
+	}
+
+	/**
+	 * @return WPSOLR_Options_ResultsRows
+	 */
+	public static function getExtensionSearchForm() {
+		return self::getObject( WPSOLR_Extensions::OPTION_SEARCH_FORMS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_SEARCH_FORMS );
 	}
 }
 

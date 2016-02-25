@@ -91,7 +91,7 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 			<div class="accordion">
 
 				<?php foreach ( $components_types as $component_type_name => $component_type ) { ?>
-					<h4 class='head_div'><?php echo $component_type_name; ?></h4>
+					<h4 class='head_div'><?php echo $component_type[ WPSOLR_Options_Components::COMPONENT_FIELD_LABEL ]; ?></h4>
 					<div>
 						<?php
 						WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(

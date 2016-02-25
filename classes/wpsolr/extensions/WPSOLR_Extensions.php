@@ -3,6 +3,7 @@
 namespace wpsolr\extensions;
 
 use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
+use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
@@ -11,8 +12,11 @@ use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
+use wpsolr\extensions\resultsheaders\WPSOLR_Options_Result_Header;
+use wpsolr\extensions\resultspagenavigations\WPSOLR_Options_Result_Page_Navigation;
+use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
-use wpsolr\extensions\components\WPSOLR_Options_Components;
+use wpsolr\extensions\searchform\WPSOLR_Options_Search_Form;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
@@ -108,11 +112,23 @@ abstract class WPSOLR_Extensions {
 	// Extension: components
 	const OPTION_COMPONENTS = 'components';
 
+	// Extension: Results rows
+	const OPTION_RESULTS_ROWS = 'results_rows';
+
+	// Extension: Results headers
+	const OPTION_RESULTS_HEADERS = 'results_headers';
+
+	// Extension: Results page navigation
+	const OPTION_RESULTS_PAGE_NAVIGATIONS = 'results_page_navigations';
+
+	// Extension: Results headers
+	const OPTION_SEARCH_FORMS = 'search_forms';
+
 	/*
 	 * Extensions configuration
 	 */
 	private static $extensions_array = [
-		self::EXTENSION_WOOCOMMERCE =>
+		self::EXTENSION_WOOCOMMERCE           =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Woocommerce::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => 'WooCommerce',
@@ -127,7 +143,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::EXTENSION_WPML              =>
+		self::EXTENSION_WPML                  =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Wpml::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => 'SitePress',
@@ -142,7 +158,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::EXTENSION_POLYLANG          =>
+		self::EXTENSION_POLYLANG              =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Polylang::CLASS,
 				self::_CONFIG_PLUGIN_FUNCTION_NAME              => 'pll_get_post_language',
@@ -157,7 +173,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::EXTENSION_ACF               =>
+		self::EXTENSION_ACF                   =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Acf::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => 'acf',
@@ -172,7 +188,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::EXTENSION_TYPES             =>
+		self::EXTENSION_TYPES                 =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Types::CLASS,
 				self::_CONFIG_PLUGIN_CONSTANT_NAME              => 'WPCF_VERSION',
@@ -187,7 +203,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::EXTENSION_INDEXES           =>
+		self::EXTENSION_INDEXES               =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Indexes::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Indexes::CLASS,
@@ -202,7 +218,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_LOCALIZATION         =>
+		self::OPTION_LOCALIZATION             =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Localization::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Localization::CLASS,
@@ -217,7 +233,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::EXTENSION_GROUPS            =>
+		self::EXTENSION_GROUPS                =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_Groups::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => 'Groups_WordPress',
@@ -232,7 +248,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::EXTENSION_S2MEMBER          =>
+		self::EXTENSION_S2MEMBER              =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Plugin_S2member::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => 'c_ws_plugin__s2member_utils_s2o',
@@ -264,7 +280,7 @@ abstract class WPSOLR_Extensions {
 				]
 			],
 		*/
-		self::OPTION_MANAGED_SOLR_SERVERS =>
+		self::OPTION_MANAGED_SOLR_SERVERS     =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_ManagedServers::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_ManagedServers::CLASS,
@@ -279,7 +295,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_FACETS               =>
+		self::OPTION_FACETS                   =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Facets::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Facets::CLASS,
@@ -294,7 +310,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_FIELDS               =>
+		self::OPTION_FIELDS                   =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Fields::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Fields::CLASS,
@@ -309,7 +325,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_SORTS                =>
+		self::OPTION_SORTS                    =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Sorts::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Sorts::CLASS,
@@ -324,7 +340,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_IMPORTEXPORT         =>
+		self::OPTION_IMPORTEXPORT             =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_ImportExports::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_ImportExports::CLASS,
@@ -339,7 +355,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_LAYOUTS        =>
+		self::OPTION_LAYOUTS                  =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Layouts::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Layouts::CLASS,
@@ -354,7 +370,7 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_COMPONENTS     =>
+		self::OPTION_COMPONENTS               =>
 			[
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Components::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Components::CLASS,
@@ -366,6 +382,66 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_COMPONENTS,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_RESULTS_ROWS             =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Result_Row::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Result_Row::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'resultsrows/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'resultsrows/WPSOLR_Options_Result_Row.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'resultsrows/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_RESULTS_ROWS,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_RESULTS_HEADERS          =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Result_Header::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Result_Header::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'resultsheaders/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'resultsheaders/WPSOLR_Options_Result_Header.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'resultsheaders/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_RESULTS_HEADERS,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_RESULTS_PAGE_NAVIGATIONS =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Result_Page_Navigation::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Result_Page_Navigation::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'resultspagenavigations/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'resultspagenavigations/WPSOLR_Options_Result_Page_Navigation.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'resultspagenavigations/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_SEARCH_FORMS             =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Search_Form::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Search_Form::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'searchform/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'searchform/WPSOLR_Options_Search_Form.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'searchform/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SEARCH_FORM,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			]

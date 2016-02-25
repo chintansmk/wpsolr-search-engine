@@ -7,10 +7,12 @@ use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\ui\shortcode\WPSOLR_Shortcode_Facet;
 use wpsolr\ui\shortcode\WPSOLR_Shortcode_Filter;
+use wpsolr\ui\shortcode\WPSOLR_Shortcode_Result_Row;
 use wpsolr\ui\shortcode\WPSOLR_Shortcode_Sort;
 use wpsolr\ui\WPSOLR_UI;
 use wpsolr\ui\WPSOLR_UI_Facet;
 use wpsolr\ui\WPSOLR_UI_Filter;
+use wpsolr\ui\WPSOLR_UI_Result_Row;
 use wpsolr\ui\WPSOLR_UI_Sort;
 use wpsolr\utilities\WPSOLR_Global;
 
@@ -25,6 +27,10 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	const COMPONENT_TYPE_FACETS = 'facets';
 	const COMPONENT_TYPE_SORTS = 'sorts';
 	const COMPONENT_TYPE_FILTERS = 'filters';
+	const COMPONENT_TYPE_RESULTS_HEADER = 'results_header';
+	const COMPONENT_TYPE_RESULTS_NAVIGATION = 'results_navigation';
+	const COMPONENT_TYPE_RESULTS_ROWS = 'results_rows';
+	const COMPONENT_TYPE_SEARCH_FORM = 'search_form';
 
 	// Form fields
 	const COMPONENT_FIELD_LABEL = 'label';
@@ -32,7 +38,6 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	const COMPONENT_FIELD_SHORTCODE_NAME = 'shortcode_name';
 	const SHORTCODE_FIELD_CODE = 'shortcode_code';
 	const COMPONENT_FIELD_TYPE = 'type';
-
 
 	/**
 	 * Post constructor.
@@ -47,20 +52,40 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	 */
 	protected static function components_types() {
 		return [
-			self::COMPONENT_TYPE_FACETS  => [
+			self::COMPONENT_TYPE_FACETS             => [
 				self::COMPONENT_FIELD_LABEL          => 'Facets',
-				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Facet )->get_shortcode_name(),
+				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Facet() )->get_shortcode_name(),
 				self::COMPONENT_FIELD_UI             => new WPSOLR_UI_Facet()
 			],
-			self::COMPONENT_TYPE_SORTS   => [
+			self::COMPONENT_TYPE_SORTS              => [
 				self::COMPONENT_FIELD_LABEL          => 'Sorts',
 				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Sort() )->get_shortcode_name(),
 				self::COMPONENT_FIELD_UI             => new WPSOLR_UI_Sort()
 			],
-			self::COMPONENT_TYPE_FILTERS => [
+			self::COMPONENT_TYPE_FILTERS            => [
 				self::COMPONENT_FIELD_LABEL          => 'Filters',
 				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Filter() )->get_shortcode_name(),
 				self::COMPONENT_FIELD_UI             => new WPSOLR_UI_Filter()
+			],
+			self::COMPONENT_TYPE_SEARCH_FORM        => [
+				self::COMPONENT_FIELD_LABEL          => 'Search box',
+				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Facet() )->get_shortcode_name(),
+				self::COMPONENT_FIELD_UI             => new WPSOLR_UI_Facet()
+			],
+			self::COMPONENT_TYPE_RESULTS_HEADER     => [
+				self::COMPONENT_FIELD_LABEL          => 'Results header',
+				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Facet() )->get_shortcode_name(),
+				self::COMPONENT_FIELD_UI             => new WPSOLR_UI_Facet()
+			],
+			self::COMPONENT_TYPE_RESULTS_ROWS       => [
+				self::COMPONENT_FIELD_LABEL          => 'Results rows',
+				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Result_Row() )->get_shortcode_name(),
+				self::COMPONENT_FIELD_UI             => new WPSOLR_UI_Result_Row()
+			],
+			self::COMPONENT_TYPE_RESULTS_NAVIGATION => [
+				self::COMPONENT_FIELD_LABEL          => 'Results page navigation',
+				self::COMPONENT_FIELD_SHORTCODE_NAME => ( new WPSOLR_Shortcode_Facet() )->get_shortcode_name(),
+				self::COMPONENT_FIELD_UI             => new WPSOLR_UI_Facet()
 			],
 		];
 	}

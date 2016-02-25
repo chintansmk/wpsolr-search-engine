@@ -7,63 +7,79 @@ use wpsolr\utilities\WPSOLR_Option;
 const WPSOLR_FIELD_PLUGIN = ' plugin';
 
 $option_names_to_export = [
-	WPSOLR_Option::OPTION_INDEXES            => [
+	WPSOLR_Option::OPTION_INDEXES                 => [
 		'description' => 'Indexes',
 		'data'        => WPSOLR_Global::getOption()->get_option_indexes()
 	],
-	WPSOLR_Option::OPTION_SEARCH             => [
+	WPSOLR_Option::OPTION_SEARCH                  => [
 		'description' => 'Search',
 		'data'        => WPSOLR_Global::getOption()->get_option_search()
 	],
-	WPSOLR_Option::OPTION_FIELDS             => [
+	WPSOLR_Option::OPTION_FIELDS                  => [
 		'description' => 'Fields to index',
 		'data'        => WPSOLR_Global::getOption()->get_option_fields()
 	],
-	WPSOLR_Option::OPTION_FACETS        => [
+	WPSOLR_Option::OPTION_FACETS                  => [
 		'description' => 'Facet groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_facet()
 	],
-	WPSOLR_Option::OPTION_SORTS         => [
+	WPSOLR_Option::OPTION_SORTS                   => [
 		'description' => 'Sort groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_sort()
 	],
-	WPSOLR_Option::OPTION_LOCALIZATION  => [
+	WPSOLR_Option::OPTION_RESULTS_ROWS            => [
+		'description' => 'Results rows',
+		'data'        => WPSOLR_Global::getOption()->get_option_results_rows()
+	],
+	WPSOLR_Option::OPTION_RESULTS_HEADERS         => [
+		'description' => 'Results headers',
+		'data'        => WPSOLR_Global::getOption()->get_option_results_header()
+	],
+	WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION => [
+		'description' => 'Results page navigations',
+		'data'        => WPSOLR_Global::getOption()->get_option_results_page_navigation()
+	],
+	WPSOLR_Option::OPTION_SEARCH_FORM             => [
+		'description' => 'Search forms',
+		'data'        => WPSOLR_Global::getOption()->get_option_search_form()
+	],
+	WPSOLR_Option::OPTION_LOCALIZATION            => [
 		'description' => 'Localizations',
 		'data'        => WPSOLR_Global::getOption()->get_option_localization()
 	],
-	WPSOLR_Option::OPTION_LAYOUTS       => [
+	WPSOLR_Option::OPTION_LAYOUTS                 => [
 		'description' => 'Layouts',
 		'data'        => WPSOLR_Global::getOption()->get_option_layouts()
 	],
-	WPSOLR_Option::OPTION_COMPONENTS    => [
+	WPSOLR_Option::OPTION_COMPONENTS              => [
 		'description' => 'Shortcodes',
 		'data'        => WPSOLR_Global::getOption()->get_option_components()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_ACF    => [
+	WPSOLR_Option::OPTION_PLUGIN_ACF              => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_ACF ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_acf()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_GROUPS => [
+	WPSOLR_Option::OPTION_PLUGIN_GROUPS           => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_GROUPS ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_groups()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_POLYLANG    => [
+	WPSOLR_Option::OPTION_PLUGIN_POLYLANG         => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_POLYLANG ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_polylang()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_S2MEMBER    => [
+	WPSOLR_Option::OPTION_PLUGIN_S2MEMBER         => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_S2MEMBER ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_s2member()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_TYPES       => [
+	WPSOLR_Option::OPTION_PLUGIN_TYPES            => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_TYPES ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_types()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_WOOCOMMERCE => [
+	WPSOLR_Option::OPTION_PLUGIN_WOOCOMMERCE      => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_WOOCOMMERCE ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_woocommerce()
 	],
-	WPSOLR_Option::OPTION_PLUGIN_WPML        => [
+	WPSOLR_Option::OPTION_PLUGIN_WPML             => [
 		'description' => WPSOLR_Extensions::get_option_plugin_name( WPSOLR_Extensions::EXTENSION_WPML ) . WPSOLR_FIELD_PLUGIN,
 		'data'        => WPSOLR_Global::getOption()->get_option_plugin_wpml()
 	]
