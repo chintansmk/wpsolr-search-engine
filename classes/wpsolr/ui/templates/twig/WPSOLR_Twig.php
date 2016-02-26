@@ -28,7 +28,7 @@ class WPSOLR_Twig {
 		/* Hybrid loader to load a file template, or a string template if file does not exist */
 		$loader_chain = new \Twig_Loader_Chain( array( $loader_file, $loader_string ) );
 
-		$is_debug = WPSOLR_Global::getOption()->get_is_debug_environment();;
+		$is_debug = WPSOLR_Global::getOption()->get_is_debug_environment();
 
 		$twig = new \Twig_Environment( $loader_chain, array(
 			'cache'       => $result->get_default_twig_template_cache_path(),

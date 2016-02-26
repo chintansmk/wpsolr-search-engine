@@ -31,7 +31,7 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 			'facets_title'               => WPSOLR_Localization::get_term( $localization_options, 'facets_title' ),
 			'facets_element'             => WPSOLR_Localization::get_term( $localization_options, 'facets_element' ),
 			'facets_element_all_results' => WPSOLR_Localization::get_term( $localization_options, 'facets_element_all_results' ),
-			'facets'                     => $this->data['data']
+			'facets'                     => self::get_data( $this )
 		);
 
 	}
@@ -41,7 +41,9 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 	 */
 	protected function is_data_empty() {
 
-		return ( ! isset( $this->data ) || empty( $this->data['data'] ) || ( count( $this->data['data'][ WPSOLR_Options_Facets::OPTION_FACETS ] ) == 0 ) );
+		$data = self::get_data( $this );
+
+		return ( empty( $data ) || ( count( $data[ WPSOLR_Options_Facets::OPTION_FACETS ] ) == 0 ) );
 	}
 
 	/**
@@ -49,7 +51,7 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 	 */
 	protected function extract_data() {
 
-		return WPSOLR_Data_Facets::extract_data( $this->component_id );
+		return WPSOLR_Data_Facets::extract_data( $this->group_id, $this->query_id );
 	}
 
 	/**

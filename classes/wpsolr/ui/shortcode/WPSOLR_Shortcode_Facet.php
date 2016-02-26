@@ -16,7 +16,13 @@ class WPSOLR_Shortcode_Facet extends WPSOLR_Shortcode {
 	 */
 	public function __construct() {
 		$this->shortcode_name = 'wpsolr_shortcode_facets';
-		$this->ui             = new WPSOLR_UI_Facet();
+	}
+
+	/**
+	 * @return WPSOLR_UI_Facet
+	 */
+	public function get_ui() {
+		return new WPSOLR_UI_Facet();
 	}
 
 }

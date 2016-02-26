@@ -46,7 +46,7 @@ class WPSOLR_UI {
 	const AJAX_ACTION_URL = 'url';
 
 	// Data extracted from Solr search results
-	protected $data;
+	protected static $data;
 
 	protected $ajax_url;
 	protected $results_page;
@@ -179,7 +179,7 @@ class WPSOLR_UI {
 			if ( $this->url_is_authorized( $this->url_regexp_lines ) ) {
 
 				// Extract data
-				$this->data = $this->extract_data_with_cache();
+				self::extract_data_with_cache( $this );
 
 				return $this->get_display_form();
 			}
@@ -258,17 +258,23 @@ class WPSOLR_UI {
 	 *
 	 * @return array
 	 */
-	protected function extract_data_with_cache() {
+	protected static function extract_data_with_cache( WPSOLR_UI $ui ) {
 
-		if ( isset( $this->data ) ) {
+		$data = self::get_data( $ui );
+		if ( ! empty( $data ) ) {
 			// Get cache
-			return $this->data;
+			return $data;
 		}
 
 		// No cache: create it.
-		$this->data = $this->extract_data();
+		self::$data[ $ui->group_id ][ $ui->query_id ] = $ui->extract_data();
+	}
 
-		return $this->data;
+	protected static function get_data( WPSOLR_UI $ui ) {
+
+		return ( ! empty( self::$data[ $ui->group_id ] ) && ! empty( self::$data[ $ui->group_id ][ $ui->query_id ] ) )
+			? self::$data[ $ui->group_id ][ $ui->query_id ]['data']
+			: [ ];
 	}
 
 	/**
@@ -309,6 +315,7 @@ class WPSOLR_UI {
 		// Twig common parameters
 		$twig_common_parameters = [
 			'ui_id'                      => $this->component_id,
+			'query_id'                   => $this->query_id,
 			'query_page'                 => $this->get_results_page_permalink(),
 			'query_parameter_name'       => $this->get_results_page_query_parameter_name(),
 			'group_id'                   => $this->group_id,

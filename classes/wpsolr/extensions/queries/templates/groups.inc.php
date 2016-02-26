@@ -1,4 +1,5 @@
 <?php
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 
 ?>
@@ -91,35 +92,12 @@ use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 			</div>
 
 			<div class="wdm_row">
-				<div class='col_left'>Infinitescroll</div>
+				<div class='col_left'>Filter</div>
 				<div class='col_right'>
-					<?php $value = isset( $group[ WPSOLR_Options_Result_Row::FORM_FIELD_IS_INFINITESCROLL ] ); ?>
-					<input type="checkbox"
-					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Result_Row::FORM_FIELD_IS_INFINITESCROLL ); ?>"
-						<?php checked( $value ); ?>
-					/>
-				</div>
-				<div class="clear"></div>
-			</div>
-
-			<div class="wdm_row">
-				<div class='col_left'>No. of results per page</div>
-				<div class='col_right'>
-					<?php $value = isset( $group[ WPSOLR_Options_Result_Row::FORM_FIELD_MAX_NB_RESULTS_BY_PAGE ] ) ? $group[ WPSOLR_Options_Result_Row::FORM_FIELD_MAX_NB_RESULTS_BY_PAGE ] : WPSOLR_Options_Result_Row::FORM_FIELD_DEFAULT_MAX_NB_RESULTS_BY_PAGE; ?>
+					<?php $value = isset( $group[ WPSOLR_Options_Query::FORM_FIELD_QUERY_FILTER ] ) ? $group[ WPSOLR_Options_Query::FORM_FIELD_QUERY_FILTER ] : ''; ?>
 					<input type="text"
-					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Result_Row::FORM_FIELD_MAX_NB_RESULTS_BY_PAGE ); ?>"
-					       value="<?php echo esc_attr( $value ); ?>"
-					/>
-				</div>
-				<div class="clear"></div>
-			</div>
-
-			<div class="wdm_row">
-				<div class='col_left'>Maximum size of each snippet text in results</div>
-				<div class='col_right'>
-					<?php $value = isset( $group[ WPSOLR_Options_Result_Row::FORM_FIELD_HIGHLIGHTING_FRAGSIZE ] ) ? $group[ WPSOLR_Options_Result_Row::FORM_FIELD_HIGHLIGHTING_FRAGSIZE ] : WPSOLR_Options_Result_Row::FORM_FIELD_DEFAULT_HIGHLIGHTING_FRAGSIZE; ?>
-					<input type="text"
-					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Result_Row::FORM_FIELD_HIGHLIGHTING_FRAGSIZE ); ?>"
+					       style="width: 95%;"
+					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Query::FORM_FIELD_QUERY_FILTER ); ?>"
 					       value="<?php echo esc_attr( $value ); ?>"
 					/>
 				</div>

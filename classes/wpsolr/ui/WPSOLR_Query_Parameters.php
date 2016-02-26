@@ -28,16 +28,16 @@ class WPSOLR_Query_Parameters {
 	public static function copy_parameters_to_query( WPSOLR_Query $wpsolr_query, $url_parameters ) {
 
 		if ( isset( $url_parameters[ WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q ] ) ) {
-			$wpsolr_query->set_wpsolr_query( $url_parameters[ WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q ] );
+			$wpsolr_query->set_wpsolr_queryQ( $url_parameters[ WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q ] );
 		}
 
-		foreach ( WPSOLR_Global::getExtensionComponents()->get_components_ids() as $component_id ) {
+		foreach ( WPSOLR_Global::getOption()->get_option_queries() as $query_id => $query ) {
 
-			$parameter = WPSOLR_Query_Parameters::SEARCH_PARAMETER_FQ . '_' . $component_id;
+			$parameter = WPSOLR_Query_Parameters::SEARCH_PARAMETER_FQ . '_' . $query_id;
 
 			if ( isset( $url_parameters[ $parameter ] ) ) {
 
-				$wpsolr_query->wpsolr_set_filter_query_fields( $component_id, $url_parameters[ $parameter ] );
+				$wpsolr_query->wpsolr_set_filter_query_fields( $query_id, $url_parameters[ $parameter ] );
 			}
 		}
 

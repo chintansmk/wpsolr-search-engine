@@ -26,7 +26,6 @@ class WPSOLR_Shortcode {
 	protected static $shortcodes;
 
 	protected $component_id;
-	protected $ui;
 
 	/**
 	 * Add all shortcodes present in this directory
@@ -99,7 +98,7 @@ class WPSOLR_Shortcode {
 	 * @return WPSOLR_UI
 	 */
 	public function get_ui() {
-		return $this->ui;
+		die( 'get_ui not implemented.' );
 	}
 
 	/**

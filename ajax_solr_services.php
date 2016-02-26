@@ -34,14 +34,14 @@ function fun_search_indexed_data() {
 	echo "<div class='cls_search' style='width:100%'> <form action='$url' method='get'  class='search-frm' >";
 	echo '<input type="hidden" value="' . $wdm_typehead_request_handler . '" id="path_to_fold">';
 	echo '<input type="hidden" value="' . $ad_url . '" id="path_to_admin">';
-	echo '<input type="hidden" value="' . WPSOLR_Global::getQuery()->get_wpsolr_query() . '" id="search_opt">';
+	echo '<input type="hidden" value="' . WPSOLR_Global::getQuery()->get_wpsolr_queryQ() . '" id="search_opt">';
 
 	$ajax_nonce = wp_create_nonce( "nonce_for_autocomplete" );
 
 	echo $form = '
         <div class="ui-widget">
 	<input type="hidden"  id="ajax_nonce" value="' . $ajax_nonce . '">
-        <input type="text" placeholder="' . WPSOLR_Localization::get_term( $localization_options, 'search_form_edit_placeholder' ) . '" value="' . WPSOLR_Global::getQuery()->get_wpsolr_query() . '" name="search" id="search_que" class="search-field sfl2" autocomplete="off"/>
+        <input type="text" placeholder="' . WPSOLR_Localization::get_term( $localization_options, 'search_form_edit_placeholder' ) . '" value="' . WPSOLR_Global::getQuery()->get_wpsolr_queryQ() . '" name="search" id="search_que" class="search-field sfl2" autocomplete="off"/>
 	<input type="submit" value="' . WPSOLR_Localization::get_term( $localization_options, 'search_form_button_label' ) . '" id="searchsubmit" style="position:relative;width:auto">
 	<input type="hidden" value="' . WPSOLR_Global::getOption()->get_search_after_autocomplete_block_submit() . '" id="is_after_autocomplete_block_submit">
 	<input type="hidden" value="' . WPSOLR_Global::getQuery()->get_wpsolr_paged() . '" id="paginate">
@@ -66,7 +66,7 @@ function fun_search_indexed_data() {
 		}
 
 		if ( $final_result[2] == 0 ) {
-			echo "<span class='infor'>" . sprintf( WPSOLR_Localization::get_term( $localization_options, 'results_header_no_results_found' ), WPSOLR_Global::getQuery()->get_wpsolr_query() ) . "</span>";
+			echo "<span class='infor'>" . sprintf( WPSOLR_Localization::get_term( $localization_options, 'results_header_no_results_found' ), WPSOLR_Global::getQuery()->get_wpsolr_queryQ() ) . "</span>";
 		} else {
 			echo '<div class="wdm_resultContainer">
                     <div class="wdm_list">';

@@ -16,7 +16,13 @@ class WPSOLR_Shortcode_Filter extends WPSOLR_Shortcode {
 	 */
 	public function __construct() {
 		$this->shortcode_name = 'wpsolr_shortcode_filters';
-		$this->ui             = new WPSOLR_UI_Filter();
+	}
+
+	/**
+	 * @return WPSOLR_UI_Filter
+	 */
+	public function get_ui() {
+		return new WPSOLR_UI_Filter();
 	}
 
 }

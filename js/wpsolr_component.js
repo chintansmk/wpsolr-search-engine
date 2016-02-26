@@ -29,12 +29,14 @@ WPSOLR_UI.prototype.debugState = function () {
     if (this.is_debug_js) {
         console.log("  ++ url: " + JSON.stringify(this.url));
         console.log("  ++ ui_id: " + JSON.stringify(this.ui_id));
+        console.log("  ++ query_id: " + JSON.stringify(this.query_id));
         console.log("  ++ query_page: " + JSON.stringify(this.query_page));
         console.log("  ++ query_parameter_name: " + JSON.stringify(this.query_parameter_name));
         console.log("  ++ is_debug_js: " + JSON.stringify(this.is_debug_js));
         console.log("  ++ is_ajax: " + JSON.stringify(this.is_ajax));
         console.log("  ++ is_own_ajax: " + JSON.stringify(this.is_own_ajax));
         console.log("  ++ is_prevent_redirection: " + JSON.stringify(this.is_prevent_redirection));
+        console.log("  ++ parameter: " + JSON.stringify(this.parameter));
 
         // Debug state of child
         this._debugState();
@@ -53,7 +55,9 @@ WPSOLR_UI.prototype.clear = function () {
     // Clear url parameters, but keep query parameter
     var current_url = new Url(window.location.href);
     var current_query = this.get_url_query();
-    current_url.query.clear();
+
+    delete current_url.query[this.getParameterName()];
+
     current_url.query[this.query_parameter_name] = current_query;
 
     this.url = current_url.toString();
@@ -87,6 +91,11 @@ WPSOLR_UI.prototype.set_is_own_ajax = function (is_own_ajax) {
 WPSOLR_UI.prototype.set_ui_id = function (ui_id) {
     this.debug("ui_id", ui_id);
     this.ui_id = ui_id;
+};
+
+WPSOLR_UI.prototype.set_query_id = function (query_id) {
+    this.debug("query_id", query_id);
+    this.query_id = query_id;
 };
 
 WPSOLR_UI.prototype.set_query_page = function (query_page) {
@@ -518,17 +527,21 @@ WPSOLR_Facets.prototype.updateLastFacetSelected = function (facet) {
     this.debugState();
 };
 
+WPSOLR_Facets.prototype.getParameterName = function () {
+    return "wpsolr_fq_" + this.query_id;
+};
+
 WPSOLR_Facets.prototype._create_url = function (current_url) {
 
     var fq_index = 0;
 
-    var parameter = "wpsolr_fq_" + this.ui_id;
+    this.parameter = this.getParameterName();
 
     // delete all wpsolr_fq parameters
     for (i = 0; ; i++) {
-        if (current_url.query[parameter + "[" + i + "]"]) {
-            delete current_url.query[parameter + "[" + i + "]"];
-            this.debug('delete from url', parameter + "[" + i + "]");
+        if (current_url.query[this.parameter + "[" + i + "]"]) {
+            delete current_url.query[this.parameter + "[" + i + "]"];
+            this.debug('delete from url', this.parameter + "[" + i + "]");
         } else {
             break;
         }
@@ -537,14 +550,14 @@ WPSOLR_Facets.prototype._create_url = function (current_url) {
     // Add field parameters
     var facets = this.facets.field || [];
     for (i = 0; i < facets.length; i++) {
-        current_url.query[parameter + "[" + fq_index + "]"] = facets[i].facet_id + ":" + facets[i].facet_value;
+        current_url.query[this.parameter + "[" + fq_index + "]"] = facets[i].facet_id + ":" + facets[i].facet_value;
         fq_index++;
     }
 
     // Add range parameters
     var facets = this.facets.range || [];
     for (i = 0; i < facets.length; i++) {
-        current_url.query[parameter + "[" + fq_index + "]"] = facets[i].facet_id + ":" + "[" + facets[i].facet_value + " TO " + (facets[i].range_sup) + "]";
+        current_url.query[this.parameter + "[" + fq_index + "]"] = facets[i].facet_id + ":" + "[" + facets[i].facet_value + " TO " + (facets[i].range_sup) + "]";
         fq_index++;
     }
 

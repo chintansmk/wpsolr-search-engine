@@ -16,7 +16,13 @@ class WPSOLR_Shortcode_Sort extends WPSOLR_Shortcode {
 	 */
 	public function __construct() {
 		$this->shortcode_name = 'wpsolr_shortcode_sorts';
-		$this->ui             = new WPSOLR_UI_Sort();
+	}
+
+	/**
+	 * @return WPSOLR_UI_Sort
+	 */
+	public function get_ui() {
+		return new WPSOLR_UI_Sort();
 	}
 
 }

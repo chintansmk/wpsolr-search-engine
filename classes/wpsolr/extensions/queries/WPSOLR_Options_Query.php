@@ -15,11 +15,7 @@ use wpsolr\utilities\WPSOLR_Global;
 class WPSOLR_Options_Query extends WPSOLR_Extensions {
 
 	const FORM_FIELD_NAME = 'name';
-	const FORM_FIELD_IS_INFINITESCROLL = 'infinitescroll';
-	const FORM_FIELD_MAX_NB_RESULTS_BY_PAGE = 'no_res';
-	const FORM_FIELD_HIGHLIGHTING_FRAGSIZE = 'highlighting_fragsize';
-	const FORM_FIELD_DEFAULT_MAX_NB_RESULTS_BY_PAGE = 20;
-	const FORM_FIELD_DEFAULT_HIGHLIGHTING_FRAGSIZE = 100;
+	const FORM_FIELD_QUERY_FILTER = 'query_filter';
 
 	/**
 	 * Post constructor.
@@ -61,25 +57,6 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 		);
 	}
 
-
-	/**
-	 * Get elements of a group
-	 *
-	 * @param string $group_id Group id
-	 *
-	 * @return array Elements of the group
-	 */
-	public function get_group_elements( $group_id ) {
-
-		$groups = WPSOLR_Global::getOption()->get_option_queries();
-
-		if ( ! isset( $groups[ $group_id ] ) ) {
-			throw new WPSOLR_Exception( sprintf( 'group \'%s\' is unknown.', $group_id ) );
-		}
-
-		return ! empty( $groups[ $group_id ] ) ? $groups[ $group_id ] : [ ];
-	}
-
 	/**
 	 * Get group
 	 *
@@ -90,34 +67,24 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 
 		$groups = WPSOLR_Global::getOption()->get_option_queries();
 
-		if ( ! empty( $group_id ) && ! empty( $groups ) && ! empty( $groups[ $group_id ] ) ) {
-			return $groups[ $group_id ];
+		if ( empty( $groups ) || empty( $groups[ $group_id ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'Query \'%s\' is unknown.', $group_id ) );
 		}
 
-		return [ ];
+		return $groups[ $group_id ];
 	}
 
 	/**
-	 * Get name
+	 * Get query filter
 	 *
-	 * @param $result
+	 * @param $query
 	 *
-	 * @return string Result name
+	 * @return string Query filter
 	 */
-	public function get_result_name( $result ) {
-		return isset( $result[ self::RESULT_FIELD_NAME ] ) ? $result[ self::RESULT_FIELD_NAME ] : '';
+	public function get_query_filter( $query ) {
+		return isset( $query[ self::FORM_FIELD_QUERY_FILTER ] ) ? $query[ self::FORM_FIELD_QUERY_FILTER ] : '';
 	}
 
-	/**
-	 * Get label
-	 *
-	 * @param $result
-	 *
-	 * @return string Result label
-	 */
-	public function get_result_label( $result ) {
-		return isset( $result[ self::RESULT_FIELD_LABEL ] ) ? $result[ self::RESULT_FIELD_LABEL ] : '';
-	}
 
 	/**
 	 * Clone the groups marked.

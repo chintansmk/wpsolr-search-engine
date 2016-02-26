@@ -91,7 +91,7 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 
 					<?php
 					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(
-						WPSOLR_Extensions::OPTION_RESULTS_ROWS, 'groups.inc.php' ),
+						WPSOLR_Extensions::OPTION_QUERIES, 'groups.inc.php' ),
 						array(
 							'options_name'       => $options_name,
 							'group_tab_selected' => $group_tab_selected,

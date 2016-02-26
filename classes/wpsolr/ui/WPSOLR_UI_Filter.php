@@ -27,7 +27,7 @@ class WPSOLR_UI_Filter extends WPSOLR_UI_Facet {
 	 */
 	protected function extract_data() {
 
-		return WPSOLR_Data_Filter::extract_data( $this->group_id );
+		return WPSOLR_Data_Filter::extract_data( $this->group_id, $this->query_id );
 	}
 
 	/**
