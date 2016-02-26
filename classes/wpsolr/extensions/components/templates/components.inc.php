@@ -1,6 +1,7 @@
 <?php
 use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\ui\WPSOLR_UI;
 
 $new_component_uuid = key( $new_component );
@@ -206,6 +207,22 @@ $current_component_option_name = sprintf( "%s[%s]", $options_name, $component_ty
 					       name="<?php echo $current_component_option_name; ?>[<?php echo $component_uuid; ?>][<?php echo WPSOLR_UI::FORM_FIELD_IS_OWN_AJAX; ?>]"
 						<?php checked( $value ); ?>
 					/>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Query</div>
+				<div class='col_right'>
+					<?php $value = isset( $component[ WPSOLR_UI::FORM_FIELD_QUERY_ID ] ) ? $component[ WPSOLR_UI::FORM_FIELD_QUERY_ID ] : ''; ?>
+					<select
+						name="<?php echo $current_component_option_name; ?>[<?php echo $component_uuid; ?>][<?php echo WPSOLR_UI::FORM_FIELD_QUERY_ID; ?>]">
+						<?php
+						foreach ( $queries as $query_uuid => $query ) { ?>
+							<option value="<?php echo esc_attr( $query_uuid ); ?>"
+								<?php selected( $query_uuid, $value, true ); ?> ><?php echo $query[ WPSOLR_Options_Query::FORM_FIELD_NAME ]; ?></option>
+						<?php } ?>
+					</select>
 				</div>
 				<div class="clear"></div>
 			</div>

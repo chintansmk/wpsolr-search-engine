@@ -132,7 +132,8 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 					'components_types'    => $this->components_types(),
 					'components'          => $components,
 					'new_component_uuids' => $new_component_uuids,
-					'new_components'      => $new_components
+					'new_components'      => $new_components,
+					'queries'             => WPSOLR_Global::getOption()->get_option_queries()
 				],
 				$plugin_parameters
 			)
@@ -287,6 +288,18 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	public function get_component_group_id( $component ) {
 
 		return ! empty( $component[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] ) ? $component[ WPSOLR_UI::FORM_FIELD_GROUP_ID ] : '';
+	}
+
+	/**
+	 * Get component query id
+	 *
+	 * @param $component
+	 *
+	 * @return string
+	 */
+	public function get_component_query_id( $component ) {
+
+		return ! empty( $component[ WPSOLR_UI::FORM_FIELD_QUERY_ID ] ) ? $component[ WPSOLR_UI::FORM_FIELD_QUERY_ID ] : '';
 	}
 
 	/**

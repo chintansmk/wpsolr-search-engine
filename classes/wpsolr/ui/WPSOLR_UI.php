@@ -26,6 +26,7 @@ class WPSOLR_UI {
 	const FORM_FIELD_SEARCH_METHOD_VALUE_AJAX_WITH_PARAMETERS = 'ajax_with_parameters';
 	const FORM_FIELD_GROUP_ID = 'group_id';
 	const FORM_FIELD_GROUP_NAME = 'name';
+	const FORM_FIELD_QUERY_ID = 'query_id';
 	const FORM_FIELD_LAYOUT_ID = 'layout_id';
 	const FORM_FIELD_URL_REGEXP = 'url_regexp';
 	const FORM_FIELD_IS_SHOW_TITLE_ON_FRONT_END = 'is_show_title_on_front_end';
@@ -70,6 +71,7 @@ class WPSOLR_UI {
 	protected $is_own_ajax;
 	protected $name;
 	protected $is_prevent_redirection;
+	protected $query_id;
 
 	/**
 	 * Front-end display of UI, returned by ajax
@@ -169,6 +171,7 @@ class WPSOLR_UI {
 			$this->url_regexp_lines           = $extension_components->get_component_url_regexp_lines( $component );
 			$this->is_own_ajax                = $extension_components->get_component_is_own_ajax( $component );
 
+			$this->query_id  = $extension_components->get_component_query_id( $component );
 			$this->group_id  = $extension_components->get_component_group_id( $component );
 			$this->layout_id = $extension_components->get_component_layout_id( $component );
 			$this->layout    = $this->get_layout();

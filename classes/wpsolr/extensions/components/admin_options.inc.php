@@ -103,7 +103,8 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 								'new_component'      => $new_components[ $component_type_name ],
 								'components'         => isset( $components[ $component_type_name ] ) ? $components[ $component_type_name ] : [ ],
 								'layouts'            => $component_type[ WPSOLR_Options_Components::COMPONENT_FIELD_UI ]->get_layouts(),
-								'groups'             => $component_type[ WPSOLR_Options_Components::COMPONENT_FIELD_UI ]->get_groups()
+								'groups'             => $component_type[ WPSOLR_Options_Components::COMPONENT_FIELD_UI ]->get_groups(),
+								'queries'            => $queries
 							)
 						);
 						?>

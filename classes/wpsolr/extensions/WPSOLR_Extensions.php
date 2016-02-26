@@ -12,6 +12,7 @@ use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\resultsheaders\WPSOLR_Options_Result_Header;
 use wpsolr\extensions\resultspagenavigations\WPSOLR_Options_Result_Page_Navigation;
 use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
@@ -123,6 +124,9 @@ abstract class WPSOLR_Extensions {
 
 	// Extension: Results headers
 	const OPTION_SEARCH_FORMS = 'search_forms';
+
+	// Extension: queries
+	const OPTION_QUERIES = 'queries';
 
 	/*
 	 * Extensions configuration
@@ -442,6 +446,21 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SEARCH_FORM,
+					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
+				]
+			],
+		self::OPTION_QUERIES                  =>
+			[
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Query::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Query::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'queries/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'queries/WPSOLR_Options_Query.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'queries/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
+				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS                           => [
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_QUERIES,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			]

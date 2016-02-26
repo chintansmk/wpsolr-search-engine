@@ -820,4 +820,19 @@ class WPSOLR_Option {
 		return self::get_option( self::OPTION_SEARCH_FORM, [ ] );
 	}
 
+	/***************************************************************************************************************
+	 *
+	 * Queries option
+	 *
+	 **************************************************************************************************************/
+	const OPTION_QUERIES = 'wpsolr_query';
+
+	/**
+	 * Get queries options array
+	 * @return array
+	 */
+	public function get_option_queries() {
+		return self::get_option( self::OPTION_QUERIES, [ ] );
+	}
+
 }

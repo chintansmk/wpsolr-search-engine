@@ -11,9 +11,13 @@ use wpsolr\extensions\importexport\WPSOLR_Options_ImportExports;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\results\WPSOLR_Options_ResultsRows;
 use wpsolr\extensions\resultsheaders\WPSOLR_Options_Result_Header;
+use wpsolr\extensions\resultspagenavigations\WPSOLR_Options_Result_Page_Navigation;
+use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
+use wpsolr\extensions\searchform\WPSOLR_Options_Search_Form;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
@@ -259,7 +263,7 @@ class WPSOLR_Global {
 	}
 
 	/**
-	 * @return WPSOLR_Options_ResultsRows
+	 * @return WPSOLR_Options_Result_Row
 	 */
 	public static function getExtensionResultsRows() {
 		return self::getObject( WPSOLR_Extensions::OPTION_RESULTS_ROWS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_RESULTS_ROWS );
@@ -273,17 +277,25 @@ class WPSOLR_Global {
 	}
 
 	/**
-	 * @return WPSOLR_Options_ResultsRows
+	 * @return WPSOLR_Options_Result_Page_Navigation
 	 */
 	public static function getExtensionResultsPageNavigations() {
 		return self::getObject( WPSOLR_Extensions::OPTION_RESULTS_PAGE_NAVIGATIONS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_RESULTS_PAGE_NAVIGATIONS );
 	}
 
 	/**
-	 * @return WPSOLR_Options_ResultsRows
+	 * @return WPSOLR_Options_Search_Form
 	 */
 	public static function getExtensionSearchForm() {
 		return self::getObject( WPSOLR_Extensions::OPTION_SEARCH_FORMS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_SEARCH_FORMS );
 	}
+
+	/**
+	 * @return WPSOLR_Options_Query
+	 */
+	public static function getExtensionQueries() {
+		return self::getObject( WPSOLR_Extensions::OPTION_QUERIES, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_QUERIES );
+	}
+
 }
 

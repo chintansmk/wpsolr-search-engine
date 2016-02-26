@@ -236,6 +236,7 @@ switch ( $tab ) {
 			$subtabs = [
 				WPSOLR_Option::OPTION_SEARCH                  => '2.1 Search',
 				WPSOLR_Option::OPTION_FIELDS                  => '2.2 Fields',
+				WPSOLR_Option::OPTION_QUERIES                 => '2.x Queries',
 				WPSOLR_Option::OPTION_FACETS                  => '2.3 Facets',
 				WPSOLR_Option::OPTION_SORTS                   => '2.4 Sorting',
 				WPSOLR_Option::OPTION_RESULTS_ROWS            => '2.x Results rows',
@@ -576,6 +577,10 @@ switch ( $tab ) {
 
 				case WPSOLR_Option::OPTION_SEARCH_FORM:
 					WPSOLR_Global::getExtensionSearchForm()->output_form();
+					break;
+
+				case WPSOLR_Option::OPTION_QUERIES:
+					WPSOLR_Global::getExtensionQueries()->output_form();
 					break;
 			}
 
