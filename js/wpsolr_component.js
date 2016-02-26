@@ -522,11 +522,13 @@ WPSOLR_Facets.prototype._create_url = function (current_url) {
 
     var fq_index = 0;
 
+    var parameter = "wpsolr_fq_" + this.ui_id;
+
     // delete all wpsolr_fq parameters
     for (i = 0; ; i++) {
-        if (current_url.query["wpsolr_fq" + "[" + i + "]"]) {
-            delete current_url.query["wpsolr_fq" + "[" + i + "]"];
-            this.debug('delete from url', "wpsolr_fq" + "[" + i + "]");
+        if (current_url.query[parameter + "[" + i + "]"]) {
+            delete current_url.query[parameter + "[" + i + "]"];
+            this.debug('delete from url', parameter + "[" + i + "]");
         } else {
             break;
         }
@@ -535,14 +537,14 @@ WPSOLR_Facets.prototype._create_url = function (current_url) {
     // Add field parameters
     var facets = this.facets.field || [];
     for (i = 0; i < facets.length; i++) {
-        current_url.query["wpsolr_fq" + "[" + fq_index + "]"] = facets[i].facet_id + ":" + facets[i].facet_value;
+        current_url.query[parameter + "[" + fq_index + "]"] = facets[i].facet_id + ":" + facets[i].facet_value;
         fq_index++;
     }
 
     // Add range parameters
     var facets = this.facets.range || [];
     for (i = 0; i < facets.length; i++) {
-        current_url.query["wpsolr_fq" + "[" + fq_index + "]"] = facets[i].facet_id + ":" + "[" + facets[i].facet_value + " TO " + (facets[i].range_sup) + "]";
+        current_url.query[parameter + "[" + fq_index + "]"] = facets[i].facet_id + ":" + "[" + facets[i].facet_value + " TO " + (facets[i].range_sup) + "]";
         fq_index++;
     }
 

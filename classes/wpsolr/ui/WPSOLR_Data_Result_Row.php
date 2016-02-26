@@ -65,7 +65,7 @@ class WPSOLR_Data_Result_Row {
 		$results = WPSOLR_Global::getSolrClient()->display_results( $wpsolr_query );
 
 		$data = static::format_data(
-			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
+			WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name( $ui_group_id ),
 			$facets,
 			$results[1] );
 

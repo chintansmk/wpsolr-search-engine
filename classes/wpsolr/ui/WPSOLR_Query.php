@@ -56,7 +56,7 @@ class WPSOLR_Query extends \WP_Query {
 
 		$this->set_wpsolr_is_search( false );
 		$this->set_wpsolr_query( '' );
-		$this->set_filter_query_fields( array() );
+		$this->wpsolr_filter_query = [ ];
 		$this->set_wpsolr_paged( '0' );
 		$this->set_wpsolr_sort( '' );
 		$this->set_wpsolr_facets_groups_id( '' );
@@ -81,10 +81,18 @@ class WPSOLR_Query extends \WP_Query {
 	}
 
 	/**
+	 * @param $component_id
+	 *
 	 * @return array
 	 */
-	public function get_filter_query_fields() {
-		return $this->wpsolr_filter_query;
+	public function get_filter_query_fields( $component_id = null ) {
+
+		if ( empty( $component_id ) ) {
+
+			return $this->wpsolr_filter_query;
+		}
+
+		return ! empty( $this->wpsolr_filter_query[ $component_id ] ) ? $this->wpsolr_filter_query[ $component_id ] : [ ];
 	}
 
 	/**
@@ -109,11 +117,12 @@ class WPSOLR_Query extends \WP_Query {
 	}
 
 	/**
+	 * @param $component_id
 	 * @param array $fq
 	 */
-	public function set_filter_query_fields( $fq ) {
+	public function wpsolr_set_filter_query_fields( $component_id, $fq ) {
 		// Ensure fq is always an array
-		$this->wpsolr_filter_query = empty( $fq ) ? array() : ( is_array( $fq ) ? $fq : array( $fq ) );
+		$this->wpsolr_filter_query[ $component_id ] = empty( $fq ) ? array() : ( is_array( $fq ) ? $fq : array( $fq ) );
 	}
 
 	/**
@@ -385,15 +394,17 @@ class WPSOLR_Query extends \WP_Query {
 	/**
 	 * Regroup filter query fields by field
 	 * ['type:post', 'type:page', 'category:cat1'] => ['type' => ['post', 'page'], 'category' => ['cat1']]
+	 *
+	 * @param $component_id
+	 *
 	 * @return array
 	 */
-	public function get_filter_query_fields_group_by_name() {
+	public function get_filter_query_fields_group_by_name( $component_id ) {
 
 		$results = array();
 
-		foreach ( $this->get_filter_query_fields() as $field_encoded ) {
+		foreach ( $this->get_filter_query_fields( $component_id ) as $field_encoded ) {
 
-			// Convert 'type:post' in ['type', 'post']
 			$field = explode( ':', $field_encoded );
 
 			if ( count( $field ) == 2 ) {

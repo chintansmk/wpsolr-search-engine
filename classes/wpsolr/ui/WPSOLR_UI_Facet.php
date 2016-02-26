@@ -49,7 +49,7 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 	 */
 	protected function extract_data() {
 
-		return WPSOLR_Data_Facets::extract_data( $this->group_id );
+		return WPSOLR_Data_Facets::extract_data( $this->component_id );
 	}
 
 	/**

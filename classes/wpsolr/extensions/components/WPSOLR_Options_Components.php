@@ -509,4 +509,26 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 		return $results;
 	}
 
+
+	/**
+	 * Retrieve all components ids
+	 *
+	 * @return array
+	 */
+	public function get_components_ids() {
+
+		$components_types = WPSOLR_Global::getOption()->get_option_components();
+
+		$results = [ ];
+		foreach ( $components_types as $component_type ) {
+
+			foreach ( $component_type as $component_uuid => $component ) {
+
+				array_push( $results, $component_uuid );
+			}
+		}
+
+		return $results;
+	}
+
 }

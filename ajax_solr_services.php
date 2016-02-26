@@ -97,7 +97,7 @@ function fun_search_indexed_data() {
 			// Display facets UI
 			echo '<div id="res_facets">' . WPSOLR_UI_Facet::build_from_templates(
 					$facets_group_id, WPSOLR_Data_Facets::format_data(
-					WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
+					WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name( $ui_group_id ),
 					WPSOLR_Global::getOption()->get_facets_selected_array(),
 					$final_result[1] ), $localization_options, [ ], $instance, WPSOLR_Widget_Facet::wpsolr_get_default_layout_definition() ) . '</div>';
 
@@ -260,7 +260,7 @@ function return_solr_results() {
 	// Add facets data
 	$res1[] = WPSOLR_UI_Facet::build_from_templates(
 		$facets_group_id, WPSOLR_Data_Facets::format_data(
-		WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name(),
+		WPSOLR_Global::getQuery()->get_filter_query_fields_group_by_name( $ui_group_id ),
 		WPSOLR_Global::getOption()->get_facets_selected_array(),
 		$final_result[1] ), WPSOLR_Localization::get_options(), [ ], $instance, WPSOLR_Widget_Facet::wpsolr_get_default_layout_definition()
 	);
