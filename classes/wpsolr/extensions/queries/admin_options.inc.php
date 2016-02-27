@@ -83,11 +83,11 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 		?>
 
 		<div class='wrapper'>
-			<h4 class='head_div'>Results rows Options</h4>
+			<h4 class='head_div'>Queries Options</h4>
 
 			<div class="wdm_row">
 				<div class='wpsolr-1col'>
-					<h4 style="display:inline">Manage groups of results to show in components.</h4>
+					<h4 style="display:inline">Manage queries to be used in components.</h4>
 
 					<?php
 					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(
@@ -110,7 +110,7 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 				<div class="submit">
 					<input name="save_results_options_form" id="save_results_options_form"
 					       type="submit" class="button-primary wdm-save"
-					       value="Save Results"/>
+					       value="Save queries"/>
 				</div>
 			</div>
 		</div>

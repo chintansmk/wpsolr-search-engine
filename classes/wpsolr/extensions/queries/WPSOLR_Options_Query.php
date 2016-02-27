@@ -16,6 +16,18 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 
 	const FORM_FIELD_NAME = 'name';
 	const FORM_FIELD_QUERY_FILTER = 'query_filter';
+	const FORM_FIELD_DEFAULT_MAX_NB_RESULTS_BY_PAGE = 20;
+	const FORM_FIELD_MAX_NB_RESULTS_BY_PAGE = 'no_res';
+	const FORM_FIELD_HIGHLIGHTING_FRAGSIZE = 'highlighting_fragsize';
+	const FORM_FIELD_DEFAULT_HIGHLIGHTING_FRAGSIZE = 100;
+	// Solr operators
+	const QUERY_OPERATOR_AND = 'AND';
+	const QUERY_OPERATOR_OR = 'OR';
+	// Timeout in seconds when calling Solr
+	const FORM_FIELD_DEFAULT_SOLR_TIMEOUT_IN_SECOND = 30;
+	const FORM_FIELD_DEFAULT_OPERATOR = 'query_default_operator';
+	const FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH = 'is_query_partial_match_begin_with';
+	const FORM_FIELD_IS_DEFAULT = 'is_default';
 
 	/**
 	 * Post constructor.

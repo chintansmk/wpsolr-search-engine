@@ -2,8 +2,8 @@
 
 namespace wpsolr\utilities;
 
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\services\WPSOLR_Service_Wordpress;
-use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\WPSOLR_Filters;
 
 /**
@@ -173,8 +173,6 @@ class WPSOLR_Option {
 	const OPTION_SEARCH_ITEM_highlighting_fragsize = 'highlighting_fragsize';
 	const OPTION_SEARCH_ITEM_is_spellchecker = 'spellchecker';
 	const OPTION_SEARCH_IS_DO_NOT_SHOW_SUGGESTIONS = 'is_do_not_show_suggestions';
-	const OPTION_SEARCH_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH = 'is_query_partial_match_begin_with';
-	const OPTION_SEARCH_QUERY_DEFAULT_OPERATOR = 'query_default_operator';
 
 	/**
 	 * Get search options array
@@ -293,7 +291,7 @@ class WPSOLR_Option {
 	 * @return boolean
 	 */
 	public function get_search_is_query_partial_match_begin_with() {
-		return ! $this->is_empty( $this->get_option_value( __FUNCTION__, self::OPTION_SEARCH, self::OPTION_SEARCH_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH ) );
+		return ! $this->is_empty( $this->get_option_value( __FUNCTION__, self::OPTION_SEARCH, WPSOLR_Options_Query::FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH ) );
 	}
 
 	/**
@@ -301,7 +299,7 @@ class WPSOLR_Option {
 	 * @return boolean
 	 */
 	public function get_search_query_default_operator() {
-		return $this->get_option_value( __FUNCTION__, self::OPTION_SEARCH, self::OPTION_SEARCH_QUERY_DEFAULT_OPERATOR, WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND );
+		return $this->get_option_value( __FUNCTION__, self::OPTION_SEARCH, WPSOLR_Options_Query::FORM_FIELD_DEFAULT_OPERATOR, WPSOLR_Options_Query::QUERY_OPERATOR_AND );
 	}
 
 	/***************************************************************************************************************

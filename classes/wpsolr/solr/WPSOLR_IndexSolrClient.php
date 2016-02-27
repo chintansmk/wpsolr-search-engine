@@ -2,6 +2,7 @@
 
 namespace wpsolr\solr;
 
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
 
@@ -36,7 +37,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 
 	public function __construct( $solr_index_indice = null, $language_code = null ) {
 
-		$config = WPSOLR_Global::getExtensionIndexes()->build_solarium_config( $solr_index_indice, $language_code, self::DEFAULT_SOLR_TIMEOUT_IN_SECOND );
+		$config = WPSOLR_Global::getExtensionIndexes()->build_solarium_config( $solr_index_indice, $language_code, WPSOLR_Options_Query::FORM_FIELD_DEFAULT_SOLR_TIMEOUT_IN_SECOND );
 
 		$this->index_indice    = $solr_index_indice;
 		$this->solarium_client = new \Solarium\Client( $config );

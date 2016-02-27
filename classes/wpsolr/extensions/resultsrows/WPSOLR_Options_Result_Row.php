@@ -16,10 +16,6 @@ use wpsolr\utilities\WPSOLR_Global;
 class WPSOLR_Options_Result_Row extends WPSOLR_Extensions {
 
 	const FORM_FIELD_IS_INFINITESCROLL = 'infinitescroll';
-	const FORM_FIELD_MAX_NB_RESULTS_BY_PAGE = 'no_res';
-	const FORM_FIELD_HIGHLIGHTING_FRAGSIZE = 'highlighting_fragsize';
-	const FORM_FIELD_DEFAULT_MAX_NB_RESULTS_BY_PAGE = 20;
-	const FORM_FIELD_DEFAULT_HIGHLIGHTING_FRAGSIZE = 100;
 
 	/**
 	 * Post constructor.

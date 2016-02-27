@@ -7,6 +7,7 @@ use Solarium\Core\Query\Result\ResultInterface;
 use Solarium\QueryType\Select\Query\Query;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\localization\WPSOLR_Localization;
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\ui\WPSOLR_Query;
 use wpsolr\utilities\WPSOLR_Global;
@@ -79,7 +80,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	static function create_from_index_indice( $index_indice ) {
 
 		// Build Solarium config from the default indexing Solr index
-		$solarium_config = WPSOLR_Global::getExtensionIndexes()->build_solarium_config( $index_indice, null, self::DEFAULT_SOLR_TIMEOUT_IN_SECOND );
+		$solarium_config = WPSOLR_Global::getExtensionIndexes()->build_solarium_config( $index_indice, null, WPSOLR_Options_Query::FORM_FIELD_DEFAULT_SOLR_TIMEOUT_IN_SECOND );
 
 		return new self( $solarium_config );
 	}
@@ -952,11 +953,14 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 				if ( ! $is_facet_or ) {
 
-					$solarium_query->addFilterQuery( array(
-						'key'   => "$filter_query_field",
-						'query' => "$filter_query_field",
-						'tag'   => [ $exclusion_tag, "$fac_fd" ]
-					) );
+					if ( empty( $solarium_query->getFilterQuery( "$filter_query_field" ) ) ) {
+
+						$solarium_query->addFilterQuery( array(
+							'key'   => "$filter_query_field",
+							'query' => "$filter_query_field",
+							'tag'   => [ $exclusion_tag, "$fac_fd" ]
+						) );
+					}
 
 				}
 
@@ -984,11 +988,14 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 			if ( ! empty( $filter_query_field_or ) ) {
 
-				$solarium_query->addFilterQuery( array(
-					'key'   => "$fac_fd",
-					'query' => "$filter_query_field_or",
-					'tag'   => [ $exclusion_tag, "$fac_fd" ]
-				) );
+				if ( empty( $solarium_query->getFilterQuery( "$fac_fd" ) ) ) {
+
+					$solarium_query->addFilterQuery( array(
+						'key'   => "$fac_fd",
+						'query' => "$filter_query_field_or",
+						'tag'   => [ $exclusion_tag, "$fac_fd" ]
+					) );
+				}
 			}
 
 		}

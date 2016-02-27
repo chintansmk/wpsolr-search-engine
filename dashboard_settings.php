@@ -1,9 +1,9 @@
 <?php
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
+use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_IndexSolrClient;
-use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
@@ -408,20 +408,20 @@ switch ( $tab ) {
 									<div class='col_left'>Query default operator<br/>
 									</div>
 									<div class='col_right'>
-										<?php $query_default_operator = isset( $solr_res_options[ WPSOLR_Option::OPTION_SEARCH_QUERY_DEFAULT_OPERATOR ] )
-											? $solr_res_options[ WPSOLR_Option::OPTION_SEARCH_QUERY_DEFAULT_OPERATOR ] : WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND; ?>
+										<?php $query_default_operator = isset( $solr_res_options[ WPSOLR_Options_Query::FORM_FIELD_DEFAULT_OPERATOR ] )
+											? $solr_res_options[ WPSOLR_Options_Query::FORM_FIELD_DEFAULT_OPERATOR ] : WPSOLR_Options_Query::QUERY_OPERATOR_AND; ?>
 
 										<select
-											name='wdm_solr_res_data[<?php echo WPSOLR_Option::OPTION_SEARCH_QUERY_DEFAULT_OPERATOR; ?>]'>
+											name='wdm_solr_res_data[<?php echo WPSOLR_Options_Query::FORM_FIELD_DEFAULT_OPERATOR; ?>]'>
 											<option
-												value='<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND; ?>' <?php selected( WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND, $query_default_operator, true ); ?>
+												value='<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_AND; ?>' <?php selected( WPSOLR_Options_Query::QUERY_OPERATOR_AND, $query_default_operator, true ); ?>
 											>
-												<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_AND; ?>
+												<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_AND; ?>
 											</option>
 											<option
-												value='<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_OR; ?>' <?php selected( WPSOLR_SearchSolrClient::QUERY_OPERATOR_OR, $query_default_operator, true ); ?>
+												value='<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_OR; ?>' <?php selected( WPSOLR_Options_Query::QUERY_OPERATOR_OR, $query_default_operator, true ); ?>
 											>
-												<?php echo WPSOLR_SearchSolrClient::QUERY_OPERATOR_OR; ?>
+												<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_OR; ?>
 											</option>
 										</select>
 
@@ -433,9 +433,9 @@ switch ( $tab ) {
 									<div class='col_left'>Display partial keyword matches in results
 									</div>
 									<div class='col_right'>
-										<?php $is_query_partial_match = isset( $solr_res_options[ WPSOLR_Option::OPTION_SEARCH_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH ] ) ? '1' : '0'; ?>
+										<?php $is_query_partial_match = isset( $solr_res_options[ WPSOLR_Options_Query::FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH ] ) ? '1' : '0'; ?>
 										<input type='checkbox'
-										       name='wdm_solr_res_data[<?php echo WPSOLR_Option::OPTION_SEARCH_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH; ?>]'
+										       name='wdm_solr_res_data[<?php echo WPSOLR_Options_Query::FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH; ?>]'
 										       value='1'
 											<?php checked( '1', $is_query_partial_match ); ?>>
 

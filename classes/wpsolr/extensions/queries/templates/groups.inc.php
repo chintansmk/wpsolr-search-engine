@@ -1,6 +1,5 @@
 <?php
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
-use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 
 ?>
 
@@ -56,6 +55,16 @@ use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 		jQuery(".sortable").sortable();
 		jQuery(".sortable").accordion({active: false, collapsible: true, heightStyle: "content"});
 
+		// Toggle default group
+		jQuery('.is_default').click(function () {
+
+			if (jQuery(this).prop("checked")) {
+
+				// Uncheck all other checks
+				jQuery('.is_default').not(this).prop("checked", false);
+			}
+
+		})
 	});
 </script>
 
@@ -87,6 +96,93 @@ use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 						       value="1"/> Clone this group when saving
 					<?php } ?>
 
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Used on your theme search page
+				</div>
+				<div class='col_right'>
+					<?php $value = isset( $group[ WPSOLR_Options_Query::FORM_FIELD_IS_DEFAULT ] ); ?>
+					<input type='checkbox'
+					       class="is_default"
+					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Query::FORM_FIELD_IS_DEFAULT ); ?>"
+					       value='1'
+						<?php echo checked( $value ); ?>>
+					<p>
+						This query will be called to retrieve the content to be displayed on your standard theme search
+						page, when no query is selected in the url.<br/>
+						Leave empty if you do not want to use this plugin on your theme search page.
+					</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Query default operator<br/>
+				</div>
+				<div class='col_right'>
+					<?php
+					$value = isset( $group[ WPSOLR_Options_Query::FORM_FIELD_DEFAULT_OPERATOR ] )
+						? $group[ WPSOLR_Options_Query::FORM_FIELD_DEFAULT_OPERATOR ] : WPSOLR_Options_Query::QUERY_OPERATOR_AND; ?>
+
+					<select
+						name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Query::FORM_FIELD_DEFAULT_OPERATOR ); ?>">
+						<option
+							value='<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_AND; ?>' <?php selected( WPSOLR_Options_Query::QUERY_OPERATOR_AND, $value, true ); ?>
+						>
+							<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_AND; ?>
+						</option>
+						<option
+							value='<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_OR; ?>' <?php selected( WPSOLR_Options_Query::QUERY_OPERATOR_OR, $value, true ); ?>
+						>
+							<?php echo WPSOLR_Options_Query::QUERY_OPERATOR_OR; ?>
+						</option>
+					</select>
+
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Display partial keyword matches in results
+				</div>
+				<div class='col_right'>
+					<?php $value = isset( $group[ WPSOLR_Options_Query::FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH ] ); ?>
+					<input type='checkbox'
+					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Query::FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH ); ?>"
+					       value='1'
+						<?php echo checked( $value ); ?>>
+
+					Warning: this will hurt both search performance and search accuracy !
+					<p>This adds '*' to all keywords.
+						For instance, 'search apache' will return results
+						containing 'searching apachesolr'</p>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>No. of rows returned by the query</div>
+				<div class='col_right'>
+					<?php $value = isset( $group[ WPSOLR_Options_Query::FORM_FIELD_MAX_NB_RESULTS_BY_PAGE ] ) ? $group[ WPSOLR_Options_Query::FORM_FIELD_MAX_NB_RESULTS_BY_PAGE ] : WPSOLR_Options_Query::FORM_FIELD_DEFAULT_MAX_NB_RESULTS_BY_PAGE; ?>
+					<input type="text"
+					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Query::FORM_FIELD_MAX_NB_RESULTS_BY_PAGE ); ?>"
+					       value="<?php echo esc_attr( $value ); ?>"
+					/>
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Maximum size of each snippet text in results</div>
+				<div class='col_right'>
+					<?php $value = isset( $group[ WPSOLR_Options_Query::FORM_FIELD_HIGHLIGHTING_FRAGSIZE ] ) ? $group[ WPSOLR_Options_Query::FORM_FIELD_HIGHLIGHTING_FRAGSIZE ] : WPSOLR_Options_Query::FORM_FIELD_DEFAULT_HIGHLIGHTING_FRAGSIZE; ?>
+					<input type="text"
+					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Query::FORM_FIELD_HIGHLIGHTING_FRAGSIZE ); ?>"
+					       value="<?php echo esc_attr( $value ); ?>"
+					/>
 				</div>
 				<div class="clear"></div>
 			</div>
