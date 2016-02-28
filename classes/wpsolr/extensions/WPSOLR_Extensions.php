@@ -5,13 +5,14 @@ namespace wpsolr\extensions;
 use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
 use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
-use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
 use wpsolr\extensions\importexport\WPSOLR_Options_ImportExports;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
+use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
+use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\resultsheaders\WPSOLR_Options_Result_Header;
 use wpsolr\extensions\resultspagenavigations\WPSOLR_Options_Result_Page_Navigation;
@@ -319,7 +320,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Fields::CLASS,
 				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Fields::CLASS,
 				self::_CONFIG_EXTENSION_DIRECTORY               => 'fields/',
-				self::_CONFIG_EXTENSION_FILE_PATH               => 'fields/WPSOLR_Fields.php',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'fields/WPSOLR_Options_Fields.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'fields/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',

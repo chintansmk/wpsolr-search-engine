@@ -4,10 +4,12 @@
  * Included file to display admin options
  */
 
+use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\WPSOLR_Filters;
 
 // Options name
 $option_name = WPSOLR_Extensions::get_option_name( WPSOLR_Extensions::EXTENSION_INDEXES );
@@ -25,6 +27,9 @@ $form_data                             = WPSOLR_Extensions::extract_form_data( $
 	)
 );
 
+$fields = WPSOLR_Global::getExtensionFields()->get_groups();
+
+$languages = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_GET_LANGUAGES, [ ] );
 ?>
 
 <div id="solr-hosting-tab">
@@ -205,6 +210,50 @@ $form_data                             = WPSOLR_Extensions::extract_form_data( $
 
 							<div class="clear"></div>
 							<span class='name_err'></span>
+						</div>
+						<div class="clear"></div>
+					</div>
+
+					<div class="wdm_row">
+						<div class='col_left'>Index fields</div>
+						<div class='col_right'>
+							<?php $value = isset( $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Indexes::FORM_FIELD_FIELD_ID ] ) ? $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Indexes::FORM_FIELD_FIELD_ID ] : ''; ?>
+							<?php if ( !$is_new_index ) { ?>
+								<input type="hidden"
+								       name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][index_field_id]>"
+								       value="<?php echo esc_attr( $value ); ?>"
+								/>
+								<?php echo $fields[ $value ][ WPSOLR_Options_Fields::FORM_FIELD_NAME ]; ?>
+							<?php } else { ?>
+								<select
+									name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][index_field_id]">
+									<?php
+									foreach ( $fields as $field_id => $field ) { ?>
+										<option value="<?php echo esc_attr( $field_id ); ?>"
+											<?php selected( $field_id, $value, true ); ?> ><?php echo $field[ WPSOLR_Options_Fields::FORM_FIELD_NAME ]; ?></option>
+									<?php } ?>
+								</select>
+							<?php } ?>
+						</div>
+						<div class="clear"></div>
+					</div>
+
+					<div class="wdm_row">
+						<div class='col_left'>Is indexing data for language</div>
+						<div class='col_right'>
+							<?php
+							$value = isset( $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Indexes::FORM_FIELD_LANGUAGE_ID ] ) ? $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Indexes::FORM_FIELD_LANGUAGE_ID ] : '';
+							?>
+							<select
+								name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][<?php echo WPSOLR_Options_Indexes::FORM_FIELD_LANGUAGE_ID; ?>]">
+								<option value="<?php echo esc_attr( '' ); ?>"
+									<?php selected( '', $value, true ); ?> ><?php echo 'All languages'; ?></option>
+								<?php
+								foreach ( $languages as $language_code => $language ) { ?>
+									<option value="<?php echo esc_attr( $language_code ); ?>"
+										<?php selected( $language_code, $value, true ); ?> ><?php echo $language_code; ?></option>
+								<?php } ?>
+							</select>
 						</div>
 						<div class="clear"></div>
 					</div>

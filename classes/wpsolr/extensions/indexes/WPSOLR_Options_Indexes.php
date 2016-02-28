@@ -17,6 +17,8 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 	// Solr index properties
 	const INDEX_TYPE = 'index_type';
 	const MANAGED_SOLR_SERVICE_ID = 'managed_solr_service_id';
+	const FORM_FIELD_FIELD_ID = 'index_field_id';
+	const FORM_FIELD_LANGUAGE_ID = 'language_id';
 
 
 	private $_options;
@@ -27,6 +29,7 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 	const STORED_INDEX_TYPE_MANAGED_TEMPORARY = 'index_type_managed_temporary';
 	// Managed Solr index
 	const STORED_INDEX_TYPE_MANAGED = 'index_type_managed';
+
 
 	/**
 	 * Post constructor.
@@ -254,6 +257,31 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 
 		return isset( $solr_indexes ) ? count( $solr_indexes ) : 0;
 	}
+
+	public function get_field_id( $solr_index ) {
+
+		$result = $this->get_index_property( $solr_index, self::FORM_FIELD_FIELD_ID, '' );
+
+		return $result;
+	}
+
+	public function get_indexes_by_field_id( $field_id ) {
+
+		$results = [ ];
+
+		foreach ( $this->get_indexes() as $solr_index_id => $solr_index ) {
+
+			if ( $field_id == $this->get_field_id( $solr_index ) ) {
+
+				// This $solr_index contains the field_id: add it to the list.
+				$results[ $solr_index_id ] = $solr_index;
+			}
+
+		}
+
+		return $results;
+	}
+
 
 	public function create_index( $managed_solr_service_id, $index_type, $index_uuid, $index_name, $index_protocol, $index_host, $index_port, $index_path, $index_key, $index_secret ) {
 

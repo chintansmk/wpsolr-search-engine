@@ -1,5 +1,7 @@
 <?php
+use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
+use wpsolr\utilities\WPSOLR_Global;
 
 ?>
 
@@ -96,6 +98,84 @@ use wpsolr\extensions\queries\WPSOLR_Options_Query;
 						       value="1"/> Clone this group when saving
 					<?php } ?>
 
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Fields</div>
+				<div class='col_right'>
+					<?php $value = isset( $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] : ''; ?>
+
+					<?php if ( $new_group_uuid != $group_uuid ) { ?>
+						<input type="hidden"
+						       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ); ?>"
+						       value="<?php echo $value; ?>"
+						/>
+						<?php
+						$fields_name = ! empty( $fields[ $value ] ) ? $fields[ $value ][ WPSOLR_Options_Query::FORM_FIELD_NAME ] : '';
+						echo $fields_name;
+						?>
+					<?php } else { ?>
+						<select
+							name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ); ?>">
+							<?php
+							foreach ( $fields as $field_id => $field ) { ?>
+								<option value="<?php echo esc_attr( $field_id ); ?>"
+									<?php selected( $field_id, $value, true ); ?> >
+									<?php echo $field[ WPSOLR_Options_Query::FORM_FIELD_NAME ]; ?>
+								</option>
+							<?php } ?>
+						</select>
+					<?php } ?>
+
+				</div>
+				<div class="clear"></div>
+			</div>
+
+			<div class="wdm_row">
+				<div class='col_left'>Index</div>
+				<div class='col_right'>
+					<?php
+					$solr_indexes = WPSOLR_Global::getExtensionIndexes()->get_indexes_by_field_id( isset( $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] : '' );
+					//foreach ( WPSOLR_Global::getExtensionIndexes()->get_indexes() as $solr_index_indice => $solr_index ) {
+					$value = isset( $group[ WPSOLR_Options_Fields::FORM_FIELD_SOLR_INDEX_ID ] ) ? $group[ WPSOLR_Options_Fields::FORM_FIELD_SOLR_INDEX_ID ] : '';
+					?>
+
+					<select
+						name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_SOLR_INDEX_ID ); ?>">
+						<?php
+						foreach ( $solr_indexes as $solr_index_id => $solr_index ) { ?>
+							<option value="<?php echo esc_attr( $solr_index_id ); ?>"
+								<?php selected( $solr_index_id, $value, true ); ?> >
+								<?php echo WPSOLR_Global::getExtensionIndexes()->get_index_name( $solr_index ); ?>
+							</option>
+						<?php } ?>
+					</select>
+
+					<p>Activate and configure wpsolr multi-language extensions (polylang, wpml) if you need to query a
+						Solr index by language.</p>
+
+
+				</div>
+				<div class="clear"></div>
+			</div>
+
+
+			<div class="wdm_row">
+				<div class='col_left'>Multi-language
+				</div>
+				<div class='col_right'>
+					<?php $value = isset( $group[ WPSOLR_Options_Query::FORM_FIELD_IS_MULTI_LANGUAGE ] ); ?>
+					<input type='checkbox'
+					       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Query::FORM_FIELD_IS_MULTI_LANGUAGE ); ?>"
+					       value='1'
+						<?php echo checked( $value ); ?>>
+					<p>
+						The query will use the index with fields '<?php echo $fields_name; ?>' that matches the
+						language. If no index can be
+						matched, the index selected above will be used.
+					</p>
 				</div>
 				<div class="clear"></div>
 			</div>

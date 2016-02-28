@@ -58,7 +58,7 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 	 * @inheritDoc
 	 */
 	public function get_groups() {
-		return WPSOLR_Global::getOption()->get_facets_groups();
+		return WPSOLR_Global::getOption()->get_option_facets();
 	}
 
 }

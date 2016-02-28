@@ -21,7 +21,7 @@ $option_names_to_export = [
 	],
 	WPSOLR_Option::OPTION_FACETS                  => [
 		'description' => 'Facet groups',
-		'data'        => WPSOLR_Global::getOption()->get_option_facet()
+		'data'        => WPSOLR_Global::getOption()->get_option_facets()
 	],
 	WPSOLR_Option::OPTION_SORTS                   => [
 		'description' => 'Sort groups',

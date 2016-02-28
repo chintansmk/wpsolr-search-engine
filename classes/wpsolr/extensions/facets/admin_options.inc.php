@@ -15,11 +15,11 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 		jQuery('[name=save_facets_options_form]').click(function () {
 
 			// Remove a new group without a name
-			var new_group_element = jQuery('#<?php echo $new_facets_group_uuid ?>_group_name');
+			var new_group_element = jQuery('#<?php echo $new_group_uuid ?>_group_name');
 			var new_group_name = new_group_element.val();
 			if (!new_group_name) {
 				if (new_group_element.is(':hidden')) {
-					jQuery('#<?php echo $new_facets_group_uuid ?>').remove();
+					jQuery('#<?php echo $new_group_uuid ?>').remove();
 				} else {
 					new_group_element.css('border', '1px solid red');
 					return false;
@@ -121,21 +121,20 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(
 						WPSOLR_Extensions::OPTION_FACETS, 'groups.inc.php' ),
 						array(
-							'options_name'              => $options_name,
-							'group_tab_selected'        => $group_tab_selected,
-							'new_facets_group_uuid'     => $new_facets_group_uuid,
-							'layouts_facets'            => $layouts_facets,
-							'layouts_filters'           => $layouts_filters,
-							'default_facets_group_uuid' => $default_facets_group_uuid,
-							'facets_groups'             => $facets_groups,
-							'facets_selected'           => $facets_selected,
-							'fields'                    => $fields,
-							'facet_selected_class'      => 'facet_selected',
-							'facet_not_selected_class'  => 'facet_not_selected',
-							'image_plus_display'        => 'none',
-							'image_minus_display'       => 'inline',
-							'image_plus'                => $image_plus,
-							'image_minus'               => $image_minus
+							'options_name'             => $options_name,
+							'group_tab_selected'       => $group_tab_selected,
+							'new_group_uuid'           => $new_group_uuid,
+							'layouts_facets'           => $layouts_facets,
+							'layouts_filters'          => $layouts_filters,
+							'groups'                   => $groups,
+							'fields'                   => $fields,
+							'groups_fields'            => $groups_fields,
+							'facet_selected_class'     => 'facet_selected',
+							'facet_not_selected_class' => 'facet_not_selected',
+							'image_plus_display'       => 'none',
+							'image_minus_display'      => 'inline',
+							'image_plus'               => $image_plus,
+							'image_minus'              => $image_minus
 						)
 					);
 					?>

@@ -54,6 +54,11 @@ class WPSOLR_Plugin_Polylang extends WPSOLR_Plugin_Wpml {
 			'get_home_url',
 		), 10, 1 );
 
+		WPSOLR_Service_Wordpress::add_filter( WPSOLR_Filters::WPSOLR_FILTER_GET_LANGUAGES, array(
+			$this,
+			'get_languages',
+		), 10, 1 );
+
 	}
 
 	/**

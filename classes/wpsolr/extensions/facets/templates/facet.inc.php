@@ -7,7 +7,7 @@ use wpsolr\utilities\WPSOLR_Option;
 ?>
 
 <?php
-$facet_option_array_name = sprintf( '%s[%s][%s][%s]', $options_name, WPSOLR_Option::OPTION_FACETS_FACETS, $facets_group_uuid, $facet_name );
+$facet_option_array_name = sprintf( '%s[%s][%s][%s]', $options_name, $facets_group_uuid, WPSOLR_Option::OPTION_FACETS_FACETS, $facet_name );
 
 $facet_layout_id        = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_FACET_LAYOUT_ID ] : '';
 $facet_filter_layout_id = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID ] ) ? $facet[ WPSOLR_Options_Facets::FACET_FIELD_FILTER_LAYOUT_ID ] : '';

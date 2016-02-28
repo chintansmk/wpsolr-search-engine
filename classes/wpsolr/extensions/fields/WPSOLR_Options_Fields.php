@@ -2,63 +2,54 @@
 
 namespace wpsolr\extensions\fields;
 
+use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Type;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\utilities\WPSOLR_Global;
-use wpsolr\utilities\WPSOLR_Option;
-use wpsolr\utilities\WPSOLR_Regexp;
 
 /**
  * Class WPSOLR_Options_Fields
  *
- * Manage Solr Fields definitions
+ * Manage queries
  */
 class WPSOLR_Options_Fields extends WPSOLR_Extensions {
 
-
-	/**
-	 * Migrate the old custom fields data to the new custom fields data.
-	 */
-	public function migrate_data_from_v7_6() {
-
-		$old_custom_fields = WPSOLR_Global::getOption()->migrate_data_from_v7_6_get_fields_custom_fields_array();
-		//$old_custom_fields = [ '_acf1_str', '_acf2_str', 'test1', '_str_test2' ];
-		if ( ! count( $old_custom_fields ) ) {
-			// Old custom fields empty: nothing to migrate
-			return;
-		}
-
-		$new_custom_fields = WPSOLR_Global::getOption()->get_fields_custom_fields_array();
-		//$new_custom_fields = [ ];
-		if ( count( $new_custom_fields ) ) {
-			// New custom fields not empty: migration already done
-			return;
-		}
-
-		// Copy custom fields
-		// ['_acf1_str', '_acf2_str'] ===> [['_acf1' => ['solr_type' => 'str']], ['_acf2' => ['solr_type' => 'str']]]
-		$new_custom_fields = [ ];
-		foreach ( $old_custom_fields as $old_custom_field ) {
-			$old_custom_field_without_str = WPSOLR_Regexp::remove_string_at_the_end( $old_custom_field, WPSOLR_Field_Types::SOLR_TYPE_STRING );
-
-			$new_custom_fields[ $old_custom_field_without_str ]['solr_type'] = WPSOLR_Field_Types::SOLR_TYPE_STRING;
-		}
-
-
-		// Save the new option
-		$options                                               = WPSOLR_Global::getOption()->get_option_fields();
-		$options[ WPSOLR_Option::OPTION_FIELDS_CUSTOM_FIELDS ] = $new_custom_fields;
-		self::set_option_data( self::OPTION_FIELDS, $options );
-
-		// Do not delete the old options. If the user wants to rollback the version, he can.
-		return;
-	}
+	const FORM_FIELD_NAME = 'name';
+	const FORM_FIELD_QUERY_FILTER = 'query_filter';
+	const FORM_FIELD_DEFAULT_MAX_NB_RESULTS_BY_PAGE = 20;
+	const FORM_FIELD_MAX_NB_RESULTS_BY_PAGE = 'no_res';
+	const FORM_FIELD_HIGHLIGHTING_FRAGSIZE = 'highlighting_fragsize';
+	const FORM_FIELD_DEFAULT_HIGHLIGHTING_FRAGSIZE = 100;
+	// Solr operators
+	const QUERY_OPERATOR_AND = 'AND';
+	const QUERY_OPERATOR_OR = 'OR';
+	// Timeout in seconds when calling Solr
+	const FORM_FIELD_DEFAULT_SOLR_TIMEOUT_IN_SECOND = 30;
+	const FORM_FIELD_DEFAULT_OPERATOR = 'query_default_operator';
+	const FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH = 'is_query_partial_match_begin_with';
+	const FORM_FIELD_IS_DEFAULT = 'is_default';
+	const OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED = 'p_excerpt';
+	const OPTION_FIELDS_EXCLUDE_IDS = 'exclude_ids';
+	const OPTION_FIELDS_POST_TYPES = 'p_types';
+	const OPTION_FIELDS_ARE_COMMENTS_INDEXED = 'comments';
+	const FORM_FIELD_TAXONOMIES = 'taxonomies';
+	const OPTION_FIELDS_CUSTOM_FIELDS = self::FORM_FIELD_CUSTOM_FIELDS;
+	const OPTION_FIELDS_IS_SHORTCODE_EXPANDED = 'is_shortcode_expanded';
+	const OPTION_FIELDS_ATTACHMENTS = 'attachment_types';
+	const FORM_FIELD_IS_INDEX_COMMENTS = 'is_index_comments';
+	const OPTION_FIELDS_SOLR_INDEXES = 'solr_indexes';
+	const FORM_FIELD_FIELD_ID = 'field_id';
+	const FORM_FIELD_CUSTOM_FIELDS = 'custom_fields';
+	const FORM_FIELD_SOLR_TYPE = 'solr_type';
+	const FORM_FIELD_SOLR_INDEX_ID = 'solr_index_id';
 
 	/**
 	 * Post constructor.
 	 */
 	protected function post_constructor() {
+
 	}
 
 	/**
@@ -67,23 +58,27 @@ class WPSOLR_Options_Fields extends WPSOLR_Extensions {
 	 * @param array $plugin_parameters Parameters
 	 */
 	public function output_form( $form_file = null, $plugin_parameters = [ ] ) {
-		$this->get_woocommerce_attributes();
 
+		$new_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
+
+		// Clone some groups
+		$groups = WPSOLR_Global::getOption()->get_option_fields();
+		$groups = $this->clone_some_groups( $groups );
 
 		// Add current plugin parameters to default parent parameters
 		parent::output_form(
 			$form_file,
 			array_merge(
 				[
-					'options'                   => WPSOLR_Global::getOption()->get_option_fields(
+					'options'                   => WPSOLR_Global::getOption()->get_option_fields(),
+					'new_group_uuid'            => $new_group_uuid,
+					'groups'                    => array_merge(
+						$groups,
 						[
-							WPSOLR_Option::OPTION_FIELDS_ARE_COMMENTS_INDEXED => 0,
-							WPSOLR_Option::OPTION_FIELDS_POST_TYPES           => '',
-							WPSOLR_Option::OPTION_FIELDS_TAXONOMIES           => '',
-							WPSOLR_Option::OPTION_FIELDS_CUSTOM_FIELDS        => '',
-							WPSOLR_Option::OPTION_FIELDS_ATTACHMENTS          => ''
-						]
-					),
+							$new_group_uuid => [
+								'name' => 'New group'
+							]
+						] ),
 					'solr_field_types'          => WPSOLR_Global::getSolrFieldTypes()->get_field_types(),
 					'indexable_post_types'      => $this->get_indexable_post_types(),
 					'allowed_attachments_types' => get_allowed_mime_types(),
@@ -97,14 +92,79 @@ class WPSOLR_Options_Fields extends WPSOLR_Extensions {
 						'and'
 					),
 					'indexable_custom_fields'   => $this->get_indexable_custom_fields(),
-					'selected_custom_fields'    => WPSOLR_Global::getOption()->get_fields_custom_fields_array()
-
+					'selected_custom_fields'    => WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
+					'indexes'                   => WPSOLR_Global::getExtensionIndexes()->get_indexes()
 				],
 				$plugin_parameters
 			)
 		);
 	}
 
+	/**
+	 * Get groups
+	 *
+	 * @return array Groups
+	 */
+	public function get_groups() {
+
+		$groups = WPSOLR_Global::getOption()->get_option_fields();
+
+		return $groups;
+	}
+
+	/**
+	 * Get group
+	 *
+	 * @@param string $group_id
+	 * @return array Group
+	 */
+	public function get_group( $group_id ) {
+
+		$groups = WPSOLR_Global::getOption()->get_option_fields();
+
+		if ( empty( $groups ) || empty( $groups[ $group_id ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'Fields \'%s\' is unknown.', $group_id ) );
+		}
+
+		return $groups[ $group_id ];
+	}
+
+	/**
+	 * Get query filter
+	 *
+	 * @param $query
+	 *
+	 * @return string Fields filter
+	 */
+	public function get_query_filter( $query ) {
+		return isset( $query[ self::FORM_FIELD_QUERY_FILTER ] ) ? $query[ self::FORM_FIELD_QUERY_FILTER ] : '';
+	}
+
+
+	/**
+	 * Clone the groups marked.
+	 *
+	 * @param $groups
+	 */
+	public function clone_some_groups( &$groups ) {
+
+		foreach ( $groups as $group_uuid => &$group ) {
+
+			if ( ! empty( $group['is_to_be_cloned'] ) ) {
+
+				unset( $group['is_to_be_cloned'] );
+
+				// Clone the group
+				$clone              = $group;
+				$result_cloned_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
+				$clone['name']      = 'Clone of ' . $clone['name'];
+
+				$groups[ $result_cloned_uuid ] = $clone;
+			}
+		}
+
+		return $groups;
+	}
 
 	/**
 	 * Get all post types, except some.
@@ -172,16 +232,47 @@ class WPSOLR_Options_Fields extends WPSOLR_Extensions {
 	 *
 	 * @return WPSOLR_Field_Type Field
 	 */
-	public function get_field_type_definition( $field_name ) {
+	public function get_field_type_definition( $field, $field_name ) {
 
-		$fields = WPSOLR_Global::getOption()->get_option_fields();
-
+		// Default type if none found
 		$solr_type = WPSOLR_Field_Types::SOLR_TYPE_STRING;
 
-		if ( isset( $fields['custom_fields'] ) && isset( $fields['custom_fields'][ $field_name ] ) ) {
-			$solr_type = $fields['custom_fields'][ $field_name ]['solr_type'];
+		if ( isset( $field[ self::FORM_FIELD_CUSTOM_FIELDS ] ) && isset( $field[ self::FORM_FIELD_CUSTOM_FIELDS ][ $field_name ] ) ) {
+			$solr_type = $field[ self::FORM_FIELD_CUSTOM_FIELDS ][ $field_name ][ self::FORM_FIELD_SOLR_TYPE ];
 		}
 
+		// Get the type definition
 		return WPSOLR_Global::getSolrFieldTypes()->get_field_type( $solr_type );
 	}
+
+	/**
+	 * Get custom fields of a field
+	 *
+	 * @param $field
+	 *
+	 * @return array
+	 */
+	public function get_custom_fields( $field ) {
+
+		$results = ! empty( $field[ self::FORM_FIELD_CUSTOM_FIELDS ] ) ? $field[ self::FORM_FIELD_CUSTOM_FIELDS ] : [ ];
+
+		return $results;
+	}
+
+	/**
+	 * Get taxonomies of a field
+	 *
+	 * @param $field
+	 *
+	 * @return array
+	 */
+	public function get_taxonomies( $field ) {
+
+		$results = ! empty( $field[ self::FORM_FIELD_TAXONOMIES ] )
+			? WPSOLR_Field_Types::add_fields_type( $field[ self::FORM_FIELD_TAXONOMIES ], WPSOLR_Field_Types::SOLR_TYPE_STRING )
+			: [ ];
+
+		return $results;
+	}
+
 }

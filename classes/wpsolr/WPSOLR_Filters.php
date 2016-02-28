@@ -71,4 +71,7 @@ class WPSOLR_Filters {
 
 	// Filter to get the home page url from ML extensions
 	const WPSOLR_FILTER_HOME_URL = 'wpsolr_filter_home_url';
+
+	// Filter to get all languages from ML plugins
+	const WPSOLR_FILTER_GET_LANGUAGES = 'wpsolr_filter_get_languages';
 }

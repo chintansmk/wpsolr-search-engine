@@ -209,25 +209,29 @@ function fun_set_solr_options() {
 	if ( isset ( $_GET['tab'] ) ) {
 		wpsolr_admin_tabs( $_GET['tab'] );
 	} else {
-		wpsolr_admin_tabs( 'solr_indexes' );
+		wpsolr_admin_tabs( 'wpsolr_indexes' );
 	}
 
 	if ( isset ( $_GET['tab'] ) ) {
 		$tab = $_GET['tab'];
 	} else {
-		$tab = 'solr_indexes';
+		$tab = 'wpsolr_fields';
 	}
 
 switch ( $tab ) {
-	case 'solr_importexports' :
+	case 'wpsolr_fields' :
+		WPSOLR_Global::getExtensionFields()->output_form();
+		break;
+
+	case 'wpsolr_importexports' :
 		WPSOLR_Global::getExtensionImportExports()->output_form();
 		break;
 
-	case 'solr_indexes' :
+	case 'wpsolr_indexes' :
 		WPSOLR_Extensions::require_once_wpsolr_extension_admin_options( WPSOLR_Extensions::EXTENSION_INDEXES );
 		break;
 
-	case 'solr_option':
+	case 'wpsolr_search':
 		?>
 		<div id="solr-option-tab">
 
@@ -235,7 +239,6 @@ switch ( $tab ) {
 
 			$subtabs = [
 				WPSOLR_Option::OPTION_SEARCH                  => '2.1 Search',
-				WPSOLR_Option::OPTION_FIELDS                  => '2.2 Fields',
 				WPSOLR_Option::OPTION_QUERIES                 => '2.x Queries',
 				WPSOLR_Option::OPTION_FACETS                  => '2.3 Facets',
 				WPSOLR_Option::OPTION_SORTS                   => '2.4 Sorting',
@@ -539,10 +542,6 @@ switch ( $tab ) {
 					<?php
 					break;
 
-				case WPSOLR_Option::OPTION_FIELDS:
-					WPSOLR_Global::getExtensionFields()->output_form();
-					break;
-
 				case WPSOLR_Option::OPTION_FACETS:
 					WPSOLR_Global::getExtensionFacets()->output_form();
 					break;
@@ -590,7 +589,7 @@ switch ( $tab ) {
 		<?php
 		break;
 
-case 'solr_plugins':
+case 'wpsolr_plugins':
 	?>
 	<div id="solr-option-tab">
 
@@ -611,7 +610,7 @@ case 'solr_plugins':
 	WPSOLR_Global::getExtension( $subtab )->output_form();
 	break;
 
-	case 'solr_operations':
+	case 'wpsolr_operations':
 
 		$option_indexes_object = WPSOLR_Global::getExtensionIndexes();
 
@@ -789,7 +788,7 @@ case 'solr_plugins':
 
 }
 
-function wpsolr_admin_tabs( $current = 'solr_indexes' ) {
+function wpsolr_admin_tabs( $current = 'wpsolr_fields' ) {
 
 	// Get default search solr index indice
 	$option_indexes            = WPSOLR_Global::getExtensionIndexes();
@@ -798,16 +797,14 @@ function wpsolr_admin_tabs( $current = 'solr_indexes' ) {
 	$nb_indexes        = count( $option_indexes->get_indexes() );
 	$are_there_indexes = ( $nb_indexes > 0 );
 
-	$tabs                 = array();
-	$tabs['solr_indexes'] = $are_there_indexes ? '1. Define your Solr Indexes' : '1. Define your Solr Index';
+	$tabs                   = [ ];
+	$tabs['wpsolr_fields']  = '1. Define your fields';
+	$tabs['wpsolr_indexes'] = $are_there_indexes ? '2. Define your Solr Indexes' : '1. Define your Solr Index';
 	if ( $are_there_indexes ) {
-		$tabs['solr_option']        = sprintf( "2. Define your search with '%s'",
-			! isset( $default_search_solr_index )
-				? $are_there_indexes ? "<span class='text_error'>No index selected</span>" : ''
-				: $option_indexes->get_index_name( $default_search_solr_index ) );
-		$tabs['solr_plugins']       = '3. Define which plugins to work with';
-		$tabs['solr_operations']    = '4. Send your data to Solr';
-		$tabs['solr_importexports'] = '5. Import/Export your setup';
+		$tabs['wpsolr_operations']    = '3. Send your data to Solr';
+		$tabs['wpsolr_search']        = '4. Define your search';
+		$tabs['wpsolr_plugins']       = '5. Define which plugins to work with';
+		$tabs['wpsolr_importexports'] = '6. Import/Export your setup';
 	}
 
 	echo '<div id="icon-themes" class="icon32"><br></div>';
@@ -824,7 +821,7 @@ function wpsolr_admin_tabs( $current = 'solr_indexes' ) {
 function wpsolr_admin_sub_tabs( $subtabs, $before = null ) {
 
 	// Tab selected by the user
-	$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'solr_indexes';
+	$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wpsolr_fields';
 
 	if ( isset ( $_GET['subtab'] ) ) {
 

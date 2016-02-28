@@ -1,258 +1,128 @@
 <?php
+use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\services\WPSOLR_Service_Wordpress;
-use wpsolr\utilities\WPSOLR_Option;
 
 ?>
+
+<?php
+$group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
+?>
+
+<script xmlns="http://www.w3.org/1999/html">
+	jQuery(document).ready(function () {
+
+		// Save form
+		jQuery('[name=save_results_options_form]').click(function () {
+
+			// Remove a new group without a name
+			var new_group_element = jQuery('#<?php echo $new_group_uuid ?>_group_name');
+			var new_group_name = new_group_element.val();
+			if (!new_group_name) {
+				if (new_group_element.is(':hidden')) {
+					jQuery('#<?php echo $new_group_uuid ?>').remove();
+				} else {
+					new_group_element.css('border', '1px solid red');
+					return false;
+				}
+			}
+
+
+			// Remove all results not selected
+			jQuery('.result_not_selected').each(function () {
+				jQuery(this).detach();
+			});
+
+			// Change the group selected in url referer
+			var url = new Url(window.location.href);
+			url.query["group_tab"] = jQuery(".tabs").tabs('option', 'active');
+			jQuery('[name=_wp_http_referer]').val(url.toString());
+
+			return true;
+		});
+
+		jQuery('.results input:checkbox').click(function () {
+			// id is 'group_uuid_field_name_is_active', we want #group_uuid_field_name which holds the result section
+			var result_section_id = '#' + jQuery(this).attr('id').replace('_is_active', '');
+
+			console.log(result_section_id);
+
+			if (jQuery(this).prop("checked")) {
+				jQuery(result_section_id).parent().removeClass('result_not_selected');
+				jQuery(result_section_id).parent().addClass('result_selected');
+			} else {
+				jQuery(result_section_id).parent().addClass('result_not_selected');
+				jQuery(result_section_id).parent().removeClass('result_selected');
+			}
+			jQuery(result_section_id).parent().find('.plus_icon').toggle(!jQuery(this).prop("checked"));
+			jQuery(result_section_id).parent().find('.minus_icon').toggle(jQuery(this).prop("checked"));
+
+		})
+
+	});
+
+</script>
 
 <script>
 	jQuery(document).ready(function () {
 
-		jQuery('[name=save_selected_index_options_form]').click(function () {
+		// Collapsable instructions
+		jQuery(".instructions").accordion({active: false, collapsible: true});
 
-			<?php
-			$fields_checkboxes_concatenated = [
-				WPSOLR_Option::OPTION_FIELDS_POST_TYPES,
-				WPSOLR_Option::OPTION_FIELDS_ATTACHMENTS,
-				WPSOLR_Option::OPTION_FIELDS_TAXONOMIES
-			];
-			foreach ($fields_checkboxes_concatenated as $field_name) { ?>
-
-			$concatenated_value = '';
-			jQuery("input:checkbox[name=<?php echo $field_name; ?>]:checked").each(function () {
-				$concatenated_value += jQuery(this).val() + ',';
-			});
-			$concatenated_value = $concatenated_value.substring(0, $concatenated_value.length - 1);
-			jQuery('#<?php echo $field_name ?>').val($concatenated_value);
-
-			<?php } ?>
-
-		});
-
-		jQuery(".<?php echo WPSOLR_Option::OPTION_FIELDS_CUSTOM_FIELDS ?> input:checkbox").click(function () {
-
-			jQuery('.' + jQuery(this).val()).children().toggle(jQuery(this).prop("checked"));
-			jQuery('.' + jQuery(this).val()).children().prop('disabled', !jQuery(this).prop("checked"));
+		jQuery("input[name=button_edit_layout],input[name=button_clone_layout]").on("click", function () {
+			dialog.dialog("open");
+			event.preventDefault();
 		});
 
 	});
 </script>
 
-<div id="solr-indexing-options" class="wdm-vertical-tabs-content">
-	<form action="options.php" method="POST" id='settings_form'>
+<div id="solr-results-options" class="wdm-vertical-tabs-content">
+	<form action="options.php" method="POST">
 		<?php
 		WPSOLR_Service_Wordpress::settings_fields( $options_name );
 		?>
 
-		<div class='indexing_option wrapper'>
-			<h4 class='head_div'>Indexing Options</h4>
-
-			<div class="wdm_note">
-
-				In this section, you will choose among all the data stored in your Wordpress
-				site, which you want to load in your Solr index.
-
-			</div>
+		<div class='wrapper'>
+			<h4 class='head_div'>Fields Options</h4>
 
 			<div class="wdm_row">
-				<div class='col_left'>
-					Index post excerpt.<br/>
-					Excerpt will be added to the post content, and be searchable, highlighted,
-					and
-					autocompleted.
-				</div>
-				<div class='col_right'>
-					<input type='checkbox'
-					       name='wdm_solr_form_data[<?php echo WPSOLR_Option::OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED ?>]'
-					       value='1' <?php checked( '1', isset( $options[ WPSOLR_Option::OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED ] ) ? $options[ WPSOLR_Option::OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED ] : '' ); ?>>
+				<div class='wpsolr-1col'>
+					<h4 style="display:inline">Manage fields used by your Solr indexes.</h4>
 
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="wdm_row">
-				<div class='col_left'>
-					Expand shortcodes of post content before indexing.<br/>
-					Else, shortcodes will simply be stripped.
-				</div>
-				<div class='col_right'>
-					<input type='checkbox'
-					       name='wdm_solr_form_data[<?php echo WPSOLR_Option::OPTION_FIELDS_IS_SHORTCODE_EXPANDED ?>]'
-					       value='1' <?php checked( '1', isset( $options[ WPSOLR_Option::OPTION_FIELDS_IS_SHORTCODE_EXPANDED ] ) ? $options[ WPSOLR_Option::OPTION_FIELDS_IS_SHORTCODE_EXPANDED ] : '' ); ?>>
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="wdm_row">
-				<div class='col_left'>Post types to be indexed</div>
-				<div class='col_right'>
-					<input type='hidden'
-					       name='wdm_solr_form_data[<?php echo WPSOLR_Option::OPTION_FIELDS_POST_TYPES ?>]'
-					       id='<?php echo WPSOLR_Option::OPTION_FIELDS_POST_TYPES ?>'>
 					<?php
-					$indexed_items = ! empty( $options[ WPSOLR_Option::OPTION_FIELDS_POST_TYPES ] ) ? $options[ WPSOLR_Option::OPTION_FIELDS_POST_TYPES ] : '';
-					foreach ( $indexable_post_types as $indexable_item ) {
-						?>
+					WPSOLR_Extensions::require_with( WPSOLR_Extensions::get_option_template_file(
+						WPSOLR_Extensions::OPTION_FIELDS, 'groups.inc.php' ),
+						array(
+							'options_name'              => $options_name,
+							'group_tab_selected'        => $group_tab_selected,
+							'new_group_uuid'            => $new_group_uuid,
+							'groups'                    => $groups,
+							'indexable_post_types'      => $indexable_post_types,
+							'solr_field_types'          => $solr_field_types,
+							'indexable_post_types'      => $indexable_post_types,
+							'allowed_attachments_types' => $allowed_attachments_types,
+							'taxonomies'                => $taxonomies,
+							'indexable_custom_fields'   => $indexable_custom_fields,
+							'selected_custom_fields'    => $selected_custom_fields,
+							'indexes'                   => $indexes
 
-						<div class='wpsolr-4col'>
-							<input type='checkbox' name='<?php echo WPSOLR_Option::OPTION_FIELDS_POST_TYPES ?>'
-							       value='<?php echo $indexable_item ?>'
-								<?php if ( strpos( $indexed_items, $indexable_item ) !== false ) { ?> checked <?php } ?>>
-							<?php echo $indexable_item ?>
-						</div>
-
-						<?php
-					}
+						)
+					);
 					?>
 
 				</div>
+
 				<div class="clear"></div>
 			</div>
 
-			<div class="wdm_row">
-				<div class='col_left'>
-					Custom Fields to be indexed
-					<br/><br/>
-					If a custom field is a <b>numeric</b> (price, volume, distance, weight), or a <b>date</b>, it can be
-					queried by range. If so, select it's numeric type among: integer, long, double, float, date.
-					<br/><br/>
-					If a custom field has been specifically <b>defined in Solr schema.xml</b>, select it's type as
-					'Custom type'.
-				</div>
-				<div class='col_right'>
-					<div class="wpsolr_overflow">
-						<?php
-						if ( count( $indexable_custom_fields ) > 0 ) {
-							foreach ( $indexable_custom_fields as $indexable_custom_field ) {
-
-								$is_indexed_custom_field = ( ! empty( $selected_custom_fields[ $indexable_custom_field ] ) );
-								$solr_type               = $is_indexed_custom_field && ! empty( $selected_custom_fields[ $indexable_custom_field ]['solr_type'] )
-									? $selected_custom_fields[ $indexable_custom_field ]['solr_type']
-									: '';
-								?>
-
-								<div class='wpsolr-1col'>
-									<div class='wpsolr-2col <?php echo WPSOLR_Option::OPTION_FIELDS_CUSTOM_FIELDS ?>'>
-										<input
-											type='checkbox'
-											name='<?php echo WPSOLR_Option::OPTION_FIELDS_CUSTOM_FIELDS ?>'
-											value='<?php echo $indexable_custom_field; ?>'
-											<?php if ( $is_indexed_custom_field ) { ?> checked <?php } ?>>
-										<?php echo $indexable_custom_field ?>
-									</div>
-
-									<div class="<?php echo $indexable_custom_field; ?>"
-									     style="float:right;">
-										<select style="<?php if ( ! $is_indexed_custom_field ) {
-											echo 'display:none';
-										} ?>"
-											<?php if ( ! $is_indexed_custom_field ) {
-												echo ' disabled ';
-											} ?>
-											    name='wdm_solr_form_data[<?php echo WPSOLR_Option::OPTION_FIELDS_CUSTOM_FIELDS ?>][<?php echo $indexable_custom_field ?>][solr_type]'>
-											<?php
-											foreach ( $solr_field_types as $solr_field_type_id => $solr_field_type ) {
-												echo sprintf( '<option value="%s" %s>%s</option>', $solr_field_type_id, selected( $solr_type, $solr_field_type_id, false ), $solr_field_type->get_name() );
-											}
-											?>
-										</select>
-									</div>
-								</div>
-
-								<?php
-							}
-
-						} else {
-							echo 'None';
-						}
-						?>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-
-			<div class="wdm_row">
-				<div class='col_left'>Attachment types to be indexed</div>
-				<div class='col_right'>
-					<div class="wpsolr_overflow">
-						<input type='hidden'
-						       name='wdm_solr_form_data[<?php echo WPSOLR_Option::OPTION_FIELDS_ATTACHMENTS ?>]'
-						       id='<?php echo WPSOLR_Option::OPTION_FIELDS_ATTACHMENTS ?>'>
-						<?php
-						$indexed_items = ! empty( $options[ WPSOLR_Option::OPTION_FIELDS_ATTACHMENTS ] ) ? $options[ WPSOLR_Option::OPTION_FIELDS_ATTACHMENTS ] : '';
-						foreach ( $allowed_attachments_types as $indexable_item ) {
-							?>
-
-							<div class='wpsolr-2col'>
-								<input type='checkbox' name='<?php echo WPSOLR_Option::OPTION_FIELDS_ATTACHMENTS ?>'
-								       value='<?php echo $indexable_item ?>'
-									<?php if ( strpos( $indexed_items, $indexable_item ) !== false ) { ?> checked <?php } ?>>
-								<?php echo $indexable_item ?>
-							</div>
-
-							<?php
-						}
-						?>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-
-			<div class="wdm_row">
-				<div class='col_left'>Custom taxonomies to be indexed</div>
-				<div class='col_right'>
-					<div>
-						<input type='hidden'
-						       name='wdm_solr_form_data[<?php echo WPSOLR_Option::OPTION_FIELDS_TAXONOMIES ?>]'
-						       id='<?php echo WPSOLR_Option::OPTION_FIELDS_TAXONOMIES ?>'>
-						<?php
-						$indexed_items = ! empty( $options[ WPSOLR_Option::OPTION_FIELDS_TAXONOMIES ] ) ? $options[ WPSOLR_Option::OPTION_FIELDS_TAXONOMIES ] : '';
-						if ( count( $taxonomies ) > 0 ) {
-							foreach ( $taxonomies as $indexable_item ) {
-								?>
-
-								<div class='wpsolr-2col'>
-									<input type='checkbox' name='<?php echo WPSOLR_Option::OPTION_FIELDS_TAXONOMIES ?>'
-									       value='<?php echo $indexable_item; ?>'
-										<?php if ( strpos( $indexed_items, $indexable_item ) !== false ) { ?> checked <?php } ?>>
-									<?php echo $indexable_item ?>
-								</div>
-
-								<?php
-							}
-
-						} else {
-							echo 'None';
-						} ?>
-					</div>
-				</div>
-				<div class="clear"></div>
-			</div>
-
-			<div class="wdm_row">
-				<div class='col_left'>Index Comments</div>
-				<div class='col_right'>
-					<input type='checkbox' name='wdm_solr_form_data[comments]'
-					       value='1' <?php checked( '1', isset( $options['comments'] ) ? $options['comments'] : '' ); ?>>
-
-				</div>
-				<div class="clear"></div>
-			</div>
-			<div class="wdm_row">
-				<div class='col_left'>Exclude items (Posts,Pages,...)</div>
-				<div class='col_right'>
-					<input type='text' name='wdm_solr_form_data[<?php echo WPSOLR_Option::OPTION_FIELDS_EXCLUDE_IDS ?>]'
-					       placeholder="Comma separated ID's list"
-					       value="<?php echo empty( $options[ WPSOLR_Option::OPTION_FIELDS_EXCLUDE_IDS ] ) ? '' : $options[ WPSOLR_Option::OPTION_FIELDS_EXCLUDE_IDS ]; ?>">
-					<br>
-					(Comma separated ids list)
-				</div>
-				<div class="clear"></div>
-			</div>
 			<div class='wdm_row'>
 				<div class="submit">
-					<input name="save_selected_index_options_form"
-					       type="submit"
-					       class="button-primary wdm-save" value="Save Options"/>
+					<input name="save_results_options_form" id="save_results_options_form"
+					       type="submit" class="button-primary wdm-save"
+					       value="Save fields"/>
 				</div>
 			</div>
 		</div>
 	</form>
 </div>
+

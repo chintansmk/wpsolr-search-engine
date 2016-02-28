@@ -97,6 +97,7 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 							'group_tab_selected' => $group_tab_selected,
 							'new_group_uuid'     => $new_group_uuid,
 							'groups'             => $groups,
+							'fields'             => $fields
 						)
 					);
 					?>

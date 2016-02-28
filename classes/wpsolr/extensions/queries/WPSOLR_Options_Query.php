@@ -28,6 +28,7 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 	const FORM_FIELD_DEFAULT_OPERATOR = 'query_default_operator';
 	const FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH = 'is_query_partial_match_begin_with';
 	const FORM_FIELD_IS_DEFAULT = 'is_default';
+	const FORM_FIELD_IS_MULTI_LANGUAGE = 'is_multi_language';
 
 	/**
 	 * Post constructor.
@@ -63,6 +64,7 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 								'name' => 'New group'
 							]
 						] ),
+					'fields'         => WPSOLR_Global::getExtensionFields()->get_groups(),
 				],
 				$plugin_parameters
 			)
