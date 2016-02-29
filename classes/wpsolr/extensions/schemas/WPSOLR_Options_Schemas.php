@@ -1,6 +1,6 @@
 <?php
 
-namespace wpsolr\extensions\fields;
+namespace wpsolr\extensions\schemas;
 
 use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
@@ -10,11 +10,11 @@ use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\utilities\WPSOLR_Global;
 
 /**
- * Class WPSOLR_Options_Fields
+ * Class WPSOLR_Options_Schemas
  *
  * Manage queries
  */
-class WPSOLR_Options_Fields extends WPSOLR_Extensions {
+class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 
 	const FORM_FIELD_NAME = 'name';
 	const FORM_FIELD_QUERY_FILTER = 'query_filter';

@@ -7,27 +7,27 @@ use wpsolr\utilities\WPSOLR_Option;
 const WPSOLR_FIELD_PLUGIN = ' plugin';
 
 $option_names_to_export = [
-	WPSOLR_Option::OPTION_INDEXES                 => [
+	WPSOLR_Option::OPTION_INDEXES      => [
 		'description' => 'Indexes',
 		'data'        => WPSOLR_Global::getOption()->get_option_indexes()
 	],
-	WPSOLR_Option::OPTION_SEARCH                  => [
+	WPSOLR_Option::OPTION_SEARCH       => [
 		'description' => 'Search',
 		'data'        => WPSOLR_Global::getOption()->get_option_search()
 	],
-	WPSOLR_Option::OPTION_FIELDS                  => [
+	WPSOLR_Option::OPTION_SCHEMAS      => [
 		'description' => 'Fields to index',
 		'data'        => WPSOLR_Global::getOption()->get_option_fields()
 	],
-	WPSOLR_Option::OPTION_FACETS                  => [
+	WPSOLR_Option::OPTION_FACETS       => [
 		'description' => 'Facet groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_facets()
 	],
-	WPSOLR_Option::OPTION_SORTS                   => [
+	WPSOLR_Option::OPTION_SORTS        => [
 		'description' => 'Sort groups',
 		'data'        => WPSOLR_Global::getOption()->get_option_sort()
 	],
-	WPSOLR_Option::OPTION_RESULTS_ROWS            => [
+	WPSOLR_Option::OPTION_RESULTS_ROWS => [
 		'description' => 'Results rows',
 		'data'        => WPSOLR_Global::getOption()->get_option_results_rows()
 	],

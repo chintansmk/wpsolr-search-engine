@@ -1,5 +1,5 @@
 <?php
-use wpsolr\extensions\fields\WPSOLR_Options_Fields;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\utilities\WPSOLR_Global;
 
@@ -105,11 +105,11 @@ use wpsolr\utilities\WPSOLR_Global;
 			<div class="wdm_row">
 				<div class='col_left'>Fields</div>
 				<div class='col_right'>
-					<?php $value = isset( $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] : ''; ?>
+					<?php $value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] : ''; ?>
 
 					<?php if ( $new_group_uuid != $group_uuid ) { ?>
 						<input type="hidden"
-						       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ); ?>"
+						       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ); ?>"
 						       value="<?php echo $value; ?>"
 						/>
 						<?php
@@ -118,7 +118,7 @@ use wpsolr\utilities\WPSOLR_Global;
 						?>
 					<?php } else { ?>
 						<select
-							name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ); ?>">
+							name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ); ?>">
 							<?php
 							foreach ( $fields as $field_id => $field ) { ?>
 								<option value="<?php echo esc_attr( $field_id ); ?>"
@@ -137,13 +137,13 @@ use wpsolr\utilities\WPSOLR_Global;
 				<div class='col_left'>Index</div>
 				<div class='col_right'>
 					<?php
-					$solr_indexes = WPSOLR_Global::getExtensionIndexes()->get_indexes_by_field_id( isset( $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] : '' );
+					$solr_indexes = WPSOLR_Global::getExtensionIndexes()->get_indexes_by_field_id( isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] : '' );
 					//foreach ( WPSOLR_Global::getExtensionIndexes()->get_indexes() as $solr_index_indice => $solr_index ) {
-					$value = isset( $group[ WPSOLR_Options_Fields::FORM_FIELD_SOLR_INDEX_ID ] ) ? $group[ WPSOLR_Options_Fields::FORM_FIELD_SOLR_INDEX_ID ] : '';
+					$value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_SOLR_INDEX_ID ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_SOLR_INDEX_ID ] : '';
 					?>
 
 					<select
-						name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_SOLR_INDEX_ID ); ?>">
+						name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_SOLR_INDEX_ID ); ?>">
 						<?php
 						foreach ( $solr_indexes as $solr_index_id => $solr_index ) { ?>
 							<option value="<?php echo esc_attr( $solr_index_id ); ?>"

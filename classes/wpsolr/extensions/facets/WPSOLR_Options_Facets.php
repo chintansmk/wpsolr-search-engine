@@ -4,7 +4,7 @@ namespace wpsolr\extensions\facets;
 
 use Solarium\QueryType\Select\Query\Query;
 use wpsolr\exceptions\WPSOLR_Exception;
-use wpsolr\extensions\fields\WPSOLR_Options_Fields;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
@@ -439,7 +439,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 * @param $facet
 	 */
 	public function get_facet_field_id( $facet ) {
-		return isset( $facet[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] ) ? $facet[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] : '';
+		return isset( $facet[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] ) ? $facet[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] : '';
 	}
 
 	/**

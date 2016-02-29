@@ -12,12 +12,12 @@ use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
-use wpsolr\extensions\fields\WPSOLR_Options_Fields;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\resultsheaders\WPSOLR_Options_Result_Header;
 use wpsolr\extensions\resultspagenavigations\WPSOLR_Options_Result_Page_Navigation;
 use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\searchform\WPSOLR_Options_Search_Form;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
@@ -100,7 +100,7 @@ abstract class WPSOLR_Extensions {
 	const OPTION_FACETS = 'facets';
 
 	// Extension: Solr Fields
-	const OPTION_FIELDS = 'fields';
+	const OPTION_SCHEMAS = 'fields';
 
 	// Extension: Sort
 	const OPTION_SORTS = 'sorts';
@@ -315,18 +315,18 @@ abstract class WPSOLR_Extensions {
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],
-		self::OPTION_FIELDS                   =>
+		self::OPTION_SCHEMAS                  =>
 			[
-				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Fields::CLASS,
-				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Fields::CLASS,
-				self::_CONFIG_EXTENSION_DIRECTORY               => 'fields/',
-				self::_CONFIG_EXTENSION_FILE_PATH               => 'fields/WPSOLR_Options_Fields.php',
-				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'fields/admin_options.inc.php',
+				self::_CONFIG_EXTENSION_CLASS_NAME              => WPSOLR_Options_Schemas::CLASS,
+				self::_CONFIG_PLUGIN_CLASS_NAME                 => WPSOLR_Options_Schemas::CLASS,
+				self::_CONFIG_EXTENSION_DIRECTORY               => 'schemas/',
+				self::_CONFIG_EXTENSION_FILE_PATH               => 'schemas/WPSOLR_Options_Schemas.php',
+				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'schemas/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
-					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_FIELDS,
+					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SCHEMAS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
 				]
 			],

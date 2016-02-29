@@ -4,7 +4,7 @@
  * Included file to display admin options
  */
 
-use wpsolr\extensions\fields\WPSOLR_Options_Fields;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
 use wpsolr\extensions\WPSOLR_Extensions;
@@ -223,14 +223,14 @@ $languages = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_GET_LANGUAGES, [ ] );
 								       name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][index_field_id]>"
 								       value="<?php echo esc_attr( $value ); ?>"
 								/>
-								<?php echo $fields[ $value ][ WPSOLR_Options_Fields::FORM_FIELD_NAME ]; ?>
+								<?php echo $fields[ $value ][ WPSOLR_Options_Schemas::FORM_FIELD_NAME ]; ?>
 							<?php } else { ?>
 								<select
 									name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][index_field_id]">
 									<?php
 									foreach ( $fields as $field_id => $field ) { ?>
 										<option value="<?php echo esc_attr( $field_id ); ?>"
-											<?php selected( $field_id, $value, true ); ?> ><?php echo $field[ WPSOLR_Options_Fields::FORM_FIELD_NAME ]; ?></option>
+											<?php selected( $field_id, $value, true ); ?> ><?php echo $field[ WPSOLR_Options_Schemas::FORM_FIELD_NAME ]; ?></option>
 									<?php } ?>
 								</select>
 							<?php } ?>

@@ -1,5 +1,5 @@
 <?php
-use wpsolr\extensions\fields\WPSOLR_Options_Fields;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\WPSOLR_Extensions;
@@ -136,17 +136,17 @@ use wpsolr\utilities\WPSOLR_Option;
 			<div class="wdm_row">
 				<div class='col_left'>Fields</div>
 				<div class='col_right'>
-					<?php $value = isset( $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ] : ''; ?>
+					<?php $value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] : ''; ?>
 
 					<?php if ( $new_group_uuid != $group_uuid ) { ?>
 						<input type="hidden"
-						       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ); ?>"
+						       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ); ?>"
 						       value="<?php echo $value; ?>"
 						/>
-						<?php echo ! empty( $groups_fields[ $value ] ) ? $groups_fields[ $value ][ WPSOLR_Options_Fields::FORM_FIELD_NAME ] : ''; ?>
+						<?php echo ! empty( $groups_fields[ $value ] ) ? $groups_fields[ $value ][ WPSOLR_Options_Schemas::FORM_FIELD_NAME ] : ''; ?>
 					<?php } else { ?>
 						<select
-							name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Fields::FORM_FIELD_FIELD_ID ); ?>">
+							name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ); ?>">
 							<?php
 							foreach ( $groups_fields as $field_id => $field ) { ?>
 								<option value="<?php echo esc_attr( $field_id ); ?>"
