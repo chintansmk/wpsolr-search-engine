@@ -9,7 +9,6 @@
  */
 
 use wpsolr\extensions\localization\WPSOLR_Localization;
-use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\solr\WPSOLR_IndexSolrClient;
 use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\ui\shortcode\WPSOLR_Shortcode;
@@ -352,6 +351,7 @@ function my_front_enqueue() {
 	// Url utilities to manipulate the url parameters
 	wp_enqueue_script( 'urljs', plugins_url( 'bower_components/jsurl/url.min.js', __FILE__ ), array( 'jquery' ), false, true );
 
+	/* Reloads endlessly safari
 	wp_enqueue_script( 'autocomplete', plugins_url( 'js/autocomplete_solr.js', __FILE__ ), array(
 		'solr_auto_js1',
 		'urljs'
@@ -367,10 +367,10 @@ function my_front_enqueue() {
 			'SEARCH_PARAMETER_SORT'       => WPSOLR_Query_Parameters::SEARCH_PARAMETER_SORT,
 			'SEARCH_PARAMETER_PAGE'       => WPSOLR_Query_Parameters::SEARCH_PARAMETER_PAGE,
 			'SORT_CODE_BY_RELEVANCY_DESC' => WPSOLR_Options_Sorts::SORT_CODE_BY_RELEVANCY_DESC,
-		) );
+		) );*/
 
-	wp_enqueue_script( 'wpsolr_ui', plugins_url( 'js/wpsolr_component.js', __FILE__ ), array( 'jquery' ), false, true );
-	wp_localize_script( 'wpsolr_ui', 'wp_localize_script_wpsolr_component',
+	wp_enqueue_script( 'wpsolr_component', plugins_url( 'js/wpsolr_component.js', __FILE__ ), array( 'jquery' ), false, true );
+	wp_localize_script( 'wpsolr_component', 'wp_localize_script_wpsolr_component',
 		array(
 			'SEARCH_PARAMETER_Q' => WPSOLR_Query_Parameters::SEARCH_PARAMETER_Q,
 			'SEARCH_PARAMETER_S' => WPSOLR_Query_Parameters::SEARCH_PARAMETER_S,
