@@ -238,17 +238,17 @@ switch ( $tab ) {
 			<?php
 
 			$subtabs = [
-				WPSOLR_Option::OPTION_SEARCH                  => '2.1 Search',
-				WPSOLR_Option::OPTION_QUERIES                 => '2.x Queries',
-				WPSOLR_Option::OPTION_FACETS                  => '2.3 Facets',
-				WPSOLR_Option::OPTION_SORTS                   => '2.4 Sorting',
-				WPSOLR_Option::OPTION_RESULTS_ROWS            => '2.x Results rows',
-				WPSOLR_Option::OPTION_RESULTS_HEADERS         => '2.x Results headers',
-				WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION => '2.x Results page navigations',
-				WPSOLR_Option::OPTION_SEARCH_FORM             => '2.x Search forms',
-				'localization_options'                        => '2.5 Localization',
-				'layout_options'                              => '2.6 Layouts',
-				'component_options'                           => '2.7 Components'
+				WPSOLR_Option::OPTION_SEARCH                  => '4.0 Search',
+				WPSOLR_Option::OPTION_QUERIES                 => '4.1 Queries',
+				WPSOLR_Option::OPTION_FACETS                  => '4.2 Facets',
+				WPSOLR_Option::OPTION_SORTS                   => '4.3 Sorts',
+				WPSOLR_Option::OPTION_RESULTS_ROWS            => '4.4 Results rows',
+				WPSOLR_Option::OPTION_RESULTS_HEADERS         => '4.5 Results headers',
+				WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION => '4.6 Results page navigations',
+				WPSOLR_Option::OPTION_SEARCH_FORM             => '4.7 Search forms',
+				'localization_options'                        => '4.8 Localization',
+				'layout_options'                              => '4.9 Layouts',
+				'component_options'                           => '4.10 Components'
 			];
 
 			$subtab = wpsolr_admin_sub_tabs( $subtabs );
@@ -798,7 +798,7 @@ function wpsolr_admin_tabs( $current = 'wpsolr_fields' ) {
 	$are_there_indexes = ( $nb_indexes > 0 );
 
 	$tabs                   = [ ];
-	$tabs['wpsolr_fields']  = '1. Define your fields';
+	$tabs['wpsolr_fields']  = '1. Define your schemas';
 	$tabs['wpsolr_indexes'] = $are_there_indexes ? '2. Define your Solr Indexes' : '1. Define your Solr Index';
 	if ( $are_there_indexes ) {
 		$tabs['wpsolr_operations']    = '3. Send your data to Solr';

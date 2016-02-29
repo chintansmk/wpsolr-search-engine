@@ -59,7 +59,7 @@ class WPSOLR_UI_Result_Row extends WPSOLR_UI {
 	 * @inheritDoc
 	 */
 	public function get_groups() {
-		return WPSOLR_Global::getOption()->get_option_results_rows();
+		return WPSOLR_Global::getExtensionResultsRows()->get_groups();
 	}
 
 }

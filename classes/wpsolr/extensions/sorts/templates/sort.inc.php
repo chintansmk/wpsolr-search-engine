@@ -1,26 +1,25 @@
 <?php
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
-use wpsolr\utilities\WPSOLR_Option;
 
 ?>
 
 <?php
-$sort_option_array_name = sprintf( '%s[%s][%s][%s]', $options_name, WPSOLR_Option::OPTION_SORTS_SORTS, $sorts_group_uuid, $sort_name );
+$sort_option_array_name = sprintf( '%s[%s][%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Sorts::FORM_FIELD_SORTS, $sort_name );
 
 $sort_layout_id = ! empty( $sort['layout_id'] ) ? $sort['layout_id'] : '';
 
 $sort_is_active = ! empty( $sort['is_active'] ) ? $sort['is_active'] : '0';
-$sort_label     = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL ] ) ? $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL ] : '';
+$sort_label     = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL ] ) ? $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL ] : $sort_name;
 ?>
 
-<li class='sorts <?php echo $sort_selected_class; ?>'>
+<li class='group_content <?php echo $sort_selected_class; ?>'>
 	<div>
-		<a><?php echo $sort_name; ?></a>
+		<a><?php echo $sort_label; ?></a>
 		<img src='<?php echo $image_plus; ?>' class='plus_icon' style='display:<?php echo $image_plus_display; ?>'>
 		<img src='<?php echo $image_minus; ?>' class='minus_icon' style='display:<?php echo $image_minus_display; ?>'
 		     title='Click to Remove the Sort'>
 	</div>
-	<div id='<?php echo $sorts_group_uuid . '_' . $sort_name; ?>'>
+	<div id='<?php echo $group_uuid . '_' . $sort_name; ?>'>
 		<input type='hidden'
 		       name='<?php echo $sort_option_array_name; ?>[name]'
 		       value='<?php echo $sort_name; ?>'/>
@@ -30,7 +29,7 @@ $sort_label     = ! empty( $sort[ WPSOLR_Options_Sorts::SORT_FIELD_LABEL ] ) ? $
 				Show this sort in this group
 			</div>
 			<div class='col_right'>
-				<input type='checkbox' id="<?php echo $sorts_group_uuid . '_' . $sort_name; ?>_is_active"
+				<input type='checkbox' id="<?php echo $group_uuid . '_' . $sort_name; ?>_is_active"
 				       name='<?php echo $sort_option_array_name; ?>[is_active]' value='1'
 					<?php checked( '1', $sort_is_active, true ); ?>/>
 			</div>

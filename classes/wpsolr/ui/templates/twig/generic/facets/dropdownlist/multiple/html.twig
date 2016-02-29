@@ -1,7 +1,7 @@
 {# Display a facet elements as checkboxes #}
 
 {% set facet_selector_class = facet.id %}
-{% set facet_selected_class = "selected" %}
+{% set group_content_selected_class = "selected" %}
 
 {% include template_css with {'plugin_dir_url': plugin_dir_url} %}
 {% include template_js with {'plugin_dir_url': plugin_dir_url, 'facet_selector_class': facet_selector_class} %}
@@ -19,7 +19,7 @@
 
                 {% set data_wpsolr_facet = {'facet_id': facet.id, 'facet_value': item.name} %}
 
-                <option {{ item.selected ? facet_selected_class : "" }}
+                <option {{ item.selected ? group_content_selected_class : "" }}
                         data-wpsolr-facet-item-value="{{ data_wpsolr_facet|json_encode }}">
                     {{ item.label }}
                 </option>

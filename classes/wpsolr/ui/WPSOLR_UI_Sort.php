@@ -26,7 +26,7 @@ class WPSOLR_UI_Sort extends WPSOLR_UI {
 
 		return array(
 			'sort_header' => ! $this->is_show_title_on_front_end ? '' : ( ! empty( $this->title ) ? $this->title : WPSOLR_Localization::get_term( $localization_options, 'sort_header' ) ),
-			'sort_list'   => $this->data['data']
+			'sort_list'   => self::get_data( $this )
 		);
 
 	}
@@ -36,7 +36,7 @@ class WPSOLR_UI_Sort extends WPSOLR_UI {
 	 */
 	protected function is_data_empty() {
 
-		return false;;
+		return false;
 	}
 
 	/**
@@ -51,7 +51,7 @@ class WPSOLR_UI_Sort extends WPSOLR_UI {
 	 * @inheritDoc
 	 */
 	public function get_groups() {
-		return WPSOLR_Global::getOption()->get_sorts_groups();
+		return WPSOLR_Global::getExtensionSorts()->get_groups();
 	}
 
 }

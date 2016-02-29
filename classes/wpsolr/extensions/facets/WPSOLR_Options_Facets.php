@@ -3,7 +3,6 @@
 namespace wpsolr\extensions\facets;
 
 use Solarium\QueryType\Select\Query\Query;
-use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
@@ -19,6 +18,9 @@ use wpsolr\utilities\WPSOLR_Regexp;
  * Manage Facets
  */
 class WPSOLR_Options_Facets extends WPSOLR_Extensions {
+
+	// Group name in error messages
+	const GROUP_NAME = 'Facet';
 
 	// Facet types
 	const FACET_TYPE_FIELD = 'facet_field';
@@ -106,38 +108,45 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 		$new_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
 
-		// Clone some groups
-		$groups = $this->clone_some_groups( WPSOLR_Global::getOption()->get_option_facets(), $facets_selected );
-
 		// Add current plugin parameters to default parent parameters
 		parent::output_form(
-			$form_file,
+			$this->get_groups_template_file(),
 			array_merge(
 				[
-					'options'         => WPSOLR_Global::getOption()->get_option_facets(),
-					'schemas'         => WPSOLR_Global::getExtensionSchemas()->get_groups(),
-					'layouts_facets'  => $this->get_facets_layouts_by_field_types(),
-					'layouts_filters' => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER ),
-					'new_group_uuid'  => $new_group_uuid,
-					'groups'          => array_merge(
-						$groups,
-						[
-							$new_group_uuid => [
-								'name'                                          => 'New group',
-								WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY => ''
-							]
-						] ),
-					'fields'          => array_merge(
-						WPSOLR_Field_Types::add_fields_type( $this->get_special_fields(), WPSOLR_Field_Types::SOLR_TYPE_STRING )
-					),
-					'image_plus'      => plugins_url( '../../../../images/plus.png', __FILE__ ),
-					'image_minus'     => plugins_url( '../../../../images/success.png', __FILE__ )
+					'group_parameters' => [
+						'extension_name'  => WPSOLR_Extensions::OPTION_FACETS,
+						'extra_classes'   => 'wpsolr_2col',
+						'options'         => $this->get_groups(),
+						'schemas'         => WPSOLR_Global::getExtensionSchemas()->get_groups(),
+						'layouts_facets'  => $this->get_facets_layouts_by_field_types(),
+						'layouts_filters' => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER ),
+						'new_group_uuid'  => $new_group_uuid,
+						'groups'          => array_merge(
+							$this->clone_some_groups(),
+							[
+								$new_group_uuid => [
+									'name'                                          => 'New facets',
+									WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY => ''
+								]
+							] ),
+						'fields'          => array_merge(
+							WPSOLR_Field_Types::add_fields_type( $this->get_special_fields(), WPSOLR_Field_Types::SOLR_TYPE_STRING )
+						),
+						'image_plus'      => plugins_url( '../../../../images/plus.png', __FILE__ ),
+						'image_minus'     => plugins_url( '../../../../images/success.png', __FILE__ )
+					]
 				],
 				$plugin_parameters
 			)
 		);
 	}
 
+	public function get_groups() {
+
+		$groups = WPSOLR_Global::getOption()->get_option_facets();
+
+		return $groups;
+	}
 
 	/**
 	 * Get all layouts by field type
@@ -162,24 +171,6 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Get facets of a facets group
-	 *
-	 * @param string $group_id Group of facets
-	 *
-	 * @return array Group
-	 */
-	public function get_group( $group_id ) {
-
-		$facets_groups = WPSOLR_Global::getOption()->get_option_facets();
-
-		if ( ! isset( $facets_groups[ $group_id ] ) ) {
-			throw new WPSOLR_Exception( sprintf( 'facets group \'%s\' is unknown.', $group_id ) );
-		}
-
-		return ! empty( $facets_groups[ $group_id ] ) ? $facets_groups[ $group_id ] : [ ];
 	}
 
 	/**
@@ -483,27 +474,6 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		return $results;
 	}
 
-
-	/**
-	 * Format a string translation
-	 *
-	 * @param $name
-	 * @param $text
-	 * @param $domain
-	 * @param $is_multiligne
-	 *
-	 * @return array
-	 */
-	protected function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
-
-		return [
-			'name'          => $name,
-			'text'          => $text,
-			'domain'        => $domain,
-			'is_multiligne' => $is_multiligne
-		];
-	}
-
 	/**
 	 * Get the strings to translate among the selected facets data
 	 * @return array
@@ -579,39 +549,6 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Clone the groups marked.
-	 *
-	 * @param $facets_groups
-	 */
-	public function clone_some_groups( $facets_groups, &$facets_selected ) {
-
-		foreach ( $facets_groups as $facets_group_uuid => &$facets_group ) {
-
-			if ( ! empty( $facets_group['is_to_be_cloned'] ) ) {
-
-				unset( $facets_group['is_to_be_cloned'] );
-
-				// Clone the group
-				$facets_group_cloned         = $facets_group;
-				$facet_group_cloned_uuid     = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
-				$facets_group_cloned['name'] = 'Clone of ' . $facets_group_cloned['name'];
-
-				$facets_groups[ $facet_group_cloned_uuid ] = $facets_group_cloned;
-
-				// Now clone the group facets
-				if ( ! empty( $facets_selected[ $facets_group_uuid ] ) ) {
-
-					$facets_selected[ $facet_group_cloned_uuid ] = $facets_selected[ $facets_group_uuid ];
-
-				}
-			}
-
-		}
-
-		return $facets_groups;
 	}
 
 }

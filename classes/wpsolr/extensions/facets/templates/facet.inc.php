@@ -38,7 +38,7 @@ $facet_field_name_front_end = ! empty( $facet[ WPSOLR_Options_Facets::FACET_FIEL
 
 ?>
 
-<li class='facets <?php echo $facet_selected_class; ?>'>
+<li class='group_content <?php echo $group_content_selected_class; ?>'>
 	<div>
 		<a><?php echo $facet_name; ?></a>
 		<img src='<?php echo $image_plus; ?>' class='plus_icon' style='display:<?php echo $image_plus_display; ?>'>

@@ -463,26 +463,6 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Format a string translation
-	 *
-	 * @param $name
-	 * @param $text
-	 * @param $domain
-	 * @param $is_multiligne
-	 *
-	 * @return array
-	 */
-	protected function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
-
-		return [
-			'name'          => $name,
-			'text'          => $text,
-			'domain'        => $domain,
-			'is_multiligne' => $is_multiligne
-		];
-	}
-
-	/**
 	 * Get the strings to translate among the selected facets data
 	 * @return array
 	 */

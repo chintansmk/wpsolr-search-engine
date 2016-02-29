@@ -11,7 +11,7 @@
 
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data
             if (facet.count > 0) {
-                jQuery(this).toggleClass("{{ facet_selected_class }}"); {# check/uncheck clicked facet #}
+                jQuery(this).toggleClass("{{ group_content_selected_class }}"); {# check/uncheck clicked facet #}
 
                 {# Update url #}
                 wpsolr_components["{{ ui_id }}"].toggleFacetValue(facet); // add facet element if selected

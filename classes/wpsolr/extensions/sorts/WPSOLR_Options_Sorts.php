@@ -5,10 +5,10 @@ namespace wpsolr\extensions\sorts;
 use Solarium\QueryType\Select\Query\Query;
 use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Schema;
 use wpsolr\utilities\WPSOLR_Global;
-use wpsolr\utilities\WPSOLR_Option;
 use wpsolr\utilities\WPSOLR_Regexp;
 
 /**
@@ -44,6 +44,8 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 	// Sorting postfix in field names
 	const SORT_FIELD_POSTFIX_ASC = '_asc';
 	const SORT_FIELD_POSTFIX_DESC = '_desc';
+	const FORM_FIELD_SORTS = 'sorts';
+
 
 	/**
 	 * Post constructor.
@@ -59,55 +61,59 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 	 */
 	public function output_form( $form_file = null, $plugin_parameters = [ ] ) {
 
-		$new_sorts_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
-
-		// Clone some groups
-		$sorts_selected = WPSOLR_Global::getOption()->get_sorts_selected_array();
-		$groups         = $this->clone_some_groups( WPSOLR_Global::getOption()->get_sorts_groups(), $sorts_selected );
+		$new_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
 
 		// Add current plugin parameters to default parent parameters
 		parent::output_form(
-			$form_file,
+			$this->get_groups_template_file(),
 			array_merge(
 				[
-					'options'                  => WPSOLR_Global::getOption()->get_option_sort(
-						[ WPSOLR_Option::OPTION_SORTS_SORTS => '' ]
-					),
-					'layouts'                  => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT ),
-					'default_sorts_group_uuid' => $this->get_default_sorts_group_id(),
-					'new_sorts_group_uuid'     => $new_sorts_group_uuid,
-					'sorts_groups'             => array_merge(
-						$groups,
-						[
-							$new_sorts_group_uuid => [
-								'name' => 'New group'
-							]
-						] ),
-					'sorts_selected'           => $sorts_selected,
-					'fields'                   => $this->get_fields_sortable(),
-					'image_plus'               => plugins_url( '../../../../images/plus.png', __FILE__ ),
-					'image_minus'              => plugins_url( '../../../../images/success.png', __FILE__ )
+					'group_parameters' => [
+						'extension_name' => WPSOLR_Extensions::OPTION_SORTS,
+						'extra_classes'  => 'wpsolr_2col',
+						'options'        => $this->get_groups(),
+						'new_group_uuid' => $new_group_uuid,
+						'groups'         => array_merge(
+							$this->clone_some_groups(),
+							[
+								$new_group_uuid => [
+									'name' => 'New sorts'
+								]
+							] ),
+						'schemas'        => WPSOLR_Global::getExtensionSchemas()->get_groups(),
+						'layouts'        => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_SORT ),
+						'image_plus'     => plugins_url( '../../../../images/plus.png', __FILE__ ),
+						'image_minus'    => plugins_url( '../../../../images/success.png', __FILE__ )
+					]
 				],
 				$plugin_parameters
 			)
 		);
 	}
 
+	public function get_groups() {
+
+		$groups = WPSOLR_Global::getOption()->get_option_sorts();
+
+		return $groups;
+	}
 
 	/**
 	 * Get all indexed fields sortable
 	 *
 	 * @return array
 	 */
-	public function get_fields_sortable() {
+	public function get_fields_sortable( $group ) {
 
 		$results = [ ];
 
+		$schema = WPSOLR_Global::getExtensionSchemas()->get_group( $this->get_schema_id( $group ) );
+
 		// Custom fields indexed
-		$indexed_custom_fields = WPSOLR_Global::getOption()->get_fields_custom_fields_array();
+		$custom_fields = WPSOLR_Global::getExtensionSchemas()->get_custom_fields( $schema );
 
 		// Filter to get only sortable fields
-		$sortable_fields = WPSOLR_Global::getSolrFieldTypes()->get_sortable( $indexed_custom_fields );
+		$sortable_fields = WPSOLR_Global::getSolrFieldTypes()->get_sortable( $custom_fields );
 
 		// Add sorting postfixes to field names
 		foreach ( $sortable_fields as $sortable_field_name => $sortable_field ) {
@@ -116,83 +122,6 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Get sorts of a sorts group
-	 *
-	 * @param string $sorts_group_id Group of sorts
-	 *
-	 * @return array Sorts of the group
-	 */
-	public function get_sorts_from_group( $sorts_group_id ) {
-
-		$sorts_groups = WPSOLR_Global::getOption()->get_sorts_selected_array();
-
-		if ( ! isset( $sorts_groups[ $sorts_group_id ] ) ) {
-			throw new WPSOLR_Exception( sprintf( 'sorts group \'%s\' is unknown.', $sorts_group_id ) );
-		}
-
-		return ! empty( $sorts_groups[ $sorts_group_id ] ) ? $sorts_groups[ $sorts_group_id ] : [ ];
-	}
-
-
-	/**
-	 * Get sorts of default group
-	 *
-	 * @return array Sorts of default group
-	 */
-	public function get_sorts_from_default_group() {
-
-		$default_sorts_group_id = WPSOLR_Global::getOption()->get_default_sorts_group_id();
-
-		if ( ! empty( $default_sorts_group_id ) ) {
-			return $this->get_sorts_from_group( $default_sorts_group_id );
-		}
-
-		return [ ];
-	}
-
-	/**
-	 * Get sorts group
-	 *
-	 * @@param string $sorts_group_id
-	 * @return array Sorts group
-	 */
-	public function get_sorts_group( $sorts_group_id ) {
-
-		$sorts_groups = WPSOLR_Global::getOption()->get_sorts_groups();
-
-		if ( ! empty( $sorts_group_id ) && ! empty( $sorts_groups ) && ! empty( $sorts_groups[ $sorts_group_id ] ) ) {
-			return $sorts_groups[ $sorts_group_id ];
-		}
-
-		return [ ];
-	}
-
-	/**
-	 * Get default sorts group id
-	 *
-	 * @return string Default sorts group id
-	 */
-	public function get_default_sorts_group_id() {
-
-		return WPSOLR_Global::getOption()->get_default_sorts_group_id();
-	}
-
-	/**
-	 * Get default sorts group
-	 *
-	 * @return array Default sorts group
-	 */
-	public function get_default_sorts_group() {
-
-		$default_sorts_group_id = $this->get_default_sorts_group_id();
-		if ( ! empty( $default_sorts_group_id ) ) {
-			return $this->get_sorts_group( $default_sorts_group_id );
-		}
-
-		return [ ];
 	}
 
 	public function get_special_fields() {
@@ -205,12 +134,30 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 	}
 
 	/**
+	 * Get schema id of a group
+	 *
+	 * @param $group
+	 */
+	public function get_schema_id( $group ) {
+		return isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] : '';
+	}
+
+	/**
+	 * Get sorts of a group
+	 *
+	 * @param $group
+	 */
+	public function get_sorts( $group ) {
+		return isset( $group[ self::FORM_FIELD_SORTS ] ) ? $group[ self::FORM_FIELD_SORTS ] : [ ];
+	}
+
+	/**
 	 * Get default sort field of a group
 	 *
 	 * @param $sort
 	 */
-	public function get_sort_default_name( $sorts_group ) {
-		return isset( $sorts_group[ self::SORTS_GROUP_FIELD_DEFAULT_SORT_FIELD ] ) ? $sorts_group[ self::SORTS_GROUP_FIELD_DEFAULT_SORT_FIELD ] : self::SORT_CODE_BY_RELEVANCY_DESC;
+	public function get_sort_default_name( $sort ) {
+		return isset( $sort[ self::SORTS_GROUP_FIELD_DEFAULT_SORT_FIELD ] ) ? $sort[ self::SORTS_GROUP_FIELD_DEFAULT_SORT_FIELD ] : self::SORT_CODE_BY_RELEVANCY_DESC;
 	}
 
 
@@ -270,26 +217,6 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Format a string translation
-	 *
-	 * @param $name
-	 * @param $text
-	 * @param $domain
-	 * @param $is_multiligne
-	 *
-	 * @return array
-	 */
-	protected function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
-
-		return [
-			'name'          => $name,
-			'text'          => $text,
-			'domain'        => $domain,
-			'is_multiligne' => $is_multiligne
-		];
-	}
-
-	/**
 	 * Get the strings to translate among the selected facets data
 	 * @return array
 	 */
@@ -326,39 +253,6 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Clone the groups marked.
-	 *
-	 * @param $sorts_groups
-	 */
-	public function clone_some_groups( $sorts_groups, &$sorts_selected ) {
-
-		foreach ( $sorts_groups as $sorts_group_uuid => &$sorts_group ) {
-
-			if ( ! empty( $sorts_group['is_to_be_cloned'] ) ) {
-
-				unset( $sorts_group['is_to_be_cloned'] );
-
-				// Clone the group
-				$sorts_group_cloned         = $sorts_group;
-				$facet_group_cloned_uuid    = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
-				$sorts_group_cloned['name'] = 'Clone of ' . $sorts_group_cloned['name'];
-
-				$sorts_groups[ $facet_group_cloned_uuid ] = $sorts_group_cloned;
-
-				// Now clone the group sorts
-				if ( ! empty( $sorts_selected[ $sorts_group_uuid ] ) ) {
-
-					$sorts_selected[ $facet_group_cloned_uuid ] = $sorts_selected[ $sorts_group_uuid ];
-
-				}
-			}
-
-		}
-
-		return $sorts_groups;
 	}
 
 }

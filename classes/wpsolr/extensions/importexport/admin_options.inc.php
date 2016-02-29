@@ -17,7 +17,7 @@ $option_names_to_export = [
 	],
 	WPSOLR_Option::OPTION_SCHEMAS      => [
 		'description' => 'Fields to index',
-		'data'        => WPSOLR_Global::getOption()->get_option_fields()
+		'data'        => WPSOLR_Global::getOption()->get_option_schemas()
 	],
 	WPSOLR_Option::OPTION_FACETS       => [
 		'description' => 'Facet groups',
@@ -25,7 +25,7 @@ $option_names_to_export = [
 	],
 	WPSOLR_Option::OPTION_SORTS        => [
 		'description' => 'Sort groups',
-		'data'        => WPSOLR_Global::getOption()->get_option_sort()
+		'data'        => WPSOLR_Global::getOption()->get_option_sorts()
 	],
 	WPSOLR_Option::OPTION_RESULTS_ROWS => [
 		'description' => 'Results rows',
@@ -33,15 +33,15 @@ $option_names_to_export = [
 	],
 	WPSOLR_Option::OPTION_RESULTS_HEADERS         => [
 		'description' => 'Results headers',
-		'data'        => WPSOLR_Global::getOption()->get_option_results_header()
+		'data'        => WPSOLR_Global::getOption()->get_option_results_headers()
 	],
 	WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION => [
 		'description' => 'Results page navigations',
-		'data'        => WPSOLR_Global::getOption()->get_option_results_page_navigation()
+		'data'        => WPSOLR_Global::getOption()->get_option_results_page_navigations()
 	],
 	WPSOLR_Option::OPTION_SEARCH_FORM             => [
 		'description' => 'Search forms',
-		'data'        => WPSOLR_Global::getOption()->get_option_search_form()
+		'data'        => WPSOLR_Global::getOption()->get_option_search_forms()
 	],
 	WPSOLR_Option::OPTION_LOCALIZATION            => [
 		'description' => 'Localizations',

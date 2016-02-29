@@ -9,7 +9,7 @@
 
         jQuery(".{{ ui_id }} .wpsolr_any_facet_filter_class li .{{ facet_selector_class }}").on("click", function (event) {
 
-            jQuery(this).toggleClass("{{ facet_selected_class }}"); {# check/uncheck clicked facet #}
+            jQuery(this).toggleClass("{{ group_content_selected_class }}"); {# check/uncheck clicked facet #}
 
             {# Update url #}
             var facet = jQuery(this).data("wpsolr-facet-item-value"); // facet value stored in html5 data

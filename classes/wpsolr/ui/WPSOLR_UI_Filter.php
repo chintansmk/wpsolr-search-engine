@@ -34,7 +34,7 @@ class WPSOLR_UI_Filter extends WPSOLR_UI_Facet {
 	 * @inheritDoc
 	 */
 	public function get_groups() {
-		return WPSOLR_Global::getOption()->get_facets_groups();
+		return WPSOLR_Global::getExtensionFacets()->get_groups();
 	}
 
 }

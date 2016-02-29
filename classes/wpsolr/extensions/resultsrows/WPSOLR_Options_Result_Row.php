@@ -3,7 +3,6 @@
 namespace wpsolr\extensions\resultsrows;
 
 use Solarium\QueryType\Select\Query\Query;
-use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
@@ -14,6 +13,9 @@ use wpsolr\utilities\WPSOLR_Global;
  * Manage Results rows
  */
 class WPSOLR_Options_Result_Row extends WPSOLR_Extensions {
+
+	// Group name in error messages
+	const GROUP_NAME = 'Results rows';
 
 	const FORM_FIELD_IS_INFINITESCROLL = 'infinitescroll';
 
@@ -33,23 +35,19 @@ class WPSOLR_Options_Result_Row extends WPSOLR_Extensions {
 
 		$new_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
 
-		// Clone some groups
-		$groups = WPSOLR_Global::getOption()->get_option_results_rows();
-		$groups = $this->clone_some_groups( $groups );
-
 		// Add current plugin parameters to default parent parameters
 		parent::output_form(
 			$form_file,
 			array_merge(
 				[
-					'options'        => WPSOLR_Global::getOption()->get_option_results_rows(),
+					'options'        => $this->get_groups(),
 					'layouts'        => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_RESULT_ROW ),
 					'new_group_uuid' => $new_group_uuid,
 					'groups'         => array_merge(
-						$groups,
+						$this->clone_some_groups(),
 						[
 							$new_group_uuid => [
-								'name' => 'New group'
+								'name' => 'New results rows'
 							]
 						] ),
 				],
@@ -58,40 +56,11 @@ class WPSOLR_Options_Result_Row extends WPSOLR_Extensions {
 		);
 	}
 
-
-	/**
-	 * Get results of a group
-	 *
-	 * @param string $group_id Group of results
-	 *
-	 * @return array Results of the group
-	 */
-	public function get_results_from_group( $group_id ) {
+	public function get_groups() {
 
 		$groups = WPSOLR_Global::getOption()->get_option_results_rows();
 
-		if ( ! isset( $groups[ $group_id ] ) ) {
-			throw new WPSOLR_Exception( sprintf( 'group \'%s\' is unknown.', $group_id ) );
-		}
-
-		return ! empty( $groups[ $group_id ] ) ? $groups[ $group_id ] : [ ];
-	}
-
-	/**
-	 * Get group
-	 *
-	 * @@param string $group_id
-	 * @return array Groups
-	 */
-	public function get_group( $group_id ) {
-
-		$groups = WPSOLR_Global::getOption()->get_option_results_rows();
-
-		if ( ! empty( $group_id ) && ! empty( $groups ) && ! empty( $groups[ $group_id ] ) ) {
-			return $groups[ $group_id ];
-		}
-
-		return [ ];
+		return $groups;
 	}
 
 	/**
@@ -114,26 +83,6 @@ class WPSOLR_Options_Result_Row extends WPSOLR_Extensions {
 	 */
 	public function get_result_label( $result ) {
 		return isset( $result[ self::RESULT_FIELD_LABEL ] ) ? $result[ self::RESULT_FIELD_LABEL ] : '';
-	}
-
-	/**
-	 * Format a string translation
-	 *
-	 * @param $name
-	 * @param $text
-	 * @param $domain
-	 * @param $is_multiligne
-	 *
-	 * @return array
-	 */
-	protected function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
-
-		return [
-			'name'          => $name,
-			'text'          => $text,
-			'domain'        => $domain,
-			'is_multiligne' => $is_multiligne
-		];
 	}
 
 	/**
@@ -173,31 +122,6 @@ class WPSOLR_Options_Result_Row extends WPSOLR_Extensions {
 		}
 
 		return $results;
-	}
-
-	/**
-	 * Clone the groups marked.
-	 *
-	 * @param $groups_results
-	 */
-	public function clone_some_groups( &$groups_results ) {
-
-		foreach ( $groups_results as $group_uuid => &$result ) {
-
-			if ( ! empty( $result['is_to_be_cloned'] ) ) {
-
-				unset( $result['is_to_be_cloned'] );
-
-				// Clone the group
-				$result_cloned         = $result;
-				$result_cloned_uuid    = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
-				$result_cloned['name'] = 'Clone of ' . $result_cloned['name'];
-
-				$groups_results[ $result_cloned_uuid ] = $result_cloned;
-			}
-		}
-
-		return $groups_results;
 	}
 
 }

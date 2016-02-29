@@ -85,7 +85,6 @@
     width: 98%;
     padding: 0 1%;
     margin-bottom: 5px;
-    border-bottom: 1px solid #f8f8f8;
 }
 
 .col_left {
@@ -100,6 +99,8 @@
     float: left;
     width: 60%;
     padding: 10px;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 .wrapper {
@@ -240,6 +241,36 @@
     margin-bottom: 5px;
     float: right;
     width: 200px;
+}
+
+.wpsolr-vertical-tabs-content {
+    float: left;
+    width: 100%;
+    padding: 0 2%;
+    border-left: 1px solid #ccc;
+}
+
+.wpsolr-vertical-tabs-content.wpsolr_2col {
+    width: 74%;
+}
+
+.wpsolr-vertical-tabs-content .wrapper {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+
+.wpsolr-vertical-tabs-content .ui-widget-content, .wpsolr-vertical-tabs-content .ui-widget-header {
+    background: none;
+    border: 0px;
+}
+
+.wpsolr-vertical-tabs-content .facets {
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
 }
 
 .wdm-vertical-tabs-content {

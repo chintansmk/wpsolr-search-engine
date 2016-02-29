@@ -2,6 +2,7 @@
 
 namespace wpsolr\extensions;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
 use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
@@ -24,6 +25,7 @@ use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\wpml\WPSOLR_Plugin_Wpml;
 use wpsolr\services\WPSOLR_Service_Wordpress;
+use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
 
 /**
@@ -32,8 +34,14 @@ use wpsolr\utilities\WPSOLR_Option;
  */
 abstract class WPSOLR_Extensions {
 
+	// Group name in error messages
+	const GROUP_NAME = 'Extension';
+
 	// Default admin form file name of the extension
 	const CONST_DEFAULT_FORM_FILE = 'admin_options.inc.php';
+
+	// Default groups template file name
+	const CONST_DEFAULT_GROUPS_TEMPLATE_FILE = 'groups.inc.php';
 
 	/*
     * Private constants
@@ -52,6 +60,7 @@ abstract class WPSOLR_Extensions {
 	const _CONFIG_OPTIONS_PLUGIN_VERSION = 'plugin_version';
 	const _CONFIG_OPTIONS_PLUGIN_NAME = 'plugin_name';
 	const _CONFIG_OPTIONS_PLUGIN_LINK = 'plugin_link';
+	const _CONFIG_OPTIONS_PLUGIN_TITLE = 'plugin_title';
 
 
 	const _SOLR_OR_OPERATOR = ' OR ';
@@ -100,7 +109,7 @@ abstract class WPSOLR_Extensions {
 	const OPTION_FACETS = 'facets';
 
 	// Extension: Solr Fields
-	const OPTION_SCHEMAS = 'fields';
+	const OPTION_SCHEMAS = 'schemas';
 
 	// Extension: Sort
 	const OPTION_SORTS = 'sorts';
@@ -141,6 +150,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'woocommerce/WPSOLR_Plugin_Woocommerce.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'woocommerce/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'WooCommerce',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 2.4.10)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/woocommerce/',
 				self::_CONFIG_OPTIONS                           => [
@@ -156,6 +166,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'wpml/WPSOLR_Plugin_Wpml.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'wpml/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'WPML',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(WPML Multilingual CMS > 3.1.6) ',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wpml.org/',
 				self::_CONFIG_OPTIONS                           => [
@@ -171,6 +182,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'polylang/WPSOLR_Plugin_Polylang.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'polylang/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Polylang',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 1.8.1)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://polylang.wordpress.com/documentation/',
 				self::_CONFIG_OPTIONS                           => [
@@ -185,6 +197,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_DIRECTORY               => 'acf/',
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'acf/WPSOLR_Plugin_Acf.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'acf/admin_options.inc.php',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Advanced Custom Fields',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 4.4.3)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/advanced-custom-fields/',
@@ -201,6 +214,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'types/WPSOLR_Plugin_Types.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'types/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Types',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 1.8.10)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/types/',
 				self::_CONFIG_OPTIONS                           => [
@@ -216,6 +230,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'indexes/WPSOLR_Options_Indexes.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'indexes/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -231,6 +246,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'localization/WPSOLR_Localization.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'localization/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -246,6 +262,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'groups/WPSOLR_Plugin_Groups.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'groups/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Groups',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 1.4.13)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/groups/',
 				self::_CONFIG_OPTIONS                           => [
@@ -261,6 +278,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 's2member/WPSOLR_Plugin_S2member.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 's2member/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 's2Member',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 150203)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/s2member/',
 				self::_CONFIG_OPTIONS                           => [
@@ -277,6 +295,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'qtranslate-x/WPSOLR_Plugin_Qtranslatex.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'qtranslate-x/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -293,6 +312,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'managedservers/WPSOLR_ManagedServers.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'managedservers/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -307,7 +327,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_DIRECTORY               => 'facets/',
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'facets/WPSOLR_Options_Facets.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'facets/admin_options.inc.php',
-				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Facet',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage your facets',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -322,7 +343,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_DIRECTORY               => 'schemas/',
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'schemas/WPSOLR_Options_Schemas.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'schemas/admin_options.inc.php',
-				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Schema',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage schemas used by your Solr indexes',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -337,7 +359,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_DIRECTORY               => 'sorts/',
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'sorts/WPSOLR_Options_Sorts.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'sorts/admin_options.inc.php',
-				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Sort',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage sorts',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -353,6 +376,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'importexport/WPSOLR_Options_ImportExports.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'importexport/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -368,6 +392,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'layouts/WPSOLR_Options_Layouts.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'layouts/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -383,6 +408,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'components/WPSOLR_Options_Components.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'components/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -398,6 +424,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'resultsrows/WPSOLR_Options_Result_Row.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'resultsrows/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -413,6 +440,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'resultsheaders/WPSOLR_Options_Result_Header.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'resultsheaders/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -428,6 +456,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'resultspagenavigations/WPSOLR_Options_Result_Page_Navigation.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'resultspagenavigations/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -443,6 +472,7 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'searchform/WPSOLR_Options_Search_Form.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'searchform/admin_options.inc.php',
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -457,7 +487,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_EXTENSION_DIRECTORY               => 'queries/',
 				self::_CONFIG_EXTENSION_FILE_PATH               => 'queries/WPSOLR_Options_Query.php',
 				self::_CONFIG_EXTENSION_ADMIN_OPTIONS_FILE_PATH => 'queries/admin_options.inc.php',
-				self::_CONFIG_OPTIONS_PLUGIN_NAME               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Query',
+				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage your Solr queries',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
 				self::_CONFIG_OPTIONS                           => [
@@ -745,6 +776,18 @@ abstract class WPSOLR_Extensions {
 	}
 
 	/**
+	 * Get the title of a plugin
+	 *
+	 * @param $extension
+	 *
+	 * @return mixed
+	 */
+	public static function get_option_plugin_title( $extension ) {
+
+		return self::$extensions_array[ $extension ][ self::_CONFIG_OPTIONS_PLUGIN_TITLE ];
+	}
+
+	/**
 	 * Get the name of a plugin
 	 *
 	 * @param $extension
@@ -893,7 +936,8 @@ abstract class WPSOLR_Extensions {
 					'is_plugin_active' => self::is_plugin_activated( $this->extension ),
 					'plugin_name'      => self::get_option_plugin_name( $this->extension ),
 					'plugin_link'      => self::get_option_plugin_link( $this->extension ),
-					'plugin_version'   => self::get_option_plugin_version( $this->extension )
+					'plugin_version'   => self::get_option_plugin_version( $this->extension ),
+					'plugin_title'     => self::get_option_plugin_title( $this->extension )
 				],
 				$plugin_parameters
 			)
@@ -914,6 +958,19 @@ abstract class WPSOLR_Extensions {
 	}
 
 	/**
+	 *    Absolute groups template file
+	 */
+	protected function get_groups_template_file() {
+
+		$directory = __DIR__;
+
+		$file = $directory . '/' . self::CONST_DEFAULT_GROUPS_TEMPLATE_FILE;
+
+		return $file;
+	}
+
+
+	/**
 	 *    Get path of a class
 	 */
 	public static function get_class_path( $class ) {
@@ -924,5 +981,77 @@ abstract class WPSOLR_Extensions {
 		return $directory_of_child_class;
 	}
 
+	/**
+	 * Get groups
+	 *
+	 * @return array Groups
+	 */
+	public function get_groups() {
+		die( 'get_groups() not implemented.' );
+	}
+
+	/**
+	 * Get group
+	 *
+	 * @@param string $group_id
+	 * @return array Group
+	 */
+	public function get_group( $group_id ) {
+
+		$groups = $this->get_groups();
+
+		if ( empty( $groups ) || empty( $groups[ $group_id ] ) ) {
+			throw new WPSOLR_Exception( sprintf( '%s \'%s\' is unknown.', static::GROUP_NAME, $group_id ) );
+		}
+
+		return $groups[ $group_id ];
+	}
+
+	/**
+	 * Clone the groups marked.
+	 *
+	 * @param $groups
+	 */
+	public function clone_some_groups() {
+
+		$groups = $this->get_groups();
+
+		foreach ( $groups as $group_uuid => &$group ) {
+
+			if ( ! empty( $group['is_to_be_cloned'] ) ) {
+
+				unset( $group['is_to_be_cloned'] );
+
+				// Clone the group
+				$clone              = $group;
+				$result_cloned_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
+				$clone['name']      = 'Clone of ' . $clone['name'];
+
+				$groups[ $result_cloned_uuid ] = $clone;
+			}
+		}
+
+		return $groups;
+	}
+
+	/**
+	 * Format a string translation
+	 *
+	 * @param $name
+	 * @param $text
+	 * @param $domain
+	 * @param $is_multiligne
+	 *
+	 * @return array
+	 */
+	protected function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
+
+		return [
+			'name'          => $name,
+			'text'          => $text,
+			'domain'        => $domain,
+			'is_multiligne' => $is_multiligne
+		];
+	}
 
 }

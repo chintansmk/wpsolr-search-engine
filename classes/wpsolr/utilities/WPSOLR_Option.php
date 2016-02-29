@@ -2,8 +2,8 @@
 
 namespace wpsolr\utilities;
 
-use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\services\WPSOLR_Service_Wordpress;
 use wpsolr\WPSOLR_Filters;
 
@@ -363,7 +363,7 @@ class WPSOLR_Option {
 	 * Sort option and items
 	 *
 	 **************************************************************************************************************/
-	const OPTION_SORTS = 'wdm_solr_sortby_data';
+	const OPTION_SORTS = 'wpsolr_sorts';
 	const OPTION_SORTS_SORTS = 'sorts';
 	const OPTION_SORTS_GROUPS = 'sorts_groups';
 	const OPTION_SORTS_GROUP_DEFAULT_ID = 'sorts_group_default_id';
@@ -372,8 +372,8 @@ class WPSOLR_Option {
 	 * Get facet options array
 	 * @return array
 	 */
-	public function get_option_sort() {
-		return self::get_option( self::OPTION_SORTS );
+	public function get_option_sorts() {
+		return self::get_option( self::OPTION_SORTS, [ ] );
 	}
 
 	/**
@@ -422,7 +422,7 @@ class WPSOLR_Option {
 	 * Get indexing options array
 	 * @return array
 	 */
-	public function get_option_fields() {
+	public function get_option_schemas() {
 		return self::get_option( self::OPTION_SCHEMAS );
 	}
 
@@ -777,7 +777,7 @@ class WPSOLR_Option {
 	 * Get results header options array
 	 * @return array
 	 */
-	public function get_option_results_header() {
+	public function get_option_results_headers() {
 		return self::get_option( self::OPTION_RESULTS_HEADERS, [ ] );
 	}
 
@@ -792,7 +792,7 @@ class WPSOLR_Option {
 	 * Get results page navigation options array
 	 * @return array
 	 */
-	public function get_option_results_page_navigation() {
+	public function get_option_results_page_navigations() {
 		return self::get_option( self::OPTION_RESULTS_PAGE_NAVIGATION, [ ] );
 	}
 
@@ -807,7 +807,7 @@ class WPSOLR_Option {
 	 * Get search form options array
 	 * @return array
 	 */
-	public function get_option_search_form() {
+	public function get_option_search_forms() {
 		return self::get_option( self::OPTION_SEARCH_FORM, [ ] );
 	}
 

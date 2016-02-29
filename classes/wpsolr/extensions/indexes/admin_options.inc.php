@@ -215,7 +215,7 @@ $languages = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_GET_LANGUAGES, [ ] );
 					</div>
 
 					<div class="wdm_row">
-						<div class='col_left'>Index fields</div>
+						<div class='col_left'>Schema</div>
 						<div class='col_right'>
 							<?php $value = isset( $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] ) ? $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] : ''; ?>
 							<?php if ( ! $is_new_index && ! empty( $value ) ) { ?>

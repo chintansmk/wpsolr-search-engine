@@ -2,7 +2,6 @@
 
 namespace wpsolr\extensions\schemas;
 
-use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Type;
@@ -15,6 +14,9 @@ use wpsolr\utilities\WPSOLR_Global;
  * Manage queries
  */
 class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
+
+	// Group name in error messages
+	const GROUP_NAME = 'Schema';
 
 	const FORM_FIELD_NAME = 'name';
 	const FORM_FIELD_QUERY_FILTER = 'query_filter';
@@ -61,72 +63,49 @@ class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 
 		$new_group_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
 
-		// Clone some groups
-		$groups = WPSOLR_Global::getOption()->get_option_fields();
-		$groups = $this->clone_some_groups( $groups );
-
 		// Add current plugin parameters to default parent parameters
 		parent::output_form(
-			$form_file,
+			$this->get_groups_template_file(),
 			array_merge(
 				[
-					'options'                   => WPSOLR_Global::getOption()->get_option_fields(),
-					'new_group_uuid'            => $new_group_uuid,
-					'groups'                    => array_merge(
-						$groups,
-						[
-							$new_group_uuid => [
-								'name' => 'New group'
-							]
-						] ),
-					'solr_field_types'          => WPSOLR_Global::getSolrFieldTypes()->get_field_types(),
-					'indexable_post_types'      => $this->get_indexable_post_types(),
-					'allowed_attachments_types' => get_allowed_mime_types(),
-					'taxonomies'                => get_taxonomies(
-						[
-							'public'   => true,
-							'_builtin' => false
+					'group_parameters' => [
+						'extension_name'            => WPSOLR_Extensions::OPTION_SCHEMAS,
+						'options'                   => $this->get_groups(),
+						'new_group_uuid'            => $new_group_uuid,
+						'groups'                    => array_merge(
+							$this->clone_some_groups(),
+							[
+								$new_group_uuid => [
+									'name' => 'New schema'
+								]
+							] ),
+						'solr_field_types'          => WPSOLR_Global::getSolrFieldTypes()->get_field_types(),
+						'indexable_post_types'      => $this->get_indexable_post_types(),
+						'allowed_attachments_types' => get_allowed_mime_types(),
+						'taxonomies'                => get_taxonomies(
+							[
+								'public'   => true,
+								'_builtin' => false
 
-						],
-						'names',
-						'and'
-					),
-					'indexable_custom_fields'   => $this->get_indexable_custom_fields(),
-					'selected_custom_fields'    => WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
-					'indexes'                   => WPSOLR_Global::getExtensionIndexes()->get_indexes()
+							],
+							'names',
+							'and'
+						),
+						'indexable_custom_fields'   => $this->get_indexable_custom_fields(),
+						'selected_custom_fields'    => WPSOLR_Global::getOption()->get_fields_custom_fields_array(),
+						'indexes'                   => WPSOLR_Global::getExtensionIndexes()->get_indexes()
+					]
 				],
 				$plugin_parameters
 			)
 		);
 	}
 
-	/**
-	 * Get groups
-	 *
-	 * @return array Groups
-	 */
 	public function get_groups() {
 
-		$groups = WPSOLR_Global::getOption()->get_option_fields();
+		$groups = WPSOLR_Global::getOption()->get_option_schemas();
 
 		return $groups;
-	}
-
-	/**
-	 * Get group
-	 *
-	 * @@param string $group_id
-	 * @return array Group
-	 */
-	public function get_group( $group_id ) {
-
-		$groups = WPSOLR_Global::getOption()->get_option_fields();
-
-		if ( empty( $groups ) || empty( $groups[ $group_id ] ) ) {
-			throw new WPSOLR_Exception( sprintf( 'Schema \'%s\' is unknown.', $group_id ) );
-		}
-
-		return $groups[ $group_id ];
 	}
 
 	/**
@@ -138,32 +117,6 @@ class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 	 */
 	public function get_query_filter( $query ) {
 		return isset( $query[ self::FORM_FIELD_QUERY_FILTER ] ) ? $query[ self::FORM_FIELD_QUERY_FILTER ] : '';
-	}
-
-
-	/**
-	 * Clone the groups marked.
-	 *
-	 * @param $groups
-	 */
-	public function clone_some_groups( &$groups ) {
-
-		foreach ( $groups as $group_uuid => &$group ) {
-
-			if ( ! empty( $group['is_to_be_cloned'] ) ) {
-
-				unset( $group['is_to_be_cloned'] );
-
-				// Clone the group
-				$clone              = $group;
-				$result_cloned_uuid = WPSOLR_Global::getExtensionIndexes()->generate_uuid();
-				$clone['name']      = 'Clone of ' . $clone['name'];
-
-				$groups[ $result_cloned_uuid ] = $clone;
-			}
-		}
-
-		return $groups;
 	}
 
 	/**

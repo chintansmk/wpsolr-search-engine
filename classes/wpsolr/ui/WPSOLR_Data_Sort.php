@@ -42,12 +42,13 @@ class WPSOLR_Data_Sort {
 		}
 
 		// Sorts of the Sorts group
-		$sorts = WPSOLR_Global::getExtensionSorts()->get_sorts_from_group( $group_id );
+		$group = WPSOLR_Global::getExtensionSorts()->get_group( $group_id );
+		$sorts = WPSOLR_Global::getExtensionSorts()->get_sorts( $group );
 
 		$data = static::format_data(
 			WPSOLR_Global::getQuery()->get_wpsolr_sort(),
 			$sorts,
-			WPSOLR_Global::getExtensionSorts()->get_sort_default_name( WPSOLR_Global::getExtensionSorts()->get_sorts_group( $group_id ) ),
+			WPSOLR_Global::getExtensionSorts()->get_sort_default_name( $group ),
 			WPSOLR_Localization::get_options() );
 
 

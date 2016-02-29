@@ -38,12 +38,12 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 
 
 			// Remove all facets not selected
-			jQuery('.facet_not_selected').each(function () {
+			jQuery('.group_content_not_selected').each(function () {
 				jQuery(this).detach();
 			});
 
 			// Remove all facet type sections not selected
-			jQuery('.facet_type_not_selected').each(function () {
+			jQuery('.group_content_not_selected').each(function () {
 				jQuery(this).detach();
 			});
 
@@ -55,18 +55,18 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 			return true;
 		});
 
-		jQuery('.facets input:checkbox').click(function () {
+		jQuery('.group_content input:checkbox').click(function () {
 			// id is 'group_uuid_field_name_is_active', we want #group_uuid_field_name which holds the facet section
 			var facet_section_id = '#' + jQuery(this).attr('id').replace('_is_active', '');
 
 			console.log(facet_section_id);
 
 			if (jQuery(this).prop("checked")) {
-				jQuery(facet_section_id).parent().removeClass('facet_not_selected');
-				jQuery(facet_section_id).parent().addClass('facet_selected');
+				jQuery(facet_section_id).parent().removeClass('group_content_not_selected');
+				jQuery(facet_section_id).parent().addClass('group_content_selected');
 			} else {
-				jQuery(facet_section_id).parent().addClass('facet_not_selected');
-				jQuery(facet_section_id).parent().removeClass('facet_selected');
+				jQuery(facet_section_id).parent().addClass('group_content_not_selected');
+				jQuery(facet_section_id).parent().removeClass('group_content_selected');
 			}
 			jQuery(facet_section_id).parent().find('.plus_icon').toggle(!jQuery(this).prop("checked"));
 			jQuery(facet_section_id).parent().find('.minus_icon').toggle(jQuery(this).prop("checked"));
@@ -78,7 +78,7 @@ $group_tab_selected = isset( $_GET['group_tab'] ) ? $_GET['group_tab'] : 0;
 </script>
 
 
-<div id="solr-facets-options" class="wdm-vertical-tabs-content">
+<div class="wpsolr-vertical-tabs-content wpsolr_2col">
 	<form action="options.php" method="POST">
 		<?php
 		WPSOLR_Service_Wordpress::settings_fields( $options_name );
