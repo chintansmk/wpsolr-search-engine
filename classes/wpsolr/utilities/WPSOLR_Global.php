@@ -181,7 +181,7 @@ class WPSOLR_Global {
 	/**
 	 * @return WPSOLR_Options_Schemas
 	 */
-	public static function getExtensionFields() {
+	public static function getExtensionSchemas() {
 		return self::getObject( WPSOLR_Extensions::OPTION_SCHEMAS, WPSOLR_Extensions::CLASS, WPSOLR_Extensions::OPTION_SCHEMAS );
 	}
 

@@ -19,7 +19,7 @@ class WPSOLR_Query extends \WP_Query {
 	protected $wpsolr_filter_query;
 	protected $wpsolr_paged;
 	protected $wpsolr_sort;
-	protected $wpsolr_facets;
+	protected $wpsolr_facets_group;
 	protected $wpsolr_query_id;
 	protected $wpsolr_query;
 	protected $wpsolr_is_wp_search;
@@ -133,8 +133,8 @@ class WPSOLR_Query extends \WP_Query {
 	 *
 	 * @return $this
 	 */
-	public function set_wpsolr_facets_fields( $facets ) {
-		$this->wpsolr_facets = $facets;
+	public function set_wpsolr_facets_group( $facets ) {
+		$this->wpsolr_facets_group = $facets;
 
 		return $this;
 	}
@@ -144,8 +144,8 @@ class WPSOLR_Query extends \WP_Query {
 	 *
 	 * @return array Facets
 	 */
-	public function get_wpsolr_facets_fields() {
-		return $this->wpsolr_facets;
+	public function get_wpsolr_facets_group() {
+		return $this->wpsolr_facets_group;
 	}
 
 	/**
@@ -282,9 +282,9 @@ class WPSOLR_Query extends \WP_Query {
 			$this->set_wpsolr_facets_groups_id( $facets_group_id );
 		}
 		$facets_group_filter_query = WPSOLR_Global::getExtensionFacets()->get_facets_group_filter_query( $facets_group_id );
-		$facets                    = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $facets_group_id );
+		$facets                    = WPSOLR_Global::getExtensionFacets()->get_group( $facets_group_id );
 		// Add group facets to Solr filters
-		$this->set_wpsolr_facets_fields( $facets );
+		$this->set_wpsolr_facets_group( $facets );
 		// Add Solr query fields from the group filter
 		$this->set_wpsolr_query_id( $facets_group_filter_query );
 

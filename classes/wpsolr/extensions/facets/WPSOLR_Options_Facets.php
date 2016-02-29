@@ -4,8 +4,8 @@ namespace wpsolr\extensions\facets;
 
 use Solarium\QueryType\Select\Query\Query;
 use wpsolr\exceptions\WPSOLR_Exception;
-use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Types;
 use wpsolr\solr\WPSOLR_Schema;
@@ -115,7 +115,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 			array_merge(
 				[
 					'options'         => WPSOLR_Global::getOption()->get_option_facets(),
-					'groups_fields'   => WPSOLR_Global::getExtensionFields()->get_groups(),
+					'schemas'         => WPSOLR_Global::getExtensionSchemas()->get_groups(),
 					'layouts_facets'  => $this->get_facets_layouts_by_field_types(),
 					'layouts_filters' => WPSOLR_Global::getExtensionLayouts()->get_layouts_from_type( WPSOLR_Options_Layouts::TYPE_LAYOUT_FACET_FILTER ),
 					'new_group_uuid'  => $new_group_uuid,
@@ -167,71 +167,51 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	/**
 	 * Get facets of a facets group
 	 *
-	 * @param string $facets_group_id Group of facets
+	 * @param string $group_id Group of facets
 	 *
-	 * @return array Facets of the group
+	 * @return array Group
 	 */
-	public function get_facets_from_group( $facets_group_id ) {
+	public function get_group( $group_id ) {
 
-		$facets_groups = WPSOLR_Global::getOption()->get_facets_selected_array();
+		$facets_groups = WPSOLR_Global::getOption()->get_option_facets();
 
-		if ( ! isset( $facets_groups[ $facets_group_id ] ) ) {
-			throw new WPSOLR_Exception( sprintf( 'facets group \'%s\' is unknown.', $facets_group_id ) );
+		if ( ! isset( $facets_groups[ $group_id ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'facets group \'%s\' is unknown.', $group_id ) );
 		}
 
-		return ! empty( $facets_groups[ $facets_group_id ] ) ? $facets_groups[ $facets_group_id ] : [ ];
+		return ! empty( $facets_groups[ $group_id ] ) ? $facets_groups[ $group_id ] : [ ];
 	}
 
 	/**
 	 * Get exclusion flag of a facets group
 	 *
-	 * @param string $facets_group_id Group of facets
+	 * @param string $group_id Group of facets
 	 *
 	 * @return array Facets of the group
 	 */
-	public function get_facets_group_is_exlusion( $facets_group_id ) {
+	public function get_facets_group_is_exlusion( $group_id ) {
 
-		$facets_group = $this->get_facets_group( $facets_group_id );
+		$group = $this->get_group( $group_id );
 
-		if ( isset( $facets_group ) ) {
+		if ( isset( $group ) ) {
 
-			return isset( $facets_group[ WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION ] );
+			return isset( $group[ WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION ] );
 		}
 
 		return false;
 	}
 
-	/**
-	 * Get facets of default group
-	 *
-	 * @return array Facets of default group
-	 */
-	public function get_facets_from_default_group() {
-
-		$default_facets_group_id = WPSOLR_Global::getOption()->get_default_facets_group_id();
-
-		if ( ! empty( $default_facets_group_id ) ) {
-			return $this->get_facets_from_group( $default_facets_group_id );
-		}
-
-		return [ ];
-	}
 
 	/**
-	 * Get facets group
+	 * Get facets of a group
 	 *
-	 * @@param string $facets_group_id
+	 * @param string $group
+	 *
 	 * @return array Facets group
 	 */
-	public function get_facets_group( $facets_group_id ) {
+	public function get_group_facets( $group ) {
 
-		$facets_groups = WPSOLR_Global::getOption()->get_facets_groups();
-
-		if ( ! empty( $facets_group_id ) && ! empty( $facets_groups ) && ! empty( $facets_groups[ $facets_group_id ] ) ) {
-			return $facets_groups[ $facets_group_id ];
-		}
-
-		return [ ];
+		return ! empty( $group[ self::OPTION_FACETS ] ) ? $group[ self::OPTION_FACETS ] : [ ];
 	}
 
 	/**
@@ -242,7 +222,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_facets_group_filter_query( $facets_group_id ) {
 
-		$facets_groups = $this->get_facets_group( $facets_group_id );
+		$facets_groups = $this->get_group_facets( $facets_group_id );
 
 		if ( ! empty( $facets_groups ) && ! empty( $facets_groups[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ] ) ) {
 			return $facets_groups[ WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY ];
@@ -270,7 +250,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 		$default_facets_group_id = $this->get_default_facets_group_id();
 		if ( ! empty( $default_facets_group_id ) ) {
-			return $this->get_facets_group( $default_facets_group_id );
+			return $this->get_group_facets( $default_facets_group_id );
 		}
 
 		return [ ];
@@ -438,8 +418,8 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 *
 	 * @param $facet
 	 */
-	public function get_facet_field_id( $facet ) {
-		return isset( $facet[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] ) ? $facet[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] : '';
+	public function get_facet_schema_id( $facet ) {
+		return isset( $facet[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] ) ? $facet[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] : '';
 	}
 
 	/**
@@ -574,7 +554,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 
 									if ( count( $columns ) != 3 ) {
 
-										set_transient( get_current_user_id() . 'wpsolr_generic_notice', sprintf( 'Range facet "%s" from group "%s" should contain 3 columns separated by "|", rather than %d in current value "%s"', $field['name'], $this->get_facets_group( $group_uuid )['name'], count( $columns ), $line ) );
+										set_transient( get_current_user_id() . 'wpsolr_generic_notice', sprintf( 'Range facet "%s" from group "%s" should contain 3 columns separated by "|", rather than %d in current value "%s"', $field['name'], $this->get_group_facets( $group_uuid )['name'], count( $columns ), $line ) );
 
 										continue;
 									}

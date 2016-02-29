@@ -49,16 +49,16 @@ class WPSOLR_Data_Facets {
 				$wpsolr_query->set_wpsolr_facets_groups_id( $group_id );
 			}
 			// Facets of the facets groups
-			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $group_id );
+			$facets = WPSOLR_Global::getExtensionFacets()->get_group( $group_id );
 
-			$wpsolr_query->set_wpsolr_facets_fields( $facets );
+			$wpsolr_query->set_wpsolr_facets_group( $facets );
 
 			// Add query
 			$wpsolr_query->set_wpsolr_query_id( $query_id );
 		} else {
 
 			// Facets of the group on the query url for a search url
-			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $group_id );
+			$facets = WPSOLR_Global::getExtensionFacets()->get_group( $group_id );
 		}
 
 		// Call and get Solr results
@@ -84,11 +84,13 @@ class WPSOLR_Data_Facets {
 	 *                  {"items":[{"name":"Blog","count":13,"selected":true}],"id":"categories","name":"Categories"}
 	 *                  ]
 	 */
-	public static function format_data( $facets_selected, $facets_to_display, $facets_in_results ) {
+	public static function format_data( $facets_selected, $facets_group, $facets_in_results ) {
 
 		$results                                = [ ];
 		$results['facets']                      = [ ];
 		$results['has_facet_elements_selected'] = false;
+
+		$facets_to_display = WPSOLR_Global::getExtensionFacets()->get_group_facets( $facets_group );
 
 		if ( count( $facets_in_results ) && count( $facets_to_display ) ) {
 

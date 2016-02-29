@@ -64,7 +64,7 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 								'name' => 'New group'
 							]
 						] ),
-					'fields'         => WPSOLR_Global::getExtensionFields()->get_groups(),
+					'fields'         => WPSOLR_Global::getExtensionSchemas()->get_groups(),
 				],
 				$plugin_parameters
 			)

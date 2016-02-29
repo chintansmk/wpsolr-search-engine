@@ -2,6 +2,7 @@
 
 namespace wpsolr\extensions\indexes;
 
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
@@ -17,7 +18,6 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 	// Solr index properties
 	const INDEX_TYPE = 'index_type';
 	const MANAGED_SOLR_SERVICE_ID = 'managed_solr_service_id';
-	const FORM_FIELD_FIELD_ID = 'index_field_id';
 	const FORM_FIELD_LANGUAGE_ID = 'language_id';
 
 
@@ -260,7 +260,7 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 
 	public function get_field_id( $solr_index ) {
 
-		$result = $this->get_index_property( $solr_index, self::FORM_FIELD_FIELD_ID, '' );
+		$result = $this->get_index_property( $solr_index, WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID, '' );
 
 		return $result;
 	}

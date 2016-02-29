@@ -40,7 +40,7 @@ class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 	const OPTION_FIELDS_ATTACHMENTS = 'attachment_types';
 	const FORM_FIELD_IS_INDEX_COMMENTS = 'is_index_comments';
 	const OPTION_FIELDS_SOLR_INDEXES = 'solr_indexes';
-	const FORM_FIELD_FIELD_ID = 'field_id';
+	const FORM_FIELD_SCHEMA_ID = 'schema_id';
 	const FORM_FIELD_CUSTOM_FIELDS = 'custom_fields';
 	const FORM_FIELD_SOLR_TYPE = 'solr_type';
 	const FORM_FIELD_SOLR_INDEX_ID = 'solr_index_id';
@@ -123,7 +123,7 @@ class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 		$groups = WPSOLR_Global::getOption()->get_option_fields();
 
 		if ( empty( $groups ) || empty( $groups[ $group_id ] ) ) {
-			throw new WPSOLR_Exception( sprintf( 'Fields \'%s\' is unknown.', $group_id ) );
+			throw new WPSOLR_Exception( sprintf( 'Schema \'%s\' is unknown.', $group_id ) );
 		}
 
 		return $groups[ $group_id ];

@@ -49,16 +49,16 @@ class WPSOLR_Data_Result_Row {
 				$wpsolr_query->set_wpsolr_facets_groups_id( $group_id );
 			}
 			// Facets of the facets groups
-			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $group_id );
+			$facets = WPSOLR_Global::getExtensionFacets()->get_group( $group_id );
 
-			$wpsolr_query->set_wpsolr_facets_fields( $facets );
+			$wpsolr_query->set_wpsolr_facets_group( $facets );
 
 			// Add Solr query fields from the Widget filter
 			$wpsolr_query->set_wpsolr_query_id( WPSOLR_Global::getExtensionFacets()->get_facets_group_filter_query( $group_id ) );
 		} else {
 
 			// Facets of the group on the query url for a search url
-			$facets = WPSOLR_Global::getExtensionFacets()->get_facets_from_group( $group_id );
+			$facets = WPSOLR_Global::getExtensionFacets()->get_group( $group_id );
 		}
 
 		// Call and get Solr results

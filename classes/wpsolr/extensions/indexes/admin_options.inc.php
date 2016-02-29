@@ -4,9 +4,9 @@
  * Included file to display admin options
  */
 
-use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\managedservers\WPSOLR_ManagedServers;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\WPSOLR_Filters;
@@ -27,7 +27,7 @@ $form_data                             = WPSOLR_Extensions::extract_form_data( $
 	)
 );
 
-$fields = WPSOLR_Global::getExtensionFields()->get_groups();
+$fields = WPSOLR_Global::getExtensionSchemas()->get_groups();
 
 $languages = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_GET_LANGUAGES, [ ] );
 ?>
@@ -217,16 +217,16 @@ $languages = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_GET_LANGUAGES, [ ] );
 					<div class="wdm_row">
 						<div class='col_left'>Index fields</div>
 						<div class='col_right'>
-							<?php $value = isset( $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Indexes::FORM_FIELD_FIELD_ID ] ) ? $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Indexes::FORM_FIELD_FIELD_ID ] : ''; ?>
-							<?php if ( !$is_new_index ) { ?>
+							<?php $value = isset( $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] ) ? $option_data['solr_indexes'][ $index_indice ][ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] : ''; ?>
+							<?php if ( ! $is_new_index && ! empty( $value ) ) { ?>
 								<input type="hidden"
-								       name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][index_field_id]>"
+								       name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][<?php echo WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID; ?>]"
 								       value="<?php echo esc_attr( $value ); ?>"
 								/>
 								<?php echo $fields[ $value ][ WPSOLR_Options_Schemas::FORM_FIELD_NAME ]; ?>
 							<?php } else { ?>
 								<select
-									name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][index_field_id]">
+									name="<?php echo $option_name ?>[solr_indexes][<?php echo $index_indice ?>][<?php echo WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID; ?>]">
 									<?php
 									foreach ( $fields as $field_id => $field ) { ?>
 										<option value="<?php echo esc_attr( $field_id ); ?>"

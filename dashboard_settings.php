@@ -220,7 +220,7 @@ function fun_set_solr_options() {
 
 switch ( $tab ) {
 	case 'wpsolr_fields' :
-		WPSOLR_Global::getExtensionFields()->output_form();
+		WPSOLR_Global::getExtensionSchemas()->output_form();
 		break;
 
 	case 'wpsolr_importexports' :

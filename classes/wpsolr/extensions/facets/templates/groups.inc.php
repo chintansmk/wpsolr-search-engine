@@ -1,7 +1,7 @@
 <?php
-use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
@@ -134,24 +134,24 @@ use wpsolr\utilities\WPSOLR_Option;
 			</div>
 
 			<div class="wdm_row">
-				<div class='col_left'>Fields</div>
+				<div class='col_left'>Schema</div>
 				<div class='col_right'>
-					<?php $value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ] : ''; ?>
+					<?php $value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] : ''; ?>
 
-					<?php if ( $new_group_uuid != $group_uuid ) { ?>
+					<?php if ( ( $new_group_uuid != $group_uuid ) && ! empty( $value ) ) { ?>
 						<input type="hidden"
-						       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ); ?>"
+						       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ); ?>"
 						       value="<?php echo $value; ?>"
 						/>
-						<?php echo ! empty( $groups_fields[ $value ] ) ? $groups_fields[ $value ][ WPSOLR_Options_Schemas::FORM_FIELD_NAME ] : ''; ?>
+						<?php echo ! empty( $schemas[ $value ] ) ? $schemas[ $value ][ WPSOLR_Options_Schemas::FORM_FIELD_NAME ] : ''; ?>
 					<?php } else { ?>
 						<select
-							name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_FIELD_ID ); ?>">
+							name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ); ?>">
 							<?php
-							foreach ( $groups_fields as $field_id => $field ) { ?>
-								<option value="<?php echo esc_attr( $field_id ); ?>"
-									<?php selected( $field_id, $value, true ); ?> >
-									<?php echo $field[ WPSOLR_Options_Query::FORM_FIELD_NAME ]; ?>
+							foreach ( $schemas as $schema_id => $schema ) { ?>
+								<option value="<?php echo esc_attr( $schema_id ); ?>"
+									<?php selected( $schema_id, $value, true ); ?> >
+									<?php echo $schema[ WPSOLR_Options_Query::FORM_FIELD_NAME ]; ?>
 								</option>
 							<?php } ?>
 						</select>
@@ -175,9 +175,15 @@ use wpsolr\utilities\WPSOLR_Option;
 				<ul class="sortable connectedSortable">
 
 					<?php
-					$group_field         = WPSOLR_Global::getExtensionFields()->get_group( WPSOLR_Global::getExtensionFacets()->get_facet_field_id( $groups[ $group_uuid ] ) );
-					$field_custom_fields = WPSOLR_Global::getExtensionFields()->get_custom_fields( $group_field );
-					$field_taxonomies    = WPSOLR_Global::getExtensionFields()->get_taxonomies( $group_field );
+					try {
+						$group_schema        = WPSOLR_Global::getExtensionSchemas()->get_group( WPSOLR_Global::getExtensionFacets()->get_facet_schema_id( $groups[ $group_uuid ] ) );
+						$field_custom_fields = WPSOLR_Global::getExtensionSchemas()->get_custom_fields( $group_schema );
+						$field_taxonomies    = WPSOLR_Global::getExtensionSchemas()->get_taxonomies( $group_schema );
+					} catch ( Exception $e ) {
+						$group_schema        = '';
+						$field_custom_fields = [ ];
+						$field_taxonomies    = [ ];
+					}
 
 					foreach ( ! empty( $groups[ $group_uuid ][ WPSOLR_Option::OPTION_FACETS_FACETS ] ) ? $groups[ $group_uuid ][ WPSOLR_Option::OPTION_FACETS_FACETS ] : [ ] as $facet_selected_name => $facet_selected ) {
 
@@ -186,10 +192,10 @@ use wpsolr\utilities\WPSOLR_Option;
 							array(
 								'options_name'         => $options_name,
 								'facets_group_uuid'    => $group_uuid,
-								'layouts_facets'       => $layouts_facets[ WPSOLR_Global::getExtensionFields()->get_field_type_definition($group_field, $facet_selected_name )->get_id() ],
+								'layouts_facets'       => $layouts_facets[ WPSOLR_Global::getExtensionSchemas()->get_field_type_definition( $group_schema, $facet_selected_name )->get_id() ],
 								'layouts_filters'      => $layouts_filters,
 								'facet_name'           => $facet_selected_name,
-								'is_numeric'           => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $facet_selected_name )->get_is_numeric(),
+								'is_numeric'           => WPSOLR_Global::getExtensionSchemas()->get_field_type_definition( $facet_selected_name )->get_is_numeric(),
 								'facet'                => $facet_selected,
 								'facet_selected_class' => $facet_selected_class,
 								'image_plus_display'   => 'none',
@@ -200,7 +206,7 @@ use wpsolr\utilities\WPSOLR_Option;
 							) );
 					}
 
-					foreach ( array_merge( $field_custom_fields, $field_taxonomies ) as $field_name => $field ) {
+					foreach ( array_merge( $field_custom_fields, $field_taxonomies ) as $field_name => $schema ) {
 
 						$field_name = strtolower( $field_name );
 
@@ -210,11 +216,11 @@ use wpsolr\utilities\WPSOLR_Option;
 								array(
 									'options_name'         => $options_name,
 									'facets_group_uuid'    => $group_uuid,
-									'layouts_facets'       => $layouts_facets[ WPSOLR_Global::getExtensionFields()->get_field_type_definition($group_field, $field_name )->get_id() ],
+									'layouts_facets'       => $layouts_facets[ WPSOLR_Global::getExtensionSchemas()->get_field_type_definition( $group_schema, $field_name )->get_id() ],
 									'layouts_filters'      => $layouts_filters,
 									'facet_name'           => $field_name,
-									'is_numeric'           => WPSOLR_Global::getExtensionFields()->get_field_type_definition( $field_name )->get_is_numeric(),
-									'facet'                => $field,
+									'is_numeric'           => WPSOLR_Global::getExtensionSchemas()->get_field_type_definition( $field_name )->get_is_numeric(),
+									'facet'                => $schema,
 									'facet_selected_class' => $facet_not_selected_class,
 									'image_plus_display'   => 'inline',
 									'image_minus_display'  => 'none',
