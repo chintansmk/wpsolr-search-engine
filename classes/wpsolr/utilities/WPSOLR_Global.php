@@ -5,18 +5,18 @@ namespace wpsolr\utilities;
 use wpsolr\extensions\acf\WPSOLR_Plugin_Acf;
 use wpsolr\extensions\components\WPSOLR_Options_Components;
 use wpsolr\extensions\facets\WPSOLR_Options_Facets;
-use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\groups\WPSOLR_Plugin_Groups;
 use wpsolr\extensions\importexport\WPSOLR_Options_ImportExports;
 use wpsolr\extensions\indexes\WPSOLR_Options_Indexes;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\polylang\WPSOLR_Plugin_Polylang;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
-use wpsolr\extensions\results\WPSOLR_Options_ResultsRows;
 use wpsolr\extensions\resultsheaders\WPSOLR_Options_Result_Header;
 use wpsolr\extensions\resultspagenavigations\WPSOLR_Options_Result_Page_Navigation;
 use wpsolr\extensions\resultsrows\WPSOLR_Options_Result_Row;
+use wpsolr\extensions\resultsrows\WPSOLR_Options_ResultsRows;
 use wpsolr\extensions\s2member\WPSOLR_Plugin_S2member;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\searchform\WPSOLR_Options_Search_Form;
 use wpsolr\extensions\sorts\WPSOLR_Options_Sorts;
 use wpsolr\extensions\types\WPSOLR_Plugin_Types;
@@ -189,7 +189,7 @@ class WPSOLR_Global {
 	 * Get all active extensions.
 	 * Load active extensions to catch specific filters/actions
 	 *
-	 * @return array
+	 * @return array[WPSOLR_Extensions]
 	 */
 	public static function getActiveExtensions() {
 		$results = [ ];
@@ -197,7 +197,27 @@ class WPSOLR_Global {
 		foreach ( WPSOLR_Extensions::get_extensions() as $extension ) {
 
 			if ( $extension['is_active'] ) {
-				$object = self::getObject( $extension['id'], WPSOLR_Extensions::CLASS, $extension['id'] );
+				$object = self::getExtension( $extension['id'] );
+				array_push( $results, $object );
+			}
+		}
+
+		return $results;
+	}
+
+
+	/**
+	 * Get all translated extensions.
+	 *
+	 * @return array WPSOLR_Extensions[]
+	 */
+	public static function getTranslatedExtensions() {
+		$results = [ ];
+
+		foreach ( WPSOLR_Extensions::get_extensions() as $extension ) {
+
+			if ( ! empty( $extension[ WPSOLR_Extensions::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN ] ) ) {
+				$object = self::getExtension( $extension['id'] );
 				array_push( $results, $object );
 			}
 		}

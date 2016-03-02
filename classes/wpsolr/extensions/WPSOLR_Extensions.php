@@ -25,8 +25,10 @@ use wpsolr\extensions\types\WPSOLR_Plugin_Types;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\wpml\WPSOLR_Plugin_Wpml;
 use wpsolr\services\WPSOLR_Service_Wordpress;
+use wpsolr\ui\WPSOLR_UI;
 use wpsolr\utilities\WPSOLR_Global;
 use wpsolr\utilities\WPSOLR_Option;
+use wpsolr\WPSOLR_Filters;
 
 /**
  * Base class for all WPSOLR extensions.
@@ -61,6 +63,8 @@ abstract class WPSOLR_Extensions {
 	const _CONFIG_OPTIONS_PLUGIN_NAME = 'plugin_name';
 	const _CONFIG_OPTIONS_PLUGIN_LINK = 'plugin_link';
 	const _CONFIG_OPTIONS_PLUGIN_TITLE = 'plugin_title';
+	const _CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN = 'translation_domain';
+	const _CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS = 'translation_fields';
 
 
 	const _SOLR_OR_OPERATOR = ' OR ';
@@ -73,7 +77,7 @@ abstract class WPSOLR_Extensions {
 	 */
 
 	// Option: localization
-	const EXTENSION_INDEXES = 'Indexes';
+	const EXTENSION_INDEXES = WPSOLR_Options_Indexes::class;
 
 	// Option: localization
 	const OPTION_LOCALIZATION = 'Localization';
@@ -106,13 +110,13 @@ abstract class WPSOLR_Extensions {
 	const OPTION_MANAGED_SOLR_SERVERS = 'Managed Solr Servers';
 
 	// Extension: Facets
-	const OPTION_FACETS = 'facets';
+	const OPTION_FACETS = WPSOLR_Options_Facets::class;
 
 	// Extension: Solr Fields
 	const OPTION_SCHEMAS = 'schemas';
 
 	// Extension: Sort
-	const OPTION_SORTS = 'sorts';
+	const OPTION_SORTS = WPSOLR_Options_Sorts::class;
 
 	// Extension: Import/Export
 	const OPTION_IMPORTEXPORT = 'import_export';
@@ -121,7 +125,7 @@ abstract class WPSOLR_Extensions {
 	const OPTION_LAYOUTS = 'layouts';
 
 	// Extension: components
-	const OPTION_COMPONENTS = 'components';
+	const OPTION_COMPONENTS = WPSOLR_Options_Components::class;
 
 	// Extension: Results rows
 	const OPTION_RESULTS_ROWS = 'results_rows';
@@ -153,6 +157,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 2.4.10)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/woocommerce/',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_PLUGIN_WOOCOMMERCE,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -169,6 +175,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(WPML Multilingual CMS > 3.1.6) ',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wpml.org/',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_PLUGIN_WPML,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -185,6 +193,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 1.8.1)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://polylang.wordpress.com/documentation/',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_PLUGIN_POLYLANG,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -201,6 +211,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_NAME               => 'Advanced Custom Fields',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 4.4.3)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/advanced-custom-fields/',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_PLUGIN_ACF,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -217,6 +229,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 1.8.10)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/types/',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_PLUGIN_TYPES,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -233,6 +247,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_INDEXES,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -249,6 +265,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_LOCALIZATION,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -265,6 +283,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 1.4.13)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/groups/',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_PLUGIN_GROUPS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -281,6 +301,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '(>= 150203)',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => 'https://wordpress.org/plugins/s2member/',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_OPTION::OPTION_PLUGIN_S2MEMBER,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -315,6 +337,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => 'wdm_solr_extension_managed_solr_servers_data',
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -331,6 +355,39 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage your facets',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => 'wpsolr facets',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [
+					[
+						'name'             => WPSOLR_Options_Facets::FACET_FIELD_LABEL_FRONT_END,
+						'parent_name'      => WPSOLR_Options_Facets::FACET_FIELD_FACETS,
+						'translation_name' => 'Facet Label on front-end',
+						'is_multiline'     => false
+					],
+					[
+						'name'             => WPSOLR_Options_Facets::FACET_FIELD_LABEL_FIRST,
+						'parent_name'      => WPSOLR_Options_Facets::FACET_FIELD_FACETS,
+						'translation_name' => 'First facet Label',
+						'is_multiline'     => false
+					],
+					[
+						'name'             => WPSOLR_Options_Facets::FACET_FIELD_LABEL,
+						'parent_name'      => WPSOLR_Options_Facets::FACET_FIELD_FACETS,
+						'translation_name' => 'Middle facet Label',
+						'is_multiline'     => false
+					],
+					[
+						'name'             => WPSOLR_Options_Facets::FACET_FIELD_LABEL_LAST,
+						'parent_name'      => WPSOLR_Options_Facets::FACET_FIELD_FACETS,
+						'translation_name' => 'Last facet Label',
+						'is_multiline'     => false
+					],
+					[
+						'name'             => WPSOLR_Options_Facets::FACET_FIELD_CUSTOM_RANGE_RANGES,
+						'parent_name'      => WPSOLR_Options_Facets::FACET_FIELD_FACETS,
+						'translation_name' => 'Uneven Range facet Labels',
+						'is_multiline'     => true
+					]
+				],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_FACETS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -347,6 +404,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage schemas used by your Solr indexes',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SCHEMAS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -363,6 +422,15 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage sorts',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => 'wpsolr sorts',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [
+					[
+						'name'             => WPSOLR_Options_Sorts::SORT_FIELD_LABEL,
+						'parent_name'      => WPSOLR_Options_Sorts::FORM_FIELD_SORTS,
+						'translation_name' => 'Sort Label',
+						'is_multiline'     => false
+					]
+				],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SORTS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -379,6 +447,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_IMPORTEXPORT,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -395,6 +465,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_LAYOUTS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -411,6 +483,15 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => 'wpsolr components',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [
+					[
+						'name'             => WPSOLR_UI::FORM_FIELD_TITLE,
+						'translation_name' => 'Component title',
+						'parent_name'      => '*',
+						'is_multiline'     => false
+					]
+				],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_COMPONENTS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -427,6 +508,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_RESULTS_ROWS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -443,6 +526,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_RESULTS_HEADERS,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -459,6 +544,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_RESULTS_PAGE_NAVIGATION,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -475,6 +562,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => '',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_SEARCH_FORM,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -491,6 +580,8 @@ abstract class WPSOLR_Extensions {
 				self::_CONFIG_OPTIONS_PLUGIN_TITLE              => 'Manage your Solr queries',
 				self::_CONFIG_OPTIONS_PLUGIN_VERSION            => '',
 				self::_CONFIG_OPTIONS_PLUGIN_LINK               => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => '',
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS => [ ],
 				self::_CONFIG_OPTIONS                           => [
 					self::_CONFIG_OPTIONS_DATA                 => WPSOLR_Option::OPTION_QUERIES,
 					self::_CONFIG_OPTIONS_IS_ACTIVE_FIELD_NAME => WPSOLR_Option::OPTION_SHARED_IS_EXTENSION_ACTIVE
@@ -556,9 +647,10 @@ abstract class WPSOLR_Extensions {
 		foreach ( self::$extensions_array as $key => $class ) {
 
 			$results[] = [
-				'id'        => $key,
-				'name'      => $class[ self::_CONFIG_OPTIONS_PLUGIN_NAME ],
-				'is_active' => self::is_extension_to_be_loaded( $key, false )
+				'id'                                            => $key,
+				'name'                                          => $class[ self::_CONFIG_OPTIONS_PLUGIN_NAME ],
+				'is_active'                                     => self::is_extension_to_be_loaded( $key, false ),
+				self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN => $class[ self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN ]
 			];
 		}
 
@@ -1037,14 +1129,16 @@ abstract class WPSOLR_Extensions {
 	/**
 	 * Format a string translation
 	 *
-	 * @param $name
+	 * @param $field_name
 	 * @param $text
 	 * @param $domain
 	 * @param $is_multiligne
 	 *
+	 * @param $name
+	 *
 	 * @return array
 	 */
-	protected function get_string_to_translate( $name, $text, $domain, $is_multiligne ) {
+	protected function get_string_to_translate( $field_name, $text, $domain, $is_multiligne, $name ) {
 
 		return [
 			'name'          => $name,
@@ -1054,4 +1148,132 @@ abstract class WPSOLR_Extensions {
 		];
 	}
 
+	/**
+	 * Get the translation domain of the plugin
+	 *
+	 * @param $extension
+	 *
+	 * @return mixed
+	 */
+	public static function get_option_plugin_translation_domain( $extension ) {
+
+		return self::$extensions_array[ $extension ][ self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_DOMAIN ];
+	}
+
+
+	/**
+	 * Get the translatable fields of the plugin
+	 *
+	 * @param $extension
+	 *
+	 * @return mixed
+	 */
+	public static function get_option_plugin_translated_fields( $extension ) {
+
+		return self::$extensions_array[ $extension ][ self::_CONFIG_OPTIONS_PLUGIN_TRANSLATION_FIELDS ];
+	}
+
+
+	/**
+	 * Get the strings to translate among the group data
+	 * @return array
+	 */
+	public function extract_strings_to_translate() {
+
+		$results = [ ];
+		$domain  = self::get_option_plugin_translation_domain( get_class( $this ) );
+
+		// Fields that can be translated and their definition
+		$translated_fields = self::get_option_plugin_translated_fields( get_class( $this ) );
+
+		if ( ! empty( $domain ) && count( $translated_fields ) > 0 ) {
+
+			foreach ( $this->get_groups() as $group_name => $group ) {
+
+				$this->extract_strings_to_translate_for_level( $domain, $translated_fields, [ ], $group, $results );
+			}
+		}
+
+		return $results;
+	}
+
+
+	/**
+	 * Get the strings to translate among the data
+	 *
+	 * @param $domain
+	 * @param $translated_fields
+	 * @param $level_names
+	 * @param $level_value
+	 * @param $results
+	 *
+	 * @return array
+	 */
+	public function extract_strings_to_translate_for_level( $domain, $translated_fields, $level_names, $level_value, &$results ) {
+
+		if ( ! is_array( $level_value ) || count( $level_value ) <= 0 ) {
+			// Level must be a not empty array
+			return;
+		}
+
+		foreach ( $level_value as $field_name => $field_value ) {
+
+			if ( ! is_array( $field_value ) ) {
+
+				foreach ( $translated_fields as $translatable ) {
+
+					if ( ( $translatable['name'] == $field_name ) &&
+					     ( ( empty( $translatable['parent_name'] ) && empty( $level_names ) ) ||
+					       ( ! empty( $translatable['parent_name'] ) && ( '*' == $translatable['parent_name'] || in_array( $translatable['parent_name'], $level_names ) ) ) )
+					) {
+
+						$results[] = $this->get_string_to_translate(
+							$translatable['name'], $field_value, $domain, $translatable['is_multiline'], $translatable['translation_name']
+						);
+
+					}
+
+				}
+
+			} else {
+
+				// Add next level to already visited levels
+				array_push( $level_names, $field_name );
+
+				// Call level below
+				$this->extract_strings_to_translate_for_level( $domain, $translated_fields, $level_names, $field_value, $results );
+			}
+
+		}
+
+	}
+
+	/**
+	 * Get the strings to translate among the group data of all extensions translatable.
+	 *
+	 * @return array Translations
+	 */
+	public static function extract_strings_to_translate_for_all_extensions() {
+
+		$translations = [ ];
+		foreach ( WPSOLR_Global::getTranslatedExtensions() as $extension ) {
+
+			$translation = $extension->extract_strings_to_translate();
+			if ( count( $translation ) > 0 ) {
+				$translations = array_merge( $translations, $translation );
+			}
+
+		}
+
+		if ( count( $translations ) > 0 ) {
+
+			// Translate
+			do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
+				[
+					'translations' => $translations
+				]
+			);
+		}
+
+	}
 }

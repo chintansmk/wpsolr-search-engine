@@ -51,6 +51,8 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	const FACET_FIELD_LABEL_FIRST = 'label_first'; // Label of the first label element
 	const FACET_FIELD_LABEL_LAST = 'label_last'; // Label of the last label element
 
+	const FACET_FIELD_FACETS = 'facets';
+
 	// Facet labels templates
 	const FACET_LABEL_TEMPLATE = '%1$s (%2$s)';
 	const FACET_LABEL_TEMPLATE_RANGE = '%1$s - %2$s (%3$d)';
@@ -202,7 +204,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 */
 	public function get_group_facets( $group ) {
 
-		return ! empty( $group[ self::OPTION_FACETS ] ) ? $group[ self::OPTION_FACETS ] : [ ];
+		return ! empty( $group[ self::FACET_FIELD_FACETS ] ) ? $group[ self::FACET_FIELD_FACETS ] : [ ];
 	}
 
 	/**
@@ -475,80 +477,35 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Get the strings to translate among the selected facets data
-	 * @return array
+	 * @inheritDoc
 	 */
-	public function get_strings_to_translate() {
+	protected function get_string_to_translate( $field_name, $text, $domain, $is_multiligne, $name ) {
 
-		$results = [ ];
-		$domain  = 'wpsolr facets'; // never change this
+		if ( $field_name == self::FACET_FIELD_CUSTOM_RANGE_RANGES ) {
 
-		// Fields that can be translated and their definition
-		$fields_translatable = [
-			self::FACET_FIELD_LABEL_FRONT_END     => [ 'name' => 'Facet Label on front-end', 'is_multiline' => false ],
-			self::FACET_FIELD_LABEL_FIRST         => [ 'name' => 'First facet Label', 'is_multiline' => false ],
-			self::FACET_FIELD_LABEL               => [ 'name' => 'Middle facet Label', 'is_multiline' => false ],
-			self::FACET_FIELD_LABEL_LAST          => [ 'name' => 'Last facet Label', 'is_multiline' => false ],
-			self::FACET_FIELD_CUSTOM_RANGE_RANGES => [ 'name' => 'Uneven Range facet Labels', 'is_multiline' => true ]
-		];
+			foreach ( WPSOLR_Regexp::split_lines( $text ) as $line ) {
 
-		$groups = WPSOLR_Global::getOption()->get_facets_selected_array();
+				if ( ! empty( trim( $line ) ) ) {
 
-		if ( ! empty( $groups ) ) {
+					$columns = explode( '|', $line );
 
-			foreach ( $groups as $group_uuid => $group ) {
+					if ( count( $columns ) != 3 ) {
 
-				foreach ( $group as $field ) {
+						set_transient( get_current_user_id() . 'wpsolr_generic_notice', sprintf( 'Range facets lines should contain 3 columns separated by "|", rather than %d in current value "%s"', count( $columns ), $line ) );
 
-					foreach ( $fields_translatable as $translatable_name => $translatable ) {
-
-						if ( ! empty( $field[ $translatable_name ] ) ) {
-
-							$results[] = $this->get_string_to_translate(
-								$field[ $translatable_name ], //sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
-								$field[ $translatable_name ],
-								$domain,
-								$translatable['is_multiline']
-							);
-						}
-
-						if ( ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ] ) && ! empty( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) ) {
-
-							// Extract the 2rd column of each line
-							$label = '';
-							foreach ( WPSOLR_Regexp::split_lines( $field[ self::FACET_FIELD_CUSTOM_RANGE ][ $translatable_name ] ) as $line ) {
-
-								if ( ! empty( trim( $line ) ) ) {
-
-									$columns = explode( '|', $line );
-
-									if ( count( $columns ) != 3 ) {
-
-										set_transient( get_current_user_id() . 'wpsolr_generic_notice', sprintf( 'Range facet "%s" from group "%s" should contain 3 columns separated by "|", rather than %d in current value "%s"', $field['name'], $this->get_group_facets( $group_uuid )['name'], count( $columns ), $line ) );
-
-										continue;
-									}
-
-									// The 3rd column contains the label to translate
-									$label = $columns[2];
-
-									$results[] = $this->get_string_to_translate(
-										$label, //sprintf( ' % s of % s % s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
-										$label,
-										$domain,
-										$translatable['is_multiline']
-									);
-
-								}
-
-							}
-						}
+						continue;
 					}
+
+					// The 3rd column contains the label to translate
+					$text = $columns[2];
 				}
+
 			}
+
 		}
 
-		return $results;
+		return parent::get_string_to_translate( $field_name, $text, $domain, $is_multiligne, $name );
 	}
+
 
 }

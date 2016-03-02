@@ -463,46 +463,16 @@ class WPSOLR_Options_Components extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Get the strings to translate among the selected facets data
-	 * @return array
+	 * @inheritDoc
 	 */
-	public function get_strings_to_translate() {
+	public function get_groups() {
 
-		$results = [ ];
-		$domain  = 'wpsolr components'; // never change this
+		$groups = WPSOLR_Global::getOption()->get_option_components();
 
-		// Fields that can be translated and their definition
-		$fields_translatable = [
-			WPSOLR_UI::FORM_FIELD_TITLE => [ 'name' => 'Component title', 'is_multiline' => false ]
-		];
-
-		$components_types = WPSOLR_Global::getOption()->get_option_components();
-
-		foreach ( $components_types as $component_type => $components ) {
-
-			foreach ( $components as $component_id => $field ) {
-
-				foreach ( $fields_translatable as $translatable_name => $translatable ) {
-
-					if ( ! empty( $field[ $translatable_name ] ) ) {
-
-						$results[] = $this->get_string_to_translate(
-							$field[ $translatable_name ],
-							$field[ $translatable_name ],
-							$domain,
-							$translatable['is_multiline']
-						);
-					}
-
-				}
-			}
-		}
-
-
-		return $results;
+		return $groups;
 	}
 
-
+	
 	/**
 	 * Retrieve all components ids
 	 *

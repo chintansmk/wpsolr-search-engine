@@ -89,43 +89,5 @@ class WPSOLR_Options_Result_Header extends WPSOLR_Extensions {
 		return isset( $result[ self::RESULT_FIELD_LABEL ] ) ? $result[ self::RESULT_FIELD_LABEL ] : '';
 	}
 
-	/**
-	 * Get the strings to translate among the selected facets data
-	 * @return array
-	 */
-	public function get_strings_to_translate() {
-
-		$results = [ ];
-		$domain  = 'wpsolr results'; // never change this
-
-		// Fields that can be translated and their definition
-		$fields_translatable = [
-			self::RESULT_FIELD_LABEL => [ 'name' => 'Result Label', 'is_multiline' => false ]
-		];
-
-		$groups = WPSOLR_Global::getOption()->get_results_selected_array();
-
-		foreach ( $groups as $group_name => $group ) {
-
-			foreach ( $group as $field ) {
-
-				foreach ( $fields_translatable as $translatable_name => $translatable ) {
-
-					if ( ! empty( $field[ $translatable_name ] ) ) {
-
-						$results[] = $this->get_string_to_translate(
-							$field[ $translatable_name ], //sprintf( '%s of %s %s', $translatable['name'], $this->get_facets_group( $facets_group_name )['name'], $facet_field['name'] ),
-							$field[ $translatable_name ],
-							$domain,
-							$translatable['is_multiline']
-						);
-					}
-
-				}
-			}
-		}
-
-		return $results;
-	}
 
 }

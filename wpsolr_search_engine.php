@@ -9,6 +9,7 @@
  */
 
 use wpsolr\extensions\localization\WPSOLR_Localization;
+use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_IndexSolrClient;
 use wpsolr\solr\WPSOLR_SearchSolrClient;
 use wpsolr\ui\shortcode\WPSOLR_Shortcode;
@@ -312,27 +313,8 @@ function my_plugins_loaded() {
 	 */
 	if ( is_admin() ) {
 
-		// Translate facets
-		do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
-			[
-				'translations' => WPSOLR_Global::getExtensionFacets()->get_strings_to_translate()
-			]
-		);
-
-		// Translate sorts
-		do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
-			[
-				'translations' => WPSOLR_Global::getExtensionSorts()->get_strings_to_translate()
-			]
-		);
-
-		// Translate shortcodes
-		do_action( WPSOLR_Filters::WPSOLR_ACTION_TRANSLATION_REGISTER_STRINGS,
-			[
-				'translations' => WPSOLR_Global::getExtensionComponents()->get_strings_to_translate()
-			]
-		);
-
+		// Load all string translations for all data managed by all extensions
+		WPSOLR_Extensions::extract_strings_to_translate_for_all_extensions();
 	}
 
 }

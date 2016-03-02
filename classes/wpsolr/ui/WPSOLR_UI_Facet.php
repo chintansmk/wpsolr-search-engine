@@ -43,7 +43,7 @@ class WPSOLR_UI_Facet extends WPSOLR_UI {
 
 		$data = self::get_data( $this );
 
-		return ( empty( $data ) || ( count( $data[ WPSOLR_Options_Facets::OPTION_FACETS ] ) == 0 ) );
+		return ( empty( $data ) || ( count( $data[ WPSOLR_Options_Facets::FACET_FIELD_FACETS ] ) == 0 ) );
 	}
 
 	/**

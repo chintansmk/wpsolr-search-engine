@@ -697,7 +697,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 
 			$facetSet = $solarium_query->getFacetSet();
 
-			$facets = ! empty( $fields[ WPSOLR_Options_Facets::OPTION_FACETS ] ) ? $fields[ WPSOLR_Options_Facets::OPTION_FACETS ] : [ ];
+			$facets = ! empty( $fields[ WPSOLR_Options_Facets::FACET_FIELD_FACETS ] ) ? $fields[ WPSOLR_Options_Facets::FACET_FIELD_FACETS ] : [ ];
 			foreach ( $facets as $field_name => $facet ) {
 
 				$facet_min_count = $extension_facets->get_facet_min_count( $facet );

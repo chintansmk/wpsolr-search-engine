@@ -44,7 +44,7 @@ class WPSOLR_UI_Result_Row extends WPSOLR_UI {
 	 */
 	protected function is_data_empty() {
 
-		return ( ! isset( $this->data ) || empty( $this->data['data'] ) || ( count( $this->data['data'][ WPSOLR_Options_Facets::OPTION_FACETS ] ) == 0 ) );
+		return ( ! isset( $this->data ) || empty( $this->data['data'] ) || ( count( $this->data['data'][ WPSOLR_Options_Facets::FACET_FIELD_FACETS ] ) == 0 ) );
 	}
 
 	/**
