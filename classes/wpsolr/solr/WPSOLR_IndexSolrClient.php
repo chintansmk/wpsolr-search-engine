@@ -14,7 +14,6 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 
 	protected $solr_indexing_options;
 
-
 	/**
 	 * Retrieve the Solr index for a post (usefull for multi languages extensions).
 	 *
@@ -41,7 +40,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 
 		$this->index_indice    = $solr_index_indice;
 		$this->solarium_client = new \Solarium\Client( $config );
-
+		$this->schema          = WPSOLR_Global::getExtensionSchemas()->get_group( WPSOLR_Global::getExtensionIndexes()->get_index_schema_id( WPSOLR_Global::getExtensionIndexes()->get_index( $this->index_indice ) ) );
 	}
 
 	public function delete_documents() {
@@ -96,7 +95,6 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 	 */
 
 	public function get_count_documents() {
-		$solr_options = get_option( 'wdm_solr_conf_data' );
 
 		$client = $this->solarium_client;
 
@@ -217,8 +215,8 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		// Get body of attachment
 		$solarium_extract_query = $client->createExtract();
 
-		$post_types = str_replace( ",", "','", WPSOLR_Global::getOption()->get_fields_post_types() );
-		$ex_ids     = WPSOLR_Global::getOption()->get_fields_exclude_ids_array();
+		$post_types  = implode( "','", WPSOLR_Global::getExtensionSchemas()->get_schema_post_types( $this->schema ) );
+		$exclude_ids = WPSOLR_Global::getExtensionSchemas()->get_schema_exclude_ids( $this->schema );
 
 		// Build the WHERE clause
 
@@ -226,7 +224,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		$where_p = " post_type in ('$post_types') ";
 
 		// Build the attachment types clause
-		$attachment_types = str_replace( ",", "','", WPSOLR_Global::getOption()->get_fields_attachements() );
+		$attachment_types = implode( "','", WPSOLR_Global::getExtensionSchemas()->get_schema_attachement_types( $this->schema ) );
 		if ( isset( $attachment_types ) && ( $attachment_types != '' ) ) {
 			$where_a = " ( post_status='publish' OR post_status='inherit' ) AND post_type='attachment' AND post_mime_type in ('$attachment_types') ";
 		}
@@ -352,7 +350,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 				$postid = $ids_array[ $idx ]['ID'];
 
 				// If post is not on blacklist
-				if ( ! in_array( $postid, $ex_ids ) ) {
+				if ( ! in_array( $postid, $exclude_ids ) ) {
 					// If post is not an attachment
 					if ( $ids_array[ $idx ]['post_type'] != 'attachment' ) {
 
@@ -566,7 +564,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_PID ]   = $pid;
 		$solarium_document_for_update[ WPSOLR_Schema::_FIELD_NAME_TITLE ] = $ptitle;
 
-		if ( WPSOLR_Global::getOption()->get_fields_are_post_excertps_indexed() && ( ! empty( $pexcerpt ) ) ) {
+		if ( WPSOLR_Global::getExtensionSchemas()->get_schema_are_post_excertps_indexed( $this->schema ) && ( ! empty( $pexcerpt ) ) ) {
 
 			// Index post excerpt, by adding it to the post content.
 			// Excerpt can therefore be: searched, autocompleted, highlighted.
@@ -574,7 +572,10 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		}
 
 		$content_with_shortcodes_expanded_or_stripped = $pcontent;
-		if ( WPSOLR_Global::getOption()->get_fields_is_shortcode_expanded() && ( strpos( $pcontent, '[solr_search_shortcode]' ) === false ) ) {
+		if ( WPSOLR_Global::getExtensionSchemas()->get_schema_is_shortcode_expanded( $this->schema )
+		     && ( false === strpos( $pcontent, '[solr_search_shortcode]' ) )
+		     && ( false === strpos( $pcontent, '[wpsolr_' ) )
+		) {
 
 			// Expand shortcodes which have a plugin active, and are not the search form shortcode (else pb).
 			global $post;
@@ -612,7 +613,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 				if ( (array) $terms === $terms ) {
 					$parent = strtolower( str_replace( ' ', '_', $parent ) );
 					foreach ( $terms as $term ) {
-						$nm1                                = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_type( $parent );
+						$nm1                                = WPSOLR_Global::getSolrFieldTypes()->get_dynamic_name_from_type( $parent, WPSOLR_Field_Types::SOLR_TYPE_STRING );
 						$solarium_document_for_update->$nm1 = $term->name;
 						/*
 						$nm2                                = $parent . '_srch';
@@ -624,7 +625,7 @@ class WPSOLR_IndexSolrClient extends WPSOLR_AbstractSolrClient {
 		}
 
 		// Add custom fields to the document
-		$this->set_custom_fields( $solarium_document_for_update, $post_to_index, WPSOLR_Global::getOption()->get_fields_custom_fields_array(), $is_continue_at_conversion_error );
+		$this->set_custom_fields( $solarium_document_for_update, $post_to_index, WPSOLR_Global::getExtensionSchemas()->get_schema_custom_fields( $this->schema ), $is_continue_at_conversion_error );
 
 		// Last chance to customize the solarium update document
 		$solarium_document_for_update = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_SOLARIUM_DOCUMENT_FOR_UPDATE, $solarium_document_for_update, $this->solr_indexing_options, $post_to_index, $attachment_body );

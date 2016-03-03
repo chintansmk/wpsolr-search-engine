@@ -141,6 +141,7 @@ abstract class WPSOLR_Extensions {
 
 	// Extension: queries
 	const OPTION_QUERIES = 'queries';
+	const FORM_FIELD_GROUP_NAME = 'name';
 
 	/*
 	 * Extensions configuration
@@ -1080,6 +1081,20 @@ abstract class WPSOLR_Extensions {
 	 */
 	public function get_groups() {
 		die( 'get_groups() not implemented.' );
+	}
+
+	/**
+	 * Get group name
+	 *
+	 * @param string $group
+	 *
+	 * @return string Group name
+	 */
+	public function get_group_name( $group ) {
+
+		$result = ! empty( $group[ self::FORM_FIELD_GROUP_NAME ] ) ? $group[ self::FORM_FIELD_GROUP_NAME ] : '';
+
+		return $result;
 	}
 
 	/**

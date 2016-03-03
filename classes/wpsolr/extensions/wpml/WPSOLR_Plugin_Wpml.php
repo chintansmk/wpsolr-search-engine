@@ -117,7 +117,7 @@ class WPSOLR_Plugin_Wpml extends WPSOLR_Extensions {
 		// Get the index indexing language
 		$language = $this->get_solr_index_indexing_language( $parameters['index_indice'] );
 
-		if ( isset( $language ) ) {
+		if ( ! empty( $language ) ) {
 
 			// Join statement
 			$sql_joint_statement = ' JOIN ';
@@ -250,14 +250,9 @@ class WPSOLR_Plugin_Wpml extends WPSOLR_Extensions {
 
 	function get_solr_index_indexing_language( $solr_index_indice ) {
 
-		$solr_indexes = $this->get_solr_index_indices();
+		$language = WPSOLR_Global::getExtensionIndexes()->get_index_language( WPSOLR_Global::getExtensionIndexes()->get_index( $solr_index_indice ) );
 
-		if ( ! isset( $solr_indexes ) || ! isset( $solr_indexes[ $solr_index_indice ] ) || ! isset( $solr_indexes[ $solr_index_indice ]['indexing_language_code'] ) || '' === $solr_indexes[ $solr_index_indice ]['indexing_language_code'] ) {
-			return null;
-		}
-
-		return $solr_indexes[ $solr_index_indice ]['indexing_language_code'];
-
+		return $language;
 	}
 
 	/**

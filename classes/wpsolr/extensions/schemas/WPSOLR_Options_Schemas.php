@@ -2,6 +2,7 @@
 
 namespace wpsolr\extensions\schemas;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\woocommerce\WPSOLR_Plugin_Woocommerce;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_Field_Type;
@@ -32,14 +33,14 @@ class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 	const FORM_FIELD_DEFAULT_OPERATOR = 'query_default_operator';
 	const FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH = 'is_query_partial_match_begin_with';
 	const FORM_FIELD_IS_DEFAULT = 'is_default';
-	const OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED = 'p_excerpt';
-	const OPTION_FIELDS_EXCLUDE_IDS = 'exclude_ids';
-	const OPTION_FIELDS_POST_TYPES = 'p_types';
+	const FORM_FIELD_ARE_POST_EXCERPTS_INDEXED = 'p_excerpt';
+	const FORM_FIELD_EXCLUDE_IDS = 'exclude_ids';
+	const FORM_FIELD_POST_TYPES = 'p_types';
 	const OPTION_FIELDS_ARE_COMMENTS_INDEXED = 'comments';
 	const FORM_FIELD_TAXONOMIES = 'taxonomies';
 	const OPTION_FIELDS_CUSTOM_FIELDS = self::FORM_FIELD_CUSTOM_FIELDS;
-	const OPTION_FIELDS_IS_SHORTCODE_EXPANDED = 'is_shortcode_expanded';
-	const OPTION_FIELDS_ATTACHMENTS = 'attachment_types';
+	const FORM_FIELD_IS_SHORTCODE_EXPANDED = 'is_shortcode_expanded';
+	const FORM_FIELD_ATTACHMENT_TYPES = 'attachment_types';
 	const FORM_FIELD_IS_INDEX_COMMENTS = 'is_index_comments';
 	const OPTION_FIELDS_SOLR_INDEXES = 'solr_indexes';
 	const FORM_FIELD_SCHEMA_ID = 'schema_id';
@@ -118,6 +119,71 @@ class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 	public function get_query_filter( $query ) {
 		return isset( $query[ self::FORM_FIELD_QUERY_FILTER ] ) ? $query[ self::FORM_FIELD_QUERY_FILTER ] : '';
 	}
+
+	/**
+	 * Get post types
+	 *
+	 * @param $schema
+	 *
+	 * @return array Post types
+	 */
+	public function get_schema_post_types( $schema ) {
+
+		if ( empty( $schema[ self::FORM_FIELD_POST_TYPES ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'Post types are mandatory. Select some in schema "%s"', $this->get_group_name( $schema ) ) );
+		}
+
+		return ! empty( $schema[ self::FORM_FIELD_POST_TYPES ] ) ? $schema[ self::FORM_FIELD_POST_TYPES ] : [ ];
+	}
+
+	/**
+	 * Get ids excluded from the schema
+	 *
+	 * @param $schema
+	 *
+	 * @return array Ids excluded
+	 */
+	public function get_schema_exclude_ids( $schema ) {
+
+		return ! empty( $schema[ self::FORM_FIELD_EXCLUDE_IDS ] ) ? explode( ',', $schema[ self::FORM_FIELD_EXCLUDE_IDS ] ) : [ ];
+	}
+
+	/**
+	 * Get attachement types from the schema
+	 *
+	 * @param $schema
+	 *
+	 * @return array Attachement types
+	 */
+	public function get_schema_attachement_types( $schema ) {
+
+		return ! empty( $schema[ self::FORM_FIELD_ATTACHMENT_TYPES ] ) ? $schema[ self::FORM_FIELD_ATTACHMENT_TYPES ] : [ ];
+	}
+
+	/**
+	 * Get authorization to index excerpts from the schema
+	 *
+	 * @param $schema
+	 *
+	 * @return boolean Excerpts can be indexed
+	 */
+	public function get_schema_are_post_excertps_indexed( $schema ) {
+
+		return ! empty( $schema[ self::FORM_FIELD_ARE_POST_EXCERPTS_INDEXED ] );
+	}
+
+	/**
+	 * Get authorization to expand shortcodes from the schema
+	 *
+	 * @param $schema
+	 *
+	 * @return boolean Shortcodes can be expanded
+	 */
+	public function get_schema_is_shortcode_expanded( $schema ) {
+
+		return ! empty( $schema[ self::FORM_FIELD_IS_SHORTCODE_EXPANDED ] );
+	}
+
 
 	/**
 	 * Get all post types, except some.
@@ -199,15 +265,15 @@ class WPSOLR_Options_Schemas extends WPSOLR_Extensions {
 	}
 
 	/**
-	 * Get custom fields of a field
+	 * Get custom fields of a schema
 	 *
-	 * @param $field
+	 * @param $schema
 	 *
-	 * @return array
+	 * @return array Custom fields
 	 */
-	public function get_custom_fields( $field ) {
+	public function get_schema_custom_fields( $schema ) {
 
-		$results = ! empty( $field[ self::FORM_FIELD_CUSTOM_FIELDS ] ) ? $field[ self::FORM_FIELD_CUSTOM_FIELDS ] : [ ];
+		$results = ! empty( $schema[ self::FORM_FIELD_CUSTOM_FIELDS ] ) ? $schema[ self::FORM_FIELD_CUSTOM_FIELDS ] : [ ];
 
 		return $results;
 	}

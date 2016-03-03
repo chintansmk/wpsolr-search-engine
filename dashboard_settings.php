@@ -790,11 +790,7 @@ case 'wpsolr_plugins':
 
 function wpsolr_admin_tabs( $current = 'wpsolr_fields' ) {
 
-	// Get default search solr index indice
-	$option_indexes            = WPSOLR_Global::getExtensionIndexes();
-	$default_search_solr_index = $option_indexes->get_default_search_solr_index();
-
-	$nb_indexes        = count( $option_indexes->get_indexes() );
+	$nb_indexes        = count( WPSOLR_Global::getExtensionIndexes()->get_indexes() );
 	$are_there_indexes = ( $nb_indexes > 0 );
 
 	$tabs                   = [ ];

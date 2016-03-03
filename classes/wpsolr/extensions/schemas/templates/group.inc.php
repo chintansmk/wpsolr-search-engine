@@ -43,9 +43,9 @@ use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 		Index post excerpt
 	</div>
 	<div class='col_right'>
-		<?php $value = isset( $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED ] ); ?>
+		<?php $value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_ARE_POST_EXCERPTS_INDEXED ] ); ?>
 		<input type='checkbox'
-		       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::OPTION_FIELDS_ARE_POST_EXCERPTS_INDEXED ); ?>"
+		       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_ARE_POST_EXCERPTS_INDEXED ); ?>"
 		       value='1'
 			<?php echo checked( $value ); ?>>
 
@@ -61,9 +61,9 @@ use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 		Expand shortcodes
 	</div>
 	<div class='col_right'>
-		<?php $value = isset( $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_IS_SHORTCODE_EXPANDED ] ); ?>
+		<?php $value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_IS_SHORTCODE_EXPANDED ] ); ?>
 		<input type='checkbox'
-		       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::OPTION_FIELDS_IS_SHORTCODE_EXPANDED ); ?>"
+		       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_IS_SHORTCODE_EXPANDED ); ?>"
 		       value='1'
 			<?php echo checked( $value ); ?>>
 
@@ -76,12 +76,12 @@ use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 	<div class='col_left'>Post types to be indexed</div>
 	<div class='col_right'>
 		<?php
-		$indexed_items = ! empty( $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_POST_TYPES ] ) ? $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_POST_TYPES ] : [ ];
+		$indexed_items = ! empty( $group[ WPSOLR_Options_Schemas::FORM_FIELD_POST_TYPES ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_POST_TYPES ] : [ ];
 		foreach ( $indexable_post_types as $indexable_item ) {
 			?>
 			<div class='wpsolr-4col'>
 				<input type='checkbox'
-				       name="<?php echo sprintf( '%s[%s][%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::OPTION_FIELDS_POST_TYPES, $indexable_item ); ?>"
+				       name="<?php echo sprintf( '%s[%s][%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_POST_TYPES, $indexable_item ); ?>"
 				       value='<?php echo $indexable_item ?>'
 					<?php checked( ! empty( $indexed_items[ $indexable_item ] ) ); ?>>
 				<?php echo $indexable_item ?>
@@ -164,14 +164,14 @@ use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 	<div class='col_right'>
 		<div class="wpsolr_overflow">
 			<?php
-			$indexed_items = ! empty( $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_ATTACHMENTS ] ) ? $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_ATTACHMENTS ] : [ ];
+			$indexed_items = ! empty( $group[ WPSOLR_Options_Schemas::FORM_FIELD_ATTACHMENT_TYPES ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_ATTACHMENT_TYPES ] : [ ];
 			foreach ( $allowed_attachments_types as $indexable_item ) {
 				?>
 
 				<div class='wpsolr-2col'>
 					<input type='checkbox'
 					       value='<?php echo $indexable_item ?>'
-					       name="<?php echo sprintf( '%s[%s][%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::OPTION_FIELDS_ATTACHMENTS, $indexable_item ); ?>"
+					       name="<?php echo sprintf( '%s[%s][%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_ATTACHMENT_TYPES, $indexable_item ); ?>"
 						<?php echo checked( ( ! empty( $indexed_items[ $indexable_item ] ) ) ); ?>>
 					<?php echo $indexable_item ?>
 				</div>
@@ -230,9 +230,9 @@ use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 <div class="wdm_row">
 	<div class='col_left'>Exclude items ids (posts, pages,...)</div>
 	<div class='col_right'>
-		<?php $value = isset( $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_EXCLUDE_IDS ] ) ? $group[ WPSOLR_Options_Schemas::OPTION_FIELDS_EXCLUDE_IDS ] : ''; ?>
+		<?php $value = isset( $group[ WPSOLR_Options_Schemas::FORM_FIELD_EXCLUDE_IDS ] ) ? $group[ WPSOLR_Options_Schemas::FORM_FIELD_EXCLUDE_IDS ] : ''; ?>
 		<input type="text"
-		       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::OPTION_FIELDS_EXCLUDE_IDS ); ?>"
+		       name="<?php echo sprintf( '%s[%s][%s]', $options_name, $group_uuid, WPSOLR_Options_Schemas::FORM_FIELD_EXCLUDE_IDS ); ?>"
 		       value="<?php echo esc_attr( $value ); ?>"
 		/>
 		Comma separated ids list

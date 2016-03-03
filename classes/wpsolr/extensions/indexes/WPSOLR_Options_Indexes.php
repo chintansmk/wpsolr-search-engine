@@ -2,6 +2,7 @@
 
 namespace wpsolr\extensions\indexes;
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
@@ -165,6 +166,11 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 
 		$solr_indexes = $this->get_indexes();
 
+		if ( empty( $solr_indexes[ $solr_index_indice ] ) ) {
+
+			throw new WPSOLR_Exception( sprintf( 'Solr index with id %s does not exist.', $solr_index_indice ) );
+		}
+
 		return isset( $solr_indexes[ $solr_index_indice ] ) ? $solr_indexes[ $solr_index_indice ] : null;
 	}
 
@@ -186,6 +192,16 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 	public function get_index_type( $solr_index ) {
 
 		return $this->get_index_property( $solr_index, self::INDEX_TYPE, '' );
+	}
+
+	public function get_index_schema_id( $solr_index ) {
+
+		return $this->get_index_property( $solr_index, WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID, '' );
+	}
+
+	public function get_index_language( $solr_index ) {
+
+		return $this->get_index_property( $solr_index, self::FORM_FIELD_LANGUAGE_ID, '' );
 	}
 
 	public function is_index_type_temporary( $solr_index ) {

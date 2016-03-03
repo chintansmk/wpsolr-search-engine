@@ -96,25 +96,26 @@ class WPSOLR_Plugin_Polylang extends WPSOLR_Plugin_Wpml {
 		// Get the index indexing language
 		$language = $this->get_solr_index_indexing_language( $parameters['index_indice'] );
 
-		// Get the languages
-		$languages = $this->get_languages();
+		if ( ! empty( $language ) ) { // Get the languages
+			$languages = $this->get_languages();
 
-		// Retrieve the term_id used for this language code
-		if ( isset( $languages[ $language ]['term_id'] ) ) {
+			// Retrieve the term_id used for this language code
+			if ( isset( $languages[ $language ]['term_id'] ) ) {
 
-			$language_term_id = $languages[ $language ]['term_id'];
-			$term             = get_term( $language_term_id, 'language' );
-			if ( isset( $term ) ) {
-				$term_taxonomy_id = $term->term_taxonomy_id;
+				$language_term_id = $languages[ $language ]['term_id'];
+				$term             = get_term( $language_term_id, 'language' );
+				if ( isset( $term ) ) {
+					$term_taxonomy_id = $term->term_taxonomy_id;
 
-				if ( isset( $language ) ) {
+					if ( isset( $language ) ) {
 
-					// Join statement
-					$sql_joint_statement = ' JOIN ';
-					$sql_joint_statement .= $wpdb->prefix . self::TABLE_TERM_RELATION_SHIPS . ' AS ' . 'wp_term_relationships';
-					$sql_joint_statement .= " ON posts.ID = wp_term_relationships.object_id AND wp_term_relationships.term_taxonomy_id = '%s' ";
+						// Join statement
+						$sql_joint_statement = ' JOIN ';
+						$sql_joint_statement .= $wpdb->prefix . self::TABLE_TERM_RELATION_SHIPS . ' AS ' . 'wp_term_relationships';
+						$sql_joint_statement .= " ON posts.ID = wp_term_relationships.object_id AND wp_term_relationships.term_taxonomy_id = '%s' ";
 
-					$sql_statements['JOIN'] = sprintf( $sql_joint_statement, $term_taxonomy_id );
+						$sql_statements['JOIN'] = sprintf( $sql_joint_statement, $term_taxonomy_id );
+					}
 				}
 			}
 		}

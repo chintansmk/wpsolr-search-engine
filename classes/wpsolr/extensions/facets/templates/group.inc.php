@@ -82,7 +82,7 @@ use wpsolr\utilities\WPSOLR_Option;
 		<?php
 		try {
 			$group_schema        = WPSOLR_Global::getExtensionSchemas()->get_group( WPSOLR_Global::getExtensionFacets()->get_facet_schema_id( $groups[ $group_uuid ] ) );
-			$field_custom_fields = WPSOLR_Global::getExtensionSchemas()->get_custom_fields( $group_schema );
+			$field_custom_fields = WPSOLR_Global::getExtensionSchemas()->get_schema_custom_fields( $group_schema );
 			$field_taxonomies    = WPSOLR_Global::getExtensionSchemas()->get_taxonomies( $group_schema );
 		} catch ( Exception $e ) {
 			$group_schema        = '';

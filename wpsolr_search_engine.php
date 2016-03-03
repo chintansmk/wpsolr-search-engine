@@ -8,6 +8,7 @@
  * License: GPL2
  */
 
+use wpsolr\exceptions\WPSOLR_Exception;
 use wpsolr\extensions\localization\WPSOLR_Localization;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\solr\WPSOLR_IndexSolrClient;
@@ -117,10 +118,11 @@ function add_remove_document_to_solr_index( $post_id, $post, $update ) {
 			set_transient( get_current_user_id() . 'updated_solr_post_save_admin_notice', 'Post/Page deleted from Solr' );
 		}
 
+	} catch ( WPSOLR_Exception $e ) {
+		set_transient( get_current_user_id() . 'error_solr_post_save_admin_notice', htmlentities( $e->getMessage() ) );
 	} catch ( Exception $e ) {
 		set_transient( get_current_user_id() . 'error_solr_post_save_admin_notice', htmlentities( $e->getMessage() ) );
 	}
-
 }
 
 add_action( 'save_post', 'add_remove_document_to_solr_index', 10, 3 );

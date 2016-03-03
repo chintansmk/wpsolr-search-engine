@@ -110,7 +110,7 @@ class WPSOLR_Options_Sorts extends WPSOLR_Extensions {
 		$schema = WPSOLR_Global::getExtensionSchemas()->get_group( $this->get_schema_id( $group ) );
 
 		// Custom fields indexed
-		$custom_fields = WPSOLR_Global::getExtensionSchemas()->get_custom_fields( $schema );
+		$custom_fields = WPSOLR_Global::getExtensionSchemas()->get_schema_custom_fields( $schema );
 
 		// Filter to get only sortable fields
 		$sortable_fields = WPSOLR_Global::getSolrFieldTypes()->get_sortable( $custom_fields );
