@@ -10,7 +10,7 @@ use wpsolr\utilities\WPSOLR_Global;
  */
 class WPSOLR_Query extends \WP_Query {
 
-	protected $solr_client;
+	protected $wpsolr_solr_client;
 
 	protected $wp_query;
 
@@ -224,7 +224,7 @@ class WPSOLR_Query extends \WP_Query {
 	/**
 	 * @return string
 	 */
-	public function get_wpsolr_query_id() {
+	public function wpsolr_get_query_id() {
 		return $this->wpsolr_query_id;
 	}
 
@@ -307,8 +307,8 @@ class WPSOLR_Query extends \WP_Query {
 		}
 
 
-		$this->solr_client = WPSOLR_Global::getSolrClient();
-		$this->resultSet   = $this->solr_client->execute_wpsolr_query( $this );
+		$this->wpsolr_solr_client = WPSOLR_Global::getSolrClient();
+		$this->resultSet          = $this->wpsolr_solr_client->execute_wpsolr_query( $this );
 
 		// Fetch all posts from the documents ids, in ONE call.
 		$posts_ids = array();

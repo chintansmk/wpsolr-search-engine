@@ -90,6 +90,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	const FACET_FIELD_MIN_MAX = 'min_max';
 	const FACET_FIELD_MIN_MAX_STEP = 'step';
 	const FACET_FIELD_MIN_MAX_STEP_DEFAULT = '100';
+	const FORM_FIELD_GROUP_EXCLUSION = 'missing';
 
 	// Layouts available for each field type
 	protected $layouts;
@@ -131,7 +132,7 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 									WPSOLR_Option::OPTION_FACETS_GROUP_FILTER_QUERY => ''
 								]
 							] ),
-						'fields'          => array_merge(
+						'$field_specials' => array_merge(
 							WPSOLR_Field_Types::add_fields_type( $this->get_special_fields(), WPSOLR_Field_Types::SOLR_TYPE_STRING )
 						),
 						'image_plus'      => plugins_url( '../../../../images/plus.png', __FILE__ ),
@@ -182,16 +183,9 @@ class WPSOLR_Options_Facets extends WPSOLR_Extensions {
 	 *
 	 * @return array Facets of the group
 	 */
-	public function get_facets_group_is_exlusion( $group_id ) {
+	public function get_facets_group_is_exlusion( $group ) {
 
-		$group = $this->get_group( $group_id );
-
-		if ( isset( $group ) ) {
-
-			return isset( $group[ WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION ] );
-		}
-
-		return false;
+		return isset( $group[ self::FORM_FIELD_GROUP_EXCLUSION ] );
 	}
 
 

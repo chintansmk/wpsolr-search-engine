@@ -31,7 +31,6 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 	// Managed Solr index
 	const STORED_INDEX_TYPE_MANAGED = 'index_type_managed';
 
-
 	/**
 	 * Post constructor.
 	 */
@@ -158,7 +157,7 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 	/**
 	 * Get a Solr index
 	 *
-	 * @param $solr_index_indice Indice in Solr indexes array
+	 * @param string $solr_index_indice Indice in Solr indexes array
 	 *
 	 * @return bool
 	 */
@@ -274,20 +273,20 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 		return isset( $solr_indexes ) ? count( $solr_indexes ) : 0;
 	}
 
-	public function get_field_id( $solr_index ) {
+	public function get_schema_id( $solr_index ) {
 
 		$result = $this->get_index_property( $solr_index, WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID, '' );
 
 		return $result;
 	}
 
-	public function get_indexes_by_field_id( $field_id ) {
+	public function get_indexes_by_field_id( $schema_id ) {
 
 		$results = [ ];
 
 		foreach ( $this->get_indexes() as $solr_index_id => $solr_index ) {
 
-			if ( $field_id == $this->get_field_id( $solr_index ) ) {
+			if ( $schema_id == $this->get_schema_id( $solr_index ) ) {
 
 				// This $solr_index contains the field_id: add it to the list.
 				$results[ $solr_index_id ] = $solr_index;
@@ -298,6 +297,31 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 		return $results;
 	}
 
+	public function get_index_id_by_language_id( $schema_id, $language_id ) {
+
+		$results = [ ];
+
+		foreach ( $this->get_indexes_by_field_id( $schema_id ) as $solr_index_id => $solr_index ) {
+
+			if ( $language_id == $this->get_index_language( $solr_index ) ) {
+
+				// This $solr_index contains the field_id: add it to the list.
+				array_push( $results, $solr_index_id );
+			}
+
+		}
+
+		if ( count( $results ) > 1 ) {
+			throw new WPSOLR_Exception(
+				sprintf( 'Several indexes with schema "%s" have language "%s".',
+					WPSOLR_Global::getExtensionSchemas()->get_group_name( ( WPSOLR_Global::getExtensionSchemas()->get_group( $schema_id ) ) ),
+					$language_id
+				)
+			);
+		}
+
+		return count( $results ) > 0 ? $results[0] : '';
+	}
 
 	public function create_index( $managed_solr_service_id, $index_type, $index_uuid, $index_name, $index_protocol, $index_host, $index_port, $index_path, $index_key, $index_secret ) {
 
@@ -417,7 +441,7 @@ class WPSOLR_Options_Indexes extends WPSOLR_Extensions {
 		if ( ! isset( $solr_index ) ) {
 
 			throw new \Exception( "The search index is missing.
-			Configure one in the <a href='?page=solr_settings&tab=solr_indexes'>Solr indexes</a>, and select it in the <a href='?page=solr_settings&tab=solr_option'>default search Solr index list</a>." );
+			Configure one in the <a href='?page=wpsolr_settings&tab=wpsolr_indexes'>Solr indexes</a>, and select it in the <a href='?page=wpsolr_settings&tab=solr_option'>default search Solr index list</a>." );
 		}
 
 		// Copy the index parameters in the Solarium endpoint

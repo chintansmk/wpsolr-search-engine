@@ -69,15 +69,12 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	 * Constructor used by factory WPSOLR_Global
 	 * Create using the default index configuration
 	 *
+	 * @param $index_indice
+	 *
 	 * @return WPSOLR_SearchSolrClient
+	 * @throws \Exception
 	 */
-	static function global_object() {
-
-		return self::create_from_index_indice( null );
-	}
-
-	// Create using an index configuration
-	static function create_from_index_indice( $index_indice ) {
+	static function global_object( $index_indice ) {
 
 		// Build Solarium config from the default indexing Solr index
 		$solarium_config = WPSOLR_Global::getExtensionIndexes()->build_solarium_config( $index_indice, null, WPSOLR_Options_Query::FORM_FIELD_DEFAULT_SOLR_TIMEOUT_IN_SECOND );
@@ -215,6 +212,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	/**
 	 * Convert a $wpsolr_query in a Solarium select query
 	 *
+	 * @param $query
 	 * @param WPSOLR_Query $wpsolr_query
 	 *
 	 * @return Query
@@ -228,7 +226,6 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		$this->set_keywords( $solarium_query, $wpsolr_query->get_wpsolr_queryQ(), WPSOLR_Global::getOption()->get_search_is_query_partial_match_begin_with() );
 
 		// Set default operator
-		$test = WPSOLR_Global::getOption()->get_search_query_default_operator();
 		$solarium_query->setQueryDefaultOperator( WPSOLR_Global::getOption()->get_search_query_default_operator() );
 
 		// Limit nb of results
@@ -242,14 +239,23 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 		/*
 		* Add query fields
 		*/
-		if ( ! empty( $wpsolr_query->get_filter_query_fields( $wpsolr_query->get_wpsolr_query_id() ) ) ) {
-			$this->add_filter_query_fields( $solarium_query, $wpsolr_query->get_filter_query_fields( $wpsolr_query->get_wpsolr_query_id() ), $wpsolr_query->get_wpsolr_facets_group(), self::SOLR_EXCLUDE_ALL_TAG );
+		if ( ! empty( $wpsolr_query->get_filter_query_fields( $wpsolr_query->wpsolr_get_query_id() ) ) ) {
+
+			$this->add_filter_query_fields( $solarium_query,
+				$wpsolr_query->get_filter_query_fields( $wpsolr_query->wpsolr_get_query_id() ),
+				$wpsolr_query->get_wpsolr_facets_group(),
+				self::SOLR_EXCLUDE_ALL_TAG
+			);
 		}
 
 		/*
 		* Add query filter
 		*/
-		$this->add_filter_query_fields( $solarium_query, [ WPSOLR_Global::getExtensionQueries()->get_query_filter( $wpsolr_query->wpsolr_get_query() ) ], $wpsolr_query->get_wpsolr_facets_group(), self::SOLR_NOT_EXCLUDE_ALL_TAG );
+		$this->add_filter_query_fields( $solarium_query,
+			[ WPSOLR_Global::getExtensionQueries()->get_query_filter( $wpsolr_query->wpsolr_get_query() ) ],
+			$wpsolr_query->get_wpsolr_facets_group(),
+			self::SOLR_NOT_EXCLUDE_ALL_TAG
+		);
 
 		/*
 		* Add highlighting fields
@@ -275,7 +281,7 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 				self::PARAMETER_FACET_FIELD_NAMES           => $wpsolr_query->get_wpsolr_facets_group(),
 				self::PARAMETER_FACET_LIMIT                 => WPSOLR_Global::getOption()->get_search_max_nb_items_by_facet(),
 				self::PARAMETER_FACET_MIN_COUNT             => self::DEFAULT_MIN_COUNT_BY_FACET,
-				self::PARAMETER_IS_EXCLUSION_BETWEEN_FACETS => WPSOLR_Global::getExtensionFacets()->get_facets_group_is_exlusion( $wpsolr_query->get_wpsolr_facets_groups_id() )
+				self::PARAMETER_IS_EXCLUSION_BETWEEN_FACETS => WPSOLR_Global::getExtensionFacets()->get_facets_group_is_exlusion( $wpsolr_query->get_wpsolr_facets_group() )
 			)
 		);
 
@@ -307,11 +313,11 @@ class WPSOLR_SearchSolrClient extends WPSOLR_AbstractSolrClient {
 	 */
 	public function execute_wpsolr_query( WPSOLR_Query $wpsolr_query ) {
 
-		/*
+
 		if ( isset( $this->solarium_results ) ) {
 			// Return results already in cache
 			return $this->solarium_results;
-		}*/
+		}
 
 		// Create the solarium query from the wpsolr query
 		$this->set_solarium_query( $wpsolr_query );

@@ -3,8 +3,11 @@
 namespace wpsolr\extensions\queries;
 
 use Solarium\QueryType\Select\Query\Query;
+use wpsolr\exceptions\WPSOLR_Exception;
+use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
 use wpsolr\extensions\WPSOLR_Extensions;
 use wpsolr\utilities\WPSOLR_Global;
+use wpsolr\WPSOLR_Filters;
 
 /**
  * Class WPSOLR_Options_Query
@@ -31,6 +34,7 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 	const FORM_FIELD_IS_QUERY_PARTIAL_MATCH_BEGIN_WITH = 'is_query_partial_match_begin_with';
 	const FORM_FIELD_IS_DEFAULT = 'is_default';
 	const FORM_FIELD_IS_MULTI_LANGUAGE = 'is_multi_language';
+
 
 	/**
 	 * Post constructor.
@@ -90,6 +94,101 @@ class WPSOLR_Options_Query extends WPSOLR_Extensions {
 	 */
 	public function get_query_filter( $query ) {
 		return isset( $query[ self::FORM_FIELD_QUERY_FILTER ] ) ? $query[ self::FORM_FIELD_QUERY_FILTER ] : '';
+	}
+
+	/**
+	 * Get is multi language of the query
+	 *
+	 * @param $query
+	 *
+	 * @return boolean
+	 */
+	public function get_query_is_multi_language( $query ) {
+
+		return isset( $query[ self::FORM_FIELD_IS_MULTI_LANGUAGE ] );
+	}
+
+	/**
+	 * Get index_id of the query
+	 *
+	 * @param $query
+	 *
+	 * @return string Index id
+	 */
+	public function get_query_index_id( $query ) {
+
+		return isset( $query[ WPSOLR_Options_Schemas::FORM_FIELD_SOLR_INDEX_ID ] ) ? $query[ WPSOLR_Options_Schemas::FORM_FIELD_SOLR_INDEX_ID ] : '';
+	}
+
+	/**
+	 * Get index of the query
+	 *
+	 * @param $query
+	 *
+	 * @return array Index
+	 */
+	public function get_query_index( $query ) {
+
+		$result = WPSOLR_Global::getExtensionIndexes()->get_index( $this->get_query_index_id( $query ) );
+
+		return $result;
+	}
+
+	/**
+	 * Get schema id of the query
+	 *
+	 * @param $query
+	 *
+	 * @return string Schema id
+	 */
+	public function get_query_schema_id( $query ) {
+
+		if ( empty( $query[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ] ) ) {
+			throw new WPSOLR_Exception( sprintf( 'query "%s" has no schema selected.', $this->get_group_name( $query ) ) );
+		}
+
+		return $query[ WPSOLR_Options_Schemas::FORM_FIELD_SCHEMA_ID ];
+	}
+
+	/**
+	 * Get a solr client for the query id
+	 *
+	 * @param $query
+	 *
+	 * @return \wpsolr\solr\WPSOLR_SearchSolrClient
+	 * @throws WPSOLR_Exception
+	 */
+	public function get_query_solr_client( $query ) {
+
+		$index_id = $this->get_query_index_id( $query );
+
+		if ( $this->get_query_is_multi_language( $query ) ) {
+
+			// Let ML plugins find the right match language/index
+			$language_code = apply_filters( WPSOLR_Filters::WPSOLR_FILTER_GET_CURRENT_LANGUAGE, null );
+
+			if ( ! empty( $language_code ) ) {
+
+				// Retrieve index with the query schema and the current language
+				$index_language_id = WPSOLR_Global::getExtensionIndexes()->get_index_id_by_language_id(
+					$this->get_query_schema_id( $query ),
+					$language_code );
+
+				if ( ! empty( $index_language_id ) ) {
+
+					$index_id = $index_language_id;
+				}
+			}
+
+		}
+
+		if ( empty( $index_id ) ) {
+			throw new WPSOLR_Exception( sprintf( 'query "%s" has no index selected.', $this->get_group_name( $query ) ) );
+		}
+
+		$result = WPSOLR_Global::getSolrClient( $index_id );
+
+		return $result;
 	}
 
 }

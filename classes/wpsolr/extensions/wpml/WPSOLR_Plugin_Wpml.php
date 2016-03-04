@@ -63,6 +63,11 @@ class WPSOLR_Plugin_Wpml extends WPSOLR_Extensions {
 			'get_languages',
 		), 10, 1 );
 
+		WPSOLR_Service_Wordpress::add_filter( WPSOLR_Filters::WPSOLR_FILTER_GET_CURRENT_LANGUAGE, array(
+			$this,
+			'get_current_language_code',
+		), 10, 1 );
+
 	}
 
 	/**

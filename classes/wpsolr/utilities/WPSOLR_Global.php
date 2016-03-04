@@ -102,9 +102,9 @@ class WPSOLR_Global {
 	/**
 	 * @return WPSOLR_SearchSolrClient
 	 */
-	public static function getSolrClient() {
+	public static function getSolrClient( $index_id ) {
 
-		return self::getObject( WPSOLR_SearchSolrClient::CLASS, WPSOLR_SearchSolrClient::CLASS );
+		return self::getObject( $index_id, WPSOLR_SearchSolrClient::CLASS, $index_id );
 	}
 
 	/**

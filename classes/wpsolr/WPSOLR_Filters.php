@@ -74,4 +74,8 @@ class WPSOLR_Filters {
 
 	// Filter to get all languages from ML plugins
 	const WPSOLR_FILTER_GET_LANGUAGES = 'wpsolr_filter_get_languages';
+
+	// Filter to get current language from ML plugins
+	const WPSOLR_FILTER_GET_CURRENT_LANGUAGE = 'wpsolr_filter_get_current_language';
+
 }

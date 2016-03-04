@@ -20,7 +20,7 @@
 		</div>
 		<div class="wdm_row">
 			<div class="submit">
-				<a href='admin.php?page=solr_settings&tab=solr_indexes' class="button-primary wdm-save">I
+				<a href='admin.php?page=wpsolr_settings&tab=solr_indexes' class="button-primary wdm-save">I
 					uploaded my 2 compatible configuration files to my Solr core >></a>
 			</div>
 		</div>

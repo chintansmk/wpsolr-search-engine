@@ -561,9 +561,6 @@ WPSOLR_Facets.prototype._create_url = function (current_url) {
         fq_index++;
     }
 
-
-    current_url.query["wpsolr_facets_group"] = this.groups_facet_id;
-
     // Last facet selected
     if (this.lastFacetSelected['facet_id'] != undefined) {
         current_url.query["wpsolr_last_group_content_selected"] = this.lastFacetSelected['facet_id'];

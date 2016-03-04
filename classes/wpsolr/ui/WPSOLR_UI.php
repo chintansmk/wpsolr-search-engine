@@ -267,13 +267,30 @@ class WPSOLR_UI {
 		}
 
 		// No cache: create it.
-		self::$data[ $ui->group_id ][ $ui->query_id ] = $ui->extract_data();
+		self::$data[ self::get_data_cache_name( $ui ) ] = $ui->extract_data();
+	}
+
+
+	/**
+	 * Create a cache stamp
+	 * Only data from the same query, group, and UI class have same stamp
+	 * Ex: filters and facets with same group and same query have different data.
+	 * Ex: 2 facets with same group and same query have same data.
+	 * Ex: 2 facets with # groups and same query have # data.
+	 *
+	 * @param WPSOLR_UI $ui
+	 *
+	 * @return string
+	 */
+	protected static function get_data_cache_name( WPSOLR_UI $ui ) {
+
+		return get_class( $ui ) . $ui->group_id . $ui->query_id;
 	}
 
 	protected static function get_data( WPSOLR_UI $ui ) {
 
-		return ( ! empty( self::$data[ $ui->group_id ] ) && ! empty( self::$data[ $ui->group_id ][ $ui->query_id ] ) )
-			? self::$data[ $ui->group_id ][ $ui->query_id ]['data']
+		return ( ! empty( self::$data[ self::get_data_cache_name( $ui ) ] ) )
+			? self::$data[ self::get_data_cache_name( $ui ) ]['data']
 			: [ ];
 	}
 

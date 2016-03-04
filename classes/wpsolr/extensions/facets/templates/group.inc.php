@@ -1,4 +1,5 @@
 <?php
+use wpsolr\extensions\facets\WPSOLR_Options_Facets;
 use wpsolr\extensions\layouts\WPSOLR_Options_Layouts;
 use wpsolr\extensions\queries\WPSOLR_Options_Query;
 use wpsolr\extensions\schemas\WPSOLR_Options_Schemas;
@@ -71,8 +72,8 @@ use wpsolr\utilities\WPSOLR_Option;
 		<div class='col_left'>Always show facets</div>
 		<div class='col_right'>
 			<input type="checkbox"
-			       name="<?php echo $options_name; ?>[<?php echo $group_uuid; ?>][<?php echo WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION; ?>]"
-			       value="1" <?php checked( ! empty( $group[ WPSOLR_Option::OPTION_FACETS_GROUP_EXCLUSION ] ) ); ?>/>
+			       name="<?php echo $options_name; ?>[<?php echo $group_uuid; ?>][<?php echo WPSOLR_Options_Facets::FORM_FIELD_GROUP_EXCLUSION; ?>]"
+			       value="1" <?php checked( ! empty( $group[ WPSOLR_Options_Facets::FORM_FIELD_GROUP_EXCLUSION ] ) ); ?>/>
 		</div>
 		<div class="clear"></div>
 	</div>
@@ -114,7 +115,7 @@ use wpsolr\utilities\WPSOLR_Option;
 			}
 		}
 
-		foreach ( array_merge( $field_custom_fields, $field_taxonomies ) as $field_name => $field ) {
+		foreach ( array_merge( $field_specials, $field_custom_fields, $field_taxonomies ) as $field_name => $field ) {
 
 			$field_name = strtolower( $field_name );
 

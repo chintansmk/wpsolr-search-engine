@@ -73,7 +73,7 @@ function wpsolr_admin_action_form_temporary_index( &$response_object ) {
 
 		// Redirect automatically to Solr options if it is the first solr index created
 		if ( count( WPSOLR_Global::getExtensionIndexes()->get_indexes() ) === 1 ) {
-			$redirect_location = '?page=solr_settings&tab=solr_option';
+			$redirect_location = '?page=wpsolr_settings&tab=solr_option';
 			header( "Location: $redirect_location", true, 302 ); // wp_redirect() is not found
 			exit;
 		}
@@ -95,7 +95,7 @@ function wpsolr_admin_init() {
 
 function fun_add_solr_settings() {
 	$img_url = plugins_url( 'images/WPSOLRDashicon.png', __FILE__ );
-	add_menu_page( 'WPSOLR', 'WPSOLR', 'manage_options', 'solr_settings', 'fun_set_solr_options', $img_url );
+	add_menu_page( 'WPSOLR', 'WPSOLR', 'manage_options', 'wpsolr_settings', 'fun_set_solr_options', $img_url );
 	wp_enqueue_style( 'dashboard_style', plugins_url( 'css/dashboard_css.css', __FILE__ ) );
 
 
@@ -209,17 +209,17 @@ function fun_set_solr_options() {
 	if ( isset ( $_GET['tab'] ) ) {
 		wpsolr_admin_tabs( $_GET['tab'] );
 	} else {
-		wpsolr_admin_tabs( 'wpsolr_indexes' );
+		wpsolr_admin_tabs( 'wpsolr_schemas' );
 	}
 
 	if ( isset ( $_GET['tab'] ) ) {
 		$tab = $_GET['tab'];
 	} else {
-		$tab = 'wpsolr_fields';
+		$tab = 'wpsolr_schemas';
 	}
 
 switch ( $tab ) {
-	case 'wpsolr_fields' :
+	case 'wpsolr_schemas' :
 		WPSOLR_Global::getExtensionSchemas()->output_form();
 		break;
 
@@ -788,13 +788,13 @@ case 'wpsolr_plugins':
 
 }
 
-function wpsolr_admin_tabs( $current = 'wpsolr_fields' ) {
+function wpsolr_admin_tabs( $current = 'wpsolr_schemas' ) {
 
 	$nb_indexes        = count( WPSOLR_Global::getExtensionIndexes()->get_indexes() );
 	$are_there_indexes = ( $nb_indexes > 0 );
 
 	$tabs                   = [ ];
-	$tabs['wpsolr_fields']  = '1. Define your schemas';
+	$tabs['wpsolr_schemas']  = '1. Define your schemas';
 	$tabs['wpsolr_indexes'] = $are_there_indexes ? '2. Define your Solr Indexes' : '1. Define your Solr Index';
 	if ( $are_there_indexes ) {
 		$tabs['wpsolr_operations']    = '3. Send your data to Solr';
@@ -807,7 +807,7 @@ function wpsolr_admin_tabs( $current = 'wpsolr_fields' ) {
 	echo '<h2 class="nav-tab-wrapper">';
 	foreach ( $tabs as $tab => $name ) {
 		$class = ( $tab == $current ) ? 'wpsolr-nav-tab-active' : 'wpsolr-nav-tab-inactive';
-		echo "<a class='nav-tab $class' href='admin.php?page=solr_settings&tab=$tab'>$name</a>";
+		echo "<a class='nav-tab $class' href='admin.php?page=wpsolr_settings&tab=$tab'>$name</a>";
 
 	}
 	echo '</h2>';
@@ -817,7 +817,7 @@ function wpsolr_admin_tabs( $current = 'wpsolr_fields' ) {
 function wpsolr_admin_sub_tabs( $subtabs, $before = null ) {
 
 	// Tab selected by the user
-	$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wpsolr_fields';
+	$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'wpsolr_schemas';
 
 	if ( isset ( $_GET['subtab'] ) ) {
 
@@ -841,7 +841,7 @@ function wpsolr_admin_sub_tabs( $subtabs, $before = null ) {
 		$class_checked = is_array( $subtab ) ? ( $subtab['is_checked'] ? 'wpsolr-nav-tab-success' : '' ) : '';
 		$name          = is_array( $subtab ) ? $subtab['name'] : $subtab;
 
-		echo "<a class='nav-tab $class_active $class_checked' href='admin.php?page=solr_settings&tab=$tab&subtab=$subtab_id'>$name</a>";
+		echo "<a class='nav-tab $class_active $class_checked' href='admin.php?page=wpsolr_settings&tab=$tab&subtab=$subtab_id'>$name</a>";
 
 	}
 
