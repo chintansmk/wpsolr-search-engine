@@ -34,14 +34,14 @@ class WPSOLR_UI_Facets {
 			}
 
 			$is_facet_selected = false;
-			$html              = sprintf( "<div><label class='wdm_label'>%s</label>
-                                    <input type='hidden' name='sel_fac_field' id='sel_fac_field' data-wpsolr-facets-selected=''>
-                                    <div class='wdm_ul' id='wpsolr_section_facets'><div class='select_opt %s' id='wpsolr_remove_facets'>%s</div>",
-					OptionLocalization::get_term( $localization_options, 'facets_header' ),
-					self::WPSOLR_FACET_CHECKBOX_CLASS . ( ! $is_facet_selected ? ' checked' : '' ),
-					OptionLocalization::get_term( $localization_options, 'facets_element_all_results' )
-			                     )
-			                     . $html;
+			//$html              = sprintf( "<div><label class='wdm_label'>%s</label>
+            //                        <input type='hidden' name='sel_fac_field' id='sel_fac_field' data-wpsolr-facets-selected=''>
+            //                        <div class='wdm_ul' id='wpsolr_section_facets'><div class='select_opt %s' id='wpsolr_remove_facets'>%s</div>",
+			//		OptionLocalization::get_term( $localization_options, 'facets_header' ),
+			//		self::WPSOLR_FACET_CHECKBOX_CLASS . ( ! $is_facet_selected ? ' checked' : '' ),
+			//		OptionLocalization::get_term( $localization_options, 'facets_element_all_results' )
+			//                     )
+			//                     . $html;
 
 			$html .= '</div></div>';
 		}

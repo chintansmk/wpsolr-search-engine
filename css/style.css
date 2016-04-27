@@ -197,12 +197,54 @@
 
     display: block;
     float: left;
-    height: 32px !important;
-    width: 150px !important;
+    height: 40px !important;
     margin-left: 5px !important;
+    width:80% !important;
+    margin-right:20px;
+    font-size:20px;
+    padding:5px;
 }
 
 .select_field {
 
     width: 99%;
 }
+
+/*SB.com customizations*/
+.select_opt{
+    font-size: 20px;
+    margin-top: 22px;
+}
+
+#res_facets lh{
+   float:left;
+   font-size: 25px;
+   font-weight: bold; 
+   padding-top:20px;
+}
+
+.p_title{
+   font-size:24px;
+}
+.p_content{
+    font-size:20px;
+}
+
+.result_row{
+    float:left;
+    width:100%;
+    margin-bottom:15px;
+    padding-bottom:15px;
+    border-bottom:1px dotted #ececec;
+}
+
+.p_misc{
+    display:none;
+}
+
+.res_info .infor{
+    font-size:18px;
+}
+
+
+

@@ -16,7 +16,59 @@ function solr_format_date( $thedate ) {
 	return preg_replace( $datere, $replstr, $thedate );
 }
 
-function fun_search_indexed_data() {
+function fun_search_indexed_data($atts) {
+
+    //echo "<br/>BEFORE SOLR FILTER QUERY";
+    //foreach (WPSOLR_Global::getQuery()->get_filter_query_fields() as $f){
+    //    echo "<br/>FILTER: ".$f;
+    //}
+
+
+    $my_atts = shortcode_atts( array(
+        'apply_facets' => 'comma separted facets:value',
+        'facets_to_display'=> 'comma separted facet1,facet2 to be displayed',
+        'search_placeholder' => 'Search...',
+        'hide_facets' => 'yes or no',
+        'hide_search_bar' => 'yes or no',
+    ), $atts );
+
+
+    $search_placeholder = 'Search...';
+    if (isset($atts['search_placeholder'])){
+        $search_placeholder = $atts['search_placeholder'];
+    }
+
+    if(isset($atts['apply_facets'])){
+        //echo "<br/><br/>ATTS".$atts['apply_facets'];
+        $scode_facets = explode(",",$atts['apply_facets']);
+        $facets = WPSOLR_Global::getQuery()->get_filter_query_fields();
+        $merged_facets = array_merge($facets, $scode_facets);
+
+        WPSOLR_Global::getQuery()->set_filter_query_fields($merged_facets);
+    }  
+    $facets_to_display = array();
+    if(isset($atts['facets_to_display'])){
+        $facets_to_display = explode(",",$atts['facets_to_display']);
+    }
+
+    $hide_facets_style = '';
+    if(isset($atts['hide_facets'])){
+        if($atts['hide_facets'] == 'yes'){
+            $hide_facets_style = 'display:none';
+        }
+    }
+    
+    $hide_search_style = '';
+    if(isset($atts['hide_search_bar'])){
+        if($atts['hide_search_bar'] == 'yes'){
+            $hide_search_style = 'display:none';
+        }
+    }
+
+    //echo "<br/>AFTER SOLR FILTER QUERY";
+    //foreach (WPSOLR_Global::getQuery()->get_filter_query_fields() as $f){
+    //    echo "<br/>FILTER: ".$f;
+    //}
 
 	$ad_url = admin_url();
 

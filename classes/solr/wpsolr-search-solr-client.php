@@ -528,9 +528,9 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 			}
 
 			$msg = '';
-			$msg .= "<div id='res$i'><div class='p_title'><a href='$url'>$title</a></div>";
-
-			$image_fragment = '';
+            //$msg .= "<div id='res$i'><div class='p_title'><a href='$url'>$title</a></div>";
+            $msg .= "<div id='res$i' class='result_row'><div class='p_title'><a href='$url'>$title</a></div>";
+            $image_fragment = '';
 			// Display first image
 			if ( is_array( $image_url ) && count( $image_url ) > 0 ) {
 				$image_fragment .= "<img class='wdm_result_list_thumb' src='$image_url[0]' />";
