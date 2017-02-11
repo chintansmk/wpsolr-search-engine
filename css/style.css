@@ -58,7 +58,7 @@
 }
 
 .p_misc {
-    float: right;
+    float: left
     color: #777;
 }
 
@@ -76,6 +76,7 @@
 .wdm_list {
     width: 24% !important;
     float: left !important;
+    min-height:100px;
 }
 
 .wdm_resultContainer {
@@ -173,8 +174,18 @@
     text-align: justify;
 }
 
-.search-submit {
+#searchsubmit {
+    position:relative;
+    float:left;
+    clear:left;
+    padding:5px;
+    width:80%;
+    font-size:14px;
+    margin-top:5px;
+}
 
+.wdm_results{
+    margin-top:-80px;
 }
 
 .custom_search {
@@ -197,12 +208,9 @@
 
     display: block;
     float: left;
-    height: 40px !important;
-    margin-left: 5px !important;
-    width:80% !important;
-    margin-right:20px;
-    font-size:20px;
-    padding:5px;
+    height: 25px !important;
+    font-size:15px;
+    width:77%;
 }
 
 .select_field {
@@ -238,13 +246,37 @@
     border-bottom:1px dotted #ececec;
 }
 
-.p_misc{
-    display:none;
-}
-
 .res_info .infor{
     font-size:18px;
 }
 
+.result_row .pauthor, .result_row .pdate{
+    font-weight:bold;
+}
+.result_row .pauthor span, .result_row .pdate span{
+    font-weight:normal;
+}
 
+.list-results .wdm_result_list_thumb{
+    width:150px;
+    height:100px;
+}
 
+.list-results .p_misc {
+    float:left;
+}
+
+.gallery-results .paginate_div{
+    clear:left;
+}
+.gallery-results .paginate_div a{
+    font-size:25px;
+}
+
+#search-results-template{
+    display:none;
+}
+#ltype-switch{
+    margin-top:10px;
+    float:right;
+}

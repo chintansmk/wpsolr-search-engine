@@ -43,7 +43,7 @@ class WPSOLR_UI_Facets {
 			//                     )
 			//                     . $html;
 
-			$html .= '</div></div>';
+			//$html .= '</div></div>';
 		}
 
 		return $html;
@@ -68,10 +68,21 @@ class WPSOLR_UI_Facets {
 
 			$facet_class = self::WPSOLR_FACET_CHECKBOX_CLASS . ( $item_selected ? ' checked' : '' );
 
+            $display_name = ucwords($item_name);
+            if($item_name == "video-album"){
+                $display_name = "Video";
+            }
+            if($item_name == "granth"){
+                $display_name = "Books";
+            }
+            if($item_name == "product"){
+                $display_name = "Other";
+            }
+
 			$html .= '<ul>';
 			$html .= '<li>';
 			$html .= "<div class='select_opt $facet_class' id='$facet_id:$item_name'>"
-			         . sprintf( $facet_element, $item_name, $item_count )
+			         . sprintf( $facet_element, $display_name, $item_count )
 			         . "</div>";
 			$html .= '</li>';
 

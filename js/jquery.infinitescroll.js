@@ -41,11 +41,12 @@ jQuery(document).on('click', '.select_opt', function () {
 
 function showloading() {
     jQuery('#loadingtext').remove();
-    //console.log('showloading');
-    jQuery("body").prepend('<div id="loadingtext" style="position: fixed; top: 100px; text-align: center; font-size: 15px; z-index: 999; margin: 0px auto; background: #CCC; padding: 30px; left: 40%;">' + info.loadingtext + '<br /><img src="' + info.loadimage + '" alt="loading" /></div>');
+    console.log('showloading');
+    jQuery("body").prepend('<div id="loadingtext" style="position: fixed; top: 500px; text-align: center; font-size: 15px; z-index: 5000; margin: 0px auto; background: #CCC; padding: 30px; left: 40%;">' + info.loadingtext + '<br /><img src="' + info.loadimage + '" alt="loading" /></div>');
 
     setTimeout(function () {
         jQuery('#loadingtext').remove();
+        console.log('remove loading');
     }, 1000);
 
 
@@ -67,9 +68,7 @@ jQuery(document).scroll(function () {
             var scrollposition = jQuery('body').scrollTop();
             var position = Math.round(offset.top);
 
-
             scrollpositionnew = scrollposition + 600;
-
 
             if (scrollpositionnew >= position && info.curentpage <= info.numberofelements && info.inprogress == 'no') {
 
@@ -128,8 +127,6 @@ jQuery(document).scroll(function () {
                 //console.log('info.curentpage: ' + info.curentpage);
                 //console.log('info.inprogress: ' + info.inprogress);
                 //console.log(' ----- ');
-
-
                 // do noting
             }
 

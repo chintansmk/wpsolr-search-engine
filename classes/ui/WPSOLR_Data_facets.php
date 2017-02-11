@@ -50,6 +50,18 @@ class WPSOLR_Data_Facets {
 
 					foreach ( $items_hierachy as $facet_in_results ) {
 
+                    //if($facet_in_results['value'] == "video-album"){
+                    //    $facet_in_results['value'] = "Video";
+                    //}
+                    //if($facet_in_results['value'] == "granth"){
+                    //    $facet_in_results['value'] = "Books";
+                    //}
+                    //if($facet_in_results['value'] == "product"){
+                    //    $facet_in_results['value'] = "Other";
+                    //}
+                    //
+                    //$facet_in_results['value'] = ucwords($facet_in_results['value']);
+
 						array_push( $facet['items'], array(
 							'value'    => $facet_in_results['value'],
 							'count'    => $facet_in_results['count'],

@@ -501,11 +501,19 @@ class WPSolrIndexSolrClient extends WPSolrAbstractSolrClient {
 		}
 
 		$pexcerpt         = $post_to_index->post_excerpt;
-		$pauth_info       = get_userdata( $post_to_index->post_author );
-		$pauthor          = isset( $pauth_info ) ? $pauth_info->display_name : '';
+        $pauth_info       = get_userdata( $post_to_index->post_author );
+
+        $authors =  wp_get_post_terms($post_to_index->ID, 'persons', array("fields" => "names"));
+
+		$pauthor          = isset( $authors[0] ) ? $authors[0] : '';
 		$pauthor_s        = isset( $pauth_info ) ? get_author_posts_url( $pauth_info->ID, $pauth_info->user_nicename ) : '';
 		$ptype            = $post_to_index->post_type;
-		$pdate            = solr_format_date( $post_to_index->post_date_gmt );
+        //$pdate            = solr_format_date( $post_to_index->post_date_gmt );
+        //$sb_date = types_render_field( "sb-date", array("format" => "Y-m-d H:i:s") );
+        $sb_date_str = strtotime(get_post_meta($post_to_index->ID,'wpcf-sb-date',true));
+        $sb_date = date("Y-m-d H:i:s", $sb_date_str);
+
+		$pdate            = solr_format_date($sb_date);
 		$pmodified        = solr_format_date( $post_to_index->post_modified_gmt );
 		$pdisplaydate     = $post_to_index->post_date;
 		$pdisplaymodified = $post_to_index->post_modified;

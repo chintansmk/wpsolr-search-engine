@@ -386,15 +386,10 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 	 *
 	 * @return array Array of html
 	 */
-	public function display_results( WPSOLR_Query $wpsolr_query, $results_display_css ) {
+	public function display_results( WPSOLR_Query $wpsolr_query ) {
 
 		$output        = array();
 		$search_result = array();
-
-        $is_list_display = false;
-        if($results_display_css == "list-results"){
-            $is_list_display = true;
-        }
 
 		// Load options
 		$localization_options = OptionLocalization::get_options();
@@ -539,13 +534,7 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 
 			$msg = '';
             //$msg .= "<div id='res$i'><div class='p_title'><a href='$url'>$title</a></div>";
-            //
-            $vc_row_cls = "vc_col-sm-4";
-            if($is_list_display){
-                $vc_row_cls = "vc_col-sm-12";
-            }
-
-            $msg .= '<div class="wpb_column vc_column_container '.$vc_row_cls.'">';
+            $msg .= '<div class="wpb_column vc_column_container vc_col-sm-4">';
             $msg .= '  <div class="vc_column-inner ">';
             $msg .= '    <div class="wpb_wrapper">';
 
@@ -554,14 +543,8 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
             $image_fragment = '';
 			// Display first image
 			if ( is_array( $image_url ) && count( $image_url ) > 0 ) {
-                $image_fragment .= "<img class='wdm_result_list_thumb' src='$image_url[0]' />";
-            }else{
-                $place_img = 'http://placehold.it/300x225';
-                if($is_list_display){
-                    $place_img = 'http://placehold.it/120x75';
-                }
-				$image_fragment .= "<img class='wdm_result_list_thumb' src='".$place_img."' />";
-            }
+				$image_fragment .= "<img class='wdm_result_list_thumb' src='$image_url[0]' />";
+			}
 
 			if ( empty( $content ) ) {
 				// Set a default value for content if no highlighting returned.
@@ -606,42 +589,35 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
             }
 
             $msg .= $image_fragment;
-            $ptitle = $title;
-            if (!$is_list_display){
-                $ptitle = wp_trim_words($title,3,"...");
-            }
-            $msg .= "      <div class='p_title'> <a href='$url' target=\"_blank\">".$ptitle."</a>";
+            $msg .= "      <div class='p_title'><a href='$url'>$title</a>";
             $msg .= "      </div>";
-            //if ( $cont_no == 1 ) {
-            //WE WILL NOT SHOW CONTENT
-			//if ( false ) {
-			//	$msg .= "<div class='p_content'><span class='res-desc'>$content - <a href='$url'>Content match</a> </span></div>";
-			//} else {
-			//	$msg .= "<div class='p_content'><span class='res-desc'>$content </span></div>";
-			//}
-			//if ( $comm_no == 1 ) {
-			//	$msg .= "<div class='p_comment'>" . $comments . "-<a href='$url'>Comment match</a></div>";
-			//}
+			//if ( $cont_no == 1 ) {
+			if ( false ) {
+				$msg .= "<div class='p_content'><span class='res-desc'>$content - <a href='$url'>Content match</a> </span></div>";
+			} else {
+				$msg .= "<div class='p_content'><span class='res-desc'>$content </span></div>";
+			}
+			if ( $comm_no == 1 ) {
+				$msg .= "<div class='p_comment'>" . $comments . "-<a href='$url'>Comment match</a></div>";
+			}
 
 			// Groups bloc - Bottom right
-			//$wpsolr_groups_message = apply_filters( WpSolrFilters::WPSOLR_FILTER_SOLR_RESULTS_DOCUMENT_GROUPS_INFOS, get_current_user_id(), $document );
-			//if ( isset( $wpsolr_groups_message ) ) {
+			$wpsolr_groups_message = apply_filters( WpSolrFilters::WPSOLR_FILTER_SOLR_RESULTS_DOCUMENT_GROUPS_INFOS, get_current_user_id(), $document );
+			if ( isset( $wpsolr_groups_message ) ) {
 
-			//	// Display groups of this user which owns at least one the document capability
-			//	$message = $wpsolr_groups_message['message'];
-			//	$msg .= "<div class='p_misc'>$message";
-			//	$msg .= "</div>";
-			//	$msg .= '<br/>';
-			//}
+				// Display groups of this user which owns at least one the document capability
+				$message = $wpsolr_groups_message['message'];
+				$msg .= "<div class='p_misc'>$message";
+				$msg .= "</div>";
+				$msg .= '<br/>';
+			}
 
 			// Informative bloc - Bottom right
-            $msg .= "<div class='p_misc'>";
-            if(isset($auth) && $auth!=""){
-                $msg .= "<div class='pauthor'><span>By:</span> ". $auth ."</div>";
-            }
-			//$msg .= empty( $cat ) ? "" : "<div class='pcat'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_row_in_category' ), $cat ) . "</div>";
-			$msg .= "<div class='pdate'><span>Date:</span> ".$date. "</div>";
-			//$msg .= empty( $no_comments ) ? "" : "<span class='pcat'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_row_number_comments' ), $no_comments ) . "</span>";
+			$msg .= "<div class='p_misc'>";
+			$msg .= "<div class='pauthor'>By: ". $auth ."</div>";
+			$msg .= empty( $cat ) ? "" : "<div class='pcat'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_row_in_category' ), $cat ) . "</div>";
+			$msg .= "<span class='pdate'>Date: ".$date. "</span>";
+			$msg .= empty( $no_comments ) ? "" : "<span class='pcat'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_row_number_comments' ), $no_comments ) . "</span>";
 			$msg .= "</div>";
 
 			// End of snippet bloc

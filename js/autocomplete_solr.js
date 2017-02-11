@@ -191,6 +191,12 @@ function call_ajax_search(selection_parameters, is_change_url) {
 
             data = JSON.parse(data1);
 
+            if ( jQuery( "#search-initial-template" ).length ) {
+                jQuery("#search-initial-template").hide();
+                jQuery("#search-results-gallery").show();
+            }
+
+
             // Display result rows
             jQuery('.results-by-facets').html(data[0]);
 
