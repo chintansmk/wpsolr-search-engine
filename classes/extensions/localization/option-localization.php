@@ -48,6 +48,7 @@ class OptionLocalization extends WpSolrExtensions {
 				'search_form_edit_placeholder'                            => _x( 'Enter Keyword....', 'Search edit placeholder', 'wpsolr' ),
 				'sort_header'                                             => _x( 'Sort by', 'Sort list header', 'wpsolr' ),
 				/* Sort */
+				WPSolrSearchSolrClient::SORT_CODE_BY_ALPHABETICAL_ASC       => _x( 'Alphabetical', 'Sort list element', 'wpsolr' ),
 				WPSolrSearchSolrClient::SORT_CODE_BY_RELEVANCY_DESC       => _x( 'More relevant', 'Sort list element', 'wpsolr' ),
 				WPSolrSearchSolrClient::SORT_CODE_BY_DATE_ASC             => _x( 'Oldest', 'Sort list element', 'wpsolr' ),
 				WPSolrSearchSolrClient::SORT_CODE_BY_DATE_DESC            => _x( 'Newest', 'Sort list element', 'wpsolr' ),

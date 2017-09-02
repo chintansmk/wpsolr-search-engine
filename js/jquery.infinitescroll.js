@@ -42,7 +42,7 @@ jQuery(document).on('click', '.select_opt', function () {
 function showloading() {
     jQuery('#loadingtext').remove();
     console.log('showloading');
-    jQuery("body").prepend('<div id="loadingtext" style="position: fixed; top: 500px; text-align: center; font-size: 15px; z-index: 5000; margin: 0px auto; background: #CCC; padding: 30px; left: 40%;">' + info.loadingtext + '<br /><img src="' + info.loadimage + '" alt="loading" /></div>');
+    jQuery("body").prepend('<div id="loadingtext" style="position: fixed; top: 250px; text-align: center; font-size: 15px; z-index: 5000; margin: 0px auto; background: #CCC; padding: 30px; left: 40%;">' + info.loadingtext + '<br /><img src="' + info.loadimage + '" alt="loading" /></div>');
 
     setTimeout(function () {
         jQuery('#loadingtext').remove();
@@ -110,7 +110,7 @@ jQuery(document).scroll(function () {
 
                         // Loop on result rows
                         jQuery.each(obj[0], function (index, value) {
-                            //console.log(value);
+                            console.log(value);
 
                             jQuery(".results-by-facets").append(value);
                         });
@@ -131,7 +131,11 @@ jQuery(document).scroll(function () {
             }
 
 
+        }else{
+               console.log('ELSE 1 numberelements: ' + info.numberofelements);
+
         }
+
 
     });
 });

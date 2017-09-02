@@ -78,6 +78,15 @@ function fun_search_indexed_data($atts) {
         $initial_template = $atts['initial_template'];
     }
 
+   //this is used to show the initial template on publication page 
+    $showing_template = false;  
+    if ($initial_template != '' && 
+            !isset($_REQUEST['search'])  
+                &&
+            !isset($_REQUEST['wpsolr_fq']) 
+        ) {
+        $showing_template = true;  
+    }
 
 
     //echo "<br/>AFTER SOLR FILTER QUERY";
@@ -97,7 +106,13 @@ function fun_search_indexed_data($atts) {
 	$localization_options = OptionLocalization::get_options();
 
 	$wdm_typehead_request_handler = 'wdm_return_solr_rows';
-            
+    
+    if(!$showing_template){
+          echo '<div id="reset-publications"><a href="'.site_url("/publications/").'">
+                  <i class="fa fa-refresh"></i> View All Publications</a>
+                </div>';
+    }       
+
     echo '<div class="vc_row wpb_row section vc_row-fluid " style=" text-align:left;">';
     echo '    <div class=" full_section_inner clearfix">';
     echo '        <div class="search-left-sidebar wpb_column vc_column_container vc_col-sm-3">';
@@ -120,12 +135,15 @@ function fun_search_indexed_data($atts) {
 <div style="clear:both"></div>
         </form>';
 
+    //display as list or gallery
     if(isset($_REQUEST['ltype'])){
         $results_display_css = $_REQUEST['ltype']."-results";
         $_SESSION["ltype"] = $results_display_css;
     }elseif (isset($_SESSION["ltype"])){
         $results_display_css = $_SESSION["ltype"];
     }
+
+
 
 	try {
 
@@ -146,27 +164,7 @@ function fun_search_indexed_data($atts) {
 			//echo '<div class="wdm_resultContainer">
              //       <div class="wdm_list">';
 
-			// Display the sort list
-			//$selected_sort_values = WPSOLR_Global::getOption()->get_sortby_items_as_array();
-			//if ( isset( $selected_sort_values ) && ( $selected_sort_values != '' ) ) {
-
-			//	$term        = OptionLocalization::get_term( $localization_options, 'sort_header' );
-			//	$sort_select = "<label class='wdm_label'>$term</label><select class='select_field'>";
-
-			//	// Add options
-			//	$sort_options = WPSolrSearchSolrClient::get_sort_options();
-			//	foreach ( $selected_sort_values as $sort_code ) {
-
-			//		$sort_label = OptionLocalization::get_term( $localization_options, $sort_code );
-
-			//		$selected = ( $sort_code === WPSOLR_Global::getQuery()->get_wpsolr_sort() ) ? 'selected' : '';
-			//		$sort_select .= "<option value='$sort_code' $selected>$sort_label</option>";
-			//	}
-
-			//	$sort_select .= "</select>";
-
-			//	echo '<div>' . $sort_select . '</div>';
-			//}
+			
        
             
 
@@ -182,14 +180,38 @@ function fun_search_indexed_data($atts) {
             echo '  </div> <!-- .search-left-sidebar vc_column_inner -->';
             echo '</div> <!-- .search-left-sidebar wpb_column -->';
 
+            if(!$showing_template){
                 echo '<div id="ltype-switch">';
                 echo ' <a href="?'.http_build_query(array_merge($_GET, array('ltype'=>'gallery'))).'"> 
                        <i class="qode_icon_font_awesome fa fa-th-large"> </i> Gallery View</a>';
                 echo '      &nbsp; | &nbsp;';
                 echo ' <a href="?'.http_build_query(array_merge($_GET, array('ltype'=>'list'))).'">
                        <i class="qode_icon_font_awesome fa fa-list"> </i> List View</a>';
+                echo '<br/>';     
+            // Display the sort list
+			$selected_sort_values = WPSOLR_Global::getOption()->get_sortby_items_as_array();
+			if ( isset( $selected_sort_values ) && ( $selected_sort_values != '' ) ) {
+
+				$term        = OptionLocalization::get_term( $localization_options, 'sort_header' );
+				$sort_select = "<label class='wdm_label'>$term</label> <select class='select_field'>";
+
+				// Add options
+				$sort_options = WPSolrSearchSolrClient::get_sort_options();
+				foreach ( $selected_sort_values as $sort_code ) {
+
+					$sort_label = OptionLocalization::get_term( $localization_options, $sort_code );
+
+					$selected = ( $sort_code === WPSOLR_Global::getQuery()->get_wpsolr_sort() ) ? 'selected' : '';
+					$sort_select .= "<option value='$sort_code' $selected>$sort_label</option>";
+				}
+
+				$sort_select .= "</select>";
+
+				echo '<div>' . $sort_select . '</div>';
+			}
+
                 echo '</div>';
-    
+            } 
 
             echo '<div class="search-right-sidebar wpb_column vc_column_container vc_col-sm-9">';
                        
@@ -197,22 +219,17 @@ function fun_search_indexed_data($atts) {
             echo '    <div class="wpb_wrapper">';
 
           
-            $showing_template = false;  
-            if ($initial_template != '' && 
-                    !isset($_REQUEST['search'])  
-                        &&
-                    !isset($_REQUEST['wpsolr_fq']) 
-                ) {
-                echo include(ABSPATH.'wp-content/themes/bridge/'.$initial_template);
-                $showing_template = true;  
+
+            if($showing_template){
+                include(ABSPATH.'wp-content/themes/bridge/'.$initial_template);
             }
-            
-           
+
             echo '<div id="search-results-gallery" class="'.$results_display_css.'"';
             if($showing_template){
-                echo 'style="display:none"';
+                echo ' style="display:none"';
             }
             echo ' >';
+            
             
                         
 			if ( $final_result[0] != '0' ) {
@@ -413,7 +430,7 @@ function return_solr_results() {
 	$paginat_var   = '';
 	if ( $total > $number_of_res ) {
 		$pages = ceil( $total / $number_of_res );
-		$paginat_var .= '<ul id="pagination-flickr"class="wdm_ul">';
+		$paginat_var .= '<ul id="pagination-flickr" class="wdm_ul">';
 		for ( $k = 1; $k <= $pages; $k ++ ) {
 			$paginat_var .= "<li ><a class='paginate' href='javascript:void(0)' id='$k'>$k</a></li>";
 		}

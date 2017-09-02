@@ -500,24 +500,78 @@ class WPSolrIndexSolrClient extends WPSolrAbstractSolrClient {
 			$pcontent = $post_to_index->post_content;
 		}
 
+        /** SB.com 
+         * To Enable Searching inside Video Album and Playlists
+         * We will index the videos related to the album 
+         * All Track Titles linked to an Audio Album
+         */
+
+
+        if ($post_to_index->post_type == "video-album"){
+            $childargs = array(
+                'post_type' => 'video',
+                'numberposts' => -1,
+                'order' => 'ASC',
+                'orderby' => 'meta_value_num',
+                'meta_key' => 'wpcf-sb-date',
+                'meta_query' => array(array(
+                                    'key' => '_wpcf_belongs_video-album_id', 
+                                    'value' => $pid
+                                ))
+                );
+            $child_posts = get_posts($childargs);
+            foreach ($child_posts as $cpost) {
+                $pcontent .= " ".$cpost->post_title."\n";
+            }
+        }
+ 
+        if ($post_to_index->post_type == "audio"){
+
+            $playlist = $post_to_index;
+            $tracks = array_filter( (array) $playlist->tracks );
+            foreach ( $tracks as $key => $track ) {
+                //set_transient( get_current_user_id() . 'error_solr_post_save_admin_notice', '<br/>:'.$track['title'] );
+                $pcontent .= " ".$track['title']."\n";
+            }
+        }
+
 		$pexcerpt         = $post_to_index->post_excerpt;
         $pauth_info       = get_userdata( $post_to_index->post_author );
 
         $authors =  wp_get_post_terms($post_to_index->ID, 'persons', array("fields" => "names"));
 
-		$pauthor          = isset( $authors[0] ) ? $authors[0] : '';
-		$pauthor_s        = isset( $pauth_info ) ? get_author_posts_url( $pauth_info->ID, $pauth_info->user_nicename ) : '';
+        $pauthor  = '';
+        $pauthor_s = '';
+        if(!is_wp_error($authors)){
+		    $pauthor          = isset( $authors[0] ) ? $authors[0] : '';
+		    $pauthor_s        = isset( $pauth_info ) ? get_author_posts_url( $pauth_info->ID, $pauth_info->user_nicename ) : '';
+        }
+
 		$ptype            = $post_to_index->post_type;
         //$pdate            = solr_format_date( $post_to_index->post_date_gmt );
         //$sb_date = types_render_field( "sb-date", array("format" => "Y-m-d H:i:s") );
-        $sb_date_str = strtotime(get_post_meta($post_to_index->ID,'wpcf-sb-date',true));
-        $sb_date = date("Y-m-d H:i:s", $sb_date_str);
+        $entity_date = get_post_meta($post_to_index->ID,'wpcf-sb-date',true);
 
-		$pdate            = solr_format_date($sb_date);
-		$pmodified        = solr_format_date( $post_to_index->post_modified_gmt );
-		$pdisplaydate     = $post_to_index->post_date;
-		$pdisplaymodified = $post_to_index->post_modified;
+        $pentity_date = '';
+
+        if(isset($entity_date) and $entity_date != ''){
+            //$sb_date_str = strtotime($entity_date);
+            $pentity_date = date("M d, Y", $entity_date);
+            $pentity_datetz = date("Y-m-d H:i:s", $entity_date);
+            
+            //set_transient( get_current_user_id() . 'error_solr_post_save_admin_notice', "Entity Date");
+		    $pdate            = solr_format_date($pentity_datetz);
+        }else{
+		    $pdate            = solr_format_date($post_to_index->post_date);
+        }
+
+		#set_transient( get_current_user_id() . 'error_solr_post_save_admin_notice', "SB Date".$sb_date);
+        $pmodified        = solr_format_date( $post_to_index->post_modified_gmt );
+        $pdisplaydate     = $pentity_date; # $post_to_index->post_date;
+        $pdisplaymodified = $post_to_index->post_modified;
+        $pentity_date     = $pentity_date;
 		$purl             = get_permalink( $pid );
+		#set_transient( get_current_user_id() . 'error_solr_post_save_admin_notice', "Permalink".$purl);
 		$comments_con     = array();
 		$comm             = isset( $this->solr_indexing_options[ WpSolrSchema::_FIELD_NAME_COMMENTS ] ) ? $this->solr_indexing_options[ WpSolrSchema::_FIELD_NAME_COMMENTS ] : '';
 
@@ -627,8 +681,9 @@ class WPSolrIndexSolrClient extends WPSolrAbstractSolrClient {
 		// Modified to enable "/" in attributes
 		$content_with_shortcodes_expanded_or_stripped = preg_replace( "~(?:\[/?)[^\]]+/?\]~s", '', $content_with_shortcodes_expanded_or_stripped );  # strip shortcodes, keep shortcode content;
 
+
 		// Remove HTML tags
-		$solarium_document_for_update[ WpSolrSchema::_FIELD_NAME_CONTENT ] = strip_tags( $content_with_shortcodes_expanded_or_stripped );
+		$solarium_document_for_update[ WpSolrSchema::_FIELD_NAME_CONTENT ] =  strip_tags( $content_with_shortcodes_expanded_or_stripped );
 
 		$solarium_document_for_update[ WpSolrSchema::_FIELD_NAME_AUTHOR ]             = $pauthor;
 		$solarium_document_for_update[ WpSolrSchema::_FIELD_NAME_AUTHOR_S ]           = $pauthor_s;

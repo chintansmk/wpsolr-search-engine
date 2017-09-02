@@ -69,8 +69,9 @@ class WPSOLR_UI_Facets {
 			$facet_class = self::WPSOLR_FACET_CHECKBOX_CLASS . ( $item_selected ? ' checked' : '' );
 
             $display_name = ucwords($item_name);
+            $display_name = $item_name;
             if($item_name == "video-album"){
-                $display_name = "Video";
+                $display_name = "Video Album";
             }
             if($item_name == "granth"){
                 $display_name = "Books";

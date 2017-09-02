@@ -25,6 +25,8 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 	// Do not change - Sort by most relevant
 	const SORT_CODE_BY_RELEVANCY_DESC = 'sort_by_relevancy_desc';
 
+    const SORT_CODE_BY_ALPHABETICAL_ASC = 'sort_by_alphabetical_asc';
+
 	// Do not change - Sort by newest
 	const SORT_CODE_BY_DATE_DESC = 'sort_by_date_desc';
 
@@ -210,6 +212,11 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 	static function get_sort_options() {
 
 		$results = array(
+            
+            array(
+				'code'  => self::SORT_CODE_BY_ALPHABETICAL_ASC,
+				'label' => 'Alphabetical',
+			),
 
 			array(
 				'code'  => self::SORT_CODE_BY_RELEVANCY_DESC,
@@ -378,7 +385,16 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 
 		// Perform the query, return the Solarium result set
 		return $this->solarium_results = $this->solarium_client->execute( isset( $solarium_query ) ? $solarium_query : $this->solarium_query );
-	}
+    }
+
+    public function mytruncate($s, $max_length){
+            if (strlen($s) > $max_length)
+            {
+                $offset = ($max_length - 3) - strlen($s);
+                $s = substr($s, 0, strrpos($s, ' ', $offset)) . '...';
+            }
+            return $s;
+    }
 
 	/**
 	 *
@@ -493,23 +509,32 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 			$title   = $document->title;
 			$content = '';
 
-			$image_url = wp_get_attachment_image_src( get_post_thumbnail_id( $id ), $size=array('300', '200') );
+            $thumbnail_url = get_post_meta(intval($id),'_dcms_eufi_img', true); //wp_get_attachment_image_src( get_post_thumbnail_id( $id ), $size=array('300', '200') )[0];
 
+            if ($thumbnail_url == null || $thumbnail_url == ''){
+                $thumbs = wp_get_attachment_image_src( get_post_thumbnail_id( $id ), $size=array('300', '200') );
+                if ( is_array( $thumbs) && count( $thumbs) > 0 ) {
+                    $thumbnail_url = $thumbs[0];
+                }
+            }
+
+            #get_the_post_thumbnail($post = intval($id), $size = array(300, 200), array( 'class' => 'wdm_result_list_thumb' ));
 			$no_comments = $document->numcomments;
 			if ( $are_comments_indexed ) {
 				$comments = $document->comments;
-			}
-			$date = date( 'M d, Y', strtotime( $document->displaydate ) );
+            }
+
+			//$date = date( 'M d, Y', strtotime( $document->modified) );
+            $date = $document->displaydate;
 
 			if ( property_exists( $document, 'categories_str' ) ) {
 				$cat_arr = $document->categories_str;
 			}
 
-
 			$cat  = implode( ',', $cat_arr );
 			$auth = $document->author;
 
-			$url = get_permalink( $id );
+			$url = get_permalink( intval($id ));
 
 			$highlightedDoc = $highlighting->getResult( $document->id );
 			$cont_no        = 0;
@@ -553,8 +578,9 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 
             $image_fragment = '';
 			// Display first image
-			if ( is_array( $image_url ) && count( $image_url ) > 0 ) {
-                $image_fragment .= "<img class='wdm_result_list_thumb' src='$image_url[0]' />";
+			//if ( is_array( $image_url ) && count( $image_url ) > 0 ) {
+			if ( isset($thumbnail_url) and $thumbnail_url != '') {
+				$image_fragment .= "<img class='wdm_result_list_thumb' src='".$thumbnail_url."' />";
             }else{
                 $place_img = 'http://placehold.it/300x225';
                 if($is_list_display){
@@ -562,8 +588,9 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
                 }
 				$image_fragment .= "<img class='wdm_result_list_thumb' src='".$place_img."' />";
             }
+            $query_keyword = $wpsolr_query->get_wpsolr_query();
 
-			if ( empty( $content ) ) {
+			if ( empty( $content ) and !empty($query_keyword)) {
 				// Set a default value for content if no highlighting returned.
 				$post_to_show = get_post( $id );
 				if ( isset( $post_to_show ) ) {
@@ -605,12 +632,12 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 			    $content .= '...';
             }
 
-            $msg .= $image_fragment;
+            $msg .= "<a href='$url'>".$image_fragment."</a>";
             $ptitle = $title;
             if (!$is_list_display){
-                $ptitle = wp_trim_words($title,3,"...");
+                $ptitle = $this->mytruncate($title,45);
             }
-            $msg .= "      <div class='p_title'> <a href='$url' target=\"_blank\">".$ptitle."</a>";
+            $msg .= "      <div class='p_title'><a href='$url'>".$ptitle."</a>";
             $msg .= "      </div>";
             //if ( $cont_no == 1 ) {
             //WE WILL NOT SHOW CONTENT
@@ -636,11 +663,19 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 
 			// Informative bloc - Bottom right
             $msg .= "<div class='p_misc'>";
+            $msg .= $content;
             if(isset($auth) && $auth!=""){
-                $msg .= "<div class='pauthor'><span>By:</span> ". $auth ."</div>";
+                $msg .= "<div class='pauthor'>". $auth ."</div>";
+            }else{
+                $msg .= "<div class='pauthor'></div>";
             }
-			//$msg .= empty( $cat ) ? "" : "<div class='pcat'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_row_in_category' ), $cat ) . "</div>";
-			$msg .= "<div class='pdate'><span>Date:</span> ".$date. "</div>";
+            //$msg .= empty( $cat ) ? "" : "<div class='pcat'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_row_in_category' ), $cat ) . "</div>";
+            //
+            if($date != "false" && $date != ''){
+                $msg .= "<div class='pdate'>".$date. "</div>";
+            }else{
+                $msg .= "<div class='pdate'></div>";
+            }
 			//$msg .= empty( $no_comments ) ? "" : "<span class='pcat'>" . sprintf( OptionLocalization::get_term( $localization_options, 'results_row_number_comments' ), $no_comments ) . "</span>";
 			$msg .= "</div>";
 
@@ -847,6 +882,10 @@ class WPSolrSearchSolrClient extends WPSolrAbstractSolrClient {
 	) {
 
 		switch ( $sort_field_name ) {
+        
+            case self::SORT_CODE_BY_ALPHABETICAL_ASC:
+				$solarium_query->addSort( WpSolrSchema::_FIELD_NAME_TITLE, $solarium_query::SORT_ASC );
+				break;
 
 			case self::SORT_CODE_BY_DATE_DESC:
 				$solarium_query->addSort( WpSolrSchema::_FIELD_NAME_DATE, $solarium_query::SORT_DESC );
